@@ -35,5 +35,10 @@
   },
   "dependencies": {
     "redux": "^4.0.4"
+  },
+  "jest": {
+    "testMatch": [
+      "<rootDir>/**/*.(spec|test).{ts,tsx}"
+    ]
   }
 }
