@@ -1,0 +1,18 @@
+---
+changelog:
+  - changes:
+      - text: 'travis setup'
+        type: feature
+    date: 2019-08-22
+    version: v1.0.1
+  - changes:
+      - text: 'first public version'
+        type: feature
+    date: 2019-08-14
+    version: v1.0.0
+files:
+  - dist/index.js
+name: pubnub-redux
+schema: 1
+scm: github.com/pubnub/redux
+version: '1.0.0'
