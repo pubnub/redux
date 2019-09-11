@@ -1,6 +1,7 @@
 export interface Message {
-    channel: string;
-    subscription: string | null;
-    timetoken: string;
-    message: string;
+  channel: string;
+  message: object;
+  publisher: string;
+  subscription: string | null;
+  timetoken: string;
 }

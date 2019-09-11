@@ -1,9 +1,9 @@
 export interface Status {
-    affectedChannelGroups: Array<string>;
-    affectedChannels: Array<string>;
-    category: string;
-    operation: string;
-    lastTimetoken: string;
-    currentTimetoken: string;
-    subscribedChannels: Array<string>;
+  affectedChannelGroups: string[];
+  affectedChannels: string[];
+  category: string;
+  operation: string;
+  lastTimetoken: number;
+  currentTimetoken: string;
+  subscribedChannels: string[];
 }
