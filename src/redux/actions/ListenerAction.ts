@@ -1,17 +1,17 @@
-import { createPresenceActions } from './PresenceActions';
-import { createStatusActions } from './StatusActions';
-import { createMessageActions } from './MessageActions';
-import { createSignalActions } from './SignalActions';
-import { createUserActions } from './UserActions';
-import { createSpaceActions } from './SpaceActions';
-import { createMembershipActions } from './MembershipActions';
+import { createPresenceActionListener } from './PresenceActions';
+import { createStatusActionListener } from './StatusActions';
+import { createMessageActionListener } from './MessageActions';
+import { createSignalActionListener } from './SignalActions';
+import { createUserActionListener } from './UserActions';
+import { createSpaceActionListener } from './SpaceActions';
+import { createMembershipActionListener } from './MembershipActions';
 
-export const createPubNubActions = (payload: any) => {
-  createMessageActions(payload);
-  createPresenceActions(payload);
-  createStatusActions(payload);
-  createSignalActions(payload);
-  createUserActions(payload);
-  createSpaceActions(payload);
-  createMembershipActions(payload);
-};
+export const createPubNubActionListener = (payload: any) => ({
+  message: createMessageActionListener(payload),
+  presence: createPresenceActionListener(payload),
+  signal: createSignalActionListener(payload),
+  user: createUserActionListener(payload),
+  space: createSpaceActionListener(payload),
+  membership: createMembershipActionListener(payload),
+  status: createStatusActionListener(payload),
+});
