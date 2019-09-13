@@ -1,4 +1,4 @@
-export interface Presence {
+export interface PresenceActionPayload {
   channel: string;
   subscription: string | null;
   actualChannel: string | null;

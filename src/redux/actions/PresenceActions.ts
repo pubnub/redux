@@ -1,28 +1,30 @@
-import { Presence } from '../types/Presence';
+import { PresenceActionPayload } from '../types/Presence';
 import { AppActions } from '../types/actions';
 import { Dispatch } from 'redux';
 
-export const UserJoin = (payload: Presence): AppActions => ({
+export const UserJoin = (payload: PresenceActionPayload): AppActions => ({
   type: 'pubnub/JOIN',
   payload,
 });
 
-export const UserLeave = (payload: Presence): AppActions => ({
+export const UserLeave = (payload: PresenceActionPayload): AppActions => ({
   type: 'pubnub/LEAVE',
   payload,
 });
 
-export const UserTimeout = (payload: Presence): AppActions => ({
+export const UserTimeout = (payload: PresenceActionPayload): AppActions => ({
   type: 'pubnub/TIMEOUT',
   payload,
 });
 
-export const UserStateChange = (payload: Presence): AppActions => ({
+export const UserStateChange = (
+  payload: PresenceActionPayload
+): AppActions => ({
   type: 'pubnub/STATE_CHANGE',
   payload,
 });
 
-export const createPresenceActions = (payload: Presence) => (
+export const createPresenceActions = (payload: PresenceActionPayload) => (
   dispatch: Dispatch<AppActions>
 ) => {
   switch (payload.action) {

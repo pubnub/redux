@@ -1,7 +1,9 @@
-import { Message } from '../types/Message';
+import { MessageActionPayload } from '../types/Message';
 import { AppActions } from '../types/actions';
 
-export const createMessageActions = (payload: Message): AppActions => ({
+export const createMessageActions = (
+  payload: MessageActionPayload
+): AppActions => ({
   type: 'pubnub/MESSAGE',
   payload,
 });

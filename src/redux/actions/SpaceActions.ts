@@ -1,18 +1,18 @@
-import { Objects } from '../types/Objects';
+import { ObjectsActionPayload } from '../types/Objects';
 import { AppActions } from '../types/actions';
 import { Dispatch } from 'redux';
 
-export const SpaceUpdated = (payload: Objects): AppActions => ({
+export const SpaceUpdated = (payload: ObjectsActionPayload): AppActions => ({
   type: 'pubnub/SPACE_UPDATED',
   payload,
 });
 
-export const SpaceDeleted = (payload: Objects): AppActions => ({
+export const SpaceDeleted = (payload: ObjectsActionPayload): AppActions => ({
   type: 'pubnub/SPACE_DELETED',
   payload,
 });
 
-export const createSpaceActions = (payload: Objects) => (
+export const createSpaceActions = (payload: ObjectsActionPayload) => (
   dispatch: Dispatch<AppActions>
 ) => {
   switch (payload.type) {

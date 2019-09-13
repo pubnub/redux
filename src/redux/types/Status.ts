@@ -1,4 +1,4 @@
-export interface Status {
+export interface StatusActionPayload {
   affectedChannelGroups: string[];
   affectedChannels: string[];
   category: string;

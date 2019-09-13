@@ -1,3 +1,3 @@
-export interface Signal {
+export interface SignalActionPayload {
   timetoken: number;
 }

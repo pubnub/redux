@@ -1,4 +1,4 @@
-export interface Message {
+export interface MessageActionPayload {
   channel: string;
   message: object;
   publisher: string;

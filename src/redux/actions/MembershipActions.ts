@@ -1,23 +1,29 @@
-import { Objects } from '../types/Objects';
+import { ObjectsActionPayload } from '../types/Objects';
 import { AppActions } from '../types/actions';
 import { Dispatch } from 'redux';
 
-export const UserMembershipUpdatedOnSpace = (payload: Objects): AppActions => ({
+export const UserMembershipUpdatedOnSpace = (
+  payload: ObjectsActionPayload
+): AppActions => ({
   type: 'pubnub/USER_MEMBERSHIP_UPDATED_ON_SPACE',
   payload,
 });
 
-export const UserAddedToSpace = (payload: Objects): AppActions => ({
+export const UserAddedToSpace = (
+  payload: ObjectsActionPayload
+): AppActions => ({
   type: 'pubnub/USER_ADDED_TO_SPACE',
   payload,
 });
 
-export const UserRemovedFromSpace = (payload: Objects): AppActions => ({
+export const UserRemovedFromSpace = (
+  payload: ObjectsActionPayload
+): AppActions => ({
   type: 'pubnub/USER_REMOVED_FROM_SPACE',
   payload,
 });
 
-export const createMembershipActions = (payload: Objects) => (
+export const createMembershipActions = (payload: ObjectsActionPayload) => (
   dispatch: Dispatch<AppActions>
 ) => {
   switch (payload.type) {

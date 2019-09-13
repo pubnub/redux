@@ -1,4 +1,4 @@
-export interface Objects {
+export interface ObjectsActionPayload {
   source: string;
   version: string;
   event: string;

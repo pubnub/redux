@@ -1,8 +1,8 @@
-import { Message } from './Message';
-import { Presence } from './Presence';
-import { Status } from './Status';
-import { Objects } from './Objects';
-import { Signal } from './Signal';
+import { MessageActionPayload } from './Message';
+import { PresenceActionPayload } from './Presence';
+import { StatusActionPayload } from './Status';
+import { ObjectsActionPayload } from './Objects';
+import { SignalActionPayload } from './Signal';
 
 export const MESSAGE = 'pubnub/MESSAGE';
 
@@ -38,127 +38,127 @@ export const SIGNAL = 'pubnub/SIGNAL';
 
 export interface MessageAction {
   type: typeof MESSAGE;
-  payload: Message;
+  payload: MessageActionPayload;
 }
 
 export interface Join {
   type: typeof JOIN;
-  payload: Presence;
+  payload: PresenceActionPayload;
 }
 
 export interface Leave {
   type: typeof LEAVE;
-  payload: Presence;
+  payload: PresenceActionPayload;
 }
 
 export interface Timeout {
   type: typeof TIMEOUT;
-  payload: Presence;
+  payload: PresenceActionPayload;
 }
 
 export interface State_Change {
   type: typeof STATE_CHANGE;
-  payload: Presence;
+  payload: PresenceActionPayload;
 }
 
 export interface Network_Up {
   type: typeof NETWORK_UP;
-  payload: Status;
+  payload: StatusActionPayload;
 }
 
 export interface Network_Down {
   type: typeof NETWORK_DOWN;
-  payload: Status;
+  payload: StatusActionPayload;
 }
 
 export interface Network_Issues {
   type: typeof NETWORK_ISSUES;
-  payload: Status;
+  payload: StatusActionPayload;
 }
 
 export interface Reconnected {
   type: typeof RECONNECTED;
-  payload: Status;
+  payload: StatusActionPayload;
 }
 
 export interface Connected {
   type: typeof CONNECTED;
-  payload: Status;
+  payload: StatusActionPayload;
 }
 
 export interface Access_Denied {
   type: typeof ACCESS_DENIED;
-  payload: Status;
+  payload: StatusActionPayload;
 }
 
 export interface Malformed_Response {
   type: typeof MALFORMED_RESPONSE;
-  payload: Status;
+  payload: StatusActionPayload;
 }
 
 export interface Bad_Request {
   type: typeof BAD_REQUEST;
-  payload: Status;
+  payload: StatusActionPayload;
 }
 
 export interface Decryption_Error {
   type: typeof DECRYPTION_ERROR;
-  payload: Status;
+  payload: StatusActionPayload;
 }
 
 export interface Request_Message_Count_Exceed {
   type: typeof REQUEST_MESSAGE_COUNT_EXCEED;
-  payload: Status;
+  payload: StatusActionPayload;
 }
 
 export interface Timeout_Connection {
   type: typeof TIMEOUT_CONNECTION;
-  payload: Status;
+  payload: StatusActionPayload;
 }
 
 export interface Unknown {
   type: typeof UNKNOWN;
-  payload: Status;
+  payload: StatusActionPayload;
 }
 
 export interface User_Updated {
   type: typeof USER_UPDATED;
-  payload: Objects;
+  payload: ObjectsActionPayload;
 }
 
 export interface User_Deleted {
   type: typeof USER_DELETED;
-  payload: Objects;
+  payload: ObjectsActionPayload;
 }
 
 export interface Space_Updated {
   type: typeof SPACE_UPDATED;
-  payload: Objects;
+  payload: ObjectsActionPayload;
 }
 
 export interface Space_Deleted {
   type: typeof SPACE_DELETED;
-  payload: Objects;
+  payload: ObjectsActionPayload;
 }
 
 export interface User_Added_To_Space {
   type: typeof USER_ADDED_TO_SPACE;
-  payload: Objects;
+  payload: ObjectsActionPayload;
 }
 
 export interface User_Removed_From_Space {
   type: typeof USER_REMOVED_FROM_SPACE;
-  payload: Objects;
+  payload: ObjectsActionPayload;
 }
 
 export interface User_Membership_Updated_On_Space {
   type: typeof USER_MEMBERSHIP_UPDATED_ON_SPACE;
-  payload: Objects;
+  payload: ObjectsActionPayload;
 }
 
 export interface SignalAction {
   type: typeof SIGNAL;
-  payload: Signal;
+  payload: SignalActionPayload;
 }
 
 export type PresenceActionTypes = Join | Leave | Timeout | State_Change;
