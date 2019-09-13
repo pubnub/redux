@@ -12,7 +12,7 @@ export const SpaceDeleted = (payload: ObjectsActionPayload): AppActions => ({
   payload,
 });
 
-export const createSpaceActions = (payload: ObjectsActionPayload) => (
+export const createSpaceActionListener = (payload: ObjectsActionPayload) => (
   dispatch: Dispatch<AppActions>
 ) => {
   switch (payload.type) {

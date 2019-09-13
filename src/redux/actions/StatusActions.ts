@@ -68,7 +68,7 @@ export const Unknown = (payload: StatusActionPayload): AppActions => ({
   payload,
 });
 
-export const createStatusActions = (payload: StatusActionPayload) => (
+export const createStatusActionListener = (payload: StatusActionPayload) => (
   dispatch: Dispatch<AppActions>
 ) => {
   switch (payload.category) {

@@ -23,9 +23,9 @@ export const UserRemovedFromSpace = (
   payload,
 });
 
-export const createMembershipActions = (payload: ObjectsActionPayload) => (
-  dispatch: Dispatch<AppActions>
-) => {
+export const createMembershipActionListener = (
+  payload: ObjectsActionPayload
+) => (dispatch: Dispatch<AppActions>) => {
   switch (payload.type) {
     case 'membership':
       switch (payload.event) {

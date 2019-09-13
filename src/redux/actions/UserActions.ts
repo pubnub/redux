@@ -12,7 +12,7 @@ export const UserDeleted = (payload: ObjectsActionPayload): AppActions => ({
   payload,
 });
 
-export const createUserActions = (payload: ObjectsActionPayload) => (
+export const createUserActionListener = (payload: ObjectsActionPayload) => (
   dispatch: Dispatch<AppActions>
 ) => {
   switch (payload.type) {
