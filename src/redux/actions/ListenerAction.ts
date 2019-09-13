@@ -5,13 +5,15 @@ import { createSignalActionListener } from './SignalActions';
 import { createUserActionListener } from './UserActions';
 import { createSpaceActionListener } from './SpaceActions';
 import { createMembershipActionListener } from './MembershipActions';
+import { Dispatch } from 'redux';
+import { AppActions } from '../types/actions';
 
-export const createPubNubActionListener = (payload: any) => ({
-  message: createMessageActionListener(payload),
-  presence: createPresenceActionListener(payload),
-  signal: createSignalActionListener(payload),
-  user: createUserActionListener(payload),
-  space: createSpaceActionListener(payload),
-  membership: createMembershipActionListener(payload),
-  status: createStatusActionListener(payload),
+export const createPubNubActionListener = (dispatch: Dispatch<AppActions>) => ({
+  message: createMessageActionListener(dispatch),
+  presence: createPresenceActionListener(dispatch),
+  signal: createSignalActionListener(dispatch),
+  user: createUserActionListener(dispatch),
+  space: createSpaceActionListener(dispatch),
+  membership: createMembershipActionListener(dispatch),
+  status: createStatusActionListener(dispatch),
 });

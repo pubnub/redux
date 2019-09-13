@@ -12,8 +12,8 @@ export const UserDeleted = (payload: ObjectsActionPayload): AppActions => ({
   payload,
 });
 
-export const createUserActionListener = (payload: ObjectsActionPayload) => (
-  dispatch: Dispatch<AppActions>
+export const createUserActionListener = (dispatch: Dispatch<AppActions>) => (
+  payload: ObjectsActionPayload
 ) => {
   switch (payload.type) {
     case 'user':

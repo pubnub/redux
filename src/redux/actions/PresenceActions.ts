@@ -25,8 +25,8 @@ export const UserStateChange = (
 });
 
 export const createPresenceActionListener = (
-  payload: PresenceActionPayload
-) => (dispatch: Dispatch<AppActions>) => {
+  dispatch: Dispatch<AppActions>
+) => (payload: PresenceActionPayload) => {
   switch (payload.action) {
     case 'join':
       dispatch(UserJoin(payload));

@@ -1,9 +1,11 @@
 import { SignalActionPayload } from '../types/Signal';
 import { AppActions } from '../types/actions';
+import { Dispatch } from 'redux';
 
-export const createSignalActionListener = (
+export const createSignalActionListener = (dispatch: Dispatch<AppActions>) => (
   payload: SignalActionPayload
-): AppActions => ({
-  type: 'pubnub/SIGNAL',
-  payload,
-});
+): AppActions =>
+  dispatch({
+    type: 'pubnub/SIGNAL',
+    payload,
+  });

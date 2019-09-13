@@ -12,8 +12,8 @@ export const SpaceDeleted = (payload: ObjectsActionPayload): AppActions => ({
   payload,
 });
 
-export const createSpaceActionListener = (payload: ObjectsActionPayload) => (
-  dispatch: Dispatch<AppActions>
+export const createSpaceActionListener = (dispatch: Dispatch<AppActions>) => (
+  payload: ObjectsActionPayload
 ) => {
   switch (payload.type) {
     case 'space':

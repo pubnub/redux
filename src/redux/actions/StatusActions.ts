@@ -68,8 +68,8 @@ export const Unknown = (payload: StatusActionPayload): AppActions => ({
   payload,
 });
 
-export const createStatusActionListener = (payload: StatusActionPayload) => (
-  dispatch: Dispatch<AppActions>
+export const createStatusActionListener = (dispatch: Dispatch<AppActions>) => (
+  payload: StatusActionPayload
 ) => {
   switch (payload.category) {
     case 'PNNetworkUpCategory':

@@ -1,9 +1,11 @@
 import { MessageActionPayload } from '../types/Message';
 import { AppActions } from '../types/actions';
+import { Dispatch } from 'redux';
 
-export const createMessageActionListener = (
+export const createMessageActionListener = (dispatch: Dispatch<AppActions>) => (
   payload: MessageActionPayload
-): AppActions => ({
-  type: 'pubnub/MESSAGE',
-  payload,
-});
+): AppActions =>
+  dispatch({
+    type: 'pubnub/MESSAGE',
+    payload,
+  });
