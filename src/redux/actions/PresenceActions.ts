@@ -1,26 +1,32 @@
 import { PresenceActionPayload } from '../types/Presence';
-import { AppActions } from '../types/actions';
+import {
+  AppActions,
+  JOIN,
+  LEAVE,
+  TIMEOUT,
+  STATE_CHANGE,
+} from '../types/actions';
 import { Dispatch } from 'redux';
 
 export const UserJoin = (payload: PresenceActionPayload): AppActions => ({
-  type: 'pubnub/JOIN',
+  type: JOIN,
   payload,
 });
 
 export const UserLeave = (payload: PresenceActionPayload): AppActions => ({
-  type: 'pubnub/LEAVE',
+  type: LEAVE,
   payload,
 });
 
 export const UserTimeout = (payload: PresenceActionPayload): AppActions => ({
-  type: 'pubnub/TIMEOUT',
+  type: TIMEOUT,
   payload,
 });
 
 export const UserStateChange = (
   payload: PresenceActionPayload
 ): AppActions => ({
-  type: 'pubnub/STATE_CHANGE',
+  type: STATE_CHANGE,
   payload,
 });
 
