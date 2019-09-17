@@ -1,70 +1,84 @@
-import { AppActions } from '../types/actions';
+import {
+  AppActions,
+  NETWORK_UP,
+  NETWORK_DOWN,
+  NETWORK_ISSUES,
+  RECONNECTED,
+  CONNECTED,
+  ACCESS_DENIED,
+  MALFORMED_RESPONSE,
+  BAD_REQUEST,
+  DECRYPTION_ERROR,
+  TIMEOUT_CONNECTION,
+  REQUEST_MESSAGE_COUNT_EXCEED,
+  UNKNOWN,
+} from '../types/actions';
 import { StatusActionPayload } from '../types/Status';
 import { Dispatch } from 'redux';
 
 export const Network_Up = (payload: StatusActionPayload): AppActions => ({
-  type: 'pubnub/NETWORK_UP',
+  type: NETWORK_UP,
   payload,
 });
 
 export const Network_Down = (payload: StatusActionPayload): AppActions => ({
-  type: 'pubnub/NETWORK_DOWN',
+  type: NETWORK_DOWN,
   payload,
 });
 
 export const Network_Issues = (payload: StatusActionPayload): AppActions => ({
-  type: 'pubnub/NETWORK_ISSUES',
+  type: NETWORK_ISSUES,
   payload,
 });
 
 export const Reconnected = (payload: StatusActionPayload): AppActions => ({
-  type: 'pubnub/RECONNECTED',
+  type: RECONNECTED,
   payload,
 });
 
 export const Connected = (payload: StatusActionPayload): AppActions => ({
-  type: 'pubnub/CONNECTED',
+  type: CONNECTED,
   payload,
 });
 
 export const Access_Denied = (payload: StatusActionPayload): AppActions => ({
-  type: 'pubnub/ACCESS_DENIED',
+  type: ACCESS_DENIED,
   payload,
 });
 
 export const Malformed_Response = (
   payload: StatusActionPayload
 ): AppActions => ({
-  type: 'pubnub/MALFORMED_RESPONSE',
+  type: MALFORMED_RESPONSE,
   payload,
 });
 
 export const Bad_Request = (payload: StatusActionPayload): AppActions => ({
-  type: 'pubnub/BAD_REQUEST',
+  type: BAD_REQUEST,
   payload,
 });
 
 export const Decryption_Error = (payload: StatusActionPayload): AppActions => ({
-  type: 'pubnub/DECRYPTION_ERROR',
+  type: DECRYPTION_ERROR,
   payload,
 });
 
 export const Timeout_Connection = (
   payload: StatusActionPayload
 ): AppActions => ({
-  type: 'pubnub/TIMEOUT_CONNECTION',
+  type: TIMEOUT_CONNECTION,
   payload,
 });
 
 export const Request_Message_Count_Exceed = (
   payload: StatusActionPayload
 ): AppActions => ({
-  type: 'pubnub/REQUEST_MESSAGE_COUNT_EXCEED',
+  type: REQUEST_MESSAGE_COUNT_EXCEED,
   payload,
 });
 
 export const Unknown = (payload: StatusActionPayload): AppActions => ({
-  type: 'pubnub/UNKNOWN',
+  type: UNKNOWN,
   payload,
 });
 
