@@ -1,4 +1,5 @@
 import { createNetworkStatusReducer } from '../createNetworkStatusReducer';
+import { NETWORK_UP, NETWORK_DOWN } from '../../types/actions';
 
 const statusActionPayloadMock = {
   affectedChannelGroups: [''],
@@ -18,7 +19,7 @@ describe('createNetworkStatusReducer', () => {
       reducer(
         { isConnected: initialState },
         {
-          type: 'pubnub/NETWORK_UP',
+          type: NETWORK_UP,
           payload: statusActionPayloadMock,
         }
       )
@@ -32,7 +33,7 @@ describe('createNetworkStatusReducer', () => {
       reducer(
         { isConnected: initialState },
         {
-          type: 'pubnub/NETWORK_DOWN',
+          type: NETWORK_DOWN,
           payload: statusActionPayloadMock,
         }
       )
