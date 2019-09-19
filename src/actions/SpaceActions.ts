@@ -2,12 +2,12 @@ import { ObjectsActionPayload } from '../types/Objects';
 import { AppActions, SPACE_UPDATED, SPACE_DELETED } from '../types/actions';
 import { Dispatch } from 'redux';
 
-export const SpaceUpdated = (payload: ObjectsActionPayload): AppActions => ({
+export const spaceUpdated = (payload: ObjectsActionPayload): AppActions => ({
   type: SPACE_UPDATED,
   payload,
 });
 
-export const SpaceDeleted = (payload: ObjectsActionPayload): AppActions => ({
+export const spaceDeleted = (payload: ObjectsActionPayload): AppActions => ({
   type: SPACE_DELETED,
   payload,
 });
@@ -19,10 +19,10 @@ export const createSpaceActionListener = (dispatch: Dispatch<AppActions>) => (
     case 'space':
       switch (payload.event) {
         case 'update':
-          dispatch(SpaceUpdated(payload));
+          dispatch(spaceUpdated(payload));
           break;
         case 'delete':
-          dispatch(SpaceDeleted(payload));
+          dispatch(spaceDeleted(payload));
           break;
         default:
           break;

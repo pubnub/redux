@@ -7,21 +7,21 @@ import {
 } from '../types/actions';
 import { Dispatch } from 'redux';
 
-export const UserMembershipUpdatedOnSpace = (
+export const userMembershipUpdatedOnSpace = (
   payload: ObjectsActionPayload
 ): AppActions => ({
   type: USER_MEMBERSHIP_UPDATED_ON_SPACE,
   payload,
 });
 
-export const UserAddedToSpace = (
+export const userAddedToSpace = (
   payload: ObjectsActionPayload
 ): AppActions => ({
   type: USER_ADDED_TO_SPACE,
   payload,
 });
 
-export const UserRemovedFromSpace = (
+export const userRemovedFromSpace = (
   payload: ObjectsActionPayload
 ): AppActions => ({
   type: USER_REMOVED_FROM_SPACE,
@@ -35,13 +35,13 @@ export const createMembershipActionListener = (
     case 'membership':
       switch (payload.event) {
         case 'create':
-          dispatch(UserAddedToSpace(payload));
+          dispatch(userAddedToSpace(payload));
           break;
         case 'update':
-          dispatch(UserMembershipUpdatedOnSpace(payload));
+          dispatch(userMembershipUpdatedOnSpace(payload));
           break;
         case 'delete':
-          dispatch(UserRemovedFromSpace(payload));
+          dispatch(userRemovedFromSpace(payload));
           break;
         default:
           break;

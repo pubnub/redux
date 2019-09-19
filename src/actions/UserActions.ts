@@ -2,12 +2,12 @@ import { ObjectsActionPayload } from '../types/Objects';
 import { AppActions, USER_UPDATED, USER_DELETED } from '../types/actions';
 import { Dispatch } from 'redux';
 
-export const UserUpdated = (payload: ObjectsActionPayload): AppActions => ({
+export const userUpdated = (payload: ObjectsActionPayload): AppActions => ({
   type: USER_UPDATED,
   payload,
 });
 
-export const UserDeleted = (payload: ObjectsActionPayload): AppActions => ({
+export const userDeleted = (payload: ObjectsActionPayload): AppActions => ({
   type: USER_DELETED,
   payload,
 });
@@ -19,10 +19,10 @@ export const createUserActionListener = (dispatch: Dispatch<AppActions>) => (
     case 'user':
       switch (payload.event) {
         case 'update':
-          dispatch(UserUpdated(payload));
+          dispatch(userUpdated(payload));
           break;
         case 'delete':
-          dispatch(UserDeleted(payload));
+          dispatch(userDeleted(payload));
           break;
         default:
           break;
