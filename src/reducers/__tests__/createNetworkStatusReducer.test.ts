@@ -6,20 +6,42 @@ import {
   Network_Down,
 } from '../../types/actions';
 
+export const networkUp = (): Network_Up => ({
+  type: NETWORK_UP,
+});
+
+export const networkDown = (): Network_Down => ({
+  type: NETWORK_DOWN,
+});
+
 describe('createNetworkStatusReducer', () => {
+  it('should return the reducer when initilizer is a boolean value', () => {
+    const initializer = false;
+    const reducer = createNetworkStatusReducer(initializer);
+    expect(reducer).toBeDefined();
+  });
+
+  it('should return the reducer when initializer function returns a boolean value', () => {
+    const initializer = () => true;
+    const reducer = createNetworkStatusReducer(initializer);
+    expect(reducer).toBeDefined();
+  });
+
   it('should handle NETWORK_UP action', () => {
-    const initialState = true;
-    const reducer = createNetworkStatusReducer(initialState);
-    const state = { isConnected: initialState };
-    const action: Network_Up = { type: NETWORK_UP };
-    expect(reducer(state, action)).toEqual({ isConnected: initialState });
+    const initializer = true;
+    const reducer = createNetworkStatusReducer(initializer);
+    const initialState = { isConnected: initializer };
+    expect(reducer(initialState, networkUp())).toEqual({
+      isConnected: initializer,
+    });
   });
 
   it('should handle NETWORK_DOWN action', () => {
-    const initialState = false;
-    const reducer = createNetworkStatusReducer(initialState);
-    const state = { isConnected: initialState };
-    const action: Network_Down = { type: NETWORK_DOWN };
-    expect(reducer(state, action)).toEqual({ isConnected: initialState });
+    const initializer = false;
+    const reducer = createNetworkStatusReducer(initializer);
+    const initialState = { isConnected: initializer };
+    expect(reducer(initialState, networkDown())).toEqual({
+      isConnected: initializer,
+    });
   });
 });
