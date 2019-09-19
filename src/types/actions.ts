@@ -63,12 +63,10 @@ export interface State_Change {
 
 export interface Network_Up {
   type: typeof NETWORK_UP;
-  payload: StatusActionPayload;
 }
 
 export interface Network_Down {
   type: typeof NETWORK_DOWN;
-  payload: StatusActionPayload;
 }
 
 export interface Network_Issues {
