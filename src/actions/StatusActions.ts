@@ -16,14 +16,12 @@ import {
 import { StatusActionPayload } from '../types/Status';
 import { Dispatch } from 'redux';
 
-export const networkUp = (payload: StatusActionPayload): AppActions => ({
+export const networkUp = (): AppActions => ({
   type: NETWORK_UP,
-  payload,
 });
 
-export const networkDown = (payload: StatusActionPayload): AppActions => ({
+export const networkDown = (): AppActions => ({
   type: NETWORK_DOWN,
-  payload,
 });
 
 export const networkIssues = (payload: StatusActionPayload): AppActions => ({
@@ -87,10 +85,10 @@ export const createStatusActionListener = (dispatch: Dispatch<AppActions>) => (
 ) => {
   switch (payload.category) {
     case 'PNNetworkUpCategory':
-      dispatch(networkUp(payload));
+      dispatch(networkUp());
       break;
     case 'PNNetworkDownCategory':
-      dispatch(networkDown(payload));
+      dispatch(networkDown());
       break;
     case 'PNNetworkIssuesCategory':
       dispatch(networkIssues(payload));

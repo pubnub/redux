@@ -1,42 +1,47 @@
 import { createNetworkStatusReducer } from '../createNetworkStatusReducer';
-import { NETWORK_UP, NETWORK_DOWN } from '../../types/actions';
+import {
+  NETWORK_UP,
+  NETWORK_DOWN,
+  Network_Up,
+  Network_Down,
+} from '../../types/actions';
 
-const statusActionPayloadMock = {
-  affectedChannelGroups: [''],
-  affectedChannels: [''],
-  category: '',
-  operation: '',
-  lastTimetoken: 1,
-  currentTimetoken: '',
-  subscribedChannels: [''],
-};
+export const networkUp = (): Network_Up => ({
+  type: NETWORK_UP,
+});
+
+export const networkDown = (): Network_Down => ({
+  type: NETWORK_DOWN,
+});
 
 describe('createNetworkStatusReducer', () => {
+  it('should return the reducer when initilizer is a boolean value', () => {
+    const initializer = false;
+    const reducer = createNetworkStatusReducer(initializer);
+    expect(reducer).toBeDefined();
+  });
+
+  it('should return the reducer when initializer function returns a boolean value', () => {
+    const initializer = () => true;
+    const reducer = createNetworkStatusReducer(initializer);
+    expect(reducer).toBeDefined();
+  });
+
   it('should handle NETWORK_UP action', () => {
-    const initialState = true;
-    const reducer = createNetworkStatusReducer(initialState);
-    expect(
-      reducer(
-        { isConnected: initialState },
-        {
-          type: NETWORK_UP,
-          payload: statusActionPayloadMock,
-        }
-      )
-    ).toEqual({ isConnected: initialState });
+    const initializer = true;
+    const reducer = createNetworkStatusReducer(initializer);
+    const initialState = { isConnected: initializer };
+    expect(reducer(initialState, networkUp())).toEqual({
+      isConnected: initializer,
+    });
   });
 
   it('should handle NETWORK_DOWN action', () => {
-    const initialState = false;
-    const reducer = createNetworkStatusReducer(initialState);
-    expect(
-      reducer(
-        { isConnected: initialState },
-        {
-          type: NETWORK_DOWN,
-          payload: statusActionPayloadMock,
-        }
-      )
-    ).toEqual({ isConnected: initialState });
+    const initializer = false;
+    const reducer = createNetworkStatusReducer(initializer);
+    const initialState = { isConnected: initializer };
+    expect(reducer(initialState, networkDown())).toEqual({
+      isConnected: initializer,
+    });
   });
 });
