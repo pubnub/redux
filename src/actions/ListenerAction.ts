@@ -8,12 +8,17 @@ import { createMembershipActionListener } from './MembershipActions';
 import { Dispatch } from 'redux';
 import { AppActions } from '../types/actions';
 
-export const createPubNubActionListener = (dispatch: Dispatch<AppActions>) => ({
-  message: createMessageActionListener(dispatch),
-  presence: createPresenceActionListener(dispatch),
-  signal: createSignalActionListener(dispatch),
-  user: createUserActionListener(dispatch),
-  space: createSpaceActionListener(dispatch),
-  membership: createMembershipActionListener(dispatch),
-  status: createStatusActionListener(dispatch),
-});
+export const createPubNubActionListener = (dispatch: Dispatch<AppActions>) =>
+  combineListeners(
+    createMessageActionListener(dispatch),
+    createPresenceActionListener(dispatch),
+    createSignalActionListener(dispatch),
+    createUserActionListener(dispatch),
+    createSpaceActionListener(dispatch),
+    createMembershipActionListener(dispatch),
+    createStatusActionListener(dispatch)
+  );
+
+export const combineListeners = (...reducers: any[]) => {
+  return Object.assign({}, ...reducers);
+};

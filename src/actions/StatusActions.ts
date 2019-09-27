@@ -80,47 +80,79 @@ export const unknown = (payload: StatusActionPayload): AppActions => ({
   payload,
 });
 
-export const createStatusActionListener = (dispatch: Dispatch<AppActions>) => (
-  payload: StatusActionPayload
-) => {
-  switch (payload.category) {
-    case 'PNNetworkUpCategory':
-      dispatch(networkUp());
-      break;
-    case 'PNNetworkDownCategory':
-      dispatch(networkDown());
-      break;
-    case 'PNNetworkIssuesCategory':
-      dispatch(networkIssues(payload));
-      break;
-    case 'PNReconnectedCategory':
-      dispatch(reconnected(payload));
-      break;
-    case 'PNConnectedCategory':
-      dispatch(connected(payload));
-      break;
-    case 'PNAccessDeniedCategory':
-      dispatch(accessDenied(payload));
-      break;
-    case 'PNMalformedResponseCategory':
-      dispatch(malformedResponse(payload));
-      break;
-    case 'PNBadRequestCategory':
-      dispatch(badRequest(payload));
-      break;
-    case 'PNDecryptionErrorCategory':
-      dispatch(decryptionError(payload));
-      break;
-    case 'PNTimeoutCategory':
-      dispatch(timeoutConnection(payload));
-      break;
-    case 'PNRequestMessageCountExceedCategory':
-      dispatch(requestMessageCountExceed(payload));
-      break;
-    case 'PNUnknownCategory':
-      dispatch(unknown(payload));
-      break;
-    default:
-      break;
+export const createStatusActionListener = (
+  dispatch: Dispatch<AppActions>,
+  options = {
+    network: true,
+    subscribe: true,
+    error: true,
   }
-};
+) => ({
+  status: (payload: StatusActionPayload) => {
+    switch (payload.category) {
+      case 'PNNetworkUpCategory':
+        if (options.network) {
+          dispatch(networkUp());
+        }
+        break;
+      case 'PNNetworkDownCategory':
+        if (options.network) {
+          dispatch(networkDown());
+        }
+        break;
+      case 'PNNetworkIssuesCategory':
+        if (options.network) {
+          dispatch(networkDown());
+          dispatch(networkIssues(payload));
+        }
+        break;
+      case 'PNReconnectedCategory':
+        if (options.network || options.subscribe) {
+          dispatch(networkUp());
+          dispatch(reconnected(payload));
+        }
+        break;
+      case 'PNConnectedCategory':
+        if (options.network || options.subscribe) {
+          dispatch(networkUp());
+          dispatch(connected(payload));
+        }
+        break;
+      case 'PNAccessDeniedCategory':
+        if (options.error) {
+          dispatch(accessDenied(payload));
+        }
+        break;
+      case 'PNMalformedResponseCategory':
+        if (options.error) {
+          dispatch(malformedResponse(payload));
+        }
+        break;
+      case 'PNBadRequestCategory':
+        if (options.error) {
+          dispatch(badRequest(payload));
+        }
+        break;
+      case 'PNDecryptionErrorCategory':
+        if (options.error) {
+          dispatch(decryptionError(payload));
+        }
+        break;
+      case 'PNTimeoutCategory':
+        if (options.network) {
+          dispatch(timeoutConnection(payload));
+        }
+        break;
+      case 'PNRequestMessageCountExceedCategory':
+        if (options.error) {
+          dispatch(requestMessageCountExceed(payload));
+        }
+        break;
+      case 'PNUnknownCategory':
+        dispatch(unknown(payload));
+        break;
+      default:
+        break;
+    }
+  },
+});

@@ -12,23 +12,23 @@ export const userDeleted = (payload: ObjectsActionPayload): AppActions => ({
   payload,
 });
 
-export const createUserActionListener = (dispatch: Dispatch<AppActions>) => (
-  payload: ObjectsActionPayload
-) => {
-  switch (payload.type) {
-    case 'user':
-      switch (payload.event) {
-        case 'update':
-          dispatch(userUpdated(payload));
-          break;
-        case 'delete':
-          dispatch(userDeleted(payload));
-          break;
-        default:
-          break;
-      }
-      break;
-    default:
-      break;
-  }
-};
+export const createUserActionListener = (dispatch: Dispatch<AppActions>) => ({
+  user: (payload: ObjectsActionPayload) => {
+    switch (payload.type) {
+      case 'user':
+        switch (payload.event) {
+          case 'update':
+            dispatch(userUpdated(payload));
+            break;
+          case 'delete':
+            dispatch(userDeleted(payload));
+            break;
+          default:
+            break;
+        }
+        break;
+      default:
+        break;
+    }
+  },
+});

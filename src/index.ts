@@ -1,4 +1,7 @@
-import { createPubNubActionListener } from './actions/ListenerAction';
+import {
+  createPubNubActionListener,
+  combineListeners,
+} from './actions/ListenerAction';
 import {
   userMembershipUpdatedOnSpace,
   userAddedToSpace,
@@ -75,4 +78,5 @@ export {
   userUpdated,
   userDeleted,
   createNetworkStatusReducer,
+  combineListeners,
 };
