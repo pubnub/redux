@@ -23,20 +23,26 @@ import {
   spaceUpdated,
 } from './actions/SpaceActions';
 import {
-  createStatusActionListener,
+  createNetworkStatusActionListener,
   networkDown,
   networkUp,
-  networkIssues,
+} from './actions/NetworkStatusActions';
+import {
+  createSubscribeStatusActionListener,
   reconnected,
   connected,
+} from './actions/SubscribeStatusActions';
+import {
+  createErrorStatusActionListener,
   timeoutConnection,
   accessDenied,
+  networkIssues,
   malformedResponse,
   badRequest,
   decryptionError,
   requestMessageCountExceed,
   unknown,
-} from './actions/StatusActions';
+} from './actions/ErrorStatusActions';
 import {
   createUserActionListener,
   userUpdated,
@@ -61,7 +67,9 @@ export {
   createSpaceActionListener,
   spaceDeleted,
   spaceUpdated,
-  createStatusActionListener,
+  createNetworkStatusActionListener,
+  createSubscribeStatusActionListener,
+  createErrorStatusActionListener,
   networkDown,
   networkUp,
   networkIssues,
