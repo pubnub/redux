@@ -32,21 +32,23 @@ export const userStateChange = (
 
 export const createPresenceActionListener = (
   dispatch: Dispatch<AppActions>
-) => (payload: PresenceActionPayload) => {
-  switch (payload.action) {
-    case 'join':
-      dispatch(userJoin(payload));
-      break;
-    case 'leave':
-      dispatch(userLeave(payload));
-      break;
-    case 'timeout':
-      dispatch(userTimeout(payload));
-      break;
-    case 'state-change':
-      dispatch(userStateChange(payload));
-      break;
-    default:
-      break;
-  }
-};
+) => ({
+  presence: (payload: PresenceActionPayload) => {
+    switch (payload.action) {
+      case 'join':
+        dispatch(userJoin(payload));
+        break;
+      case 'leave':
+        dispatch(userLeave(payload));
+        break;
+      case 'timeout':
+        dispatch(userTimeout(payload));
+        break;
+      case 'state-change':
+        dispatch(userStateChange(payload));
+        break;
+      default:
+        break;
+    }
+  },
+});
