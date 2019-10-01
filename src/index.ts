@@ -21,6 +21,9 @@ import {
   createSpaceActionListener,
   spaceDeleted,
   spaceUpdated,
+  getSpaces,
+  spaceListRetrieved,
+  getSpacesError,
 } from './actions/SpaceActions';
 import {
   createNetworkStatusActionListener,
@@ -70,6 +73,9 @@ export {
   createSpaceActionListener,
   spaceDeleted,
   spaceUpdated,
+  getSpaces,
+  spaceListRetrieved,
+  getSpacesError,
   createNetworkStatusActionListener,
   createSubscribeStatusActionListener,
   createErrorStatusActionListener,
