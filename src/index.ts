@@ -47,6 +47,9 @@ import {
   createUserActionListener,
   userUpdated,
   userDeleted,
+  getUsers,
+  userListRetrieved,
+  getUsersError,
 } from './actions/UserActions';
 
 import { createNetworkStatusReducer } from './reducers/createNetworkStatusReducer';
@@ -85,6 +88,9 @@ export {
   createUserActionListener,
   userUpdated,
   userDeleted,
+  getUsers,
+  userListRetrieved,
+  getUsersError,
   createNetworkStatusReducer,
   combineListeners,
 };

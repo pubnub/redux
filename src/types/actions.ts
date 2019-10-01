@@ -1,7 +1,7 @@
 import { MessageActionPayload } from './Message';
 import { PresenceActionPayload } from './Presence';
 import { StatusActionPayload } from './Status';
-import { ObjectsActionPayload } from './Objects';
+import { ObjectsActionPayload, ObjectResponsePayload } from './Objects';
 import { SignalActionPayload } from './Signal';
 
 export const MESSAGE = 'pubnub/MESSAGE';
@@ -27,6 +27,8 @@ export const UNKNOWN = 'pubnub/UNKNOWN';
 
 export const USER_UPDATED = 'pubnub/USER_UPDATED';
 export const USER_DELETED = 'pubnub/USER_DELETED';
+export const USER_LIST_RETRIEVED = 'pubnub/USER_LIST_RETRIEVED';
+export const GET_USERS_ERROR = 'pubnub/GET_USERS_ERROR';
 export const SPACE_UPDATED = 'pubnub/SPACE_UPDATED';
 export const SPACE_DELETED = 'pubnub/SPACE_DELETED';
 export const USER_ADDED_TO_SPACE = 'pubnub/USER_ADDED_TO_SPACE';
@@ -129,6 +131,15 @@ export interface User_Deleted {
   payload: ObjectsActionPayload;
 }
 
+export interface User_List_Retrieved {
+  type: typeof USER_LIST_RETRIEVED;
+  payload: ObjectResponsePayload;
+}
+
+export interface Get_Users_Error {
+  type: typeof GET_USERS_ERROR;
+}
+
 export interface Space_Updated {
   type: typeof SPACE_UPDATED;
   payload: ObjectsActionPayload;
@@ -177,6 +188,8 @@ export type StatusActionTypes =
 export type ObjectsActionTypes =
   | User_Updated
   | User_Deleted
+  | User_List_Retrieved
+  | Get_Users_Error
   | Space_Updated
   | Space_Deleted
   | User_Added_To_Space
