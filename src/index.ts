@@ -57,6 +57,8 @@ import {
 
 import { createNetworkStatusReducer } from './reducers/createNetworkStatusReducer';
 
+import { store } from './store/configureStore';
+
 export {
   createPubNubActionListener,
   createMembershipActionListener,
@@ -99,4 +101,5 @@ export {
   getUsersError,
   createNetworkStatusReducer,
   combineListeners,
+  store,
 };
