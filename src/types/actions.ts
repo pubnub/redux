@@ -31,6 +31,8 @@ export const USER_LIST_RETRIEVED = 'pubnub/USER_LIST_RETRIEVED';
 export const GET_USERS_ERROR = 'pubnub/GET_USERS_ERROR';
 export const SPACE_UPDATED = 'pubnub/SPACE_UPDATED';
 export const SPACE_DELETED = 'pubnub/SPACE_DELETED';
+export const SPACE_LIST_RETRIEVED = 'pubnub/SPACE_LIST_RETRIEVED';
+export const GET_SPACES_ERROR = 'pubnub/GET_SPACES_ERROR';
 export const USER_ADDED_TO_SPACE = 'pubnub/USER_ADDED_TO_SPACE';
 export const USER_REMOVED_FROM_SPACE = 'pubnub/USER_REMOVED_FROM_SPACE';
 export const USER_MEMBERSHIP_UPDATED_ON_SPACE =
@@ -150,6 +152,15 @@ export interface Space_Deleted {
   payload: ObjectsActionPayload;
 }
 
+export interface Space_List_Retrieved {
+  type: typeof SPACE_LIST_RETRIEVED;
+  payload: ObjectResponsePayload;
+}
+
+export interface Get_Spaces_Error {
+  type: typeof GET_SPACES_ERROR;
+}
+
 export interface User_Added_To_Space {
   type: typeof USER_ADDED_TO_SPACE;
   payload: ObjectsActionPayload;
@@ -192,6 +203,8 @@ export type ObjectsActionTypes =
   | Get_Users_Error
   | Space_Updated
   | Space_Deleted
+  | Space_List_Retrieved
+  | Get_Spaces_Error
   | User_Added_To_Space
   | User_Removed_From_Space
   | User_Membership_Updated_On_Space;

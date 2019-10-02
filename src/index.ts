@@ -21,6 +21,9 @@ import {
   createSpaceActionListener,
   spaceDeleted,
   spaceUpdated,
+  getSpaces,
+  spaceListRetrieved,
+  getSpacesError,
 } from './actions/SpaceActions';
 import {
   createNetworkStatusActionListener,
@@ -54,6 +57,8 @@ import {
 
 import { createNetworkStatusReducer } from './reducers/createNetworkStatusReducer';
 
+import { store } from './store/configureStore';
+
 export {
   createPubNubActionListener,
   createMembershipActionListener,
@@ -70,6 +75,9 @@ export {
   createSpaceActionListener,
   spaceDeleted,
   spaceUpdated,
+  getSpaces,
+  spaceListRetrieved,
+  getSpacesError,
   createNetworkStatusActionListener,
   createSubscribeStatusActionListener,
   createErrorStatusActionListener,
@@ -93,4 +101,5 @@ export {
   getUsersError,
   createNetworkStatusReducer,
   combineListeners,
+  store,
 };
