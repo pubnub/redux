@@ -38,7 +38,7 @@ export const getSpaces = (pubnub: any, options?: SpaceListInput) => (
   dispatch: Dispatch
 ) => {
   pubnub.getSpaces(
-    { options },
+    options,
     (status: ObjectStatusPayload, response: ObjectResponsePayload) => {
       if (status.error) dispatch(getSpacesError());
       else dispatch(spaceListRetrieved(response));
