@@ -38,7 +38,7 @@ export const getUsers = (pubnub: any, options?: UsersListInput) => (
   dispatch: Dispatch
 ) => {
   pubnub.getUsers(
-    { options },
+    options,
     (status: ObjectStatusPayload, response: ObjectResponsePayload) => {
       if (status.error) dispatch(getUsersError());
       else dispatch(userListRetrieved(response));
