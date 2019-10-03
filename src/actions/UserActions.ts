@@ -1,6 +1,6 @@
 import {
   ObjectsActionPayload,
-  ObjectStatusPayload,
+  ObjectsStatusPayload,
   ObjectResponsePayload,
 } from '../types/Objects';
 import {
@@ -39,7 +39,7 @@ export const getUsers = (pubnub: any, options?: UsersListInput) => (
 ) => {
   pubnub.getUsers(
     options,
-    (status: ObjectStatusPayload, response: ObjectResponsePayload) => {
+    (status: ObjectsStatusPayload, response: ObjectResponsePayload) => {
       if (status.error) dispatch(getUsersError());
       else dispatch(userListRetrieved(response));
     }
