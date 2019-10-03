@@ -48,18 +48,12 @@ export const getSpaces = (pubnub: any, options?: SpaceListInput) => (
 
 export const createSpaceActionListener = (dispatch: Dispatch<AppActions>) => ({
   space: (payload: ObjectsActionPayload) => {
-    switch (payload.type) {
-      case 'space':
-        switch (payload.event) {
-          case 'update':
-            dispatch(spaceUpdated(payload));
-            break;
-          case 'delete':
-            dispatch(spaceDeleted(payload));
-            break;
-          default:
-            break;
-        }
+    switch (payload.message.event) {
+      case 'update':
+        dispatch(spaceUpdated(payload));
+        break;
+      case 'delete':
+        dispatch(spaceDeleted(payload));
         break;
       default:
         break;

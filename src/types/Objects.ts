@@ -1,9 +1,13 @@
 export interface ObjectsActionPayload {
-  source: string;
-  version: string;
-  event: string;
-  type: string;
-  data: object;
+  channel: string;
+  message: {
+    data: object;
+    event: string;
+    type: string;
+  };
+  publisher: string | undefined;
+  subscription: null;
+  timetoken: string;
 }
 
 export interface ObjectStatusPayload {

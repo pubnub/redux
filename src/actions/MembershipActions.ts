@@ -32,21 +32,15 @@ export const createMembershipActionListener = (
   dispatch: Dispatch<AppActions>
 ) => ({
   membership: (payload: ObjectsActionPayload) => {
-    switch (payload.type) {
-      case 'membership':
-        switch (payload.event) {
-          case 'create':
-            dispatch(userAddedToSpace(payload));
-            break;
-          case 'update':
-            dispatch(userMembershipUpdatedOnSpace(payload));
-            break;
-          case 'delete':
-            dispatch(userRemovedFromSpace(payload));
-            break;
-          default:
-            break;
-        }
+    switch (payload.message.event) {
+      case 'create':
+        dispatch(userAddedToSpace(payload));
+        break;
+      case 'update':
+        dispatch(userMembershipUpdatedOnSpace(payload));
+        break;
+      case 'delete':
+        dispatch(userRemovedFromSpace(payload));
         break;
       default:
         break;
