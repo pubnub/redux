@@ -1,7 +1,7 @@
 import {
   ObjectsActionPayload,
   ObjectsStatusPayload,
-  ObjectResponsePayload,
+  ObjectsResponsePayload,
 } from '../types/Objects';
 import {
   AppActions,
@@ -28,7 +28,7 @@ export const getSpacesError = (): AppActions => ({
 });
 
 export const spaceListRetrieved = (
-  payload: ObjectResponsePayload
+  payload: ObjectsResponsePayload
 ): AppActions => ({
   type: OBJECTS_GET_SPACES,
   payload,
@@ -39,7 +39,7 @@ export const getSpaces = (pubnub: any, options?: SpaceListInput) => (
 ) => {
   pubnub.getSpaces(
     options,
-    (status: ObjectsStatusPayload, response: ObjectResponsePayload) => {
+    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
       if (status.error) dispatch(getSpacesError());
       else dispatch(spaceListRetrieved(response));
     }

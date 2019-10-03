@@ -16,7 +16,7 @@ export interface ObjectsStatusPayload {
   statusCode: number;
 }
 
-export interface ObjectResponsePayload {
+export interface ObjectsResponsePayload {
   status: number;
   data: object | null;
 }
