@@ -5,32 +5,32 @@ import {
 } from '../types/Objects';
 import {
   AppActions,
-  USER_UPDATED,
-  USER_DELETED,
-  USER_LIST_RETRIEVED,
-  GET_USERS_ERROR,
+  OBJECTS_UPDATE_USER,
+  OBJECTS_DELETE_USER,
+  OBJECTS_GET_USERS,
+  OBJECTS_GET_USERS_ERROR,
 } from '../types/actions';
 import { Dispatch } from 'redux';
 import { UsersListInput } from '../types/User';
 
 export const userUpdated = (payload: ObjectsActionPayload): AppActions => ({
-  type: USER_UPDATED,
+  type: OBJECTS_UPDATE_USER,
   payload,
 });
 
 export const userDeleted = (payload: ObjectsActionPayload): AppActions => ({
-  type: USER_DELETED,
+  type: OBJECTS_DELETE_USER,
   payload,
 });
 
 export const getUsersError = (): AppActions => ({
-  type: GET_USERS_ERROR,
+  type: OBJECTS_GET_USERS_ERROR,
 });
 
 export const userListRetrieved = (
   payload: ObjectResponsePayload
 ): AppActions => ({
-  type: USER_LIST_RETRIEVED,
+  type: OBJECTS_GET_USERS,
   payload,
 });
 

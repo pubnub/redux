@@ -25,18 +25,19 @@ export const REQUEST_MESSAGE_COUNT_EXCEED =
   'pubnub/REQUEST_MESSAGE_COUNT_EXCEED';
 export const UNKNOWN = 'pubnub/UNKNOWN';
 
-export const USER_UPDATED = 'pubnub/USER_UPDATED';
-export const USER_DELETED = 'pubnub/USER_DELETED';
-export const USER_LIST_RETRIEVED = 'pubnub/USER_LIST_RETRIEVED';
-export const GET_USERS_ERROR = 'pubnub/GET_USERS_ERROR';
-export const SPACE_UPDATED = 'pubnub/SPACE_UPDATED';
-export const SPACE_DELETED = 'pubnub/SPACE_DELETED';
-export const SPACE_LIST_RETRIEVED = 'pubnub/SPACE_LIST_RETRIEVED';
-export const GET_SPACES_ERROR = 'pubnub/GET_SPACES_ERROR';
-export const USER_ADDED_TO_SPACE = 'pubnub/USER_ADDED_TO_SPACE';
-export const USER_REMOVED_FROM_SPACE = 'pubnub/USER_REMOVED_FROM_SPACE';
-export const USER_MEMBERSHIP_UPDATED_ON_SPACE =
-  'pubnub/USER_MEMBERSHIP_UPDATED_ON_SPACE';
+export const OBJECTS_UPDATE_USER = 'pubnub/OBJECTS_UPDATE_USER';
+export const OBJECTS_DELETE_USER = 'pubnub/OBJECTS_DELETE_USER';
+export const OBJECTS_GET_USERS = 'pubnub/OBJECTS_GET_USERS';
+export const OBJECTS_GET_USERS_ERROR = 'pubnub/OBJECTS_GET_USERS_ERROR';
+export const OBJECTS_UPDATE_SPACE = 'pubnub/OBJECTS_UPDATE_SPACE';
+export const OBJECTS_DELETE_SPACE = 'pubnub/OBJECTS_DELETE_SPACE';
+export const OBJECTS_GET_SPACES = 'pubnub/OBJECTS_GET_SPACES';
+export const OBJECTS_GET_SPACES_ERROR = 'pubnub/OBJECTS_GET_SPACES_ERROR';
+export const OBJECTS_USER_ADDED_TO_SPACE = 'pubnub/OBJECTS_USER_ADDED_TO_SPACE';
+export const OBJECTS_USER_REMOVED_FROM_SPACE =
+  'pubnub/OBJECTS_USER_REMOVED_FROM_SPACE';
+export const OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE =
+  'pubnub/OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE';
 
 export const SIGNAL = 'pubnub/SIGNAL';
 
@@ -124,55 +125,55 @@ export interface Unknown {
 }
 
 export interface User_Updated {
-  type: typeof USER_UPDATED;
+  type: typeof OBJECTS_UPDATE_USER;
   payload: ObjectsActionPayload;
 }
 
 export interface User_Deleted {
-  type: typeof USER_DELETED;
+  type: typeof OBJECTS_DELETE_USER;
   payload: ObjectsActionPayload;
 }
 
 export interface User_List_Retrieved {
-  type: typeof USER_LIST_RETRIEVED;
+  type: typeof OBJECTS_GET_USERS;
   payload: ObjectResponsePayload;
 }
 
 export interface Get_Users_Error {
-  type: typeof GET_USERS_ERROR;
+  type: typeof OBJECTS_GET_USERS_ERROR;
 }
 
 export interface Space_Updated {
-  type: typeof SPACE_UPDATED;
+  type: typeof OBJECTS_UPDATE_SPACE;
   payload: ObjectsActionPayload;
 }
 
 export interface Space_Deleted {
-  type: typeof SPACE_DELETED;
+  type: typeof OBJECTS_DELETE_SPACE;
   payload: ObjectsActionPayload;
 }
 
 export interface Space_List_Retrieved {
-  type: typeof SPACE_LIST_RETRIEVED;
+  type: typeof OBJECTS_GET_SPACES;
   payload: ObjectResponsePayload;
 }
 
 export interface Get_Spaces_Error {
-  type: typeof GET_SPACES_ERROR;
+  type: typeof OBJECTS_GET_SPACES_ERROR;
 }
 
 export interface User_Added_To_Space {
-  type: typeof USER_ADDED_TO_SPACE;
+  type: typeof OBJECTS_USER_ADDED_TO_SPACE;
   payload: ObjectsActionPayload;
 }
 
 export interface User_Removed_From_Space {
-  type: typeof USER_REMOVED_FROM_SPACE;
+  type: typeof OBJECTS_USER_REMOVED_FROM_SPACE;
   payload: ObjectsActionPayload;
 }
 
 export interface User_Membership_Updated_On_Space {
-  type: typeof USER_MEMBERSHIP_UPDATED_ON_SPACE;
+  type: typeof OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE;
   payload: ObjectsActionPayload;
 }
 

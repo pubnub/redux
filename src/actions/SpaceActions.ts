@@ -5,32 +5,32 @@ import {
 } from '../types/Objects';
 import {
   AppActions,
-  SPACE_UPDATED,
-  SPACE_DELETED,
-  GET_SPACES_ERROR,
-  SPACE_LIST_RETRIEVED,
+  OBJECTS_UPDATE_SPACE,
+  OBJECTS_DELETE_SPACE,
+  OBJECTS_GET_SPACES_ERROR,
+  OBJECTS_GET_SPACES,
 } from '../types/actions';
 import { Dispatch } from 'redux';
 import { SpaceListInput } from '../types/Space';
 
 export const spaceUpdated = (payload: ObjectsActionPayload): AppActions => ({
-  type: SPACE_UPDATED,
+  type: OBJECTS_UPDATE_SPACE,
   payload,
 });
 
 export const spaceDeleted = (payload: ObjectsActionPayload): AppActions => ({
-  type: SPACE_DELETED,
+  type: OBJECTS_DELETE_SPACE,
   payload,
 });
 
 export const getSpacesError = (): AppActions => ({
-  type: GET_SPACES_ERROR,
+  type: OBJECTS_GET_SPACES_ERROR,
 });
 
 export const spaceListRetrieved = (
   payload: ObjectResponsePayload
 ): AppActions => ({
-  type: SPACE_LIST_RETRIEVED,
+  type: OBJECTS_GET_SPACES,
   payload,
 });
 
