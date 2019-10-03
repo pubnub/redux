@@ -10,7 +10,7 @@ export interface ObjectsActionPayload {
   timetoken: string;
 }
 
-export interface ObjectStatusPayload {
+export interface ObjectsStatusPayload {
   error: boolean;
   operation: string;
   statusCode: number;
