@@ -9,9 +9,13 @@ import {
   OBJECTS_DELETE_USER,
   OBJECTS_GET_USERS,
   OBJECTS_GET_USERS_ERROR,
+  OBJECTS_GET_USER_BY_ID_ERROR,
+  OBJECTS_GET_USER_BY_ID,
+  OBJECTS_CREATE_USER_ERROR,
+  OBJECTS_CREATE_USER,
 } from '../types/actions';
 import { Dispatch } from 'redux';
-import { UsersListInput } from '../types/User';
+import { UsersListInput, createUserInput } from '../types/User';
 
 export const userUpdated = (payload: ObjectsActionPayload): AppActions => ({
   type: OBJECTS_UPDATE_USER,
@@ -23,8 +27,9 @@ export const userDeleted = (payload: ObjectsActionPayload): AppActions => ({
   payload,
 });
 
-export const getUsersError = (): AppActions => ({
-  type: OBJECTS_GET_USERS_ERROR,
+export const userCreated = (payload: ObjectsResponsePayload): AppActions => ({
+  type: OBJECTS_CREATE_USER,
+  payload,
 });
 
 export const userListRetrieved = (
@@ -34,14 +39,67 @@ export const userListRetrieved = (
   payload,
 });
 
+export const userRetrievedById = (
+  payload: ObjectsResponsePayload
+): AppActions => ({
+  type: OBJECTS_GET_USER_BY_ID,
+  payload,
+});
+
+export const getUsersError = (): AppActions => ({
+  type: OBJECTS_GET_USERS_ERROR,
+});
+
+export const getUserByIdError = (): AppActions => ({
+  type: OBJECTS_GET_USER_BY_ID_ERROR,
+});
+
+export const createUserError = (): AppActions => ({
+  type: OBJECTS_CREATE_USER_ERROR,
+});
+
+export const createUser = (
+  pubnub: any,
+  id: string,
+  name: string,
+  options?: createUserInput
+) => (dispatch: Dispatch) => {
+  pubnub.createUser(
+    {
+      id,
+      name,
+      ...options,
+    },
+    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
+      if (status.error) dispatch(createUserError());
+      else dispatch(userCreated(response));
+    }
+  );
+};
+
 export const getUsers = (pubnub: any, options?: UsersListInput) => (
   dispatch: Dispatch
 ) => {
   pubnub.getUsers(
-    options,
+    { ...options },
     (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
       if (status.error) dispatch(getUsersError());
       else dispatch(userListRetrieved(response));
+    }
+  );
+};
+
+export const getUserById = (pubnub: any, userId: string, include?: object) => (
+  dispatch: Dispatch
+) => {
+  pubnub.getUser(
+    {
+      userId,
+      ...include,
+    },
+    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
+      if (status.error) dispatch(getUserByIdError());
+      else dispatch(userRetrievedById(response));
     }
   );
 };

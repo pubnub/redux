@@ -1,7 +1,7 @@
 import { MessageActionPayload } from './Message';
 import { PresenceActionPayload } from './Presence';
 import { StatusActionPayload } from './Status';
-import { ObjectsActionPayload, ObjectResponsePayload } from './Objects';
+import { ObjectsActionPayload, ObjectsResponsePayload } from './Objects';
 import { SignalActionPayload } from './Signal';
 
 export const MESSAGE = 'pubnub/MESSAGE';
@@ -27,8 +27,13 @@ export const UNKNOWN = 'pubnub/UNKNOWN';
 
 export const OBJECTS_UPDATE_USER = 'pubnub/OBJECTS_UPDATE_USER';
 export const OBJECTS_DELETE_USER = 'pubnub/OBJECTS_DELETE_USER';
+export const OBJECTS_CREATE_USER = 'pubnub/OBJECTS_CREATE_USER';
+export const OBJECTS_CREATE_USER_ERROR = 'pubnub/OBJECTS_CREATE_USER_ERROR';
 export const OBJECTS_GET_USERS = 'pubnub/OBJECTS_GET_USERS';
 export const OBJECTS_GET_USERS_ERROR = 'pubnub/OBJECTS_GET_USERS_ERROR';
+export const OBJECTS_GET_USER_BY_ID = 'pubnub/OBJECTS_GET_USER_BY_ID';
+export const OBJECTS_GET_USER_BY_ID_ERROR =
+  'pubnub/OBJECTS_GET_USER_BY_ID_ERROR';
 export const OBJECTS_UPDATE_SPACE = 'pubnub/OBJECTS_UPDATE_SPACE';
 export const OBJECTS_DELETE_SPACE = 'pubnub/OBJECTS_DELETE_SPACE';
 export const OBJECTS_GET_SPACES = 'pubnub/OBJECTS_GET_SPACES';
@@ -134,13 +139,31 @@ export interface User_Deleted {
   payload: ObjectsActionPayload;
 }
 
+export interface User_Created {
+  type: typeof OBJECTS_CREATE_USER;
+  payload: ObjectsResponsePayload;
+}
+
+export interface Create_User_Error {
+  type: typeof OBJECTS_CREATE_USER_ERROR;
+}
+
 export interface User_List_Retrieved {
   type: typeof OBJECTS_GET_USERS;
-  payload: ObjectResponsePayload;
+  payload: ObjectsResponsePayload;
 }
 
 export interface Get_Users_Error {
   type: typeof OBJECTS_GET_USERS_ERROR;
+}
+
+export interface Get_User_By_Id {
+  type: typeof OBJECTS_GET_USER_BY_ID;
+  payload: ObjectsResponsePayload;
+}
+
+export interface Get_User_By_Id_Error {
+  type: typeof OBJECTS_GET_USER_BY_ID_ERROR;
 }
 
 export interface Space_Updated {
@@ -155,7 +178,7 @@ export interface Space_Deleted {
 
 export interface Space_List_Retrieved {
   type: typeof OBJECTS_GET_SPACES;
-  payload: ObjectResponsePayload;
+  payload: ObjectsResponsePayload;
 }
 
 export interface Get_Spaces_Error {
@@ -200,8 +223,12 @@ export type StatusActionTypes =
 export type ObjectsActionTypes =
   | User_Updated
   | User_Deleted
+  | User_Created
+  | Create_User_Error
   | User_List_Retrieved
   | Get_Users_Error
+  | Get_User_By_Id
+  | Get_User_By_Id_Error
   | Space_Updated
   | Space_Deleted
   | Space_List_Retrieved
