@@ -1,7 +1,12 @@
 export interface ObjectsActionPayload {
   channel: string;
   message: {
-    data: object;
+    data: {
+      eTag: string;
+      id: string;
+      name: string;
+      updated: string;
+    };
     event: string;
     type: string;
   };

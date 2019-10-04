@@ -50,12 +50,15 @@ import {
   createUserActionListener,
   userUpdated,
   userDeleted,
+  createUser,
   getUsers,
   userListRetrieved,
   getUsersError,
+  getUserById,
 } from './actions/UserActions';
 
 import { createNetworkStatusReducer } from './reducers/createNetworkStatusReducer';
+import { userReducer } from './reducers/userReducer';
 
 export {
   createPubNubActionListener,
@@ -94,9 +97,12 @@ export {
   createUserActionListener,
   userUpdated,
   userDeleted,
+  createUser,
   getUsers,
+  getUserById,
   userListRetrieved,
   getUsersError,
   createNetworkStatusReducer,
+  userReducer,
   combineListeners,
 };
