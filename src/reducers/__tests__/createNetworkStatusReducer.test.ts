@@ -2,15 +2,15 @@ import { createNetworkStatusReducer } from '../createNetworkStatusReducer';
 import {
   NETWORK_UP,
   NETWORK_DOWN,
-  Network_Up,
-  Network_Down,
+  NetworkUpAction,
+  NetworkDownAction,
 } from '../../types/actions';
 
-export const networkUp = (): Network_Up => ({
+export const networkUp = (): NetworkUpAction => ({
   type: NETWORK_UP,
 });
 
-export const networkDown = (): Network_Down => ({
+export const networkDown = (): NetworkDownAction => ({
   type: NETWORK_DOWN,
 });
 

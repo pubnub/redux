@@ -1,3 +1,3 @@
 export interface NetworkStatus {
-  isConnected: Boolean;
+  isConnected: boolean;
 }

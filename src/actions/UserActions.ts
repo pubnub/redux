@@ -1,10 +1,5 @@
+import { ObjectsStatusPayload, ObjectsResponsePayload } from '../types/Objects';
 import {
-  ObjectsActionPayload,
-  ObjectsStatusPayload,
-  ObjectsResponsePayload,
-} from '../types/Objects';
-import {
-  AppActions,
   OBJECTS_UPDATE_USER,
   OBJECTS_DELETE_USER,
   OBJECTS_GET_USERS,
@@ -13,48 +8,59 @@ import {
   OBJECTS_GET_USER_BY_ID,
   OBJECTS_CREATE_USER_ERROR,
   OBJECTS_CREATE_USER,
+  GetUserByIdAction,
+  UserUpdatedAction,
+  UserDeletedAction,
+  UserCreatedAction,
+  UserListRetrievedAction,
+  GetUsersErrorAction,
+  GetUserByIdErrorAction,
+  CreateUserErrorAction,
 } from '../types/actions';
 import { Dispatch } from 'redux';
-import { UsersListInput, createUserInput } from '../types/User';
+import {
+  UsersListInput,
+  CreateUserInput,
+  User,
+  UserActionPayload,
+} from '../types/User';
 
-export const userUpdated = (payload: ObjectsActionPayload): AppActions => ({
+export const userUpdated = (payload: User): UserUpdatedAction => ({
   type: OBJECTS_UPDATE_USER,
   payload,
 });
 
-export const userDeleted = (payload: ObjectsActionPayload): AppActions => ({
+export const userDeleted = (payload: User): UserDeletedAction => ({
   type: OBJECTS_DELETE_USER,
   payload,
 });
 
-export const userCreated = (payload: ObjectsResponsePayload): AppActions => ({
+export const userCreated = (payload: User): UserCreatedAction => ({
   type: OBJECTS_CREATE_USER,
   payload,
 });
 
 export const userListRetrieved = (
-  payload: ObjectsResponsePayload
-): AppActions => ({
+  payload: User[]
+): UserListRetrievedAction => ({
   type: OBJECTS_GET_USERS,
   payload,
 });
 
-export const userRetrievedById = (
-  payload: ObjectsResponsePayload
-): AppActions => ({
+export const userRetrievedById = (payload: User): GetUserByIdAction => ({
   type: OBJECTS_GET_USER_BY_ID,
   payload,
 });
 
-export const getUsersError = (): AppActions => ({
+export const getUsersError = (): GetUsersErrorAction => ({
   type: OBJECTS_GET_USERS_ERROR,
 });
 
-export const getUserByIdError = (): AppActions => ({
+export const getUserByIdError = (): GetUserByIdErrorAction => ({
   type: OBJECTS_GET_USER_BY_ID_ERROR,
 });
 
-export const createUserError = (): AppActions => ({
+export const createUserError = (): CreateUserErrorAction => ({
   type: OBJECTS_CREATE_USER_ERROR,
 });
 
@@ -62,8 +68,8 @@ export const createUser = (
   pubnub: any,
   id: string,
   name: string,
-  options?: createUserInput
-) => (dispatch: Dispatch) => {
+  options?: CreateUserInput
+) => (dispatch: Dispatch<UserCreatedAction | CreateUserErrorAction>) => {
   pubnub.createUser(
     {
       id,
@@ -71,26 +77,32 @@ export const createUser = (
       ...options,
     },
     (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
-      if (status.error) dispatch(createUserError());
-      else dispatch(userCreated(response));
+      if (status.error) {
+        dispatch(createUserError());
+      } else if (response.data !== undefined) {
+        dispatch(userCreated(response.data));
+      }
     }
   );
 };
 
 export const getUsers = (pubnub: any, options?: UsersListInput) => (
-  dispatch: Dispatch
+  dispatch: Dispatch<UserListRetrievedAction | GetUsersErrorAction>
 ) => {
   pubnub.getUsers(
     { ...options },
-    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
-      if (status.error) dispatch(getUsersError());
-      else dispatch(userListRetrieved(response));
+    (status: ObjectsStatusPayload, response: UserListRetrievedAction) => {
+      if (status.error) {
+        dispatch(getUsersError());
+      } else {
+        dispatch(userListRetrieved(response.payload));
+      }
     }
   );
 };
 
 export const getUserById = (pubnub: any, userId: string, include?: object) => (
-  dispatch: Dispatch
+  dispatch: Dispatch<GetUserByIdAction | GetUserByIdErrorAction>
 ) => {
   pubnub.getUser(
     {
@@ -98,20 +110,25 @@ export const getUserById = (pubnub: any, userId: string, include?: object) => (
       ...include,
     },
     (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
-      if (status.error) dispatch(getUserByIdError());
-      else dispatch(userRetrievedById(response));
+      if (status.error) {
+        dispatch(getUserByIdError());
+      } else if (response.data) {
+        dispatch(userRetrievedById(response.data));
+      }
     }
   );
 };
 
-export const createUserActionListener = (dispatch: Dispatch<AppActions>) => ({
-  user: (payload: ObjectsActionPayload) => {
-    switch (payload.message.event) {
+export const createUserActionListener = (
+  dispatch: Dispatch<UserUpdatedAction | UserDeletedAction>
+) => ({
+  user: (payload: UserActionPayload) => {
+    switch (payload.event) {
       case 'update':
-        dispatch(userUpdated(payload));
+        dispatch(userUpdated(payload.data));
         break;
       case 'delete':
-        dispatch(userDeleted(payload));
+        dispatch(userDeleted(payload.data));
         break;
       default:
         break;

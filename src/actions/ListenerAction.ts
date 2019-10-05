@@ -8,9 +8,11 @@ import { createUserActionListener } from './UserActions';
 import { createSpaceActionListener } from './SpaceActions';
 import { createMembershipActionListener } from './MembershipActions';
 import { Dispatch } from 'redux';
-import { AppActions } from '../types/actions';
+import { ListenerActions } from '../types/actions';
 
-export const createPubNubActionListener = (dispatch: Dispatch<AppActions>) =>
+export const createPubNubActionListener = (
+  dispatch: Dispatch<ListenerActions>
+) =>
   combineListeners(
     createMessageActionListener(dispatch),
     createPresenceActionListener(dispatch),
@@ -41,7 +43,7 @@ export const combineListeners = (...listeners: any[]) => {
  */
 const mergeListenersByType = (listeners: any[]): any[] => {
   const result: any[] = [];
-  const incomingListeners: { [key: string]: Array<any> } = {};
+  const incomingListeners: { [key: string]: any[] } = {};
 
   // group the listeners by type so we can combine them
   listeners.forEach(listener => {
@@ -57,15 +59,17 @@ const mergeListenersByType = (listeners: any[]): any[] => {
   });
 
   // merge the grouped listeners and add to the result list
-  Object.entries(incomingListeners).forEach(([listenerType, listeners]) => {
-    if (listeners.length === 1) {
-      // only one listener for this type so add directly to the result list
-      result.push(listeners[0]);
-    } else if (listeners.length > 1) {
-      // multiple listeners for this type so combine them and add to the result list
-      result.push(createCombinedListener(listenerType, listeners));
+  Object.entries(incomingListeners).forEach(
+    ([listenerType, listenersOfType]) => {
+      if (listenersOfType.length === 1) {
+        // only one listener for this type so add directly to the result list
+        result.push(listenersOfType[0]);
+      } else if (listenersOfType.length > 1) {
+        // multiple listeners for this type so combine them and add to the result list
+        result.push(createCombinedListener(listenerType, listenersOfType));
+      }
     }
-  });
+  );
 
   return result;
 };

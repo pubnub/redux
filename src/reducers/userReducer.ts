@@ -2,60 +2,91 @@ import {
   OBJECTS_GET_USERS,
   OBJECTS_GET_USERS_ERROR,
   OBJECTS_UPDATE_USER,
-  ObjectsActionTypes,
-  User_Updated,
-  User_Deleted,
+  UserListenerActions,
+  UserUpdatedAction,
+  UserDeletedAction,
   OBJECTS_GET_USER_BY_ID_ERROR,
   OBJECTS_GET_USER_BY_ID,
   OBJECTS_CREATE_USER_ERROR,
   OBJECTS_DELETE_USER,
   OBJECTS_CREATE_USER,
+  UserActions,
+  UserCreatedAction,
+  UserListRetrievedAction,
+  GetUserByIdAction,
 } from '../types/actions';
-import { UserInitialState } from '../types/User';
+import { User } from '../types/User';
 
-let initialState: UserInitialState = {
-  data: [],
-  error: '',
-  user: {},
+let initialState = {};
+
+interface UserState {
+  [key: string]: User;
+}
+
+const createUser = (
+  state: UserState = initialState,
+  action: UserCreatedAction
+) => {
+  let newState: UserState = { ...state };
+
+  newState[action.payload.id] = action.payload;
+
+  return newState;
 };
 
-const updateUser = (state = initialState, action: User_Updated) => {
-  let userIndex = state.data.findIndex(
-    (user: any) => user.id === action.payload.message.data.id
-  );
-  return {
-    ...state,
-    data: [
-      ...state.data.slice(0, userIndex),
-      action.payload.message.data,
-      ...state.data.slice(userIndex + 1),
-    ],
-  };
+const updateUser = (
+  state: UserState = initialState,
+  action: UserUpdatedAction
+) => {
+  let newState: UserState = { ...state };
+
+  newState[action.payload.id] = action.payload;
+
+  return newState;
 };
 
-const deleteUser = (state = initialState, action: User_Deleted) => {
-  let userIndex = state.data.findIndex(
-    (user: any) => user.id === action.payload.message.data.id
-  );
-  return {
-    ...state,
-    data: [
-      ...state.data.slice(0, userIndex),
-      ...state.data.slice(userIndex + 1),
-    ],
-  };
+const deleteUser = (
+  state: UserState = initialState,
+  action: UserDeletedAction
+) => {
+  let newState: UserState = { ...state };
+
+  delete newState[action.payload.id];
+
+  return newState;
+};
+
+const addUsers = (
+  state: UserState = initialState,
+  action: UserListRetrievedAction
+) => {
+  let newState: UserState = { ...state };
+
+  action.payload.forEach((user: User) => {
+    newState[user.id] = user;
+  });
+
+  return newState;
+};
+
+const addUser = (
+  state: UserState = initialState,
+  action: GetUserByIdAction
+) => {
+  let newState: UserState = { ...state };
+
+  newState[action.payload.id] = action.payload;
+
+  return newState;
 };
 
 export const userReducer = (
   state = initialState,
-  action: ObjectsActionTypes
+  action: UserActions | UserListenerActions
 ) => {
   switch (action.type) {
     case OBJECTS_CREATE_USER:
-      return {
-        ...state,
-        user: action.payload.data,
-      };
+      return createUser(state, action);
     case OBJECTS_CREATE_USER_ERROR:
       return {
         ...state,
@@ -64,15 +95,9 @@ export const userReducer = (
     case OBJECTS_DELETE_USER:
       return deleteUser(state, action);
     case OBJECTS_GET_USERS:
-      return {
-        ...state,
-        data: action.payload.data,
-      };
+      return addUsers(state, action);
     case OBJECTS_GET_USER_BY_ID:
-      return {
-        ...state,
-        user: action.payload.data,
-      };
+      return addUser(state, action);
     case OBJECTS_GET_USERS_ERROR:
     case OBJECTS_GET_USER_BY_ID_ERROR:
       return {

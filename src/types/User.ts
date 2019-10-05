@@ -1,3 +1,12 @@
+export interface User {
+  id: string;
+  name: string;
+  externalId?: string;
+  profileUrl?: string;
+  email?: string;
+  custom?: object;
+}
+
 export interface UsersListInput {
   limit?: number;
   page?: {
@@ -10,16 +19,12 @@ export interface UsersListInput {
   };
 }
 
-export interface UserInitialState {
-  data: object[];
-  error: string;
-  user: object;
+export interface CreateUserInput extends User {
+  include?: object;
 }
 
-export interface createUserInput {
-  externalId?: string;
-  profileUrl?: string;
-  email?: string;
-  custom?: object;
-  include?: object;
+export interface UserActionPayload {
+  data: User;
+  event: string;
+  type: string;
 }

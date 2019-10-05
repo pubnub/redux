@@ -1,7 +1,15 @@
-import { StatusActionTypes, NETWORK_UP, NETWORK_DOWN } from '../types/actions';
+import {
+  NETWORK_UP,
+  NETWORK_DOWN,
+  NetworkStatusListenerActions,
+} from '../types/actions';
 import { NetworkStatus } from '../types/NetworkStatus';
 
-export const createNetworkStatusReducer = (initializer: Function | boolean) => {
+type NetworkStatusInitializerFunction = () => boolean;
+
+export const createNetworkStatusReducer = (
+  initializer: NetworkStatusInitializerFunction | boolean
+) => {
   let initialState: NetworkStatus;
 
   if (typeof initializer === 'boolean') {
@@ -20,7 +28,7 @@ export const createNetworkStatusReducer = (initializer: Function | boolean) => {
   }
   return function networkStatusReducer(
     state = initialState,
-    action: StatusActionTypes
+    action: NetworkStatusListenerActions
   ): NetworkStatus {
     switch (action.type) {
       case NETWORK_UP:

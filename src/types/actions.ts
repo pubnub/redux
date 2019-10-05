@@ -2,6 +2,7 @@ import { MessageActionPayload } from './Message';
 import { PresenceActionPayload } from './Presence';
 import { StatusActionPayload } from './Status';
 import { ObjectsActionPayload, ObjectsResponsePayload } from './Objects';
+import { User } from './User';
 import { SignalActionPayload } from './Signal';
 
 export const MESSAGE = 'pubnub/MESSAGE';
@@ -46,158 +47,158 @@ export const OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE =
 
 export const SIGNAL = 'pubnub/SIGNAL';
 
-export interface MessageAction {
-  type: typeof MESSAGE;
-  payload: MessageActionPayload;
-}
-
-export interface Join {
+export interface JoinAction {
   type: typeof JOIN;
   payload: PresenceActionPayload;
 }
 
-export interface Leave {
+export interface LeaveAction {
   type: typeof LEAVE;
   payload: PresenceActionPayload;
 }
 
-export interface Timeout {
+export interface TimeoutAction {
   type: typeof TIMEOUT;
   payload: PresenceActionPayload;
 }
 
-export interface State_Change {
+export interface StateChangeAction {
   type: typeof STATE_CHANGE;
   payload: PresenceActionPayload;
 }
 
-export interface Network_Up {
+export interface NetworkUpAction {
   type: typeof NETWORK_UP;
 }
 
-export interface Network_Down {
+export interface NetworkDownAction {
   type: typeof NETWORK_DOWN;
 }
 
-export interface Network_Issues {
+export interface NetworkIssuesAction {
   type: typeof NETWORK_ISSUES;
   payload: StatusActionPayload;
 }
 
-export interface Reconnected {
+export interface ReconnectedAction {
   type: typeof RECONNECTED;
   payload: StatusActionPayload;
 }
 
-export interface Connected {
+export interface ConnectedAction {
   type: typeof CONNECTED;
   payload: StatusActionPayload;
 }
 
-export interface Access_Denied {
+export interface AccessDeniedAction {
   type: typeof ACCESS_DENIED;
   payload: StatusActionPayload;
 }
 
-export interface Malformed_Response {
+export interface MalformedResponseAction {
   type: typeof MALFORMED_RESPONSE;
   payload: StatusActionPayload;
 }
 
-export interface Bad_Request {
+export interface BadRequestAction {
   type: typeof BAD_REQUEST;
   payload: StatusActionPayload;
 }
 
-export interface Decryption_Error {
+export interface DecryptionErrorAction {
   type: typeof DECRYPTION_ERROR;
   payload: StatusActionPayload;
 }
 
-export interface Request_Message_Count_Exceed {
+export interface RequestMessageCountExceedAction {
   type: typeof REQUEST_MESSAGE_COUNT_EXCEED;
   payload: StatusActionPayload;
 }
 
-export interface Timeout_Connection {
+export interface TimeoutConnectionAction {
   type: typeof TIMEOUT_CONNECTION;
   payload: StatusActionPayload;
 }
 
-export interface Unknown {
+export interface UnknownAction {
   type: typeof UNKNOWN;
   payload: StatusActionPayload;
 }
 
-export interface User_Updated {
+export interface UserUpdatedAction {
   type: typeof OBJECTS_UPDATE_USER;
-  payload: ObjectsActionPayload;
+  payload: User;
 }
 
-export interface User_Deleted {
+export interface UserDeletedAction {
   type: typeof OBJECTS_DELETE_USER;
-  payload: ObjectsActionPayload;
+  payload: User;
 }
 
-export interface User_Created {
+export interface UserCreatedAction {
   type: typeof OBJECTS_CREATE_USER;
-  payload: ObjectsResponsePayload;
+  payload: User;
 }
 
-export interface Create_User_Error {
+export interface CreateUserErrorAction {
   type: typeof OBJECTS_CREATE_USER_ERROR;
 }
 
-export interface User_List_Retrieved {
+export interface UserListRetrievedAction {
   type: typeof OBJECTS_GET_USERS;
-  payload: ObjectsResponsePayload;
+  payload: User[];
 }
 
-export interface Get_Users_Error {
+export interface GetUsersErrorAction {
   type: typeof OBJECTS_GET_USERS_ERROR;
 }
 
-export interface Get_User_By_Id {
+export interface GetUserByIdAction {
   type: typeof OBJECTS_GET_USER_BY_ID;
-  payload: ObjectsResponsePayload;
+  payload: User;
 }
 
-export interface Get_User_By_Id_Error {
+export interface GetUserByIdErrorAction {
   type: typeof OBJECTS_GET_USER_BY_ID_ERROR;
 }
 
-export interface Space_Updated {
+export interface SpaceUpdatedAction {
   type: typeof OBJECTS_UPDATE_SPACE;
   payload: ObjectsActionPayload;
 }
 
-export interface Space_Deleted {
+export interface SpaceDeletedAction {
   type: typeof OBJECTS_DELETE_SPACE;
   payload: ObjectsActionPayload;
 }
 
-export interface Space_List_Retrieved {
+export interface SpaceListRetrievedAction {
   type: typeof OBJECTS_GET_SPACES;
   payload: ObjectsResponsePayload;
 }
 
-export interface Get_Spaces_Error {
+export interface GetSpacesErrorAction {
   type: typeof OBJECTS_GET_SPACES_ERROR;
 }
 
-export interface User_Added_To_Space {
+export interface UserAddedToSpaceAction {
   type: typeof OBJECTS_USER_ADDED_TO_SPACE;
   payload: ObjectsActionPayload;
 }
 
-export interface User_Removed_From_Space {
+export interface UserRemovedFromSpaceAction {
   type: typeof OBJECTS_USER_REMOVED_FROM_SPACE;
   payload: ObjectsActionPayload;
 }
 
-export interface User_Membership_Updated_On_Space {
+export interface UserMembershipUpdatedOnSpaceAction {
   type: typeof OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE;
   payload: ObjectsActionPayload;
+}
+
+export interface MessageAction {
+  type: typeof MESSAGE;
+  payload: MessageActionPayload;
 }
 
 export interface SignalAction {
@@ -205,41 +206,64 @@ export interface SignalAction {
   payload: SignalActionPayload;
 }
 
-export type PresenceActionTypes = Join | Leave | Timeout | State_Change;
-export type StatusActionTypes =
-  | Network_Up
-  | Network_Down
-  | Network_Issues
-  | Reconnected
-  | Connected
-  | Access_Denied
-  | Malformed_Response
-  | Bad_Request
-  | Request_Message_Count_Exceed
-  | Decryption_Error
-  | Timeout_Connection
-  | Unknown;
+export type PresenceListenerActions =
+  | JoinAction
+  | LeaveAction
+  | TimeoutAction
+  | StateChangeAction;
 
-export type ObjectsActionTypes =
-  | User_Updated
-  | User_Deleted
-  | User_Created
-  | Create_User_Error
-  | User_List_Retrieved
-  | Get_Users_Error
-  | Get_User_By_Id
-  | Get_User_By_Id_Error
-  | Space_Updated
-  | Space_Deleted
-  | Space_List_Retrieved
-  | Get_Spaces_Error
-  | User_Added_To_Space
-  | User_Removed_From_Space
-  | User_Membership_Updated_On_Space;
+export type NetworkStatusListenerActions = NetworkUpAction | NetworkDownAction;
 
-export type AppActions =
+export type SubscriptionStatusListenerActions =
+  | ReconnectedAction
+  | ConnectedAction;
+
+export type ErrorStatusListenerActions =
+  | NetworkIssuesAction
+  | AccessDeniedAction
+  | MalformedResponseAction
+  | BadRequestAction
+  | RequestMessageCountExceedAction
+  | DecryptionErrorAction
+  | TimeoutConnectionAction
+  | UnknownAction;
+
+export type StatusListenerActions =
+  | NetworkStatusListenerActions
+  | SubscriptionStatusListenerActions
+  | ErrorStatusListenerActions;
+
+export type UserActions =
+  | UserCreatedAction
+  | CreateUserErrorAction
+  | UserListRetrievedAction
+  | GetUsersErrorAction
+  | GetUserByIdAction
+  | GetUserByIdErrorAction;
+
+export type SpaceActions =
+  | SpaceUpdatedAction
+  | SpaceDeletedAction
+  | SpaceListRetrievedAction
+  | GetSpacesErrorAction;
+
+export type UserListenerActions = UserUpdatedAction | UserDeletedAction;
+
+export type SpaceListenerActions = SpaceUpdatedAction | SpaceDeletedAction;
+
+export type MembershipListenerActions =
+  | UserAddedToSpaceAction
+  | UserRemovedFromSpaceAction
+  | UserMembershipUpdatedOnSpaceAction;
+
+export type ObjectListenerActions =
+  | UserListenerActions
+  | SpaceListenerActions
+  | MembershipListenerActions;
+
+export type ListenerActions =
   | MessageAction
-  | PresenceActionTypes
-  | StatusActionTypes
-  | ObjectsActionTypes
-  | SignalAction;
+  | SignalAction
+  | PresenceListenerActions
+  | StatusListenerActions
+  | ObjectListenerActions;

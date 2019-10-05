@@ -1,17 +1,23 @@
-import { AppActions, NETWORK_UP, NETWORK_DOWN } from '../types/actions';
+import {
+  NETWORK_UP,
+  NETWORK_DOWN,
+  NetworkStatusListenerActions,
+  NetworkUpAction,
+  NetworkDownAction,
+} from '../types/actions';
 import { StatusActionPayload } from '../types/Status';
 import { Dispatch } from 'redux';
 
-export const networkUp = (): AppActions => ({
+export const networkUp = (): NetworkUpAction => ({
   type: NETWORK_UP,
 });
 
-export const networkDown = (): AppActions => ({
+export const networkDown = (): NetworkDownAction => ({
   type: NETWORK_DOWN,
 });
 
 export const createNetworkStatusActionListener = (
-  dispatch: Dispatch<AppActions>
+  dispatch: Dispatch<NetworkStatusListenerActions>
 ) => ({
   status: (payload: StatusActionPayload) => {
     switch (payload.category) {

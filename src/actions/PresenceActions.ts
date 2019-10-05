@@ -1,37 +1,41 @@
 import { PresenceActionPayload } from '../types/Presence';
 import {
-  AppActions,
   JOIN,
   LEAVE,
   TIMEOUT,
   STATE_CHANGE,
+  JoinAction,
+  LeaveAction,
+  TimeoutAction,
+  StateChangeAction,
+  PresenceListenerActions,
 } from '../types/actions';
 import { Dispatch } from 'redux';
 
-export const userJoin = (payload: PresenceActionPayload): AppActions => ({
+export const userJoin = (payload: PresenceActionPayload): JoinAction => ({
   type: JOIN,
   payload,
 });
 
-export const userLeave = (payload: PresenceActionPayload): AppActions => ({
+export const userLeave = (payload: PresenceActionPayload): LeaveAction => ({
   type: LEAVE,
   payload,
 });
 
-export const userTimeout = (payload: PresenceActionPayload): AppActions => ({
+export const userTimeout = (payload: PresenceActionPayload): TimeoutAction => ({
   type: TIMEOUT,
   payload,
 });
 
 export const userStateChange = (
   payload: PresenceActionPayload
-): AppActions => ({
+): StateChangeAction => ({
   type: STATE_CHANGE,
   payload,
 });
 
 export const createPresenceActionListener = (
-  dispatch: Dispatch<AppActions>
+  dispatch: Dispatch<PresenceListenerActions>
 ) => ({
   presence: (payload: PresenceActionPayload) => {
     switch (payload.action) {

@@ -3,33 +3,36 @@ import {
   OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
   OBJECTS_USER_ADDED_TO_SPACE,
   OBJECTS_USER_REMOVED_FROM_SPACE,
-  AppActions,
+  UserMembershipUpdatedOnSpaceAction,
+  UserAddedToSpaceAction,
+  UserRemovedFromSpaceAction,
+  MembershipListenerActions,
 } from '../types/actions';
 import { Dispatch } from 'redux';
 
 export const userMembershipUpdatedOnSpace = (
   payload: ObjectsActionPayload
-): AppActions => ({
+): UserMembershipUpdatedOnSpaceAction => ({
   type: OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
   payload,
 });
 
 export const userAddedToSpace = (
   payload: ObjectsActionPayload
-): AppActions => ({
+): UserAddedToSpaceAction => ({
   type: OBJECTS_USER_ADDED_TO_SPACE,
   payload,
 });
 
 export const userRemovedFromSpace = (
   payload: ObjectsActionPayload
-): AppActions => ({
+): UserRemovedFromSpaceAction => ({
   type: OBJECTS_USER_REMOVED_FROM_SPACE,
   payload,
 });
 
 export const createMembershipActionListener = (
-  dispatch: Dispatch<AppActions>
+  dispatch: Dispatch<MembershipListenerActions>
 ) => ({
   membership: (payload: ObjectsActionPayload) => {
     switch (payload.message.event) {
