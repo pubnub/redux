@@ -10,7 +10,7 @@ export interface UsersListInput {
   };
 }
 
-export interface UserInitialState {
+export interface UserState {
   data: object[];
   error: string;
   user: object;

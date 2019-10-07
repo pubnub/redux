@@ -23,5 +23,5 @@ export interface ObjectsStatusPayload {
 
 export interface ObjectsResponsePayload {
   status: number;
-  data: object | null;
+  data: object[];
 }
