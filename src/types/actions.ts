@@ -38,6 +38,11 @@ export const OBJECTS_UPDATE_SPACE = 'pubnub/OBJECTS_UPDATE_SPACE';
 export const OBJECTS_DELETE_SPACE = 'pubnub/OBJECTS_DELETE_SPACE';
 export const OBJECTS_GET_SPACES = 'pubnub/OBJECTS_GET_SPACES';
 export const OBJECTS_GET_SPACES_ERROR = 'pubnub/OBJECTS_GET_SPACES_ERROR';
+export const OBJECTS_CREATE_SPACE = 'pubnub/OBJECTS_CREATE_SPACE';
+export const OBJECTS_CREATE_SPACE_ERROR = 'pubnub/OBJECTS_CREATE_SPACE_ERROR';
+export const OBJECTS_GET_SPACE_BY_ID = 'pubnub/OBJECTS_GET_SPACE_BY_ID';
+export const OBJECTS_GET_SPACE_BY_ID_ERROR =
+  'pubnub/OBJECTS_GET_SPACE_BY_ID_ERROR';
 export const OBJECTS_USER_ADDED_TO_SPACE = 'pubnub/OBJECTS_USER_ADDED_TO_SPACE';
 export const OBJECTS_USER_REMOVED_FROM_SPACE =
   'pubnub/OBJECTS_USER_REMOVED_FROM_SPACE';
@@ -185,6 +190,24 @@ export interface Get_Spaces_Error {
   type: typeof OBJECTS_GET_SPACES_ERROR;
 }
 
+export interface Space_Created {
+  type: typeof OBJECTS_CREATE_SPACE;
+  payload: ObjectsResponsePayload;
+}
+
+export interface Create_Space_Error {
+  type: typeof OBJECTS_CREATE_SPACE_ERROR;
+}
+
+export interface Get_Space_By_Id {
+  type: typeof OBJECTS_GET_SPACE_BY_ID;
+  payload: ObjectsResponsePayload;
+}
+
+export interface Get_Space_By_Id_Error {
+  type: typeof OBJECTS_GET_SPACE_BY_ID_ERROR;
+}
+
 export interface User_Added_To_Space {
   type: typeof OBJECTS_USER_ADDED_TO_SPACE;
   payload: ObjectsActionPayload;
@@ -231,8 +254,12 @@ export type ObjectsActionTypes =
   | Get_User_By_Id_Error
   | Space_Updated
   | Space_Deleted
+  | Space_Created
+  | Create_Space_Error
   | Space_List_Retrieved
   | Get_Spaces_Error
+  | Get_Space_By_Id
+  | Get_Space_By_Id_Error
   | User_Added_To_Space
   | User_Removed_From_Space
   | User_Membership_Updated_On_Space;

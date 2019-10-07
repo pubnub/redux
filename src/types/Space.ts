@@ -9,3 +9,15 @@ export interface SpaceListInput {
     customFields?: boolean;
   };
 }
+
+export interface SpaceState {
+  data: object[];
+  error: string;
+  space: object;
+}
+
+export interface CreateSpaceInput {
+  description?: string;
+  custom?: object;
+  include?: object;
+}
