@@ -46,16 +46,21 @@ export const userRetrievedById = (
   payload,
 });
 
-export const getUsersError = (): AppActions => ({
+export const getUsersError = (payload: ObjectsStatusPayload): AppActions => ({
   type: OBJECTS_GET_USERS_ERROR,
+  payload,
 });
 
-export const getUserByIdError = (): AppActions => ({
+export const getUserByIdError = (
+  payload: ObjectsStatusPayload
+): AppActions => ({
   type: OBJECTS_GET_USER_BY_ID_ERROR,
+  payload,
 });
 
-export const createUserError = (): AppActions => ({
+export const createUserError = (payload: ObjectsStatusPayload): AppActions => ({
   type: OBJECTS_CREATE_USER_ERROR,
+  payload,
 });
 
 export const createUser = (
@@ -71,7 +76,7 @@ export const createUser = (
       ...options,
     },
     (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
-      if (status.error) dispatch(createUserError());
+      if (status.error) dispatch(createUserError(status));
       else dispatch(userCreated(response));
     }
   );
@@ -83,7 +88,7 @@ export const getUsers = (pubnub: any, options?: UsersListInput) => (
   pubnub.getUsers(
     { ...options },
     (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
-      if (status.error) dispatch(getUsersError());
+      if (status.error) dispatch(getUsersError(status));
       else dispatch(userListRetrieved(response));
     }
   );
@@ -98,7 +103,7 @@ export const getUserById = (pubnub: any, userId: string, include?: object) => (
       ...include,
     },
     (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
-      if (status.error) dispatch(getUserByIdError());
+      if (status.error) dispatch(getUserByIdError(status));
       else dispatch(userRetrievedById(response));
     }
   );

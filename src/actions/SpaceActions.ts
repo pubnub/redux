@@ -46,16 +46,23 @@ export const spaceRetrievedById = (
   payload,
 });
 
-export const getSpacesError = (): AppActions => ({
+export const getSpacesError = (payload: ObjectsStatusPayload): AppActions => ({
   type: OBJECTS_GET_SPACES_ERROR,
+  payload,
 });
 
-export const getSpaceByIdError = (): AppActions => ({
+export const getSpaceByIdError = (
+  payload: ObjectsStatusPayload
+): AppActions => ({
   type: OBJECTS_GET_SPACE_BY_ID_ERROR,
+  payload,
 });
 
-export const createSpaceError = (): AppActions => ({
+export const createSpaceError = (
+  payload: ObjectsStatusPayload
+): AppActions => ({
   type: OBJECTS_CREATE_SPACE_ERROR,
+  payload,
 });
 
 export const createSpace = (
@@ -71,7 +78,7 @@ export const createSpace = (
       ...options,
     },
     (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
-      if (status.error) dispatch(createSpaceError());
+      if (status.error) dispatch(createSpaceError(status));
       else dispatch(spaceCreated(response));
     }
   );
@@ -83,7 +90,7 @@ export const getSpaces = (pubnub: any, options?: SpaceListInput) => (
   pubnub.getSpaces(
     { ...options },
     (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
-      if (status.error) dispatch(getSpacesError());
+      if (status.error) dispatch(getSpacesError(status));
       else dispatch(spaceListRetrieved(response));
     }
   );
@@ -100,7 +107,7 @@ export const getSpaceById = (
       ...include,
     },
     (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
-      if (status.error) dispatch(getSpaceByIdError());
+      if (status.error) dispatch(getSpaceByIdError(status));
       else dispatch(spaceRetrievedById(response));
     }
   );

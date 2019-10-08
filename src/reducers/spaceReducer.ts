@@ -10,7 +10,11 @@ import {
   OBJECTS_UPDATE_SPACE,
   OBJECTS_GET_SPACE_BY_ID,
 } from '../types/actions';
-import { ObjectsResponsePayload, ObjectsActionPayload } from '../types/Objects';
+import {
+  ObjectsResponsePayload,
+  ObjectsActionPayload,
+  ObjectsStatusPayload,
+} from '../types/Objects';
 
 let initialState: SpaceState = {
   data: [],
@@ -21,6 +25,14 @@ let initialState: SpaceState = {
 const createSpace = (state: SpaceState, payload: ObjectsResponsePayload) => ({
   ...state,
   data: [...state.data, payload.data],
+});
+
+const createSpaceError = (
+  state: SpaceState,
+  payload: ObjectsStatusPayload
+) => ({
+  ...state,
+  error: payload.errorData.error.message,
 });
 
 const updateSpace = (state: SpaceState, payload: ObjectsActionPayload) => {
@@ -60,6 +72,11 @@ const getSpaceById = (state: SpaceState, payload: ObjectsResponsePayload) => ({
   space: payload.data,
 });
 
+const getSpaceError = (state: SpaceState, payload: ObjectsStatusPayload) => ({
+  ...state,
+  error: payload.errorData.error.message,
+});
+
 export const spaceReducer = (
   state = initialState,
   action: ObjectsActionTypes
@@ -68,10 +85,7 @@ export const spaceReducer = (
     case OBJECTS_CREATE_SPACE:
       return createSpace(state, action.payload);
     case OBJECTS_CREATE_SPACE_ERROR:
-      return {
-        ...state,
-        error: 'Error while trying to create a space',
-      };
+      return createSpaceError(state, action.payload);
     case OBJECTS_DELETE_SPACE:
       return deleteSpace(state, action.payload);
     case OBJECTS_GET_SPACES:
@@ -80,10 +94,7 @@ export const spaceReducer = (
       return getSpaceById(state, action.payload);
     case OBJECTS_GET_SPACES_ERROR:
     case OBJECTS_GET_SPACE_BY_ID_ERROR:
-      return {
-        ...state,
-        error: 'Error while trying to retrieve space(s)',
-      };
+      return getSpaceError(state, action.payload);
     case OBJECTS_UPDATE_SPACE:
       return updateSpace(state, action.payload);
     default:

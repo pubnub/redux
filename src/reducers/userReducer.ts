@@ -10,7 +10,11 @@ import {
   OBJECTS_CREATE_USER,
 } from '../types/actions';
 import { UserState } from '../types/User';
-import { ObjectsActionPayload, ObjectsResponsePayload } from 'types/Objects';
+import {
+  ObjectsActionPayload,
+  ObjectsResponsePayload,
+  ObjectsStatusPayload,
+} from 'types/Objects';
 
 let initialState: UserState = {
   data: [],
@@ -21,6 +25,11 @@ let initialState: UserState = {
 const createUser = (state: UserState, payload: ObjectsResponsePayload) => ({
   ...state,
   data: [...state.data, payload.data],
+});
+
+const createUserError = (state: UserState, payload: ObjectsStatusPayload) => ({
+  ...state,
+  error: payload.errorData.error.message,
 });
 
 const updateUser = (state: UserState, payload: ObjectsActionPayload) => {
@@ -60,6 +69,11 @@ const getUserById = (state: UserState, payload: ObjectsResponsePayload) => ({
   user: payload.data,
 });
 
+const getUserError = (state: UserState, payload: ObjectsStatusPayload) => ({
+  ...state,
+  error: payload.errorData.error.message,
+});
+
 export const userReducer = (
   state = initialState,
   action: ObjectsActionTypes
@@ -68,10 +82,7 @@ export const userReducer = (
     case OBJECTS_CREATE_USER:
       return createUser(state, action.payload);
     case OBJECTS_CREATE_USER_ERROR:
-      return {
-        ...state,
-        error: 'Error while trying to create an user',
-      };
+      return createUserError(state, action.payload);
     case OBJECTS_DELETE_USER:
       return deleteUser(state, action.payload);
     case OBJECTS_GET_USERS:
@@ -80,10 +91,7 @@ export const userReducer = (
       return getUserById(state, action.payload);
     case OBJECTS_GET_USERS_ERROR:
     case OBJECTS_GET_USER_BY_ID_ERROR:
-      return {
-        ...state,
-        error: 'Error while trying to retrieve user(s)',
-      };
+      return getUserError(state, action.payload);
     case OBJECTS_UPDATE_USER:
       return updateUser(state, action.payload);
     default:
