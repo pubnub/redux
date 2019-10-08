@@ -7,6 +7,9 @@ import {
   userAddedToSpace,
   userRemovedFromSpace,
   createMembershipActionListener,
+  getMembers,
+  getMemberships,
+  addMembers,
 } from './actions/MembershipActions';
 import { createMessageActionListener } from './actions/MessageActions';
 import {
@@ -69,6 +72,9 @@ export {
   userMembershipUpdatedOnSpace,
   userAddedToSpace,
   userRemovedFromSpace,
+  getMembers,
+  getMemberships,
+  addMembers,
   createMessageActionListener,
   createPresenceActionListener,
   userJoin,

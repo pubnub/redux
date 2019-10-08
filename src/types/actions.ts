@@ -1,7 +1,11 @@
 import { MessageActionPayload } from './Message';
 import { PresenceActionPayload } from './Presence';
 import { StatusActionPayload } from './Status';
-import { ObjectsActionPayload, ObjectsResponsePayload } from './Objects';
+import {
+  ObjectsActionPayload,
+  ObjectsResponsePayload,
+  ObjectsStatusPayload,
+} from './Objects';
 import { SignalActionPayload } from './Signal';
 
 export const MESSAGE = 'pubnub/MESSAGE';
@@ -48,6 +52,16 @@ export const OBJECTS_USER_REMOVED_FROM_SPACE =
   'pubnub/OBJECTS_USER_REMOVED_FROM_SPACE';
 export const OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE =
   'pubnub/OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE';
+export const OBJECTS_GET_MEMBERS = 'pubnub/OBJECTS_GET_MEMBERS';
+export const OBJECTS_GET_MEMBERS_ERROR = 'pubnub/OBJECTS_GET_MEMBERS_ERROR';
+export const OBJECTS_GET_MEMBERSHIPS = 'pubnub/OBJECTS_GET_MEMBERSHIPS';
+export const OBJECTS_GET_MEMBERSHIPS_ERROR =
+  'pubnub/OBJECTS_GET_MEMBERSHIPS_ERROR';
+export const OBJECTS_ADD_MEMBERS = 'pubunb/OBJECTS_ADD_MEMBERS';
+export const OBJECTS_ADD_MEMBERS_ERROR = 'pubnub/OBJECTS_ADD_MEMBERS_ERROR';
+export const OBJECTS_REMOVE_MEMBERS = 'pubnub/OBJECTS_REMOVE_MEMBERS';
+export const OBJECTS_REMOVE_MEMBERS_ERROR =
+  'pubnub/OBJECTS_REMOVE_MEMBERS_ERROR';
 
 export const SIGNAL = 'pubnub/SIGNAL';
 
@@ -151,6 +165,7 @@ export interface User_Created {
 
 export interface Create_User_Error {
   type: typeof OBJECTS_CREATE_USER_ERROR;
+  payload: ObjectsStatusPayload;
 }
 
 export interface User_List_Retrieved {
@@ -160,6 +175,7 @@ export interface User_List_Retrieved {
 
 export interface Get_Users_Error {
   type: typeof OBJECTS_GET_USERS_ERROR;
+  payload: ObjectsStatusPayload;
 }
 
 export interface Get_User_By_Id {
@@ -169,6 +185,7 @@ export interface Get_User_By_Id {
 
 export interface Get_User_By_Id_Error {
   type: typeof OBJECTS_GET_USER_BY_ID_ERROR;
+  payload: ObjectsStatusPayload;
 }
 
 export interface Space_Updated {
@@ -188,6 +205,7 @@ export interface Space_List_Retrieved {
 
 export interface Get_Spaces_Error {
   type: typeof OBJECTS_GET_SPACES_ERROR;
+  payload: ObjectsStatusPayload;
 }
 
 export interface Space_Created {
@@ -197,6 +215,7 @@ export interface Space_Created {
 
 export interface Create_Space_Error {
   type: typeof OBJECTS_CREATE_SPACE_ERROR;
+  payload: ObjectsStatusPayload;
 }
 
 export interface Get_Space_By_Id {
@@ -206,6 +225,7 @@ export interface Get_Space_By_Id {
 
 export interface Get_Space_By_Id_Error {
   type: typeof OBJECTS_GET_SPACE_BY_ID_ERROR;
+  payload: ObjectsStatusPayload;
 }
 
 export interface User_Added_To_Space {
@@ -221,6 +241,46 @@ export interface User_Removed_From_Space {
 export interface User_Membership_Updated_On_Space {
   type: typeof OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE;
   payload: ObjectsActionPayload;
+}
+
+export interface Member_List_Retrieved {
+  type: typeof OBJECTS_GET_MEMBERS;
+  payload: ObjectsResponsePayload;
+}
+
+export interface Get_Members_Error {
+  type: typeof OBJECTS_GET_MEMBERS_ERROR;
+  payload: ObjectsStatusPayload;
+}
+
+export interface Memberships_Retrieved {
+  type: typeof OBJECTS_GET_MEMBERSHIPS;
+  payload: ObjectsResponsePayload;
+}
+
+export interface Get_Memerships_Error {
+  type: typeof OBJECTS_GET_MEMBERSHIPS_ERROR;
+  payload: ObjectsStatusPayload;
+}
+
+export interface Members_Added {
+  type: typeof OBJECTS_ADD_MEMBERS;
+  payload: ObjectsResponsePayload;
+}
+
+export interface Add_Members_Error {
+  type: typeof OBJECTS_ADD_MEMBERS_ERROR;
+  payload: ObjectsStatusPayload;
+}
+
+export interface Members_Removed {
+  type: typeof OBJECTS_REMOVE_MEMBERS;
+  payload: ObjectsResponsePayload;
+}
+
+export interface Remove_Members_Error {
+  type: typeof OBJECTS_REMOVE_MEMBERS_ERROR;
+  payload: ObjectsStatusPayload;
 }
 
 export interface SignalAction {
@@ -262,7 +322,15 @@ export type ObjectsActionTypes =
   | Get_Space_By_Id_Error
   | User_Added_To_Space
   | User_Removed_From_Space
-  | User_Membership_Updated_On_Space;
+  | User_Membership_Updated_On_Space
+  | Member_List_Retrieved
+  | Get_Members_Error
+  | Memberships_Retrieved
+  | Get_Memerships_Error
+  | Members_Added
+  | Members_Removed
+  | Remove_Members_Error
+  | Add_Members_Error;
 
 export type AppActions =
   | MessageAction

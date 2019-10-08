@@ -1,11 +1,24 @@
-import { ObjectsActionPayload } from '../types/Objects';
+import {
+  ObjectsActionPayload,
+  ObjectsStatusPayload,
+  ObjectsResponsePayload,
+} from '../types/Objects';
 import {
   OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
   OBJECTS_USER_ADDED_TO_SPACE,
   OBJECTS_USER_REMOVED_FROM_SPACE,
   AppActions,
+  OBJECTS_GET_MEMBERS_ERROR,
+  OBJECTS_GET_MEMBERS,
+  OBJECTS_GET_MEMBERSHIPS,
+  OBJECTS_GET_MEMBERSHIPS_ERROR,
+  OBJECTS_ADD_MEMBERS_ERROR,
+  OBJECTS_ADD_MEMBERS,
+  OBJECTS_REMOVE_MEMBERS_ERROR,
+  OBJECTS_REMOVE_MEMBERS,
 } from '../types/actions';
 import { Dispatch } from 'redux';
+import { MembershipListInput, MemberList } from '../types/Membership';
 
 export const userMembershipUpdatedOnSpace = (
   payload: ObjectsActionPayload
@@ -27,6 +40,118 @@ export const userRemovedFromSpace = (
   type: OBJECTS_USER_REMOVED_FROM_SPACE,
   payload,
 });
+
+const memberListRetrieved = (payload: ObjectsResponsePayload): AppActions => ({
+  type: OBJECTS_GET_MEMBERS,
+  payload,
+});
+
+const membershipsRetrieved = (payload: ObjectsResponsePayload): AppActions => ({
+  type: OBJECTS_GET_MEMBERSHIPS,
+  payload,
+});
+
+const membersRemoved = (payload: ObjectsResponsePayload): AppActions => ({
+  type: OBJECTS_REMOVE_MEMBERS,
+  payload,
+});
+
+const membersAdded = (payload: ObjectsResponsePayload): AppActions => ({
+  type: OBJECTS_ADD_MEMBERS,
+  payload,
+});
+
+const addMembersError = (payload: ObjectsStatusPayload): AppActions => ({
+  type: OBJECTS_ADD_MEMBERS_ERROR,
+  payload,
+});
+
+const removeMembersError = (payload: ObjectsStatusPayload): AppActions => ({
+  type: OBJECTS_REMOVE_MEMBERS_ERROR,
+  payload,
+});
+
+const getMembershipsError = (payload: ObjectsStatusPayload): AppActions => ({
+  type: OBJECTS_GET_MEMBERSHIPS_ERROR,
+  payload,
+});
+
+const getMembersError = (payload: ObjectsStatusPayload): AppActions => ({
+  type: OBJECTS_GET_MEMBERS_ERROR,
+  payload,
+});
+
+export const getMembers = (
+  pubnub: any,
+  spaceId: string,
+  options?: MembershipListInput
+) => (dispatch: Dispatch) => {
+  pubnub.getMembers(
+    {
+      spaceId,
+      ...options,
+    },
+    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
+      if (status.error) dispatch(getMembersError(status));
+      else dispatch(memberListRetrieved(response));
+    }
+  );
+};
+
+export const removeMembers = (
+  pubnub: any,
+  spaceId: string,
+  users: string[],
+  options?: MembershipListInput
+) => (dispatch: Dispatch) => {
+  pubnub.removeMembers(
+    {
+      spaceId,
+      users,
+      ...options,
+    },
+    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
+      if (status.error) dispatch(removeMembersError(status));
+      else dispatch(membersRemoved(response));
+    }
+  );
+};
+
+export const getMemberships = (
+  pubnub: any,
+  userId: string,
+  options?: MembershipListInput
+) => (dispatch: Dispatch) => {
+  pubnub.getMemberships(
+    {
+      userId,
+      ...options,
+    },
+    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
+      if (status.error) dispatch(getMembershipsError(status));
+      else dispatch(membershipsRetrieved(response));
+    }
+  );
+};
+
+export const addMembers = (
+  pubnub: any,
+  spaceId: string,
+  users: MemberList[],
+  options?: MembershipListInput
+) => (dispatch: Dispatch) => {
+  pubnub.addMembers(
+    {
+      spaceId,
+      users,
+      ...options,
+    },
+    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
+      if (status.error) dispatch(addMembersError(status));
+      else dispatch(membersAdded(response));
+    }
+  );
+};
 
 export const createMembershipActionListener = (
   dispatch: Dispatch<AppActions>
