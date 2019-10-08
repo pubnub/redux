@@ -3,20 +3,32 @@ export interface ObjectsActionPayload {
   message: {
     data: {
       eTag: string;
-      id: string;
-      name: string;
-      updated: string;
+      id?: string;
+      spaceId?: string;
+      userId?: string;
+      name?: string;
+      created?: string;
+      updated?: string;
+      custom?: string | null;
     };
     event: string;
     type: string;
   };
-  publisher: string | undefined;
-  subscription: null;
+  publisher?: string | undefined;
+  subscription: string | null;
   timetoken: string;
 }
 
 export interface ObjectsStatusPayload {
+  category: string;
   error: boolean;
+  errorData: {
+    status: number;
+    error: {
+      message: string;
+      source: string;
+    };
+  };
   operation: string;
   statusCode: number;
 }
