@@ -20,7 +20,7 @@ let initialState: UserState = {
 
 const createUser = (state: UserState, payload: ObjectsResponsePayload) => ({
   ...state,
-  user: payload.data,
+  data: [...state.data, payload.data],
 });
 
 const updateUser = (state: UserState, payload: ObjectsActionPayload) => {

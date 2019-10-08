@@ -20,7 +20,7 @@ let initialState: SpaceState = {
 
 const createSpace = (state: SpaceState, payload: ObjectsResponsePayload) => ({
   ...state,
-  space: payload.data,
+  data: [...state.data, payload.data],
 });
 
 const updateSpace = (state: SpaceState, payload: ObjectsActionPayload) => {
