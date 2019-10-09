@@ -1,4 +1,3 @@
-import { SpaceState } from '../types/Space';
 import {
   ObjectsActionTypes,
   OBJECTS_GET_SPACES,
@@ -15,6 +14,12 @@ import {
   ObjectsActionPayload,
   ObjectsStatusPayload,
 } from '../types/Objects';
+
+interface SpaceState {
+  data: object[];
+  error: string;
+  space: object;
+}
 
 let initialState: SpaceState = {
   data: [],

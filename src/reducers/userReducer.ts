@@ -9,12 +9,17 @@ import {
   OBJECTS_DELETE_USER,
   OBJECTS_CREATE_USER,
 } from '../types/actions';
-import { UserState } from '../types/User';
 import {
   ObjectsActionPayload,
   ObjectsResponsePayload,
   ObjectsStatusPayload,
 } from 'types/Objects';
+
+interface UserState {
+  data: object[];
+  error: string;
+  user: object;
+}
 
 let initialState: UserState = {
   data: [],

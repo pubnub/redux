@@ -10,12 +10,17 @@ import {
   OBJECTS_REMOVE_MEMBERS,
   OBJECTS_REMOVE_MEMBERS_ERROR,
 } from '../types/actions';
-import { MembershipState } from '../types/Membership';
 import {
   ObjectsActionPayload,
   ObjectsResponsePayload,
   ObjectsStatusPayload,
 } from '../types/Objects';
+
+interface MembershipState {
+  user: object;
+  error: string;
+  data: object[];
+}
 
 let initialState: MembershipState = {
   user: {},

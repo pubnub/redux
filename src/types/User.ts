@@ -10,12 +10,6 @@ export interface UsersListInput {
   };
 }
 
-export interface UserState {
-  data: object[];
-  error: string;
-  user: object;
-}
-
 export interface createUserInput {
   externalId?: string;
   profileUrl?: string;
