@@ -34,7 +34,7 @@ const createUser = (state: UserState, payload: ObjectsResponsePayload) => ({
 
 const createUserError = (state: UserState, payload: ObjectsStatusPayload) => ({
   ...state,
-  error: payload.errorData.error.message,
+  error: payload.errorData ? payload.errorData.error.message : payload.message,
 });
 
 const updateUser = (state: UserState, payload: ObjectsActionPayload) => {
@@ -76,7 +76,7 @@ const getUserById = (state: UserState, payload: ObjectsResponsePayload) => ({
 
 const getUserError = (state: UserState, payload: ObjectsStatusPayload) => ({
   ...state,
-  error: payload.errorData.error.message,
+  error: payload.errorData ? payload.errorData.error.message : payload.message,
 });
 
 export const userReducer = (

@@ -31,6 +31,8 @@ export interface ObjectsStatusPayload {
   };
   operation: string;
   statusCode: number;
+  message: string;
+  type: string;
 }
 
 export interface ObjectsResponsePayload {

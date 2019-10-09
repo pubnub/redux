@@ -37,7 +37,7 @@ const createSpaceError = (
   payload: ObjectsStatusPayload
 ) => ({
   ...state,
-  error: payload.errorData.error.message,
+  error: payload.errorData ? payload.errorData.error.message : payload.message,
 });
 
 const updateSpace = (state: SpaceState, payload: ObjectsActionPayload) => {
@@ -79,7 +79,7 @@ const getSpaceById = (state: SpaceState, payload: ObjectsResponsePayload) => ({
 
 const getSpaceError = (state: SpaceState, payload: ObjectsStatusPayload) => ({
   ...state,
-  error: payload.errorData.error.message,
+  error: payload.errorData ? payload.errorData.error.message : payload.message,
 });
 
 export const spaceReducer = (

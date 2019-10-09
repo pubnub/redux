@@ -49,7 +49,7 @@ const addMembersError = (
   payload: ObjectsStatusPayload
 ) => ({
   ...state,
-  error: payload.errorData.error.message,
+  error: payload.errorData ? payload.errorData.error.message : payload.message,
 });
 
 const removeMembersError = (
@@ -57,7 +57,7 @@ const removeMembersError = (
   payload: ObjectsStatusPayload
 ) => ({
   ...state,
-  error: payload.errorData.error.message,
+  error: payload.errorData ? payload.errorData.error.message : payload.message,
 });
 
 const getMembers = (
@@ -81,7 +81,7 @@ const getMemberError = (
   payload: ObjectsStatusPayload
 ) => ({
   ...state,
-  error: payload.errorData.error.message,
+  error: payload.errorData ? payload.errorData.error.message : payload.message,
 });
 
 export const membershipReducer = (
