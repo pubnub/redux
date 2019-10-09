@@ -9,7 +9,6 @@ import {
   createMembershipActionListener,
   getMembers,
   getMemberships,
-  addMembers,
 } from './actions/MembershipActions';
 import { createMessageActionListener } from './actions/MessageActions';
 import {
@@ -65,6 +64,7 @@ import {
 import { createNetworkStatusReducer } from './reducers/createNetworkStatusReducer';
 import { userReducer } from './reducers/userReducer';
 import { spaceReducer } from './reducers/spaceReducer';
+import { membershipReducer } from './reducers/membershipReducer';
 
 export {
   createPubNubActionListener,
@@ -74,7 +74,6 @@ export {
   userRemovedFromSpace,
   getMembers,
   getMemberships,
-  addMembers,
   createMessageActionListener,
   createPresenceActionListener,
   userJoin,
@@ -116,5 +115,6 @@ export {
   createNetworkStatusReducer,
   userReducer,
   spaceReducer,
+  membershipReducer,
   combineListeners,
 };

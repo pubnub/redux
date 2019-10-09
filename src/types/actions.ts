@@ -57,11 +57,6 @@ export const OBJECTS_GET_MEMBERS_ERROR = 'pubnub/OBJECTS_GET_MEMBERS_ERROR';
 export const OBJECTS_GET_MEMBERSHIPS = 'pubnub/OBJECTS_GET_MEMBERSHIPS';
 export const OBJECTS_GET_MEMBERSHIPS_ERROR =
   'pubnub/OBJECTS_GET_MEMBERSHIPS_ERROR';
-export const OBJECTS_ADD_MEMBERS = 'pubunb/OBJECTS_ADD_MEMBERS';
-export const OBJECTS_ADD_MEMBERS_ERROR = 'pubnub/OBJECTS_ADD_MEMBERS_ERROR';
-export const OBJECTS_REMOVE_MEMBERS = 'pubnub/OBJECTS_REMOVE_MEMBERS';
-export const OBJECTS_REMOVE_MEMBERS_ERROR =
-  'pubnub/OBJECTS_REMOVE_MEMBERS_ERROR';
 
 export const SIGNAL = 'pubnub/SIGNAL';
 
@@ -263,26 +258,6 @@ export interface Get_Memerships_Error {
   payload: ObjectsStatusPayload;
 }
 
-export interface Members_Added {
-  type: typeof OBJECTS_ADD_MEMBERS;
-  payload: ObjectsResponsePayload;
-}
-
-export interface Add_Members_Error {
-  type: typeof OBJECTS_ADD_MEMBERS_ERROR;
-  payload: ObjectsStatusPayload;
-}
-
-export interface Members_Removed {
-  type: typeof OBJECTS_REMOVE_MEMBERS;
-  payload: ObjectsResponsePayload;
-}
-
-export interface Remove_Members_Error {
-  type: typeof OBJECTS_REMOVE_MEMBERS_ERROR;
-  payload: ObjectsStatusPayload;
-}
-
 export interface SignalAction {
   type: typeof SIGNAL;
   payload: SignalActionPayload;
@@ -326,11 +301,7 @@ export type ObjectsActionTypes =
   | Member_List_Retrieved
   | Get_Members_Error
   | Memberships_Retrieved
-  | Get_Memerships_Error
-  | Members_Added
-  | Members_Removed
-  | Remove_Members_Error
-  | Add_Members_Error;
+  | Get_Memerships_Error;
 
 export type AppActions =
   | MessageAction

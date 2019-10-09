@@ -12,13 +12,9 @@ import {
   OBJECTS_GET_MEMBERS,
   OBJECTS_GET_MEMBERSHIPS,
   OBJECTS_GET_MEMBERSHIPS_ERROR,
-  OBJECTS_ADD_MEMBERS_ERROR,
-  OBJECTS_ADD_MEMBERS,
-  OBJECTS_REMOVE_MEMBERS_ERROR,
-  OBJECTS_REMOVE_MEMBERS,
 } from '../types/actions';
 import { Dispatch } from 'redux';
-import { MembershipListInput, MemberList } from '../types/Membership';
+import { MembershipListInput } from '../types/Membership';
 
 export const userMembershipUpdatedOnSpace = (
   payload: ObjectsActionPayload
@@ -51,26 +47,6 @@ const membershipsRetrieved = (payload: ObjectsResponsePayload): AppActions => ({
   payload,
 });
 
-const membersRemoved = (payload: ObjectsResponsePayload): AppActions => ({
-  type: OBJECTS_REMOVE_MEMBERS,
-  payload,
-});
-
-const membersAdded = (payload: ObjectsResponsePayload): AppActions => ({
-  type: OBJECTS_ADD_MEMBERS,
-  payload,
-});
-
-const addMembersError = (payload: ObjectsStatusPayload): AppActions => ({
-  type: OBJECTS_ADD_MEMBERS_ERROR,
-  payload,
-});
-
-const removeMembersError = (payload: ObjectsStatusPayload): AppActions => ({
-  type: OBJECTS_REMOVE_MEMBERS_ERROR,
-  payload,
-});
-
 const getMembershipsError = (payload: ObjectsStatusPayload): AppActions => ({
   type: OBJECTS_GET_MEMBERSHIPS_ERROR,
   payload,
@@ -98,25 +74,6 @@ export const getMembers = (
   );
 };
 
-export const removeMembers = (
-  pubnub: any,
-  spaceId: string,
-  users: string[],
-  options?: MembershipListInput
-) => (dispatch: Dispatch) => {
-  pubnub.removeMembers(
-    {
-      spaceId,
-      users,
-      ...options,
-    },
-    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
-      if (status.error) dispatch(removeMembersError(status));
-      else dispatch(membersRemoved(response));
-    }
-  );
-};
-
 export const getMemberships = (
   pubnub: any,
   userId: string,
@@ -130,25 +87,6 @@ export const getMemberships = (
     (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
       if (status.error) dispatch(getMembershipsError(status));
       else dispatch(membershipsRetrieved(response));
-    }
-  );
-};
-
-export const addMembers = (
-  pubnub: any,
-  spaceId: string,
-  users: MemberList[],
-  options?: MembershipListInput
-) => (dispatch: Dispatch) => {
-  pubnub.addMembers(
-    {
-      spaceId,
-      users,
-      ...options,
-    },
-    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
-      if (status.error) dispatch(addMembersError(status));
-      else dispatch(membersAdded(response));
     }
   );
 };

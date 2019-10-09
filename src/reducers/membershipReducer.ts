@@ -5,10 +5,8 @@ import {
   OBJECTS_GET_MEMBERS_ERROR,
   OBJECTS_GET_MEMBERSHIPS,
   OBJECTS_GET_MEMBERSHIPS_ERROR,
-  OBJECTS_ADD_MEMBERS,
-  OBJECTS_ADD_MEMBERS_ERROR,
-  OBJECTS_REMOVE_MEMBERS,
-  OBJECTS_REMOVE_MEMBERS_ERROR,
+  OBJECTS_USER_REMOVED_FROM_SPACE,
+  OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
 } from '../types/actions';
 import {
   ObjectsActionPayload,
@@ -36,28 +34,20 @@ const userAddedToSpace = (
   user: payload.message.data,
 });
 
-const addMembers = (
+const userRemovedFromSpace = (
   state: MembershipState,
-  payload: ObjectsResponsePayload
+  payload: ObjectsActionPayload
 ) => ({
   ...state,
-  data: [...state.data, payload.data],
+  user: payload.message.data,
 });
 
-const addMembersError = (
+const userMembershipUpdatedOnSpace = (
   state: MembershipState,
-  payload: ObjectsStatusPayload
+  payload: ObjectsActionPayload
 ) => ({
   ...state,
-  error: payload.errorData ? payload.errorData.error.message : payload.message,
-});
-
-const removeMembersError = (
-  state: MembershipState,
-  payload: ObjectsStatusPayload
-) => ({
-  ...state,
-  error: payload.errorData ? payload.errorData.error.message : payload.message,
+  user: payload.message.data,
 });
 
 const getMembers = (
@@ -91,12 +81,10 @@ export const membershipReducer = (
   switch (action.type) {
     case OBJECTS_USER_ADDED_TO_SPACE:
       return userAddedToSpace(state, action.payload);
-    case OBJECTS_ADD_MEMBERS:
-      return addMembers(state, action.payload);
-    case OBJECTS_ADD_MEMBERS_ERROR:
-      return addMembersError(state, action.payload);
-    case OBJECTS_REMOVE_MEMBERS_ERROR:
-      return removeMembersError(state, action.payload);
+    case OBJECTS_USER_REMOVED_FROM_SPACE:
+      return userRemovedFromSpace(state, action.payload);
+    case OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE:
+      return userMembershipUpdatedOnSpace(state, action.payload);
     case OBJECTS_GET_MEMBERS:
       return getMembers(state, action.payload);
     case OBJECTS_GET_MEMBERSHIPS:
