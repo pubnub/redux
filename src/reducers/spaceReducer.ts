@@ -13,24 +13,41 @@ import {
   ObjectsResponsePayload,
   ObjectsActionPayload,
   ObjectsStatusPayload,
+  ObjectsData,
 } from '../types/Objects';
 
 interface SpaceState {
-  data: object[];
+  spacesById: {
+    byId: Record<string, ObjectsData>;
+    allIds: string[];
+  };
   error: string;
   space: object;
 }
 
 let initialState: SpaceState = {
-  data: [],
+  spacesById: {
+    byId: {},
+    allIds: [],
+  },
   error: '',
   space: {},
 };
 
-const createSpace = (state: SpaceState, payload: ObjectsResponsePayload) => ({
-  ...state,
-  data: [...state.data, payload.data],
-});
+const createSpace = (state: SpaceState, payload: ObjectsResponsePayload) =>
+  'id' in payload.data
+    ? {
+        ...state,
+        spacesById: {
+          ...state.spacesById,
+          byId: {
+            ...state.spacesById.byId,
+            [payload.data.id]: payload.data,
+          },
+          allIds: [...state.spacesById.allIds, payload.data.id],
+        },
+      }
+    : state;
 
 const createSpaceError = (
   state: SpaceState,
@@ -40,37 +57,52 @@ const createSpaceError = (
   error: payload.errorData ? payload.errorData.error.message : payload.message,
 });
 
-const updateSpace = (state: SpaceState, payload: ObjectsActionPayload) => {
-  let spaceIndex = state.data.findIndex(
-    (space: any) => space.id === payload.message.data.id
-  );
-  return {
-    ...state,
-    data: [
-      ...state.data.slice(0, spaceIndex),
-      payload.message.data,
-      ...state.data.slice(spaceIndex + 1),
-    ],
-  };
-};
+const updateSpace = (state: SpaceState, payload: ObjectsActionPayload) => ({
+  ...state,
+  spacesById: {
+    ...state.spacesById,
+    byId: {
+      ...state.spacesById.byId,
+      [payload.message.data.id]: payload.message.data,
+    },
+  },
+});
 
 const deleteSpace = (state: SpaceState, payload: ObjectsActionPayload) => {
-  let spaceIndex = state.data.findIndex(
-    (space: any) => space.id === payload.message.data.id
-  );
+  const idToDelete = payload.message.data.id;
+  const { [idToDelete]: value, ...otherSpaces } = state.spacesById.byId;
   return {
     ...state,
-    data: [
-      ...state.data.slice(0, spaceIndex),
-      ...state.data.slice(spaceIndex + 1),
-    ],
+    spacesById: {
+      ...state.spacesById,
+      byId: otherSpaces,
+      allIds: state.spacesById.allIds.filter(
+        id => id !== payload.message.data.id
+      ),
+    },
   };
 };
 
-const getSpaces = (state: SpaceState, payload: ObjectsResponsePayload) => ({
-  ...state,
-  data: payload.data,
-});
+const getSpaces = (state: SpaceState, payload: ObjectsResponsePayload) => {
+  let receivedSpaces = initialState;
+  if (Array.isArray(payload.data)) {
+    payload.data.forEach((space: ObjectsData) => {
+      receivedSpaces.spacesById.byId[space.id] = space;
+      receivedSpaces.spacesById.allIds = receivedSpaces.spacesById.allIds.concat(
+        space.id
+      );
+    });
+  }
+
+  return {
+    ...state,
+    spacesById: {
+      ...state.spacesById,
+      byId: receivedSpaces.spacesById.byId,
+      allIds: receivedSpaces.spacesById.allIds,
+    },
+  };
+};
 
 const getSpaceById = (state: SpaceState, payload: ObjectsResponsePayload) => ({
   ...state,

@@ -13,61 +13,93 @@ import {
   ObjectsActionPayload,
   ObjectsResponsePayload,
   ObjectsStatusPayload,
+  ObjectsData,
 } from 'types/Objects';
 
 interface UserState {
-  data: object[];
+  usersById: {
+    byId: Record<string, ObjectsData>;
+    allIds: string[];
+  };
   error: string;
   user: object;
 }
 
 let initialState: UserState = {
-  data: [],
+  usersById: {
+    byId: {},
+    allIds: [],
+  },
   error: '',
   user: {},
 };
 
-const createUser = (state: UserState, payload: ObjectsResponsePayload) => ({
-  ...state,
-  data: [...state.data, payload.data],
-});
+const createUser = (state: UserState, payload: ObjectsResponsePayload) =>
+  'id' in payload.data
+    ? {
+        ...state,
+        usersById: {
+          ...state.usersById,
+          byId: {
+            ...state.usersById.byId,
+            [payload.data.id]: payload.data,
+          },
+          allIds: [...state.usersById.allIds, payload.data.id],
+        },
+      }
+    : state;
 
 const createUserError = (state: UserState, payload: ObjectsStatusPayload) => ({
   ...state,
   error: payload.errorData ? payload.errorData.error.message : payload.message,
 });
 
-const updateUser = (state: UserState, payload: ObjectsActionPayload) => {
-  let userIndex = state.data.findIndex(
-    (user: any) => user.id === payload.message.data.id
-  );
-  return {
-    ...state,
-    data: [
-      ...state.data.slice(0, userIndex),
-      payload.message.data,
-      ...state.data.slice(userIndex + 1),
-    ],
-  };
-};
+const updateUser = (state: UserState, payload: ObjectsActionPayload) => ({
+  ...state,
+  usersById: {
+    ...state.usersById,
+    byId: {
+      ...state.usersById.byId,
+      [payload.message.data.id]: payload.message.data,
+    },
+  },
+});
 
 const deleteUser = (state: UserState, payload: ObjectsActionPayload) => {
-  let userIndex = state.data.findIndex(
-    (user: any) => user.id === payload.message.data.id
-  );
+  const idToDelete = payload.message.data.id;
+  const { [idToDelete]: value, ...otherUsers } = state.usersById.byId;
   return {
     ...state,
-    data: [
-      ...state.data.slice(0, userIndex),
-      ...state.data.slice(userIndex + 1),
-    ],
+    usersById: {
+      ...state.usersById,
+      byId: otherUsers,
+      allIds: state.usersById.allIds.filter(
+        id => id !== payload.message.data.id
+      ),
+    },
   };
 };
 
-const getUsers = (state: UserState, payload: ObjectsResponsePayload) => ({
-  ...state,
-  data: payload.data,
-});
+const getUsers = (state: UserState, payload: ObjectsResponsePayload) => {
+  let receivedUsers = initialState;
+  if (Array.isArray(payload.data)) {
+    payload.data.forEach((user: ObjectsData) => {
+      receivedUsers.usersById.byId[user.id] = user;
+      receivedUsers.usersById.allIds = receivedUsers.usersById.allIds.concat(
+        user.id
+      );
+    });
+  }
+
+  return {
+    ...state,
+    usersById: {
+      ...state.usersById,
+      byId: receivedUsers.usersById.byId,
+      allIds: receivedUsers.usersById.allIds,
+    },
+  };
+};
 
 const getUserById = (state: UserState, payload: ObjectsResponsePayload) => ({
   ...state,
