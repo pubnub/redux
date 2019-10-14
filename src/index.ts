@@ -7,6 +7,8 @@ import {
   userAddedToSpace,
   userRemovedFromSpace,
   createMembershipActionListener,
+  getMembers,
+  getMemberships,
 } from './actions/MembershipActions';
 import { createMessageActionListener } from './actions/MessageActions';
 import {
@@ -24,6 +26,8 @@ import {
   getSpaces,
   spaceListRetrieved,
   getSpacesError,
+  createSpace,
+  getSpaceById,
 } from './actions/SpaceActions';
 import {
   createNetworkStatusActionListener,
@@ -59,6 +63,8 @@ import {
 
 import { createNetworkStatusReducer } from './reducers/createNetworkStatusReducer';
 import { userReducer } from './reducers/userReducer';
+import { spaceReducer } from './reducers/spaceReducer';
+import { membershipReducer } from './reducers/membershipReducer';
 
 export {
   createPubNubActionListener,
@@ -66,6 +72,8 @@ export {
   userMembershipUpdatedOnSpace,
   userAddedToSpace,
   userRemovedFromSpace,
+  getMembers,
+  getMemberships,
   createMessageActionListener,
   createPresenceActionListener,
   userJoin,
@@ -79,6 +87,8 @@ export {
   getSpaces,
   spaceListRetrieved,
   getSpacesError,
+  createSpace,
+  getSpaceById,
   createNetworkStatusActionListener,
   createSubscribeStatusActionListener,
   createErrorStatusActionListener,
@@ -104,5 +114,7 @@ export {
   getUsersError,
   createNetworkStatusReducer,
   userReducer,
+  spaceReducer,
+  membershipReducer,
   combineListeners,
 };

@@ -2,21 +2,28 @@ import {
   ObjectsActionPayload,
   ObjectsStatusPayload,
   ObjectsResponsePayload,
+  ObjectsListInput,
 } from '../types/Objects';
 import {
   OBJECTS_UPDATE_SPACE,
   OBJECTS_DELETE_SPACE,
   OBJECTS_GET_SPACES_ERROR,
   OBJECTS_GET_SPACES,
-  SpaceUpdatedAction,
+  OBJECTS_CREATE_SPACE,
+  OBJECTS_GET_SPACE_BY_ID,
+  OBJECTS_GET_SPACE_BY_ID_ERROR,
+  OBJECTS_CREATE_SPACE_ERROR,
   SpaceDeletedAction,
+  SpaceUpdatedAction,
+  CreateSpaceErrorAction,
+  GetSpaceByIdErrorAction,
   GetSpacesErrorAction,
+  GetSpaceByIdAction,
   SpaceListRetrievedAction,
-  SpaceActions,
-  SpaceListenerActions,
+  SpaceCreatedAction,
 } from '../types/actions';
 import { Dispatch } from 'redux';
-import { SpaceListInput } from '../types/Space';
+import { CreateSpaceInput } from '../types/Space';
 
 export const spaceUpdated = (
   payload: ObjectsActionPayload
@@ -32,8 +39,11 @@ export const spaceDeleted = (
   payload,
 });
 
-export const getSpacesError = (): GetSpacesErrorAction => ({
-  type: OBJECTS_GET_SPACES_ERROR,
+export const spaceCreated = (
+  payload: ObjectsResponsePayload
+): SpaceCreatedAction => ({
+  type: OBJECTS_CREATE_SPACE,
+  payload,
 });
 
 export const spaceListRetrieved = (
@@ -43,14 +53,64 @@ export const spaceListRetrieved = (
   payload,
 });
 
-export const getSpaces = (pubnub: any, options?: SpaceListInput) => (
-  dispatch: Dispatch<SpaceActions>
+export const spaceRetrievedById = (
+  payload: ObjectsResponsePayload
+): GetSpaceByIdAction => ({
+  type: OBJECTS_GET_SPACE_BY_ID,
+  payload,
+});
+
+export const getSpacesError = (
+  payload: ObjectsStatusPayload
+): GetSpacesErrorAction => ({
+  type: OBJECTS_GET_SPACES_ERROR,
+  payload,
+});
+
+export const getSpaceByIdError = (
+  payload: ObjectsStatusPayload
+): GetSpaceByIdErrorAction => ({
+  type: OBJECTS_GET_SPACE_BY_ID_ERROR,
+  payload,
+});
+
+export const createSpaceError = (
+  payload: ObjectsStatusPayload
+): CreateSpaceErrorAction => ({
+  type: OBJECTS_CREATE_SPACE_ERROR,
+  payload,
+});
+
+export const createSpace = (
+  pubnub: any,
+  id: string,
+  name: string,
+  options?: CreateSpaceInput
+) => (dispatch: Dispatch) => {
+  pubnub.createSpace(
+    {
+      id,
+      name,
+      ...options,
+    },
+    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
+      if (status.error) {
+        dispatch(createSpaceError(status));
+      } else {
+        dispatch(spaceCreated(response));
+      }
+    }
+  );
+};
+
+export const getSpaces = (pubnub: any, options?: ObjectsListInput) => (
+  dispatch: Dispatch
 ) => {
   pubnub.getSpaces(
     { ...options },
     (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
       if (status.error) {
-        dispatch(getSpacesError());
+        dispatch(getSpacesError(status));
       } else {
         dispatch(spaceListRetrieved(response));
       }
@@ -58,8 +118,28 @@ export const getSpaces = (pubnub: any, options?: SpaceListInput) => (
   );
 };
 
+export const getSpaceById = (
+  pubnub: any,
+  spaceId: string,
+  include?: object
+) => (dispatch: Dispatch) => {
+  pubnub.getSpace(
+    {
+      spaceId,
+      ...include,
+    },
+    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
+      if (status.error) {
+        dispatch(getSpaceByIdError(status));
+      } else {
+        dispatch(spaceRetrievedById(response));
+      }
+    }
+  );
+};
+
 export const createSpaceActionListener = (
-  dispatch: Dispatch<SpaceListenerActions>
+  dispatch: Dispatch<SpaceUpdatedAction | SpaceDeletedAction>
 ) => ({
   space: (payload: ObjectsActionPayload) => {
     switch (payload.message.event) {

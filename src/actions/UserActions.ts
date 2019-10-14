@@ -1,4 +1,3 @@
-import { ObjectsStatusPayload, ObjectsResponsePayload } from '../types/Objects';
 import {
   OBJECTS_UPDATE_USER,
   OBJECTS_DELETE_USER,
@@ -8,20 +7,22 @@ import {
   OBJECTS_GET_USER_BY_ID,
   OBJECTS_CREATE_USER_ERROR,
   OBJECTS_CREATE_USER,
-  GetUserByIdAction,
   UserUpdatedAction,
   UserDeletedAction,
   UserCreatedAction,
   UserListRetrievedAction,
+  GetUserByIdAction,
   GetUsersErrorAction,
   GetUserByIdErrorAction,
   CreateUserErrorAction,
 } from '../types/actions';
 import { Dispatch } from 'redux';
 import {
-  UsersListInput,
-  CreateUserInput,
   User,
+  CreateUserInput,
+  UserStatusPayload,
+  UserResponsePayload,
+  UsersListInput,
   UserActionPayload,
 } from '../types/User';
 
@@ -52,16 +53,25 @@ export const userRetrievedById = (payload: User): GetUserByIdAction => ({
   payload,
 });
 
-export const getUsersError = (): GetUsersErrorAction => ({
+export const getUsersError = (
+  payload: UserStatusPayload
+): GetUsersErrorAction => ({
   type: OBJECTS_GET_USERS_ERROR,
+  payload,
 });
 
-export const getUserByIdError = (): GetUserByIdErrorAction => ({
+export const getUserByIdError = (
+  payload: UserStatusPayload
+): GetUserByIdErrorAction => ({
   type: OBJECTS_GET_USER_BY_ID_ERROR,
+  payload,
 });
 
-export const createUserError = (): CreateUserErrorAction => ({
+export const createUserError = (
+  payload: UserStatusPayload
+): CreateUserErrorAction => ({
   type: OBJECTS_CREATE_USER_ERROR,
+  payload,
 });
 
 export const createUser = (
@@ -76,9 +86,9 @@ export const createUser = (
       name,
       ...options,
     },
-    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
+    (status: UserStatusPayload, response: UserResponsePayload) => {
       if (status.error) {
-        dispatch(createUserError());
+        dispatch(createUserError(status));
       } else if (response.data !== undefined) {
         dispatch(userCreated(response.data));
       }
@@ -91,9 +101,9 @@ export const getUsers = (pubnub: any, options?: UsersListInput) => (
 ) => {
   pubnub.getUsers(
     { ...options },
-    (status: ObjectsStatusPayload, response: UserListRetrievedAction) => {
+    (status: UserStatusPayload, response: UserListRetrievedAction) => {
       if (status.error) {
-        dispatch(getUsersError());
+        dispatch(getUsersError(status));
       } else {
         dispatch(userListRetrieved(response.payload));
       }
@@ -109,10 +119,10 @@ export const getUserById = (pubnub: any, userId: string, include?: object) => (
       userId,
       ...include,
     },
-    (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
+    (status: UserStatusPayload, response: UserResponsePayload) => {
       if (status.error) {
-        dispatch(getUserByIdError());
-      } else if (response.data) {
+        dispatch(getUserByIdError(status));
+      } else if (response.data !== undefined) {
         dispatch(userRetrievedById(response.data));
       }
     }

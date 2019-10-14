@@ -1,29 +1,55 @@
-import { User } from './User';
+export interface ObjectsData {
+  id: string;
+  eTag?: string;
+  spaceId?: string;
+  userId?: string;
+  name?: string;
+  created?: string;
+  updated?: string;
+  custom?: string | null;
+}
 
 export interface ObjectsActionPayload {
   channel: string;
   message: {
-    data: {
-      eTag: string;
-      id: string;
-      name: string;
-      updated: string;
-    };
+    data: ObjectsData;
     event: string;
     type: string;
   };
-  publisher?: string;
-  subscription?: string;
+  publisher?: string | undefined;
+  subscription: string | null;
   timetoken: string;
 }
 
 export interface ObjectsStatusPayload {
+  category: string;
   error: boolean;
+  errorData?: {
+    status: number;
+    error: {
+      message: string;
+      source: string;
+    };
+  };
   operation: string;
   statusCode: number;
+  message: string;
+  type: string;
 }
 
 export interface ObjectsResponsePayload {
   status: number;
-  data?: User;
+  data: ObjectsData[] | ObjectsData;
+}
+
+export interface ObjectsListInput {
+  limit?: number;
+  page?: {
+    next?: string;
+    prev?: string;
+  };
+  include?: {
+    totalCount?: boolean;
+    customFields?: boolean;
+  };
 }

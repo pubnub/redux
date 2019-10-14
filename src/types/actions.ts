@@ -1,9 +1,13 @@
 import { MessageActionPayload } from './Message';
 import { PresenceActionPayload } from './Presence';
 import { StatusActionPayload } from './Status';
-import { ObjectsActionPayload, ObjectsResponsePayload } from './Objects';
-import { User } from './User';
+import {
+  ObjectsActionPayload,
+  ObjectsResponsePayload,
+  ObjectsStatusPayload,
+} from './Objects';
 import { SignalActionPayload } from './Signal';
+import { User } from './User';
 
 export const MESSAGE = 'pubnub/MESSAGE';
 
@@ -39,12 +43,21 @@ export const OBJECTS_UPDATE_SPACE = 'pubnub/OBJECTS_UPDATE_SPACE';
 export const OBJECTS_DELETE_SPACE = 'pubnub/OBJECTS_DELETE_SPACE';
 export const OBJECTS_GET_SPACES = 'pubnub/OBJECTS_GET_SPACES';
 export const OBJECTS_GET_SPACES_ERROR = 'pubnub/OBJECTS_GET_SPACES_ERROR';
+export const OBJECTS_CREATE_SPACE = 'pubnub/OBJECTS_CREATE_SPACE';
+export const OBJECTS_CREATE_SPACE_ERROR = 'pubnub/OBJECTS_CREATE_SPACE_ERROR';
+export const OBJECTS_GET_SPACE_BY_ID = 'pubnub/OBJECTS_GET_SPACE_BY_ID';
+export const OBJECTS_GET_SPACE_BY_ID_ERROR =
+  'pubnub/OBJECTS_GET_SPACE_BY_ID_ERROR';
 export const OBJECTS_USER_ADDED_TO_SPACE = 'pubnub/OBJECTS_USER_ADDED_TO_SPACE';
 export const OBJECTS_USER_REMOVED_FROM_SPACE =
   'pubnub/OBJECTS_USER_REMOVED_FROM_SPACE';
 export const OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE =
   'pubnub/OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE';
-
+export const OBJECTS_GET_MEMBERS = 'pubnub/OBJECTS_GET_MEMBERS';
+export const OBJECTS_GET_MEMBERS_ERROR = 'pubnub/OBJECTS_GET_MEMBERS_ERROR';
+export const OBJECTS_GET_MEMBERSHIPS = 'pubnub/OBJECTS_GET_MEMBERSHIPS';
+export const OBJECTS_GET_MEMBERSHIPS_ERROR =
+  'pubnub/OBJECTS_GET_MEMBERSHIPS_ERROR';
 export const SIGNAL = 'pubnub/SIGNAL';
 
 export interface JoinAction {
@@ -144,6 +157,11 @@ export interface CreateUserErrorAction {
   type: typeof OBJECTS_CREATE_USER_ERROR;
 }
 
+export interface CreateUserErrorAction {
+  type: typeof OBJECTS_CREATE_USER_ERROR;
+  payload: ObjectsStatusPayload;
+}
+
 export interface UserListRetrievedAction {
   type: typeof OBJECTS_GET_USERS;
   payload: User[];
@@ -151,6 +169,12 @@ export interface UserListRetrievedAction {
 
 export interface GetUsersErrorAction {
   type: typeof OBJECTS_GET_USERS_ERROR;
+  payload: ObjectsStatusPayload;
+}
+
+export interface GetUserByIdErrorAction {
+  type: typeof OBJECTS_GET_USER_BY_ID_ERROR;
+  payload: ObjectsStatusPayload;
 }
 
 export interface GetUserByIdAction {
@@ -179,6 +203,27 @@ export interface SpaceListRetrievedAction {
 
 export interface GetSpacesErrorAction {
   type: typeof OBJECTS_GET_SPACES_ERROR;
+  payload: ObjectsStatusPayload;
+}
+
+export interface SpaceCreatedAction {
+  type: typeof OBJECTS_CREATE_SPACE;
+  payload: ObjectsResponsePayload;
+}
+
+export interface CreateSpaceErrorAction {
+  type: typeof OBJECTS_CREATE_SPACE_ERROR;
+  payload: ObjectsStatusPayload;
+}
+
+export interface GetSpaceByIdAction {
+  type: typeof OBJECTS_GET_SPACE_BY_ID;
+  payload: ObjectsResponsePayload;
+}
+
+export interface GetSpaceByIdErrorAction {
+  type: typeof OBJECTS_GET_SPACE_BY_ID_ERROR;
+  payload: ObjectsStatusPayload;
 }
 
 export interface UserAddedToSpaceAction {
@@ -194,6 +239,26 @@ export interface UserRemovedFromSpaceAction {
 export interface UserMembershipUpdatedOnSpaceAction {
   type: typeof OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE;
   payload: ObjectsActionPayload;
+}
+
+export interface GetMembersAction {
+  type: typeof OBJECTS_GET_MEMBERS;
+  payload: ObjectsResponsePayload;
+}
+
+export interface GetMembersErrorAction {
+  type: typeof OBJECTS_GET_MEMBERS_ERROR;
+  payload: ObjectsStatusPayload;
+}
+
+export interface GetMembershipsAction {
+  type: typeof OBJECTS_GET_MEMBERSHIPS;
+  payload: ObjectsResponsePayload;
+}
+
+export interface GetMemershipsErrorAction {
+  type: typeof OBJECTS_GET_MEMBERSHIPS_ERROR;
+  payload: ObjectsStatusPayload;
 }
 
 export interface MessageAction {
@@ -242,10 +307,18 @@ export type UserActions =
   | GetUserByIdErrorAction;
 
 export type SpaceActions =
-  | SpaceUpdatedAction
-  | SpaceDeletedAction
+  | SpaceCreatedAction
+  | CreateSpaceErrorAction
   | SpaceListRetrievedAction
-  | GetSpacesErrorAction;
+  | GetSpacesErrorAction
+  | GetSpaceByIdAction
+  | GetSpaceByIdErrorAction;
+
+export type MembershipActions =
+  | GetMembershipsAction
+  | GetMembersAction
+  | GetMemershipsErrorAction
+  | GetMembersErrorAction;
 
 export type UserListenerActions = UserUpdatedAction | UserDeletedAction;
 
