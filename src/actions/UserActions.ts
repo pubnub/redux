@@ -2,6 +2,7 @@ import {
   ObjectsActionPayload,
   ObjectsStatusPayload,
   ObjectsResponsePayload,
+  ObjectsListInput,
 } from '../types/Objects';
 import {
   AppActions,
@@ -15,7 +16,7 @@ import {
   OBJECTS_CREATE_USER,
 } from '../types/actions';
 import { Dispatch } from 'redux';
-import { UsersListInput, createUserInput } from '../types/User';
+import { createUserInput } from '../types/User';
 
 export const userUpdated = (payload: ObjectsActionPayload): AppActions => ({
   type: OBJECTS_UPDATE_USER,
@@ -82,7 +83,7 @@ export const createUser = (
   );
 };
 
-export const getUsers = (pubnub: any, options?: UsersListInput) => (
+export const getUsers = (pubnub: any, options?: ObjectsListInput) => (
   dispatch: Dispatch
 ) => {
   pubnub.getUsers(

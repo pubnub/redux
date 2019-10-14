@@ -2,6 +2,7 @@ import {
   ObjectsActionPayload,
   ObjectsStatusPayload,
   ObjectsResponsePayload,
+  ObjectsListInput,
 } from '../types/Objects';
 import {
   AppActions,
@@ -15,7 +16,7 @@ import {
   OBJECTS_CREATE_SPACE_ERROR,
 } from '../types/actions';
 import { Dispatch } from 'redux';
-import { SpaceListInput, CreateSpaceInput } from '../types/Space';
+import { CreateSpaceInput } from '../types/Space';
 
 export const spaceUpdated = (payload: ObjectsActionPayload): AppActions => ({
   type: OBJECTS_UPDATE_SPACE,
@@ -84,7 +85,7 @@ export const createSpace = (
   );
 };
 
-export const getSpaces = (pubnub: any, options?: SpaceListInput) => (
+export const getSpaces = (pubnub: any, options?: ObjectsListInput) => (
   dispatch: Dispatch
 ) => {
   pubnub.getSpaces(

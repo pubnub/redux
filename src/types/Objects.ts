@@ -1,16 +1,18 @@
+export interface ObjectsData {
+  id: string;
+  eTag?: string;
+  spaceId?: string;
+  userId?: string;
+  name?: string;
+  created?: string;
+  updated?: string;
+  custom?: string | null;
+}
+
 export interface ObjectsActionPayload {
   channel: string;
   message: {
-    data: {
-      eTag: string;
-      id?: string;
-      spaceId?: string;
-      userId?: string;
-      name?: string;
-      created?: string;
-      updated?: string;
-      custom?: string | null;
-    };
+    data: ObjectsData;
     event: string;
     type: string;
   };
@@ -37,5 +39,17 @@ export interface ObjectsStatusPayload {
 
 export interface ObjectsResponsePayload {
   status: number;
-  data: object[];
+  data: ObjectsData[] | ObjectsData;
+}
+
+export interface ObjectsListInput {
+  limit?: number;
+  page?: {
+    next?: string;
+    prev?: string;
+  };
+  include?: {
+    totalCount?: boolean;
+    customFields?: boolean;
+  };
 }

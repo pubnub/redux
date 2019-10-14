@@ -2,6 +2,7 @@ import {
   ObjectsActionPayload,
   ObjectsStatusPayload,
   ObjectsResponsePayload,
+  ObjectsListInput,
 } from '../types/Objects';
 import {
   OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
@@ -14,7 +15,6 @@ import {
   OBJECTS_GET_MEMBERSHIPS_ERROR,
 } from '../types/actions';
 import { Dispatch } from 'redux';
-import { MembershipListInput } from '../types/Membership';
 
 export const userMembershipUpdatedOnSpace = (
   payload: ObjectsActionPayload
@@ -60,7 +60,7 @@ const getMembersError = (payload: ObjectsStatusPayload): AppActions => ({
 export const getMembers = (
   pubnub: any,
   spaceId: string,
-  options?: MembershipListInput
+  options?: ObjectsListInput
 ) => (dispatch: Dispatch) => {
   pubnub.getMembers(
     {
@@ -77,7 +77,7 @@ export const getMembers = (
 export const getMemberships = (
   pubnub: any,
   userId: string,
-  options?: MembershipListInput
+  options?: ObjectsListInput
 ) => (dispatch: Dispatch) => {
   pubnub.getMemberships(
     {
