@@ -12,35 +12,70 @@ import {
   ObjectsActionPayload,
   ObjectsResponsePayload,
   ObjectsStatusPayload,
+  ObjectsData,
 } from '../types/Objects';
 
 interface MembershipState {
-  user: object;
+  usersById: {
+    byId: Record<string, ObjectsData>;
+    allIds: string[];
+  };
+  spacesById: {
+    byId: Record<string, ObjectsData>;
+    allIds: string[];
+  };
   error: string;
-  data: object[];
+  space: object;
 }
 
 let initialState: MembershipState = {
-  user: {},
+  usersById: {
+    byId: {},
+    allIds: [],
+  },
+  spacesById: {
+    byId: {},
+    allIds: [],
+  },
   error: '',
-  data: [],
+  space: {},
 };
 
 const userAddedToSpace = (
   state: MembershipState,
   payload: ObjectsActionPayload
-) => ({
-  ...state,
-  user: payload.message.data,
-});
+) =>
+  'id' in payload.message.data
+    ? {
+        ...state,
+        usersById: {
+          ...state.usersById,
+          byId: {
+            ...state.usersById.byId,
+            [payload.message.data.id]: payload.message.data,
+          },
+          allIds: [...state.usersById.allIds, payload.message.data.id],
+        },
+      }
+    : state;
 
 const userRemovedFromSpace = (
   state: MembershipState,
   payload: ObjectsActionPayload
-) => ({
-  ...state,
-  user: payload.message.data,
-});
+) => {
+  const idToDelete = payload.message.data.id;
+  const { [idToDelete]: value, ...otherUsers } = state.usersById.byId;
+  return {
+    ...state,
+    usersById: {
+      ...state.usersById,
+      byId: otherUsers,
+      allIds: state.usersById.allIds.filter(
+        id => id !== payload.message.data.id
+      ),
+    },
+  };
+};
 
 const userMembershipUpdatedOnSpace = (
   state: MembershipState,
@@ -53,18 +88,50 @@ const userMembershipUpdatedOnSpace = (
 const getMembers = (
   state: MembershipState,
   payload: ObjectsResponsePayload
-) => ({
-  ...state,
-  data: payload.data,
-});
+) => {
+  let receivedUsers = initialState;
+  if (Array.isArray(payload.data)) {
+    payload.data.forEach((user: ObjectsData) => {
+      receivedUsers.usersById.byId[user.id] = user;
+      receivedUsers.usersById.allIds = receivedUsers.usersById.allIds.concat(
+        user.id
+      );
+    });
+  }
+
+  return {
+    ...state,
+    spacesById: {
+      ...state.usersById,
+      byId: receivedUsers.usersById.byId,
+      allIds: receivedUsers.usersById.allIds,
+    },
+  };
+};
 
 const getMembeberships = (
   state: MembershipState,
   payload: ObjectsResponsePayload
-) => ({
-  ...state,
-  user: payload.data,
-});
+) => {
+  let receivedSpaces = initialState;
+  if (Array.isArray(payload.data)) {
+    payload.data.forEach((space: ObjectsData) => {
+      receivedSpaces.spacesById.byId[space.id] = space;
+      receivedSpaces.spacesById.allIds = receivedSpaces.spacesById.allIds.concat(
+        space.id
+      );
+    });
+  }
+
+  return {
+    ...state,
+    spacesById: {
+      ...state.spacesById,
+      byId: receivedSpaces.spacesById.byId,
+      allIds: receivedSpaces.spacesById.allIds,
+    },
+  };
+};
 
 const getMemberError = (
   state: MembershipState,
