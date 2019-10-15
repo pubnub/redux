@@ -1,5 +1,15 @@
-export interface CreateSpaceInput {
+export interface Space {
+  id: string;
+  name: string;
   description?: string;
+  email?: string;
+  externalId?: string;
   custom?: object;
-  include?: object;
+  include?: {
+    customFields?: boolean;
+  };
+}
+
+export interface SpaceMap {
+  [key: string]: Space;
 }

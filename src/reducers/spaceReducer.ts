@@ -9,138 +9,241 @@ import {
   OBJECTS_GET_SPACE_BY_ID,
   SpaceActions,
   SpaceListenerActions,
+  OBJECTS_DELETE_SPACE_ERROR,
+  OBJECTS_UPDATE_SPACE_ERROR,
+  OBJECTS_CREATE_SPACE_BEGIN,
+  OBJECTS_UPDATE_SPACE_BEGIN,
+  OBJECTS_DELETE_SPACE_BEGIN,
+  OBJECTS_GET_SPACES_BEGIN,
+  OBJECTS_GET_SPACE_BY_ID_BEGIN,
 } from '../types/actions';
+import { Space, SpaceMap } from 'types/Space';
 import {
-  ObjectsResponsePayload,
-  ObjectsActionPayload,
-  ObjectsStatusPayload,
-  ObjectsData,
-} from '../types/Objects';
+  PubNubApiSuccess,
+  PubNubApiState,
+  PubNubApiError,
+} from 'types/PubNubApi';
 
-interface SpaceState {
-  spacesById: {
-    byId: Record<string, ObjectsData>;
-    allIds: string[];
-  };
-  error: string;
-  space: object;
-}
+type SpaceState = PubNubApiState<Space>;
 
 let initialState: SpaceState = {
-  spacesById: {
-    byId: {},
-    allIds: [],
-  },
-  error: '',
-  space: {},
+  data: {},
+  loadingAll: 0,
+  loadingById: {},
+  errorAll: undefined,
+  errorById: {},
 };
 
-const createSpace = (state: SpaceState, payload: ObjectsResponsePayload) =>
-  'id' in payload.data
-    ? {
-        ...state,
-        spacesById: {
-          ...state.spacesById,
-          byId: {
-            ...state.spacesById.byId,
-            [payload.data.id]: payload.data,
-          },
-          allIds: [...state.spacesById.allIds, payload.data.id],
-        },
-      }
-    : state;
+const beginCreateSpace = (state: SpaceState, payload: Space) => {
+  let newState = { ...state };
+  let id = payload.id;
+  let loading =
+    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
+
+  newState.loadingById[id] = loading + 1;
+  delete newState.errorById[id];
+
+  return newState;
+};
+
+const createSpace = (state: SpaceState, payload: PubNubApiSuccess<Space>) => {
+  let newState = { ...state };
+  let id = payload.data.id;
+  let loading =
+    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
+
+  newState.data[id] = { ...payload.data };
+  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
+
+  return newState;
+};
 
 const createSpaceError = (
   state: SpaceState,
-  payload: ObjectsStatusPayload
-) => ({
-  ...state,
-  error:
-    payload.errorData !== undefined
-      ? payload.errorData.error.message
-      : payload.message,
-});
+  payload: PubNubApiError<Space>
+) => {
+  let newState = { ...state };
+  let id = payload.data.id;
+  let loading =
+    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
 
-const updateSpace = (state: SpaceState, payload: ObjectsActionPayload) => ({
-  ...state,
-  spacesById: {
-    ...state.spacesById,
-    byId: {
-      ...state.spacesById.byId,
-      [payload.message.data.id]: payload.message.data,
-    },
-  },
-});
+  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
+  newState.errorById[id] = payload;
 
-const deleteSpace = (state: SpaceState, payload: ObjectsActionPayload) => {
-  const idToDelete = payload.message.data.id;
-  const { [idToDelete]: value, ...otherSpaces } = state.spacesById.byId;
-  return {
-    ...state,
-    spacesById: {
-      ...state.spacesById,
-      byId: otherSpaces,
-      allIds: state.spacesById.allIds.filter(
-        id => id !== payload.message.data.id
-      ),
-    },
-  };
+  return newState;
 };
 
-const getSpaces = (state: SpaceState, payload: ObjectsResponsePayload) => {
-  let receivedSpaces = initialState;
-  if (Array.isArray(payload.data)) {
-    payload.data.forEach((space: ObjectsData) => {
-      receivedSpaces.spacesById.byId[space.id] = space;
-      receivedSpaces.spacesById.allIds = receivedSpaces.spacesById.allIds.concat(
-        space.id
-      );
-    });
-  }
+const beginUpdateSpace = (state: SpaceState, payload: Space) => {
+  let newState = { ...state };
+  let id = payload.id;
+  let loading =
+    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
 
-  return {
-    ...state,
-    spacesById: {
-      ...state.spacesById,
-      byId: receivedSpaces.spacesById.byId,
-      allIds: receivedSpaces.spacesById.allIds,
-    },
-  };
+  newState.loadingById[id] = loading + 1;
+  delete newState.errorById[id];
+
+  return newState;
 };
 
-const getSpaceById = (state: SpaceState, payload: ObjectsResponsePayload) => ({
+const updateSpace = (state: SpaceState, payload: PubNubApiSuccess<Space>) => {
+  let newState = { ...state };
+  let id = payload.data.id;
+  let loading =
+    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
+
+  newState.data[id] = { ...payload.data };
+  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
+
+  return newState;
+};
+
+const updateSpaceError = (
+  state: SpaceState,
+  payload: PubNubApiError<Space>
+) => {
+  let newState = { ...state };
+  let id = payload.data.id;
+  let loading =
+    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
+
+  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
+  newState.errorById[id] = payload;
+
+  return newState;
+};
+
+const beginDeleteSpace = (state: SpaceState, payload: string) => {
+  let newState = { ...state };
+  let id = payload;
+  let loading =
+    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
+
+  newState.loadingById[id] = loading + 1;
+  delete newState.errorById[id];
+
+  return newState;
+};
+
+const deleteSpace = (state: SpaceState, payload: PubNubApiSuccess<Space>) => {
+  let newState: SpaceState = { ...state };
+  let id = payload.data.id;
+  let loading =
+    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
+
+  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
+  delete newState.data[id];
+
+  return newState;
+};
+
+const deleteSpaceError = (
+  state: SpaceState,
+  payload: PubNubApiError<Space>
+) => {
+  let newState = { ...state };
+  let id = payload.data.id;
+  let loading =
+    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
+
+  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
+  newState.errorById[id] = payload;
+
+  return newState;
+};
+
+const beginGetSpaces = (state: SpaceState) => ({
   ...state,
-  space: payload.data,
+  loadingAll: state.loadingAll + 1,
+  errorAll: undefined,
 });
 
-const getSpaceError = (state: SpaceState, payload: ObjectsStatusPayload) => ({
+const getSpaces = (state: SpaceState, payload: PubNubApiSuccess<SpaceMap>) => ({
   ...state,
-  error:
-    payload.errorData !== undefined
-      ? payload.errorData.error.message
-      : payload.message,
+  data: { ...payload.data },
+  loadingAll: state.loadingAll !== undefined ? --state.loadingAll : 0,
 });
+
+const getSpacesError = (state: SpaceState, payload: PubNubApiError) => ({
+  ...state,
+  loadingAll: state.loadingAll !== undefined ? --state.loadingAll : 0,
+  error: payload,
+});
+
+const beginGetSpaceById = (state: SpaceState, payload: string) => {
+  let newState = { ...state };
+  let id = payload;
+  let loading =
+    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
+
+  newState.loadingById[id] = loading + 1;
+  delete newState.errorById[id];
+
+  return newState;
+};
+
+const getSpaceById = (state: SpaceState, payload: PubNubApiSuccess<Space>) => {
+  let newState = { ...state };
+  let id = payload.data.id;
+  let loading =
+    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
+
+  newState.data[id] = { ...payload.data };
+  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
+
+  return newState;
+};
+
+const getSpaceError = (state: SpaceState, payload: PubNubApiError<Space>) => {
+  let newState = { ...state };
+  let id = payload.data.id;
+  let loading =
+    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
+
+  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
+  newState.errorById[id] = payload;
+
+  return newState;
+};
 
 export const spaceReducer = (
   state = initialState,
   action: SpaceActions | SpaceListenerActions
 ): SpaceState => {
   switch (action.type) {
+    case OBJECTS_CREATE_SPACE_BEGIN:
+      return beginCreateSpace(state, action.payload);
     case OBJECTS_CREATE_SPACE:
       return createSpace(state, action.payload);
     case OBJECTS_CREATE_SPACE_ERROR:
       return createSpaceError(state, action.payload);
+    case OBJECTS_UPDATE_SPACE_BEGIN:
+      return beginUpdateSpace(state, action.payload);
+    case OBJECTS_UPDATE_SPACE:
+      return updateSpace(state, action.payload);
+    case OBJECTS_UPDATE_SPACE_ERROR:
+      return updateSpaceError(state, action.payload);
+    case OBJECTS_DELETE_SPACE_BEGIN:
+      return beginDeleteSpace(state, action.payload);
     case OBJECTS_DELETE_SPACE:
       return deleteSpace(state, action.payload);
+    case OBJECTS_DELETE_SPACE_ERROR:
+      return deleteSpaceError(state, action.payload);
+    case OBJECTS_GET_SPACES_BEGIN:
+      return beginGetSpaces(state);
     case OBJECTS_GET_SPACES:
       return getSpaces(state, action.payload);
+    case OBJECTS_GET_SPACES_ERROR:
+      return getSpacesError(state, action.payload);
+    case OBJECTS_GET_SPACE_BY_ID_BEGIN:
+      return beginGetSpaceById(state, action.payload);
     case OBJECTS_GET_SPACE_BY_ID:
       return getSpaceById(state, action.payload);
-    case OBJECTS_GET_SPACES_ERROR:
     case OBJECTS_GET_SPACE_BY_ID_ERROR:
       return getSpaceError(state, action.payload);
     case OBJECTS_UPDATE_SPACE:
       return updateSpace(state, action.payload);
+    case OBJECTS_UPDATE_SPACE_ERROR:
+      return updateSpaceError(state, action.payload);
     default:
       return state;
   }
