@@ -63,10 +63,16 @@ import {
 
 import { createNetworkStatusReducer } from './reducers/createNetworkStatusReducer';
 import { userReducer } from './reducers/userReducer';
-import { spaceReducer } from './reducers/spaceReducer';
+import { createSpaceReducer } from './reducers/spaceReducer';
 import { membershipReducer } from './reducers/membershipReducer';
+import { Identifiable, PubNubApiState } from 'types/PubNubApi';
+import { Space, SpaceMap } from 'types/Space';
 
 export {
+  Identifiable,
+  PubNubApiState,
+  Space,
+  SpaceMap,
   createPubNubActionListener,
   createMembershipActionListener,
   userMembershipUpdatedOnSpace,
@@ -114,7 +120,7 @@ export {
   getUsersError,
   createNetworkStatusReducer,
   userReducer,
-  spaceReducer,
+  createSpaceReducer,
   membershipReducer,
   combineListeners,
 };

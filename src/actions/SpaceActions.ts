@@ -41,30 +41,31 @@ import {
   PubNubApiSuccess,
   PubNubApiError,
   PubNubApiStatus,
+  Identifiable,
 } from 'types/PubNubApi';
 
-export const createSpaceBegin = (payload: Space): CreateSpaceBeginAction => ({
+export const createSpaceBegin = <T>(payload: T): CreateSpaceBeginAction<T> => ({
   type: OBJECTS_CREATE_SPACE_BEGIN,
   payload,
 });
 
-export const spaceCreated = (
-  payload: PubNubApiSuccess<Space>
-): SpaceCreatedAction => ({
+export const spaceCreated = <T>(
+  payload: PubNubApiSuccess<T>
+): SpaceCreatedAction<T> => ({
   type: OBJECTS_CREATE_SPACE,
   payload,
 });
 
-export const createSpaceError = (
-  payload: PubNubApiError<Space>
-): CreateSpaceErrorAction => ({
+export const createSpaceError = <T>(
+  payload: PubNubApiError<T>
+): CreateSpaceErrorAction<T> => ({
   type: OBJECTS_CREATE_SPACE_ERROR,
   payload,
 });
 
-export const spaceListRetrieved = (
-  payload: PubNubApiSuccess<SpaceMap>
-): SpaceListRetrievedAction => ({
+export const spaceListRetrieved = <T>(
+  payload: PubNubApiSuccess<SpaceMap<T>>
+): SpaceListRetrievedAction<T> => ({
   type: OBJECTS_GET_SPACES,
   payload,
 });
@@ -74,15 +75,15 @@ export const getSpacesBegin = (): GetSpacesBeginAction => ({
 });
 
 export const getSpacesError = (
-  payload: PubNubApiError<Space>
+  payload: PubNubApiError<object>
 ): GetSpacesErrorAction => ({
   type: OBJECTS_GET_SPACES_ERROR,
   payload,
 });
 
-export const spaceRetrievedById = (
-  payload: PubNubApiSuccess<Space>
-): GetSpaceByIdAction => ({
+export const spaceRetrievedById = <T>(
+  payload: PubNubApiSuccess<T>
+): GetSpaceByIdAction<T> => ({
   type: OBJECTS_GET_SPACE_BY_ID,
   payload,
 });
@@ -94,35 +95,35 @@ export const getSpaceByIdBegin = (
   payload,
 });
 
-export const getSpaceByIdError = (
-  payload: PubNubApiError<Space>
-): GetSpaceByIdErrorAction => ({
+export const getSpaceByIdError = <T>(
+  payload: PubNubApiError<T>
+): GetSpaceByIdErrorAction<T> => ({
   type: OBJECTS_GET_SPACE_BY_ID_ERROR,
   payload,
 });
 
-export const spaceUpdated = (
-  payload: PubNubApiSuccess<Space>
-): SpaceUpdatedAction => ({
+export const spaceUpdated = <T>(
+  payload: PubNubApiSuccess<T>
+): SpaceUpdatedAction<T> => ({
   type: OBJECTS_UPDATE_SPACE,
   payload,
 });
 
-export const updateSpaceBegin = (payload: Space): UpdateSpaceBeginAction => ({
+export const updateSpaceBegin = <T>(payload: T): UpdateSpaceBeginAction<T> => ({
   type: OBJECTS_UPDATE_SPACE_BEGIN,
   payload,
 });
 
-export const updateSpaceError = (
-  payload: PubNubApiError<Space>
-): UpdateSpaceErrorAction => ({
+export const updateSpaceError = <T>(
+  payload: PubNubApiError<T>
+): UpdateSpaceErrorAction<T> => ({
   type: OBJECTS_UPDATE_SPACE_ERROR,
   payload,
 });
 
-export const spaceDeleted = (
-  payload: PubNubApiSuccess<Space>
-): SpaceDeletedAction => ({
+export const spaceDeleted = <T>(
+  payload: PubNubApiSuccess<T>
+): SpaceDeletedAction<T> => ({
   type: OBJECTS_DELETE_SPACE,
   payload,
 });
@@ -132,9 +133,9 @@ export const deleteSpaceBegin = (payload: string): DeleteSpaceBeginAction => ({
   payload,
 });
 
-export const deleteSpaceError = (
-  payload: PubNubApiError<Space>
-): DeleteSpaceErrorAction => ({
+export const deleteSpaceError = <T>(
+  payload: PubNubApiError<T>
+): DeleteSpaceErrorAction<T> => ({
   type: OBJECTS_DELETE_SPACE_ERROR,
   payload,
 });
@@ -299,22 +300,22 @@ export const getSpaceById = (
   );
 };
 
-export const createSpaceActionListener = (
-  dispatch: Dispatch<SpaceUpdatedAction | SpaceDeletedAction>
+export const createSpaceActionListener = <T extends Identifiable>(
+  dispatch: Dispatch<SpaceUpdatedAction<T> | SpaceDeletedAction<T>>
 ) => ({
-  space: (payload: ObjectsActionPayload) => {
+  space: (payload: ObjectsActionPayload<T>) => {
     switch (payload.message.event) {
       case 'update':
         dispatch(
           spaceUpdated({
-            data: payload.message.data as Space,
+            data: payload.message.data,
           })
         );
         break;
       case 'delete':
         dispatch(
           spaceDeleted({
-            data: payload.message.data as Space,
+            data: payload.message.data,
           })
         );
         break;

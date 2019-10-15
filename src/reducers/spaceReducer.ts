@@ -17,24 +17,26 @@ import {
   OBJECTS_GET_SPACES_BEGIN,
   OBJECTS_GET_SPACE_BY_ID_BEGIN,
 } from '../types/actions';
-import { Space, SpaceMap } from 'types/Space';
+import { SpaceMap } from '../types/Space';
 import {
   PubNubApiSuccess,
   PubNubApiState,
   PubNubApiError,
-} from 'types/PubNubApi';
+  Identifiable,
+} from '../types/PubNubApi';
 
-type SpaceState = PubNubApiState<Space>;
-
-let initialState: SpaceState = {
+const createInitialState = <T extends Identifiable>(): PubNubApiState<T> => ({
   data: {},
   loadingAll: 0,
   loadingById: {},
   errorAll: undefined,
   errorById: {},
-};
+});
 
-const beginCreateSpace = (state: SpaceState, payload: Space) => {
+const beginCreateSpace = <T extends Identifiable>(
+  state: PubNubApiState<T>,
+  payload: T
+) => {
   let newState = { ...state };
   let id = payload.id;
   let loading =
@@ -46,7 +48,10 @@ const beginCreateSpace = (state: SpaceState, payload: Space) => {
   return newState;
 };
 
-const createSpace = (state: SpaceState, payload: PubNubApiSuccess<Space>) => {
+const createSpace = <T extends Identifiable>(
+  state: PubNubApiState<T>,
+  payload: PubNubApiSuccess<T>
+) => {
   let newState = { ...state };
   let id = payload.data.id;
   let loading =
@@ -58,9 +63,9 @@ const createSpace = (state: SpaceState, payload: PubNubApiSuccess<Space>) => {
   return newState;
 };
 
-const createSpaceError = (
-  state: SpaceState,
-  payload: PubNubApiError<Space>
+const createSpaceError = <T extends Identifiable>(
+  state: PubNubApiState<T>,
+  payload: PubNubApiError<T>
 ) => {
   let newState = { ...state };
   let id = payload.data.id;
@@ -73,7 +78,10 @@ const createSpaceError = (
   return newState;
 };
 
-const beginUpdateSpace = (state: SpaceState, payload: Space) => {
+const beginUpdateSpace = <T extends Identifiable>(
+  state: PubNubApiState<T>,
+  payload: T
+) => {
   let newState = { ...state };
   let id = payload.id;
   let loading =
@@ -85,7 +93,10 @@ const beginUpdateSpace = (state: SpaceState, payload: Space) => {
   return newState;
 };
 
-const updateSpace = (state: SpaceState, payload: PubNubApiSuccess<Space>) => {
+const updateSpace = <T extends Identifiable>(
+  state: PubNubApiState<T>,
+  payload: PubNubApiSuccess<T>
+) => {
   let newState = { ...state };
   let id = payload.data.id;
   let loading =
@@ -97,9 +108,9 @@ const updateSpace = (state: SpaceState, payload: PubNubApiSuccess<Space>) => {
   return newState;
 };
 
-const updateSpaceError = (
-  state: SpaceState,
-  payload: PubNubApiError<Space>
+const updateSpaceError = <T extends Identifiable>(
+  state: PubNubApiState<T>,
+  payload: PubNubApiError<T>
 ) => {
   let newState = { ...state };
   let id = payload.data.id;
@@ -112,7 +123,7 @@ const updateSpaceError = (
   return newState;
 };
 
-const beginDeleteSpace = (state: SpaceState, payload: string) => {
+const beginDeleteSpace = <T>(state: PubNubApiState<T>, payload: string) => {
   let newState = { ...state };
   let id = payload;
   let loading =
@@ -124,8 +135,11 @@ const beginDeleteSpace = (state: SpaceState, payload: string) => {
   return newState;
 };
 
-const deleteSpace = (state: SpaceState, payload: PubNubApiSuccess<Space>) => {
-  let newState: SpaceState = { ...state };
+const deleteSpace = <T extends Identifiable>(
+  state: PubNubApiState<T>,
+  payload: PubNubApiSuccess<T>
+) => {
+  let newState: PubNubApiState<T> = { ...state };
   let id = payload.data.id;
   let loading =
     newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
@@ -136,9 +150,9 @@ const deleteSpace = (state: SpaceState, payload: PubNubApiSuccess<Space>) => {
   return newState;
 };
 
-const deleteSpaceError = (
-  state: SpaceState,
-  payload: PubNubApiError<Space>
+const deleteSpaceError = <T extends Identifiable>(
+  state: PubNubApiState<T>,
+  payload: PubNubApiError<T>
 ) => {
   let newState = { ...state };
   let id = payload.data.id;
@@ -151,25 +165,34 @@ const deleteSpaceError = (
   return newState;
 };
 
-const beginGetSpaces = (state: SpaceState) => ({
+const beginGetSpaces = <T extends Identifiable>(state: PubNubApiState<T>) => ({
   ...state,
   loadingAll: state.loadingAll + 1,
   errorAll: undefined,
 });
 
-const getSpaces = (state: SpaceState, payload: PubNubApiSuccess<SpaceMap>) => ({
+const getSpaces = <T>(
+  state: PubNubApiState<T>,
+  payload: PubNubApiSuccess<SpaceMap<T>>
+) => ({
   ...state,
   data: { ...payload.data },
   loadingAll: state.loadingAll !== undefined ? --state.loadingAll : 0,
 });
 
-const getSpacesError = (state: SpaceState, payload: PubNubApiError) => ({
+const getSpacesError = <T extends Identifiable>(
+  state: PubNubApiState<T>,
+  payload: PubNubApiError
+) => ({
   ...state,
   loadingAll: state.loadingAll !== undefined ? --state.loadingAll : 0,
   error: payload,
 });
 
-const beginGetSpaceById = (state: SpaceState, payload: string) => {
+const beginGetSpaceById = <T extends Identifiable>(
+  state: PubNubApiState<T>,
+  payload: string
+) => {
   let newState = { ...state };
   let id = payload;
   let loading =
@@ -181,7 +204,10 @@ const beginGetSpaceById = (state: SpaceState, payload: string) => {
   return newState;
 };
 
-const getSpaceById = (state: SpaceState, payload: PubNubApiSuccess<Space>) => {
+const getSpaceById = <T extends Identifiable>(
+  state: PubNubApiState<T>,
+  payload: PubNubApiSuccess<T>
+) => {
   let newState = { ...state };
   let id = payload.data.id;
   let loading =
@@ -193,7 +219,10 @@ const getSpaceById = (state: SpaceState, payload: PubNubApiSuccess<Space>) => {
   return newState;
 };
 
-const getSpaceError = (state: SpaceState, payload: PubNubApiError<Space>) => {
+const getSpaceError = <T extends Identifiable>(
+  state: PubNubApiState<T>,
+  payload: PubNubApiError<T>
+) => {
   let newState = { ...state };
   let id = payload.data.id;
   let loading =
@@ -205,45 +234,47 @@ const getSpaceError = (state: SpaceState, payload: PubNubApiError<Space>) => {
   return newState;
 };
 
-export const spaceReducer = (
-  state = initialState,
-  action: SpaceActions | SpaceListenerActions
-): SpaceState => {
+type AllSpaceActions<T> = SpaceActions<T> | SpaceListenerActions<T>;
+
+export const createSpaceReducer = <T extends Identifiable>() => (
+  state: PubNubApiState<T> = createInitialState<T>(),
+  action: AllSpaceActions<T>
+): PubNubApiState<T> => {
   switch (action.type) {
     case OBJECTS_CREATE_SPACE_BEGIN:
-      return beginCreateSpace(state, action.payload);
+      return beginCreateSpace<T>(state, action.payload);
     case OBJECTS_CREATE_SPACE:
-      return createSpace(state, action.payload);
+      return createSpace<T>(state, action.payload);
     case OBJECTS_CREATE_SPACE_ERROR:
-      return createSpaceError(state, action.payload);
+      return createSpaceError<T>(state, action.payload);
     case OBJECTS_UPDATE_SPACE_BEGIN:
-      return beginUpdateSpace(state, action.payload);
+      return beginUpdateSpace<T>(state, action.payload);
     case OBJECTS_UPDATE_SPACE:
-      return updateSpace(state, action.payload);
+      return updateSpace<T>(state, action.payload);
     case OBJECTS_UPDATE_SPACE_ERROR:
-      return updateSpaceError(state, action.payload);
+      return updateSpaceError<T>(state, action.payload);
     case OBJECTS_DELETE_SPACE_BEGIN:
-      return beginDeleteSpace(state, action.payload);
+      return beginDeleteSpace<T>(state, action.payload);
     case OBJECTS_DELETE_SPACE:
-      return deleteSpace(state, action.payload);
+      return deleteSpace<T>(state, action.payload);
     case OBJECTS_DELETE_SPACE_ERROR:
-      return deleteSpaceError(state, action.payload);
+      return deleteSpaceError<T>(state, action.payload);
     case OBJECTS_GET_SPACES_BEGIN:
-      return beginGetSpaces(state);
+      return beginGetSpaces<T>(state);
     case OBJECTS_GET_SPACES:
-      return getSpaces(state, action.payload);
+      return getSpaces<T>(state, action.payload);
     case OBJECTS_GET_SPACES_ERROR:
-      return getSpacesError(state, action.payload);
+      return getSpacesError<T>(state, action.payload);
     case OBJECTS_GET_SPACE_BY_ID_BEGIN:
-      return beginGetSpaceById(state, action.payload);
+      return beginGetSpaceById<T>(state, action.payload);
     case OBJECTS_GET_SPACE_BY_ID:
-      return getSpaceById(state, action.payload);
+      return getSpaceById<T>(state, action.payload);
     case OBJECTS_GET_SPACE_BY_ID_ERROR:
-      return getSpaceError(state, action.payload);
+      return getSpaceError<T>(state, action.payload);
     case OBJECTS_UPDATE_SPACE:
-      return updateSpace(state, action.payload);
+      return updateSpace<T>(state, action.payload);
     case OBJECTS_UPDATE_SPACE_ERROR:
-      return updateSpaceError(state, action.payload);
+      return updateSpaceError<T>(state, action.payload);
     default:
       return state;
   }

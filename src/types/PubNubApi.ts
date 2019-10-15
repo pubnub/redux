@@ -6,20 +6,24 @@ export interface PubNubApiStatus {
   statusCode: number;
 }
 
-export interface PubNubApiSuccess<Data> {
-  data: Data;
+export interface Identifiable {
+  id: string;
 }
 
-export interface PubNubApiError<Data = object> {
+export interface PubNubApiSuccess<T> {
+  data: T;
+}
+
+export interface PubNubApiError<T = object> {
   code: string;
   message: string;
-  data: Data;
+  data: T;
 }
 
-export interface PubNubApiState<Data> {
-  data: { [key: string]: Data };
+export interface PubNubApiState<T> {
+  data: { [key: string]: T };
   loadingAll: number;
   loadingById: { [key: string]: number };
   errorAll?: PubNubApiError;
-  errorById: { [key: string]: PubNubApiError<Data> };
+  errorById: { [key: string]: PubNubApiError<T> };
 }

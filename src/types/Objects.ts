@@ -1,3 +1,5 @@
+import { Identifiable } from './PubNubApi';
+
 export interface ObjectsData {
   id: string;
   eTag?: string;
@@ -9,10 +11,10 @@ export interface ObjectsData {
   custom?: string | null;
 }
 
-export interface ObjectsActionPayload {
+export interface ObjectsActionPayload<T extends Identifiable> {
   channel: string;
   message: {
-    data: ObjectsData;
+    data: T;
     event: string;
     type: string;
   };

@@ -10,6 +10,6 @@ export interface Space {
   };
 }
 
-export interface SpaceMap {
-  [key: string]: Space;
+export interface SpaceMap<T> {
+  [key: string]: T;
 }

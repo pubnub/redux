@@ -15,6 +15,7 @@ import {
   ObjectsStatusPayload,
   ObjectsData,
 } from '../types/Objects';
+import { Identifiable } from 'types/PubNubApi';
 
 interface MembershipState {
   usersById: {
@@ -42,9 +43,9 @@ let initialState: MembershipState = {
   space: {},
 };
 
-const userAddedToSpace = (
+const userAddedToSpace = <T extends Identifiable>(
   state: MembershipState,
-  payload: ObjectsActionPayload
+  payload: ObjectsActionPayload<T>
 ) =>
   'id' in payload.message.data
     ? {
@@ -60,9 +61,9 @@ const userAddedToSpace = (
       }
     : state;
 
-const userRemovedFromSpace = (
+const userRemovedFromSpace = <T extends Identifiable>(
   state: MembershipState,
-  payload: ObjectsActionPayload
+  payload: ObjectsActionPayload<T>
 ) => {
   const idToDelete = payload.message.data.id;
   const { [idToDelete]: value, ...otherUsers } = state.usersById.byId;
@@ -78,9 +79,9 @@ const userRemovedFromSpace = (
   };
 };
 
-const userMembershipUpdatedOnSpace = (
+const userMembershipUpdatedOnSpace = <T extends Identifiable>(
   state: MembershipState,
-  payload: ObjectsActionPayload
+  payload: ObjectsActionPayload<T>
 ) => ({
   ...state,
   user: payload.message.data,
@@ -145,9 +146,9 @@ const getMemberError = (
       : payload.message,
 });
 
-export const membershipReducer = (
+export const membershipReducer = <T extends Identifiable>(
   state = initialState,
-  action: MembershipActions | MembershipListenerActions
+  action: MembershipActions | MembershipListenerActions<T>
 ): MembershipState => {
   switch (action.type) {
     case OBJECTS_USER_ADDED_TO_SPACE:

@@ -8,8 +8,8 @@ import {
 } from './Objects';
 import { SignalActionPayload } from './Signal';
 import { User } from './User';
-import { Space, SpaceMap } from './Space';
-import { PubNubApiSuccess, PubNubApiError } from './PubNubApi';
+import { SpaceMap } from './Space';
+import { PubNubApiSuccess, PubNubApiError, Identifiable } from './PubNubApi';
 
 export const MESSAGE = 'pubnub/MESSAGE';
 
@@ -199,9 +199,9 @@ export interface GetUserByIdErrorAction {
   type: typeof OBJECTS_GET_USER_BY_ID_ERROR;
 }
 
-export interface SpaceListRetrievedAction {
+export interface SpaceListRetrievedAction<T> {
   type: typeof OBJECTS_GET_SPACES;
-  payload: PubNubApiSuccess<SpaceMap>;
+  payload: PubNubApiSuccess<SpaceMap<T>>;
 }
 
 export interface GetSpacesBeginAction {
@@ -213,39 +213,39 @@ export interface GetSpacesErrorAction {
   payload: PubNubApiError;
 }
 
-export interface SpaceCreatedAction {
+export interface SpaceCreatedAction<T> {
   type: typeof OBJECTS_CREATE_SPACE;
-  payload: PubNubApiSuccess<Space>;
+  payload: PubNubApiSuccess<T>;
 }
 
-export interface CreateSpaceBeginAction {
+export interface CreateSpaceBeginAction<T> {
   type: typeof OBJECTS_CREATE_SPACE_BEGIN;
-  payload: Space;
+  payload: T;
 }
 
-export interface CreateSpaceErrorAction {
+export interface CreateSpaceErrorAction<T> {
   type: typeof OBJECTS_CREATE_SPACE_ERROR;
-  payload: PubNubApiError<Space>;
+  payload: PubNubApiError<T>;
 }
 
-export interface SpaceUpdatedAction {
+export interface SpaceUpdatedAction<T> {
   type: typeof OBJECTS_UPDATE_SPACE;
-  payload: PubNubApiSuccess<Space>;
+  payload: PubNubApiSuccess<T>;
 }
 
-export interface UpdateSpaceBeginAction {
+export interface UpdateSpaceBeginAction<T> {
   type: typeof OBJECTS_UPDATE_SPACE_BEGIN;
-  payload: Space;
+  payload: T;
 }
 
-export interface UpdateSpaceErrorAction {
+export interface UpdateSpaceErrorAction<T> {
   type: typeof OBJECTS_UPDATE_SPACE_ERROR;
-  payload: PubNubApiError<Space>;
+  payload: PubNubApiError<T>;
 }
 
-export interface SpaceDeletedAction {
+export interface SpaceDeletedAction<T> {
   type: typeof OBJECTS_DELETE_SPACE;
-  payload: PubNubApiSuccess<Space>;
+  payload: PubNubApiSuccess<T>;
 }
 
 export interface DeleteSpaceBeginAction {
@@ -253,14 +253,14 @@ export interface DeleteSpaceBeginAction {
   payload: string;
 }
 
-export interface DeleteSpaceErrorAction {
+export interface DeleteSpaceErrorAction<T> {
   type: typeof OBJECTS_DELETE_SPACE_ERROR;
-  payload: PubNubApiError<Space>;
+  payload: PubNubApiError<T>;
 }
 
-export interface GetSpaceByIdAction {
+export interface GetSpaceByIdAction<T> {
   type: typeof OBJECTS_GET_SPACE_BY_ID;
-  payload: PubNubApiSuccess<Space>;
+  payload: PubNubApiSuccess<T>;
 }
 
 export interface GetSpaceByIdBeginAction {
@@ -268,24 +268,24 @@ export interface GetSpaceByIdBeginAction {
   payload: string;
 }
 
-export interface GetSpaceByIdErrorAction {
+export interface GetSpaceByIdErrorAction<T> {
   type: typeof OBJECTS_GET_SPACE_BY_ID_ERROR;
-  payload: PubNubApiError<Space>;
+  payload: PubNubApiError<T>;
 }
 
-export interface UserAddedToSpaceAction {
+export interface UserAddedToSpaceAction<T extends Identifiable> {
   type: typeof OBJECTS_USER_ADDED_TO_SPACE;
-  payload: ObjectsActionPayload;
+  payload: ObjectsActionPayload<T>;
 }
 
-export interface UserRemovedFromSpaceAction {
+export interface UserRemovedFromSpaceAction<T extends Identifiable> {
   type: typeof OBJECTS_USER_REMOVED_FROM_SPACE;
-  payload: ObjectsActionPayload;
+  payload: ObjectsActionPayload<T>;
 }
 
-export interface UserMembershipUpdatedOnSpaceAction {
+export interface UserMembershipUpdatedOnSpaceAction<T extends Identifiable> {
   type: typeof OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE;
-  payload: ObjectsActionPayload;
+  payload: ObjectsActionPayload<T>;
 }
 
 export interface GetMembersAction {
@@ -353,22 +353,22 @@ export type UserActions =
   | GetUserByIdAction
   | GetUserByIdErrorAction;
 
-export type SpaceActions =
-  | SpaceCreatedAction
-  | CreateSpaceBeginAction
-  | CreateSpaceErrorAction
-  | SpaceUpdatedAction
-  | UpdateSpaceBeginAction
-  | UpdateSpaceErrorAction
-  | SpaceDeletedAction
+export type SpaceActions<T> =
+  | SpaceCreatedAction<T>
+  | CreateSpaceBeginAction<T>
+  | CreateSpaceErrorAction<T>
+  | SpaceUpdatedAction<T>
+  | UpdateSpaceBeginAction<T>
+  | UpdateSpaceErrorAction<T>
+  | SpaceDeletedAction<T>
   | DeleteSpaceBeginAction
-  | DeleteSpaceErrorAction
-  | SpaceListRetrievedAction
+  | DeleteSpaceErrorAction<T>
+  | SpaceListRetrievedAction<T>
   | GetSpacesBeginAction
   | GetSpacesErrorAction
-  | GetSpaceByIdAction
+  | GetSpaceByIdAction<T>
   | GetSpaceByIdBeginAction
-  | GetSpaceByIdErrorAction;
+  | GetSpaceByIdErrorAction<T>;
 
 export type MembershipActions =
   | GetMembershipsAction
@@ -378,21 +378,23 @@ export type MembershipActions =
 
 export type UserListenerActions = UserUpdatedAction | UserDeletedAction;
 
-export type SpaceListenerActions = SpaceUpdatedAction | SpaceDeletedAction;
+export type SpaceListenerActions<T> =
+  | SpaceUpdatedAction<T>
+  | SpaceDeletedAction<T>;
 
-export type MembershipListenerActions =
-  | UserAddedToSpaceAction
-  | UserRemovedFromSpaceAction
-  | UserMembershipUpdatedOnSpaceAction;
+export type MembershipListenerActions<T extends Identifiable> =
+  | UserAddedToSpaceAction<T>
+  | UserRemovedFromSpaceAction<T>
+  | UserMembershipUpdatedOnSpaceAction<T>;
 
-export type ObjectListenerActions =
+export type ObjectListenerActions<T extends Identifiable> =
   | UserListenerActions
-  | SpaceListenerActions
-  | MembershipListenerActions;
+  | SpaceListenerActions<T>
+  | MembershipListenerActions<T>;
 
-export type ListenerActions =
+export type ListenerActions<T extends Identifiable> =
   | MessageAction
   | SignalAction
   | PresenceListenerActions
   | StatusListenerActions
-  | ObjectListenerActions;
+  | ObjectListenerActions<T>;
