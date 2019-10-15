@@ -65,8 +65,9 @@ import { createNetworkStatusReducer } from './reducers/createNetworkStatusReduce
 import { userReducer } from './reducers/userReducer';
 import { createSpaceReducer } from './reducers/spaceReducer';
 import { membershipReducer } from './reducers/membershipReducer';
-import { Identifiable, PubNubApiState } from 'types/PubNubApi';
-import { Space, SpaceMap } from 'types/Space';
+import { Identifiable, PubNubApiState } from './types/PubNubApi';
+
+import { Space, SpaceMap } from './types/Space';
 
 export {
   Identifiable,

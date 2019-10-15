@@ -37,7 +37,12 @@ const beginCreateSpace = <T extends Identifiable>(
   state: PubNubApiState<T>,
   payload: T
 ) => {
-  let newState = { ...state };
+  let newState = {
+    ...state,
+    data: { ...state.data },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
   let id = payload.id;
   let loading =
     newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
@@ -52,7 +57,12 @@ const createSpace = <T extends Identifiable>(
   state: PubNubApiState<T>,
   payload: PubNubApiSuccess<T>
 ) => {
-  let newState = { ...state };
+  let newState = {
+    ...state,
+    data: { ...state.data },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
   let id = payload.data.id;
   let loading =
     newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
@@ -67,7 +77,12 @@ const createSpaceError = <T extends Identifiable>(
   state: PubNubApiState<T>,
   payload: PubNubApiError<T>
 ) => {
-  let newState = { ...state };
+  let newState = {
+    ...state,
+    data: { ...state.data },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
   let id = payload.data.id;
   let loading =
     newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
@@ -82,7 +97,12 @@ const beginUpdateSpace = <T extends Identifiable>(
   state: PubNubApiState<T>,
   payload: T
 ) => {
-  let newState = { ...state };
+  let newState = {
+    ...state,
+    data: { ...state.data },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
   let id = payload.id;
   let loading =
     newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
@@ -97,7 +117,12 @@ const updateSpace = <T extends Identifiable>(
   state: PubNubApiState<T>,
   payload: PubNubApiSuccess<T>
 ) => {
-  let newState = { ...state };
+  let newState = {
+    ...state,
+    data: { ...state.data },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
   let id = payload.data.id;
   let loading =
     newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
@@ -112,7 +137,12 @@ const updateSpaceError = <T extends Identifiable>(
   state: PubNubApiState<T>,
   payload: PubNubApiError<T>
 ) => {
-  let newState = { ...state };
+  let newState = {
+    ...state,
+    data: { ...state.data },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
   let id = payload.data.id;
   let loading =
     newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
@@ -124,7 +154,12 @@ const updateSpaceError = <T extends Identifiable>(
 };
 
 const beginDeleteSpace = <T>(state: PubNubApiState<T>, payload: string) => {
-  let newState = { ...state };
+  let newState = {
+    ...state,
+    data: { ...state.data },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
   let id = payload;
   let loading =
     newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
@@ -139,7 +174,12 @@ const deleteSpace = <T extends Identifiable>(
   state: PubNubApiState<T>,
   payload: PubNubApiSuccess<T>
 ) => {
-  let newState: PubNubApiState<T> = { ...state };
+  let newState = {
+    ...state,
+    data: { ...state.data },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
   let id = payload.data.id;
   let loading =
     newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
@@ -154,7 +194,12 @@ const deleteSpaceError = <T extends Identifiable>(
   state: PubNubApiState<T>,
   payload: PubNubApiError<T>
 ) => {
-  let newState = { ...state };
+  let newState = {
+    ...state,
+    data: { ...state.data },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
   let id = payload.data.id;
   let loading =
     newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
@@ -167,6 +212,9 @@ const deleteSpaceError = <T extends Identifiable>(
 
 const beginGetSpaces = <T extends Identifiable>(state: PubNubApiState<T>) => ({
   ...state,
+  data: { ...state.data },
+  loadingById: { ...state.loadingById },
+  errorById: { ...state.errorById },
   loadingAll: state.loadingAll + 1,
   errorAll: undefined,
 });
@@ -177,7 +225,9 @@ const getSpaces = <T>(
 ) => ({
   ...state,
   data: { ...payload.data },
-  loadingAll: state.loadingAll !== undefined ? --state.loadingAll : 0,
+  loadingById: { ...state.loadingById },
+  errorById: { ...state.errorById },
+  loadingAll: state.loadingAll !== undefined ? state.loadingAll - 1 : 0,
 });
 
 const getSpacesError = <T extends Identifiable>(
@@ -185,7 +235,9 @@ const getSpacesError = <T extends Identifiable>(
   payload: PubNubApiError
 ) => ({
   ...state,
-  loadingAll: state.loadingAll !== undefined ? --state.loadingAll : 0,
+  loadingById: { ...state.loadingById },
+  errorById: { ...state.errorById },
+  loadingAll: state.loadingAll !== undefined ? state.loadingAll - 1 : 0,
   error: payload,
 });
 
@@ -193,7 +245,12 @@ const beginGetSpaceById = <T extends Identifiable>(
   state: PubNubApiState<T>,
   payload: string
 ) => {
-  let newState = { ...state };
+  let newState = {
+    ...state,
+    data: { ...state.data },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
   let id = payload;
   let loading =
     newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
@@ -208,7 +265,12 @@ const getSpaceById = <T extends Identifiable>(
   state: PubNubApiState<T>,
   payload: PubNubApiSuccess<T>
 ) => {
-  let newState = { ...state };
+  let newState = {
+    ...state,
+    data: { ...state.data },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
   let id = payload.data.id;
   let loading =
     newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
@@ -223,7 +285,12 @@ const getSpaceError = <T extends Identifiable>(
   state: PubNubApiState<T>,
   payload: PubNubApiError<T>
 ) => {
-  let newState = { ...state };
+  let newState = {
+    ...state,
+    data: { ...state.data },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
   let id = payload.data.id;
   let loading =
     newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;

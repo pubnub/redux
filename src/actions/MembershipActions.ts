@@ -22,24 +22,25 @@ import {
   GetMembersAction,
 } from '../types/actions';
 import { Dispatch } from 'redux';
+import { Identifiable } from 'types/PubNubApi';
 
-export const userMembershipUpdatedOnSpace = (
-  payload: ObjectsActionPayload
-): UserMembershipUpdatedOnSpaceAction => ({
+export const userMembershipUpdatedOnSpace = <T extends Identifiable>(
+  payload: ObjectsActionPayload<T>
+): UserMembershipUpdatedOnSpaceAction<T> => ({
   type: OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
   payload,
 });
 
-export const userAddedToSpace = (
-  payload: ObjectsActionPayload
-): UserAddedToSpaceAction => ({
+export const userAddedToSpace = <T extends Identifiable>(
+  payload: ObjectsActionPayload<T>
+): UserAddedToSpaceAction<T> => ({
   type: OBJECTS_USER_ADDED_TO_SPACE,
   payload,
 });
 
-export const userRemovedFromSpace = (
-  payload: ObjectsActionPayload
-): UserRemovedFromSpaceAction => ({
+export const userRemovedFromSpace = <T extends Identifiable>(
+  payload: ObjectsActionPayload<T>
+): UserRemovedFromSpaceAction<T> => ({
   type: OBJECTS_USER_REMOVED_FROM_SPACE,
   payload,
 });
@@ -112,10 +113,10 @@ export const getMemberships = (
   );
 };
 
-export const createMembershipActionListener = (
-  dispatch: Dispatch<MembershipListenerActions>
+export const createMembershipActionListener = <T extends Identifiable>(
+  dispatch: Dispatch<MembershipListenerActions<T>>
 ) => ({
-  membership: (payload: ObjectsActionPayload) => {
+  membership: (payload: ObjectsActionPayload<T>) => {
     switch (payload.message.event) {
       case 'create':
         dispatch(userAddedToSpace(payload));

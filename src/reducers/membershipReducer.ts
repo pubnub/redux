@@ -73,7 +73,7 @@ const userRemovedFromSpace = <T extends Identifiable>(
       ...state.usersById,
       byId: otherUsers,
       allIds: state.usersById.allIds.filter(
-        id => id !== payload.message.data.id
+        (id) => id !== payload.message.data.id
       ),
     },
   };

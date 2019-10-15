@@ -9,16 +9,17 @@ import { createSpaceActionListener } from './SpaceActions';
 import { createMembershipActionListener } from './MembershipActions';
 import { Dispatch } from 'redux';
 import { ListenerActions } from '../types/actions';
+import { Identifiable } from 'types/PubNubApi';
 
-export const createPubNubActionListener = (
-  dispatch: Dispatch<ListenerActions>
+export const createPubNubActionListener = <T extends Identifiable>(
+  dispatch: Dispatch<ListenerActions<T>>
 ) =>
   combineListeners(
     createMessageActionListener(dispatch),
     createPresenceActionListener(dispatch),
     createSignalActionListener(dispatch),
     createUserActionListener(dispatch),
-    createSpaceActionListener(dispatch),
+    createSpaceActionListener<T>(dispatch),
     createMembershipActionListener(dispatch),
     createNetworkStatusActionListener(dispatch),
     createSubscribeStatusActionListener(dispatch),
@@ -46,7 +47,7 @@ const mergeListenersByType = (listeners: any[]): any[] => {
   const incomingListeners: { [key: string]: any[] } = {};
 
   // group the listeners by type so we can combine them
-  listeners.forEach(listener => {
+  listeners.forEach((listener) => {
     // each listener is a key/value pair
     // the key is the listener type, the value is the handler function
     let listenerType = Object.keys(listener)[0];
