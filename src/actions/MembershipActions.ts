@@ -8,18 +8,18 @@ import {
   OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
   OBJECTS_USER_ADDED_TO_SPACE,
   OBJECTS_USER_REMOVED_FROM_SPACE,
-  OBJECTS_GET_MEMBERS,
-  OBJECTS_GET_MEMBERSHIPS,
-  OBJECTS_GET_MEMBERSHIPS_ERROR,
-  OBJECTS_GET_MEMBERS_ERROR,
+  OBJECTS_FETCH_MEMBERS,
+  OBJECTS_FETCH_MEMBERSHIPS,
+  OBJECTS_FETCH_MEMBERSHIPS_ERROR,
+  OBJECTS_FETCH_MEMBERS_ERROR,
   UserMembershipUpdatedOnSpaceAction,
   UserAddedToSpaceAction,
   UserRemovedFromSpaceAction,
   MembershipListenerActions,
-  GetMembersErrorAction,
-  GetMemershipsErrorAction,
-  GetMembershipsAction,
-  GetMembersAction,
+  FetchMembersErrorAction,
+  FetchMemershipsErrorAction,
+  FetchMembershipsAction,
+  FetchMembersAction,
 } from '../types/actions';
 import { Dispatch } from 'redux';
 import { Identifiable } from 'types/PubNubApi';
@@ -47,33 +47,33 @@ export const userRemovedFromSpace = <T extends Identifiable>(
 
 const memberListRetrieved = (
   payload: ObjectsResponsePayload
-): GetMembersAction => ({
-  type: OBJECTS_GET_MEMBERS,
+): FetchMembersAction => ({
+  type: OBJECTS_FETCH_MEMBERS,
   payload,
 });
 
 const membershipsRetrieved = (
   payload: ObjectsResponsePayload
-): GetMembershipsAction => ({
-  type: OBJECTS_GET_MEMBERSHIPS,
+): FetchMembershipsAction => ({
+  type: OBJECTS_FETCH_MEMBERSHIPS,
   payload,
 });
 
-const getMembershipsError = (
+const fetchMembershipsError = (
   payload: ObjectsStatusPayload
-): GetMemershipsErrorAction => ({
-  type: OBJECTS_GET_MEMBERSHIPS_ERROR,
+): FetchMemershipsErrorAction => ({
+  type: OBJECTS_FETCH_MEMBERSHIPS_ERROR,
   payload,
 });
 
-const getMembersError = (
+const fetchMembersError = (
   payload: ObjectsStatusPayload
-): GetMembersErrorAction => ({
-  type: OBJECTS_GET_MEMBERS_ERROR,
+): FetchMembersErrorAction => ({
+  type: OBJECTS_FETCH_MEMBERS_ERROR,
   payload,
 });
 
-export const getMembers = (
+export const fetchMembers = (
   pubnub: any,
   spaceId: string,
   options?: ObjectsListInput
@@ -85,7 +85,7 @@ export const getMembers = (
     },
     (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
       if (status.error) {
-        dispatch(getMembersError(status));
+        dispatch(fetchMembersError(status));
       } else {
         dispatch(memberListRetrieved(response));
       }
@@ -93,7 +93,7 @@ export const getMembers = (
   );
 };
 
-export const getMemberships = (
+export const fetchMemberships = (
   pubnub: any,
   userId: string,
   options?: ObjectsListInput
@@ -105,7 +105,7 @@ export const getMemberships = (
     },
     (status: ObjectsStatusPayload, response: ObjectsResponsePayload) => {
       if (status.error) {
-        dispatch(getMembershipsError(status));
+        dispatch(fetchMembershipsError(status));
       } else {
         dispatch(membershipsRetrieved(response));
       }

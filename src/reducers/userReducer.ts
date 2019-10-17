@@ -1,19 +1,19 @@
 import {
-  OBJECTS_GET_USERS,
-  OBJECTS_GET_USERS_ERROR,
+  OBJECTS_FETCH_USERS,
+  OBJECTS_FETCH_USERS_ERROR,
   OBJECTS_UPDATE_USER,
   UserListenerActions,
   UserUpdatedAction,
   UserDeletedAction,
-  OBJECTS_GET_USER_BY_ID_ERROR,
-  OBJECTS_GET_USER_BY_ID,
+  OBJECTS_FETCH_USER_BY_ID_ERROR,
+  OBJECTS_FETCH_USER_BY_ID,
   OBJECTS_CREATE_USER_ERROR,
   OBJECTS_DELETE_USER,
   OBJECTS_CREATE_USER,
   UserActions,
   UserCreatedAction,
   UserListRetrievedAction,
-  GetUserByIdAction,
+  FetchUserByIdAction,
 } from '../types/actions';
 import { User } from '../types/User';
 
@@ -71,7 +71,7 @@ const addUsers = (
 
 const addUser = (
   state: UserState = initialState,
-  action: GetUserByIdAction
+  action: FetchUserByIdAction
 ) => {
   let newState: UserState = { ...state };
 
@@ -94,12 +94,12 @@ export const userReducer = (
       };
     case OBJECTS_DELETE_USER:
       return deleteUser(state, action);
-    case OBJECTS_GET_USERS:
+    case OBJECTS_FETCH_USERS:
       return addUsers(state, action);
-    case OBJECTS_GET_USER_BY_ID:
+    case OBJECTS_FETCH_USER_BY_ID:
       return addUser(state, action);
-    case OBJECTS_GET_USERS_ERROR:
-    case OBJECTS_GET_USER_BY_ID_ERROR:
+    case OBJECTS_FETCH_USERS_ERROR:
+    case OBJECTS_FETCH_USER_BY_ID_ERROR:
       return {
         ...state,
         error: 'Error while trying to retrieve user(s)',

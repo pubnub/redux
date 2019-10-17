@@ -1,9 +1,9 @@
 import {
   OBJECTS_USER_ADDED_TO_SPACE,
-  OBJECTS_GET_MEMBERS,
-  OBJECTS_GET_MEMBERS_ERROR,
-  OBJECTS_GET_MEMBERSHIPS,
-  OBJECTS_GET_MEMBERSHIPS_ERROR,
+  OBJECTS_FETCH_MEMBERS,
+  OBJECTS_FETCH_MEMBERS_ERROR,
+  OBJECTS_FETCH_MEMBERSHIPS,
+  OBJECTS_FETCH_MEMBERSHIPS_ERROR,
   OBJECTS_USER_REMOVED_FROM_SPACE,
   OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
   MembershipListenerActions,
@@ -87,7 +87,7 @@ const userMembershipUpdatedOnSpace = <T extends Identifiable>(
   user: payload.message.data,
 });
 
-const getMembers = (
+const fetchMembers = (
   state: MembershipState,
   payload: ObjectsResponsePayload
 ) => {
@@ -111,7 +111,7 @@ const getMembers = (
   };
 };
 
-const getMembeberships = (
+const fetchMembeberships = (
   state: MembershipState,
   payload: ObjectsResponsePayload
 ) => {
@@ -135,7 +135,7 @@ const getMembeberships = (
   };
 };
 
-const getMemberError = (
+const fetchMemberError = (
   state: MembershipState,
   payload: ObjectsStatusPayload
 ) => ({
@@ -157,13 +157,13 @@ export const membershipReducer = <T extends Identifiable>(
       return userRemovedFromSpace(state, action.payload);
     case OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE:
       return userMembershipUpdatedOnSpace(state, action.payload);
-    case OBJECTS_GET_MEMBERS:
-      return getMembers(state, action.payload);
-    case OBJECTS_GET_MEMBERSHIPS:
-      return getMembeberships(state, action.payload);
-    case OBJECTS_GET_MEMBERSHIPS_ERROR:
-    case OBJECTS_GET_MEMBERS_ERROR:
-      return getMemberError(state, action.payload);
+    case OBJECTS_FETCH_MEMBERS:
+      return fetchMembers(state, action.payload);
+    case OBJECTS_FETCH_MEMBERSHIPS:
+      return fetchMembeberships(state, action.payload);
+    case OBJECTS_FETCH_MEMBERSHIPS_ERROR:
+    case OBJECTS_FETCH_MEMBERS_ERROR:
+      return fetchMemberError(state, action.payload);
     default:
       return state;
   }

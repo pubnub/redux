@@ -7,8 +7,8 @@ import {
   userAddedToSpace,
   userRemovedFromSpace,
   createMembershipActionListener,
-  getMembers,
-  getMemberships,
+  fetchMembers,
+  fetchMemberships,
 } from './actions/MembershipActions';
 import { createMessageActionListener } from './actions/MessageActions';
 import {
@@ -23,11 +23,11 @@ import {
   createSpaceActionListener,
   spaceDeleted,
   spaceUpdated,
-  getSpaces,
+  fetchSpaces,
   spaceListRetrieved,
-  getSpacesError,
+  fetchSpacesError,
   createSpace,
-  getSpaceById,
+  fetchSpaceById,
 } from './actions/SpaceActions';
 import {
   createNetworkStatusActionListener,
@@ -55,32 +55,34 @@ import {
   userUpdated,
   userDeleted,
   createUser,
-  getUsers,
+  fetchUsers,
   userListRetrieved,
-  getUsersError,
-  getUserById,
+  fetchUsersError,
+  fetchUserById,
 } from './actions/UserActions';
 
 import { createNetworkStatusReducer } from './reducers/createNetworkStatusReducer';
 import { userReducer } from './reducers/userReducer';
 import { createSpaceReducer } from './reducers/spaceReducer';
+import { createSpaceListReducer } from './reducers/spaceListReducer';
 import { membershipReducer } from './reducers/membershipReducer';
-import { Identifiable, PubNubApiState } from './types/PubNubApi';
+import { Identifiable, PubNubObjectApiState } from './types/PubNubApi';
 
-import { Space, SpaceMap } from './types/Space';
+import { Space } from './types/Space';
+import { SpaceListState } from './reducers/spaceListReducer';
 
 export {
   Identifiable,
-  PubNubApiState,
+  PubNubObjectApiState as PubNubApiState,
   Space,
-  SpaceMap,
+  SpaceListState,
   createPubNubActionListener,
   createMembershipActionListener,
   userMembershipUpdatedOnSpace,
   userAddedToSpace,
   userRemovedFromSpace,
-  getMembers,
-  getMemberships,
+  fetchMembers,
+  fetchMemberships,
   createMessageActionListener,
   createPresenceActionListener,
   userJoin,
@@ -91,11 +93,11 @@ export {
   createSpaceActionListener,
   spaceDeleted,
   spaceUpdated,
-  getSpaces,
+  fetchSpaces,
   spaceListRetrieved,
-  getSpacesError,
+  fetchSpacesError,
   createSpace,
-  getSpaceById,
+  fetchSpaceById,
   createNetworkStatusActionListener,
   createSubscribeStatusActionListener,
   createErrorStatusActionListener,
@@ -115,13 +117,14 @@ export {
   userUpdated,
   userDeleted,
   createUser,
-  getUsers,
-  getUserById,
+  fetchUsers,
+  fetchUserById,
   userListRetrieved,
-  getUsersError,
+  fetchUsersError,
   createNetworkStatusReducer,
   userReducer,
   createSpaceReducer,
+  createSpaceListReducer,
   membershipReducer,
   combineListeners,
 };

@@ -6,26 +6,26 @@ import {
 import {
   OBJECTS_UPDATE_SPACE,
   OBJECTS_DELETE_SPACE,
-  OBJECTS_GET_SPACES_ERROR,
-  OBJECTS_GET_SPACES,
+  OBJECTS_FETCH_SPACES_ERROR,
+  OBJECTS_FETCH_SPACES,
   OBJECTS_CREATE_SPACE,
-  OBJECTS_GET_SPACE_BY_ID,
-  OBJECTS_GET_SPACE_BY_ID_ERROR,
+  OBJECTS_FETCH_SPACE_BY_ID,
+  OBJECTS_FETCH_SPACE_BY_ID_ERROR,
   OBJECTS_CREATE_SPACE_ERROR,
   SpaceDeletedAction,
   SpaceUpdatedAction,
   CreateSpaceErrorAction,
-  GetSpaceByIdErrorAction,
-  GetSpacesErrorAction,
-  GetSpaceByIdAction,
+  FetchSpaceByIdErrorAction,
+  FetchSpacesErrorAction,
+  FetchSpaceByIdAction,
   SpaceListRetrievedAction,
   SpaceCreatedAction,
   CreateSpaceBeginAction,
   OBJECTS_CREATE_SPACE_BEGIN,
-  OBJECTS_GET_SPACES_BEGIN,
-  GetSpacesBeginAction,
-  GetSpaceByIdBeginAction,
-  OBJECTS_GET_SPACE_BY_ID_BEGIN,
+  OBJECTS_FETCH_SPACES_BEGIN,
+  FetchSpacesBeginAction,
+  FetchSpaceByIdBeginAction,
+  OBJECTS_FETCH_SPACE_BY_ID_BEGIN,
   UpdateSpaceBeginAction,
   OBJECTS_UPDATE_SPACE_BEGIN,
   UpdateSpaceErrorAction,
@@ -38,8 +38,8 @@ import {
 import { Dispatch } from 'redux';
 import { Space, SpaceMap } from '../types/Space';
 import {
-  PubNubApiSuccess,
-  PubNubApiError,
+  PubNubObjectApiSuccess,
+  PubNubObjectApiError,
   PubNubApiStatus,
   Identifiable,
 } from 'types/PubNubApi';
@@ -50,60 +50,63 @@ export const createSpaceBegin = <T>(payload: T): CreateSpaceBeginAction<T> => ({
 });
 
 export const spaceCreated = <T>(
-  payload: PubNubApiSuccess<T>
+  payload: PubNubObjectApiSuccess<T>
 ): SpaceCreatedAction<T> => ({
   type: OBJECTS_CREATE_SPACE,
   payload,
 });
 
 export const createSpaceError = <T>(
-  payload: PubNubApiError<T>
+  payload: PubNubObjectApiError<T>
 ): CreateSpaceErrorAction<T> => ({
   type: OBJECTS_CREATE_SPACE_ERROR,
   payload,
 });
 
 export const spaceListRetrieved = <T>(
-  payload: PubNubApiSuccess<SpaceMap<T>>
+  payload: PubNubObjectApiSuccess<SpaceMap<T>>
 ): SpaceListRetrievedAction<T> => ({
-  type: OBJECTS_GET_SPACES,
+  type: OBJECTS_FETCH_SPACES,
   payload,
 });
 
-export const getSpacesBegin = (): GetSpacesBeginAction => ({
-  type: OBJECTS_GET_SPACES_BEGIN,
+export const fetchSpacesBegin = (payload: {
+  label: string;
+}): FetchSpacesBeginAction => ({
+  type: OBJECTS_FETCH_SPACES_BEGIN,
+  payload,
 });
 
-export const getSpacesError = (
-  payload: PubNubApiError<object>
-): GetSpacesErrorAction => ({
-  type: OBJECTS_GET_SPACES_ERROR,
+export const fetchSpacesError = (
+  payload: PubNubObjectApiError<object>
+): FetchSpacesErrorAction => ({
+  type: OBJECTS_FETCH_SPACES_ERROR,
   payload,
 });
 
 export const spaceRetrievedById = <T>(
-  payload: PubNubApiSuccess<T>
-): GetSpaceByIdAction<T> => ({
-  type: OBJECTS_GET_SPACE_BY_ID,
+  payload: PubNubObjectApiSuccess<T>
+): FetchSpaceByIdAction<T> => ({
+  type: OBJECTS_FETCH_SPACE_BY_ID,
   payload,
 });
 
-export const getSpaceByIdBegin = (
+export const fetchSpaceByIdBegin = (
   payload: string
-): GetSpaceByIdBeginAction => ({
-  type: OBJECTS_GET_SPACE_BY_ID_BEGIN,
+): FetchSpaceByIdBeginAction => ({
+  type: OBJECTS_FETCH_SPACE_BY_ID_BEGIN,
   payload,
 });
 
-export const getSpaceByIdError = <T>(
-  payload: PubNubApiError<T>
-): GetSpaceByIdErrorAction<T> => ({
-  type: OBJECTS_GET_SPACE_BY_ID_ERROR,
+export const fetchSpaceByIdError = <T>(
+  payload: PubNubObjectApiError<T>
+): FetchSpaceByIdErrorAction<T> => ({
+  type: OBJECTS_FETCH_SPACE_BY_ID_ERROR,
   payload,
 });
 
 export const spaceUpdated = <T>(
-  payload: PubNubApiSuccess<T>
+  payload: PubNubObjectApiSuccess<T>
 ): SpaceUpdatedAction<T> => ({
   type: OBJECTS_UPDATE_SPACE,
   payload,
@@ -115,14 +118,14 @@ export const updateSpaceBegin = <T>(payload: T): UpdateSpaceBeginAction<T> => ({
 });
 
 export const updateSpaceError = <T>(
-  payload: PubNubApiError<T>
+  payload: PubNubObjectApiError<T>
 ): UpdateSpaceErrorAction<T> => ({
   type: OBJECTS_UPDATE_SPACE_ERROR,
   payload,
 });
 
 export const spaceDeleted = <T>(
-  payload: PubNubApiSuccess<T>
+  payload: PubNubObjectApiSuccess<T>
 ): SpaceDeletedAction<T> => ({
   type: OBJECTS_DELETE_SPACE,
   payload,
@@ -134,7 +137,7 @@ export const deleteSpaceBegin = (payload: string): DeleteSpaceBeginAction => ({
 });
 
 export const deleteSpaceError = <T>(
-  payload: PubNubApiError<T>
+  payload: PubNubObjectApiError<T>
 ): DeleteSpaceErrorAction<T> => ({
   type: OBJECTS_DELETE_SPACE_ERROR,
   payload,
@@ -235,25 +238,29 @@ export const deleteSpace = (pubnub: any, id: string) => (
   );
 };
 
-export const getSpaces = (pubnub: any, options?: ObjectsListInput) => (
-  dispatch: Dispatch
-) => {
-  dispatch(getSpacesBegin());
+export const fetchSpaces = (
+  pubnub: any,
+  options: ObjectsListInput = {},
+  label: string = 'all'
+) => (dispatch: Dispatch) => {
+  dispatch(fetchSpacesBegin({ label: label }));
 
   pubnub.getSpaces(
     { ...options },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
         dispatch(
-          getSpacesError({
+          fetchSpacesError({
             code: status.category,
             message: status.errorData,
             data: response.data as Space,
+            label: label,
           })
         );
       } else {
         dispatch(
           spaceListRetrieved({
+            label: label,
             data: (response.data as Space[]).reduce(
               (result: { [key: string]: Space }, value) => {
                 result[value.id] = value;
@@ -268,12 +275,12 @@ export const getSpaces = (pubnub: any, options?: ObjectsListInput) => (
   );
 };
 
-export const getSpaceById = (
+export const fetchSpaceById = (
   pubnub: any,
   spaceId: string,
   include?: object
 ) => (dispatch: Dispatch) => {
-  dispatch(getSpaceByIdBegin(spaceId));
+  dispatch(fetchSpaceByIdBegin(spaceId));
 
   pubnub.getSpace(
     {
@@ -283,7 +290,7 @@ export const getSpaceById = (
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
         dispatch(
-          getSpaceByIdError({
+          fetchSpaceByIdError({
             code: status.category,
             message: status.errorData,
             data: response.data as Space,
