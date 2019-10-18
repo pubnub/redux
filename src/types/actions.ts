@@ -7,7 +7,7 @@ import {
   ObjectsStatusPayload,
 } from './Objects';
 import { SignalActionPayload } from './Signal';
-import { User } from './User';
+import { UserMap } from './User';
 import { SpaceMap } from './Space';
 import {
   PubNubObjectApiSuccess,
@@ -35,17 +35,23 @@ export const TIMEOUT_CONNECTION = 'pubnub/TIMEOUT_CONNECTION';
 export const REQUEST_MESSAGE_COUNT_EXCEED =
   'pubnub/REQUEST_MESSAGE_COUNT_EXCEED';
 export const UNKNOWN = 'pubnub/UNKNOWN';
-
+export const OBJECTS_UPDATE_USER_BEGIN = 'pubnub/OBJECTS_UPDATE_USER_BEGIN';
 export const OBJECTS_UPDATE_USER = 'pubnub/OBJECTS_UPDATE_USER';
+export const OBJECTS_UPDATE_USER_ERROR = 'pubnub/OBJECTS_UPDATE_USER_ERROR';
+export const OBJECTS_DELETE_USER_BEGIN = 'pubnub/OBJECTS_DELETE_USER_BEGIN';
 export const OBJECTS_DELETE_USER = 'pubnub/OBJECTS_DELETE_USER';
+export const OBJECTS_DELETE_USER_ERROR = 'pubnub/OBJECTS_DELETE_USER_ERROR';
+export const OBJECTS_CREATE_USER_BEGIN = 'pubnub/OBJECTS_CREATE_USER_BEGIN';
 export const OBJECTS_CREATE_USER = 'pubnub/OBJECTS_CREATE_USER';
 export const OBJECTS_CREATE_USER_ERROR = 'pubnub/OBJECTS_CREATE_USER_ERROR';
+export const OBJECTS_FETCH_USERS_BEGIN = 'pubnub/OBJECTS_FETCH_USERS_BEGIN';
 export const OBJECTS_FETCH_USERS = 'pubnub/OBJECTS_FETCH_USERS';
 export const OBJECTS_FETCH_USERS_ERROR = 'pubnub/OBJECTS_FETCH_USERS_ERROR';
+export const OBJECTS_FETCH_USER_BY_ID_BEGIN =
+  'pubnub/OBJECTS_FETCH_USER_BY_ID_BEGIN';
 export const OBJECTS_FETCH_USER_BY_ID = 'pubnub/OBJECTS_FETCH_USER_BY_ID';
 export const OBJECTS_FETCH_USER_BY_ID_ERROR =
   'pubnub/OBJECTS_FETCH_USER_BY_ID_ERROR';
-
 export const OBJECTS_CREATE_SPACE = 'pubnub/OBJECTS_CREATE_SPACE';
 export const OBJECTS_CREATE_SPACE_BEGIN = 'pubnub/OBJECTS_CREATE_SPACE_BEGIN';
 export const OBJECTS_CREATE_SPACE_ERROR = 'pubnub/OBJECTS_CREATE_SPACE_ERROR';
@@ -155,52 +161,79 @@ export interface UnknownAction {
   payload: StatusActionPayload;
 }
 
-export interface UserUpdatedAction {
+export interface UserUpdatedAction<T> {
   type: typeof OBJECTS_UPDATE_USER;
-  payload: User;
+  payload: PubNubObjectApiSuccess<T>;
 }
 
-export interface UserDeletedAction {
+export interface UpdateUserBeginAction<T> {
+  type: typeof OBJECTS_UPDATE_USER_BEGIN;
+  payload: T;
+}
+
+export interface UpdateUserErrorAction<T> {
+  type: typeof OBJECTS_UPDATE_USER_ERROR;
+  payload: PubNubObjectApiError<T>;
+}
+
+export interface UserDeletedAction<T> {
   type: typeof OBJECTS_DELETE_USER;
-  payload: User;
+  payload: PubNubObjectApiSuccess<T>;
 }
 
-export interface UserCreatedAction {
+export interface DeleteUserBeginAction {
+  type: typeof OBJECTS_DELETE_USER_BEGIN;
+  payload: string;
+}
+
+export interface DeleteUserErrorAction<T> {
+  type: typeof OBJECTS_DELETE_USER_ERROR;
+  payload: PubNubObjectApiError<T>;
+}
+
+export interface UserCreatedAction<T> {
   type: typeof OBJECTS_CREATE_USER;
-  payload: User;
+  payload: PubNubObjectApiSuccess<T>;
 }
 
-export interface CreateUserErrorAction {
+export interface CreateUserBeginAction<T> {
+  type: typeof OBJECTS_CREATE_USER_BEGIN;
+  payload: T;
+}
+
+export interface CreateUserErrorAction<T> {
   type: typeof OBJECTS_CREATE_USER_ERROR;
+  payload: PubNubObjectApiError<T>;
 }
 
-export interface CreateUserErrorAction {
-  type: typeof OBJECTS_CREATE_USER_ERROR;
-  payload: ObjectsStatusPayload;
+export interface FetchUsersBeginAction {
+  type: typeof OBJECTS_FETCH_USERS_BEGIN;
+  payload: { label: string };
 }
 
-export interface UserListRetrievedAction {
+export interface UserListRetrievedAction<T> {
   type: typeof OBJECTS_FETCH_USERS;
-  payload: User[];
+  payload: PubNubObjectApiSuccess<UserMap<T>>;
 }
 
 export interface FetchUsersErrorAction {
   type: typeof OBJECTS_FETCH_USERS_ERROR;
-  payload: ObjectsStatusPayload;
+  payload: PubNubObjectApiError;
 }
 
-export interface FetchUserByIdErrorAction {
+export interface FetchUserByIdErrorAction<T> {
   type: typeof OBJECTS_FETCH_USER_BY_ID_ERROR;
-  payload: ObjectsStatusPayload;
+  payload: PubNubObjectApiError<T>;
 }
 
-export interface FetchUserByIdAction {
+export interface FetchUserByIdBeginAction {
+  type: typeof OBJECTS_FETCH_USER_BY_ID_BEGIN;
+  payload: string;
+}
+
+export interface FetchUserByIdAction<T> {
   type: typeof OBJECTS_FETCH_USER_BY_ID;
-  payload: User;
-}
-
-export interface FetchUserByIdErrorAction {
-  type: typeof OBJECTS_FETCH_USER_BY_ID_ERROR;
+  payload: PubNubObjectApiSuccess<T>;
 }
 
 export interface SpaceListRetrievedAction<T> {
@@ -350,13 +383,22 @@ export type StatusListenerActions =
   | SubscriptionStatusListenerActions
   | ErrorStatusListenerActions;
 
-export type UserActions =
-  | UserCreatedAction
-  | CreateUserErrorAction
-  | UserListRetrievedAction
+export type UserActions<T> =
+  | UserCreatedAction<T>
+  | CreateUserBeginAction<T>
+  | CreateUserErrorAction<T>
+  | UserUpdatedAction<T>
+  | UpdateUserBeginAction<T>
+  | UpdateUserErrorAction<T>
+  | UserDeletedAction<T>
+  | DeleteUserBeginAction
+  | DeleteUserErrorAction<T>
+  | UserListRetrievedAction<T>
+  | FetchUsersBeginAction
   | FetchUsersErrorAction
-  | FetchUserByIdAction
-  | FetchUserByIdErrorAction;
+  | FetchUserByIdAction<T>
+  | FetchUserByIdBeginAction
+  | FetchUserByIdErrorAction<T>;
 
 export type SpaceActions<T> =
   | SpaceCreatedAction<T>
@@ -381,7 +423,9 @@ export type MembershipActions =
   | FetchMemershipsErrorAction
   | FetchMembersErrorAction;
 
-export type UserListenerActions = UserUpdatedAction | UserDeletedAction;
+export type UserListenerActions<T> =
+  | UserUpdatedAction<T>
+  | UserDeletedAction<T>;
 
 export type SpaceListenerActions<T> =
   | SpaceUpdatedAction<T>
@@ -393,7 +437,7 @@ export type MembershipListenerActions<T extends Identifiable> =
   | UserMembershipUpdatedOnSpaceAction<T>;
 
 export type ObjectListenerActions<T extends Identifiable> =
-  | UserListenerActions
+  | UserListenerActions<T>
   | SpaceListenerActions<T>
   | MembershipListenerActions<T>;
 

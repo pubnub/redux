@@ -52,17 +52,18 @@ import {
 } from './actions/ErrorStatusActions';
 import {
   createUserActionListener,
-  userUpdated,
   userDeleted,
-  createUser,
+  userUpdated,
   fetchUsers,
   userListRetrieved,
   fetchUsersError,
+  createUser,
   fetchUserById,
 } from './actions/UserActions';
 
 import { createNetworkStatusReducer } from './reducers/createNetworkStatusReducer';
-import { userReducer } from './reducers/userReducer';
+import { createUserReducer } from './reducers/userReducer';
+import { createUserListReducer } from './reducers/userListReducer';
 import { createSpaceReducer } from './reducers/spaceReducer';
 import { createSpaceListReducer } from './reducers/spaceListReducer';
 import { membershipReducer } from './reducers/membershipReducer';
@@ -122,7 +123,8 @@ export {
   userListRetrieved,
   fetchUsersError,
   createNetworkStatusReducer,
-  userReducer,
+  createUserReducer,
+  createUserListReducer,
   createSpaceReducer,
   createSpaceListReducer,
   membershipReducer,

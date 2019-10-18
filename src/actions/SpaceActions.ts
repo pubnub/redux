@@ -143,18 +143,13 @@ export const deleteSpaceError = <T>(
   payload,
 });
 
-export const createSpace = (
-  pubnub: any,
-  id: string,
-  name: string,
-  space: Space
-) => (dispatch: Dispatch) => {
+export const createSpace = (pubnub: any, space: Space) => (
+  dispatch: Dispatch
+) => {
   dispatch(createSpaceBegin(space));
 
   pubnub.createSpace(
     {
-      id,
-      name,
       ...space,
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
@@ -177,18 +172,13 @@ export const createSpace = (
   );
 };
 
-export const updateSpace = (
-  pubnub: any,
-  id: string,
-  name: string,
-  space: Space
-) => (dispatch: Dispatch) => {
+export const updateSpace = (pubnub: any, space: Space) => (
+  dispatch: Dispatch
+) => {
   dispatch(updateSpaceBegin(space));
 
   pubnub.updateSpace(
     {
-      id,
-      name,
       ...space,
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
@@ -263,6 +253,10 @@ export const fetchSpaces = (
             label: label,
             data: (response.data as Space[]).reduce(
               (result: { [key: string]: Space }, value) => {
+                if (value.description === null) {
+                  value.description = ''; // TODO: reference app cannot handle missing description
+                }
+
                 result[value.id] = value;
                 return result;
               },

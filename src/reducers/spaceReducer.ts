@@ -24,289 +24,86 @@ import {
   PubNubObjectApiError,
   Identifiable,
 } from '../types/PubNubApi';
+import {
+  beginObjectById,
+  errorObjectById,
+  successObjectById,
+  successDeleteObjectById,
+  successObjectList,
+} from './reducerUtil';
 
 const createInitialState = <T extends Identifiable>(): PubNubObjectApiState<
   T
 > => ({
-  data: {},
-  loadingAll: 0,
+  byId: {},
   loadingById: {},
-  errorAll: undefined,
   errorById: {},
 });
 
 const beginCreateSpace = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: T
-) => {
-  let newState = {
-    ...state,
-    data: { ...state.data },
-    loadingById: { ...state.loadingById },
-    errorById: { ...state.errorById },
-  };
-  let id = payload.id;
-  let loading =
-    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
-
-  newState.loadingById[id] = loading + 1;
-  delete newState.errorById[id];
-
-  return newState;
-};
+) => beginObjectById<T>(state, payload.id);
 
 const createSpace = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
-) => {
-  let newState = {
-    ...state,
-    data: { ...state.data },
-    loadingById: { ...state.loadingById },
-    errorById: { ...state.errorById },
-  };
-  let id = payload.data.id;
-  let loading =
-    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
-
-  newState.data[id] = { ...payload.data };
-  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
-
-  return newState;
-};
+) => successObjectById<T>(state, payload);
 
 const createSpaceError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
-) => {
-  let newState = {
-    ...state,
-    data: { ...state.data },
-    loadingById: { ...state.loadingById },
-    errorById: { ...state.errorById },
-  };
-  let id = payload.data.id;
-  let loading =
-    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
-
-  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
-  newState.errorById[id] = payload;
-
-  return newState;
-};
+) => errorObjectById<T>(state, payload);
 
 const beginUpdateSpace = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: T
-) => {
-  let newState = {
-    ...state,
-    data: { ...state.data },
-    loadingById: { ...state.loadingById },
-    errorById: { ...state.errorById },
-  };
-  let id = payload.id;
-  let loading =
-    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
-
-  newState.loadingById[id] = loading + 1;
-  delete newState.errorById[id];
-
-  return newState;
-};
+) => beginObjectById<T>(state, payload.id);
 
 const updateSpace = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
-) => {
-  let newState = {
-    ...state,
-    data: { ...state.data },
-    loadingById: { ...state.loadingById },
-    errorById: { ...state.errorById },
-  };
-  let id = payload.data.id;
-  let loading =
-    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
-
-  newState.data[id] = { ...payload.data };
-  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
-
-  return newState;
-};
+) => successObjectById<T>(state, payload);
 
 const updateSpaceError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
-) => {
-  let newState = {
-    ...state,
-    data: { ...state.data },
-    loadingById: { ...state.loadingById },
-    errorById: { ...state.errorById },
-  };
-  let id = payload.data.id;
-  let loading =
-    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
+) => errorObjectById<T>(state, payload);
 
-  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
-  newState.errorById[id] = payload;
-
-  return newState;
-};
-
-const beginDeleteSpace = <T>(
+const beginDeleteSpace = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: string
-) => {
-  let newState = {
-    ...state,
-    data: { ...state.data },
-    loadingById: { ...state.loadingById },
-    errorById: { ...state.errorById },
-  };
-  let id = payload;
-  let loading =
-    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
-
-  newState.loadingById[id] = loading + 1;
-  delete newState.errorById[id];
-
-  return newState;
-};
+) => beginObjectById<T>(state, payload);
 
 const deleteSpace = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
-) => {
-  let newState = {
-    ...state,
-    data: { ...state.data },
-    loadingById: { ...state.loadingById },
-    errorById: { ...state.errorById },
-  };
-  let id = payload.data.id;
-  let loading =
-    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
-
-  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
-  delete newState.data[id];
-
-  return newState;
-};
+) => successDeleteObjectById<T>(state, payload);
 
 const deleteSpaceError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
-) => {
-  let newState = {
-    ...state,
-    data: { ...state.data },
-    loadingById: { ...state.loadingById },
-    errorById: { ...state.errorById },
-  };
-  let id = payload.data.id;
-  let loading =
-    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
+) => errorObjectById<T>(state, payload);
 
-  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
-  newState.errorById[id] = payload;
-
-  return newState;
-};
-
-const beginFetchSpaces = <T extends Identifiable>(
-  state: PubNubObjectApiState<T>
-) => ({
-  ...state,
-  data: { ...state.data },
-  loadingById: { ...state.loadingById },
-  errorById: { ...state.errorById },
-  loadingAll: state.loadingAll + 1,
-  errorAll: undefined,
-});
-
-const fetchSpaces = <T>(
+const fetchSpaces = <T extends object>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<SpaceMap<T>>
-) => ({
-  ...state,
-  data: { ...payload.data },
-  loadingById: { ...state.loadingById },
-  errorById: { ...state.errorById },
-  loadingAll: state.loadingAll !== undefined ? state.loadingAll - 1 : 0,
-});
-
-const fetchSpacesError = <T extends Identifiable>(
-  state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiError
-) => ({
-  ...state,
-  loadingById: { ...state.loadingById },
-  errorById: { ...state.errorById },
-  loadingAll: state.loadingAll !== undefined ? state.loadingAll - 1 : 0,
-  error: payload,
-});
+) => successObjectList<T>(state, payload);
 
 const beginFetchSpaceById = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: string
-) => {
-  let newState = {
-    ...state,
-    data: { ...state.data },
-    loadingById: { ...state.loadingById },
-    errorById: { ...state.errorById },
-  };
-  let id = payload;
-  let loading =
-    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
-
-  newState.loadingById[id] = loading + 1;
-  delete newState.errorById[id];
-
-  return newState;
-};
+) => beginObjectById<T>(state, payload);
 
 const fetchSpaceById = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
-) => {
-  let newState = {
-    ...state,
-    data: { ...state.data },
-    loadingById: { ...state.loadingById },
-    errorById: { ...state.errorById },
-  };
-  let id = payload.data.id;
-  let loading =
-    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
-
-  newState.data[id] = { ...payload.data };
-  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
-
-  return newState;
-};
+) => successObjectById<T>(state, payload);
 
 const fetchSpaceError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
-) => {
-  let newState = {
-    ...state,
-    data: { ...state.data },
-    loadingById: { ...state.loadingById },
-    errorById: { ...state.errorById },
-  };
-  let id = payload.data.id;
-  let loading =
-    newState.loadingById[id] !== undefined ? newState.loadingById[id] : 0;
-
-  newState.loadingById[id] = loading > 0 ? loading - 1 : 0;
-  newState.errorById[id] = payload;
-
-  return newState;
-};
+) => errorObjectById<T>(state, payload);
 
 export const createSpaceReducer = <T extends Identifiable>() => (
   state: PubNubObjectApiState<T> = createInitialState<T>(),
@@ -332,11 +129,15 @@ export const createSpaceReducer = <T extends Identifiable>() => (
     case OBJECTS_DELETE_SPACE_ERROR:
       return deleteSpaceError<T>(state, action.payload);
     case OBJECTS_FETCH_SPACES_BEGIN:
-      return beginFetchSpaces<T>(state);
+      // nothing to do here
+      // loading multiples will be tracked in spaceListReducer
+      return state;
     case OBJECTS_FETCH_SPACES:
       return fetchSpaces<T>(state, action.payload);
     case OBJECTS_FETCH_SPACES_ERROR:
-      return fetchSpacesError<T>(state, action.payload);
+      // nothing to do here
+      // loading multiples will be tracked in spaceListReducer
+      return state;
     case OBJECTS_FETCH_SPACE_BY_ID_BEGIN:
       return beginFetchSpaceById<T>(state, action.payload);
     case OBJECTS_FETCH_SPACE_BY_ID:

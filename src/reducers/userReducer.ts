@@ -1,111 +1,149 @@
 import {
   OBJECTS_FETCH_USERS,
-  OBJECTS_FETCH_USERS_ERROR,
-  OBJECTS_UPDATE_USER,
-  UserListenerActions,
-  UserUpdatedAction,
-  UserDeletedAction,
-  OBJECTS_FETCH_USER_BY_ID_ERROR,
-  OBJECTS_FETCH_USER_BY_ID,
+  OBJECTS_CREATE_USER,
   OBJECTS_CREATE_USER_ERROR,
   OBJECTS_DELETE_USER,
-  OBJECTS_CREATE_USER,
+  OBJECTS_FETCH_USERS_ERROR,
+  OBJECTS_FETCH_USER_BY_ID_ERROR,
+  OBJECTS_UPDATE_USER,
+  OBJECTS_FETCH_USER_BY_ID,
   UserActions,
-  UserCreatedAction,
-  UserListRetrievedAction,
-  FetchUserByIdAction,
+  UserListenerActions,
+  OBJECTS_DELETE_USER_ERROR,
+  OBJECTS_UPDATE_USER_ERROR,
+  OBJECTS_CREATE_USER_BEGIN,
+  OBJECTS_UPDATE_USER_BEGIN,
+  OBJECTS_DELETE_USER_BEGIN,
+  OBJECTS_FETCH_USERS_BEGIN,
+  OBJECTS_FETCH_USER_BY_ID_BEGIN,
 } from '../types/actions';
-import { User } from '../types/User';
+import { UserMap } from '../types/User';
+import {
+  PubNubObjectApiSuccess,
+  PubNubObjectApiState,
+  PubNubObjectApiError,
+  Identifiable,
+} from '../types/PubNubApi';
+import {
+  beginObjectById,
+  errorObjectById,
+  successObjectById,
+  successDeleteObjectById,
+  successObjectList,
+} from './reducerUtil';
 
-let initialState = {};
+const createInitialState = <T extends Identifiable>(): PubNubObjectApiState<
+  T
+> => ({
+  byId: {},
+  loadingById: {},
+  errorById: {},
+});
 
-interface UserState {
-  [key: string]: User;
-}
+const beginCreateUser = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: T
+) => beginObjectById<T>(state, payload.id);
 
-const createUser = (
-  state: UserState = initialState,
-  action: UserCreatedAction
-) => {
-  let newState: UserState = { ...state };
+const createUser = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiSuccess<T>
+) => successObjectById<T>(state, payload);
 
-  newState[action.payload.id] = action.payload;
+const createUserError = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiError<T>
+) => errorObjectById<T>(state, payload);
 
-  return newState;
-};
+const beginUpdateUser = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: T
+) => beginObjectById<T>(state, payload.id);
 
-const updateUser = (
-  state: UserState = initialState,
-  action: UserUpdatedAction
-) => {
-  let newState: UserState = { ...state };
+const updateUser = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiSuccess<T>
+) => successObjectById<T>(state, payload);
 
-  newState[action.payload.id] = action.payload;
+const updateUserError = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiError<T>
+) => errorObjectById<T>(state, payload);
 
-  return newState;
-};
+const beginDeleteUser = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: string
+) => beginObjectById<T>(state, payload);
 
-const deleteUser = (
-  state: UserState = initialState,
-  action: UserDeletedAction
-) => {
-  let newState: UserState = { ...state };
+const deleteUser = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiSuccess<T>
+) => successDeleteObjectById<T>(state, payload);
 
-  delete newState[action.payload.id];
+const deleteUserError = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiError<T>
+) => errorObjectById<T>(state, payload);
 
-  return newState;
-};
+const fetchUsers = <T extends object>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiSuccess<UserMap<T>>
+) => successObjectList<T>(state, payload);
 
-const addUsers = (
-  state: UserState = initialState,
-  action: UserListRetrievedAction
-) => {
-  let newState: UserState = { ...state };
+const beginFetchUserById = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: string
+) => beginObjectById<T>(state, payload);
 
-  action.payload.forEach((user: User) => {
-    newState[user.id] = user;
-  });
+const fetchUserById = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiSuccess<T>
+) => successObjectById<T>(state, payload);
 
-  return newState;
-};
+const fetchUserError = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiError<T>
+) => errorObjectById<T>(state, payload);
 
-const addUser = (
-  state: UserState = initialState,
-  action: FetchUserByIdAction
-) => {
-  let newState: UserState = { ...state };
-
-  newState[action.payload.id] = action.payload;
-
-  return newState;
-};
-
-export const userReducer = (
-  state = initialState,
-  action: UserActions | UserListenerActions
-) => {
+export const createUserReducer = <T extends Identifiable>() => (
+  state: PubNubObjectApiState<T> = createInitialState<T>(),
+  action: UserActions<T> | UserListenerActions<T>
+): PubNubObjectApiState<T> => {
   switch (action.type) {
+    case OBJECTS_CREATE_USER_BEGIN:
+      return beginCreateUser<T>(state, action.payload);
     case OBJECTS_CREATE_USER:
-      return createUser(state, action);
+      return createUser<T>(state, action.payload);
     case OBJECTS_CREATE_USER_ERROR:
-      return {
-        ...state,
-        error: 'Error while trying to create an user',
-      };
-    case OBJECTS_DELETE_USER:
-      return deleteUser(state, action);
-    case OBJECTS_FETCH_USERS:
-      return addUsers(state, action);
-    case OBJECTS_FETCH_USER_BY_ID:
-      return addUser(state, action);
-    case OBJECTS_FETCH_USERS_ERROR:
-    case OBJECTS_FETCH_USER_BY_ID_ERROR:
-      return {
-        ...state,
-        error: 'Error while trying to retrieve user(s)',
-      };
+      return createUserError<T>(state, action.payload);
+    case OBJECTS_UPDATE_USER_BEGIN:
+      return beginUpdateUser<T>(state, action.payload);
     case OBJECTS_UPDATE_USER:
-      return updateUser(state, action);
+      return updateUser<T>(state, action.payload);
+    case OBJECTS_UPDATE_USER_ERROR:
+      return updateUserError<T>(state, action.payload);
+    case OBJECTS_DELETE_USER_BEGIN:
+      return beginDeleteUser<T>(state, action.payload);
+    case OBJECTS_DELETE_USER:
+      return deleteUser<T>(state, action.payload);
+    case OBJECTS_DELETE_USER_ERROR:
+      return deleteUserError<T>(state, action.payload);
+    case OBJECTS_FETCH_USERS_BEGIN:
+      // nothing to do here
+      // loading multiples will be tracked in userListReducer
+      return state;
+    case OBJECTS_FETCH_USERS:
+      return fetchUsers<T>(state, action.payload);
+    case OBJECTS_FETCH_USERS_ERROR:
+      // nothing to do here
+      // loading multiples will be tracked in userListReducer
+      return state;
+    case OBJECTS_FETCH_USER_BY_ID_BEGIN:
+      return beginFetchUserById<T>(state, action.payload);
+    case OBJECTS_FETCH_USER_BY_ID:
+      return fetchUserById<T>(state, action.payload);
+    case OBJECTS_FETCH_USER_BY_ID_ERROR:
+      return fetchUserError<T>(state, action.payload);
     default:
       return state;
   }

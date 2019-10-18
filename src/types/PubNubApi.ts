@@ -23,9 +23,7 @@ export interface PubNubObjectApiError<T = object> {
 }
 
 export interface PubNubObjectApiState<T> {
-  data: { [key: string]: T };
-  loadingAll: number;
+  byId: { [key: string]: T };
   loadingById: { [key: string]: number };
-  errorAll?: PubNubObjectApiError;
   errorById: { [key: string]: PubNubObjectApiError<T> };
 }
