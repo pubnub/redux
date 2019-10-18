@@ -72,11 +72,16 @@ import { Identifiable, PubNubObjectApiState } from './types/PubNubApi';
 import { Space } from './types/Space';
 import { SpaceListState } from './reducers/spaceListReducer';
 
+import { User } from './types/User';
+import { UserListState } from './reducers/userListReducer';
+
 export {
   Identifiable,
   PubNubObjectApiState as PubNubApiState,
   Space,
   SpaceListState,
+  User,
+  UserListState,
   createPubNubActionListener,
   createMembershipActionListener,
   userMembershipUpdatedOnSpace,

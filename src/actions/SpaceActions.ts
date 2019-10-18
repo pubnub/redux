@@ -158,13 +158,13 @@ export const createSpace = (pubnub: any, space: Space) => (
           createSpaceError({
             code: status.category,
             message: status.errorData,
-            data: response.data as Space,
+            data: response ? response.data : { ...space },
           })
         );
       } else {
         dispatch(
           spaceCreated({
-            data: response.data as Space,
+            data: response.data,
           })
         );
       }
@@ -187,13 +187,13 @@ export const updateSpace = (pubnub: any, space: Space) => (
           updateSpaceError({
             code: status.category,
             message: status.errorData,
-            data: response.data as Space,
+            data: response ? response.data : { ...space },
           })
         );
       } else {
         dispatch(
           spaceUpdated({
-            data: response.data as Space,
+            data: response.data,
           })
         );
       }
@@ -214,13 +214,13 @@ export const deleteSpace = (pubnub: any, id: string) => (
           deleteSpaceError({
             code: status.category,
             message: status.errorData,
-            data: response.data as Space,
+            data: response ? response.data : { id: id },
           })
         );
       } else {
         dispatch(
           spaceDeleted({
-            data: response.data as Space,
+            data: response.data,
           })
         );
       }
@@ -243,7 +243,7 @@ export const fetchSpaces = (
           fetchSpacesError({
             code: status.category,
             message: status.errorData,
-            data: response.data as Space,
+            data: response ? response.data : {},
             label: label,
           })
         );
@@ -287,13 +287,13 @@ export const fetchSpaceById = (
           fetchSpaceByIdError({
             code: status.category,
             message: status.errorData,
-            data: response.data as Space,
+            data: response ? response.data : { id: spaceId },
           })
         );
       } else {
         dispatch(
           spaceRetrievedById({
-            data: response.data as Space,
+            data: response.data,
           })
         );
       }

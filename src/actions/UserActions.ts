@@ -156,7 +156,7 @@ export const createUser = (pubnub: any, user: User) => (dispatch: Dispatch) => {
           createUserError({
             code: status.category,
             message: status.errorData,
-            data: response.data as User,
+            data: response ? response.data : { ...user },
           })
         );
       } else {
@@ -183,7 +183,7 @@ export const updateUser = (pubnub: any, user: User) => (dispatch: Dispatch) => {
           updateUserError({
             code: status.category,
             message: status.errorData,
-            data: response.data as User,
+            data: response ? response.data : { ...user },
           })
         );
       } else {
@@ -208,7 +208,7 @@ export const deleteUser = (pubnub: any, id: string) => (dispatch: Dispatch) => {
           deleteUserError({
             code: status.category,
             message: status.errorData,
-            data: response.data as User,
+            data: response ? response.data : { id: id },
           })
         );
       } else {
@@ -237,7 +237,7 @@ export const fetchUsers = (
           fetchUsersError({
             code: status.category,
             message: status.errorData,
-            data: response.data as User,
+            data: response ? response.data : {},
             label: label,
           })
         );
@@ -277,7 +277,7 @@ export const fetchUserById = (
           fetchUserByIdError({
             code: status.category,
             message: status.errorData,
-            data: response.data as User,
+            data: response ? response.data : { id: userId },
           })
         );
       } else {
