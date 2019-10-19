@@ -2,14 +2,21 @@ import {
   createPubNubActionListener,
   combineListeners,
 } from './actions/ListenerAction';
+import { createUserActionListener } from './listeners/UserListener';
+import { createSpaceActionListener } from './listeners/SpaceListener';
+import { createMembershipActionListener } from './listeners/MembershipListener';
 import {
-  userMembershipUpdatedOnSpace,
-  userAddedToSpace,
-  userRemovedFromSpace,
-  createMembershipActionListener,
-  fetchMembers,
+  joinSpaces,
+  leaveSpaces,
   fetchMemberships,
+  updateMembership,
 } from './actions/MembershipActions';
+import {
+  fetchMembers,
+  updateMembers,
+  addMembers,
+  removeMembers,
+} from './actions/MembersActions';
 import { createMessageActionListener } from './actions/MessageActions';
 import {
   createPresenceActionListener,
@@ -20,7 +27,6 @@ import {
 } from './actions/PresenceActions';
 import { createSignalActionListener } from './actions/SignalActions';
 import {
-  createSpaceActionListener,
   spaceDeleted,
   spaceUpdated,
   fetchSpaces,
@@ -51,7 +57,6 @@ import {
   unknown,
 } from './actions/ErrorStatusActions';
 import {
-  createUserActionListener,
   userDeleted,
   userUpdated,
   fetchUsers,
@@ -84,11 +89,14 @@ export {
   UserListState,
   createPubNubActionListener,
   createMembershipActionListener,
-  userMembershipUpdatedOnSpace,
-  userAddedToSpace,
-  userRemovedFromSpace,
   fetchMembers,
+  updateMembers,
+  addMembers,
+  removeMembers,
   fetchMemberships,
+  updateMembership,
+  joinSpaces,
+  leaveSpaces,
   createMessageActionListener,
   createPresenceActionListener,
   userJoin,

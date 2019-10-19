@@ -1,8 +1,4 @@
-import {
-  ObjectsActionPayload,
-  ObjectsResponsePayload,
-  ObjectsListInput,
-} from '../types/Objects';
+import { ObjectsResponsePayload, ObjectsListInput } from '../types/Objects';
 import {
   OBJECTS_UPDATE_SPACE,
   OBJECTS_DELETE_SPACE,
@@ -41,7 +37,6 @@ import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
-  Identifiable,
 } from 'types/PubNubApi';
 
 export const createSpaceBegin = <T>(payload: T): CreateSpaceBeginAction<T> => ({
@@ -300,28 +295,3 @@ export const fetchSpaceById = (
     }
   );
 };
-
-export const createSpaceActionListener = <T extends Identifiable>(
-  dispatch: Dispatch<SpaceUpdatedAction<T> | SpaceDeletedAction<T>>
-) => ({
-  space: (payload: ObjectsActionPayload<T>) => {
-    switch (payload.message.event) {
-      case 'update':
-        dispatch(
-          spaceUpdated({
-            data: payload.message.data,
-          })
-        );
-        break;
-      case 'delete':
-        dispatch(
-          spaceDeleted({
-            data: payload.message.data,
-          })
-        );
-        break;
-      default:
-        break;
-    }
-  },
-});

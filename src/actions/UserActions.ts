@@ -1,8 +1,4 @@
-import {
-  ObjectsActionPayload,
-  ObjectsResponsePayload,
-  ObjectsListInput,
-} from '../types/Objects';
+import { ObjectsResponsePayload, ObjectsListInput } from '../types/Objects';
 import {
   OBJECTS_UPDATE_USER,
   OBJECTS_DELETE_USER,
@@ -41,7 +37,6 @@ import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
-  Identifiable,
 } from 'types/PubNubApi';
 
 export const createUserBegin = <T>(payload: T): CreateUserBeginAction<T> => ({
@@ -162,7 +157,7 @@ export const createUser = (pubnub: any, user: User) => (dispatch: Dispatch) => {
       } else {
         dispatch(
           userCreated({
-            data: response.data as User,
+            data: response.data,
           })
         );
       }
@@ -189,7 +184,7 @@ export const updateUser = (pubnub: any, user: User) => (dispatch: Dispatch) => {
       } else {
         dispatch(
           userUpdated({
-            data: response.data as User,
+            data: response.data,
           })
         );
       }
@@ -214,7 +209,7 @@ export const deleteUser = (pubnub: any, id: string) => (dispatch: Dispatch) => {
       } else {
         dispatch(
           userDeleted({
-            data: response.data as User,
+            data: response.data,
           })
         );
       }
@@ -283,35 +278,10 @@ export const fetchUserById = (
       } else {
         dispatch(
           userRetrievedById({
-            data: response.data as User,
+            data: response.data,
           })
         );
       }
     }
   );
 };
-
-export const createUserActionListener = <T extends Identifiable>(
-  dispatch: Dispatch<UserUpdatedAction<T> | UserDeletedAction<T>>
-) => ({
-  user: (payload: ObjectsActionPayload<T>) => {
-    switch (payload.message.event) {
-      case 'update':
-        dispatch(
-          userUpdated({
-            data: payload.message.data,
-          })
-        );
-        break;
-      case 'delete':
-        dispatch(
-          userDeleted({
-            data: payload.message.data,
-          })
-        );
-        break;
-      default:
-        break;
-    }
-  },
-});

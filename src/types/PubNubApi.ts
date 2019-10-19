@@ -10,6 +10,11 @@ export interface Identifiable extends Object {
   id: string;
 }
 
+export interface MembershipInfo extends Identifiable {
+  spaceId: string;
+  userId: string;
+}
+
 export interface PubNubObjectApiSuccess<T> {
   data: T;
   label?: string;

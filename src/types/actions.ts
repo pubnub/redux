@@ -1,11 +1,7 @@
 import { MessageActionPayload } from './Message';
 import { PresenceActionPayload } from './Presence';
 import { StatusActionPayload } from './Status';
-import {
-  ObjectsActionPayload,
-  ObjectsResponsePayload,
-  ObjectsStatusPayload,
-} from './Objects';
+import { ObjectsActionPayload } from './Objects';
 import { SignalActionPayload } from './Signal';
 import { UserMap } from './User';
 import { SpaceMap } from './Space';
@@ -14,14 +10,13 @@ import {
   PubNubObjectApiError,
   Identifiable,
 } from './PubNubApi';
+import { MembershipResult } from './Membership';
 
 export const MESSAGE = 'pubnub/MESSAGE';
-
 export const JOIN = 'pubnub/JOIN';
 export const LEAVE = 'pubnub/LEAVE';
 export const TIMEOUT = 'pubnub/TIMEOUT';
 export const STATE_CHANGE = 'pubnub/STATE_CHANGE';
-
 export const NETWORK_UP = 'pubnub/NETWORK_UP';
 export const NETWORK_DOWN = 'pubnub/NETWORK_DOWN';
 export const NETWORK_ISSUES = 'pubnub/NETWORK_ISSUES';
@@ -69,18 +64,43 @@ export const OBJECTS_FETCH_SPACE_BY_ID_BEGIN =
   'pubnub/OBJECTS_FETCH_SPACE_BY_ID_BEGIN';
 export const OBJECTS_FETCH_SPACE_BY_ID_ERROR =
   'pubnub/OBJECTS_FETCH_SPACE_BY_ID_ERROR';
-
 export const OBJECTS_USER_ADDED_TO_SPACE = 'pubnub/OBJECTS_USER_ADDED_TO_SPACE';
 export const OBJECTS_USER_REMOVED_FROM_SPACE =
   'pubnub/OBJECTS_USER_REMOVED_FROM_SPACE';
 export const OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE =
   'pubnub/OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE';
-
+export const OBJECTS_FETCH_MEMBERS_BEGIN = 'pubnub/OBJECTS_FETCH_MEMBERS_BEGIN';
 export const OBJECTS_FETCH_MEMBERS = 'pubnub/OBJECTS_FETCH_MEMBERS';
 export const OBJECTS_FETCH_MEMBERS_ERROR = 'pubnub/OBJECTS_FETCH_MEMBERS_ERROR';
+export const OBJECTS_UPDATE_MEMBERS_BEGIN =
+  'pubnub/OBJECTS_UPDATE_MEMBERS_BEGIN';
+export const OBJECTS_UPDATE_MEMBERS = 'pubnub/OBJECTS_UPDATE_MEMBERS';
+export const OBJECTS_UPDATE_MEMBERS_ERROR =
+  'pubnub/OBJECTS_UPDATE_MEMBERS_ERROR';
+export const OBJECTS_ADD_MEMBERS_BEGIN = 'pubnub/OBJECTS_ADD_MEMBERS_BEGIN';
+export const OBJECTS_MEMBERS_ADDED = 'pubnub/OBJECTS_MEMBERS_ADDED';
+export const OBJECTS_ADD_MEMBERS_ERROR = 'pubnub/OBJECTS_ADD_MEMBERS_ERROR';
+export const OBJECTS_REMOVE_MEMBERS_BEGIN =
+  'pubnub/OBJECTS_REMOVE_MEMBERS_BEGIN';
+export const OBJECTS_MEMBERS_REMOVED = 'pubnub/OBJECTS_MEMBERS_REMOVED';
+export const OBJECTS_REMOVE_MEMBERS_ERROR =
+  'pubnub/OBJECTS_REMOVE_MEMBERS_ERROR';
+export const OBJECTS_FETCH_MEMBERSHIPS_BEGIN =
+  'pubnub/OBJECTS_FETCH_MEMBERSHIPS_BEGIN';
 export const OBJECTS_FETCH_MEMBERSHIPS = 'pubnub/OBJECTS_FETCH_MEMBERSHIPS';
 export const OBJECTS_FETCH_MEMBERSHIPS_ERROR =
   'pubnub/OBJECTS_FETCH_MEMBERSHIPS_ERROR';
+export const OBJECTS_UPDATE_MEMBERSHIP_BEGIN =
+  'pubnub/OBJECTS_UPDATE_MEMBERSHIP_BEGIN';
+export const OBJECTS_UPDATE_MEMBERSHIP = 'pubnub/OBJECTS_UPDATE_MEMBERSHIP';
+export const OBJECTS_UPDATE_MEMBERSHIP_ERROR =
+  'pubnub/OBJECTS_UPDATE_MEMBERSHIP_ERROR';
+export const OBJECTS_JOIN_SPACES_BEGIN = 'pubnub/OBJECTS_JOIN_SPACES_BEGIN';
+export const OBJECTS_SPACES_JOINED = 'pubnub/OBJECTS_SPACES_JOINED';
+export const OBJECTS_JOIN_SPACES_ERROR = 'pubnub/OBJECTS_JOIN_SPACES_ERROR';
+export const OBJECTS_LEAVE_SPACES_BEGIN = 'pubnub/OBJECTS_LEAVE_SPACES_BEGIN';
+export const OBJECTS_SPACES_LEFT = 'pubnub/OBJECTS_SPACES_LEFT';
+export const OBJECTS_LEAVE_SPACES_ERROR = 'pubnub/OBJECTS_LEAVE_SPACES_ERROR';
 export const SIGNAL = 'pubnub/SIGNAL';
 
 export interface JoinAction {
@@ -313,37 +333,137 @@ export interface FetchSpaceByIdErrorAction<T> {
 
 export interface UserAddedToSpaceAction<T extends Identifiable> {
   type: typeof OBJECTS_USER_ADDED_TO_SPACE;
-  payload: ObjectsActionPayload<T>;
+  payload: PubNubObjectApiSuccess<T>;
 }
 
 export interface UserRemovedFromSpaceAction<T extends Identifiable> {
   type: typeof OBJECTS_USER_REMOVED_FROM_SPACE;
-  payload: ObjectsActionPayload<T>;
+  payload: PubNubObjectApiSuccess<T>;
 }
 
 export interface UserMembershipUpdatedOnSpaceAction<T extends Identifiable> {
   type: typeof OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE;
-  payload: ObjectsActionPayload<T>;
+  payload: PubNubObjectApiSuccess<T>;
+}
+
+export interface FetchMembersBeginAction {
+  type: typeof OBJECTS_FETCH_MEMBERS_BEGIN;
+  payload: { label: string };
 }
 
 export interface FetchMembersAction {
   type: typeof OBJECTS_FETCH_MEMBERS;
-  payload: ObjectsResponsePayload;
+  payload: MembershipResult;
 }
 
 export interface FetchMembersErrorAction {
   type: typeof OBJECTS_FETCH_MEMBERS_ERROR;
-  payload: ObjectsStatusPayload;
+  payload: PubNubObjectApiError;
+}
+
+export interface MembersUpdatedAction<T> {
+  type: typeof OBJECTS_UPDATE_MEMBERS;
+  payload: PubNubObjectApiSuccess<T>;
+}
+
+export interface UpdateMembersBeginAction<T> {
+  type: typeof OBJECTS_UPDATE_MEMBERS_BEGIN;
+  payload: T;
+}
+
+export interface UpdateMembersErrorAction<T> {
+  type: typeof OBJECTS_UPDATE_MEMBERS_ERROR;
+  payload: PubNubObjectApiError<T>;
+}
+
+export interface MembersAddedAction<T> {
+  type: typeof OBJECTS_MEMBERS_ADDED;
+  payload: PubNubObjectApiSuccess<T>;
+}
+
+export interface AddMembersBeginAction<T> {
+  type: typeof OBJECTS_ADD_MEMBERS_BEGIN;
+  payload: T;
+}
+
+export interface AddMembersErrorAction<T> {
+  type: typeof OBJECTS_ADD_MEMBERS_ERROR;
+  payload: PubNubObjectApiError<T>;
+}
+
+export interface MembersRemovedAction<T> {
+  type: typeof OBJECTS_MEMBERS_REMOVED;
+  payload: PubNubObjectApiSuccess<T>;
+}
+
+export interface RemoveMembersBeginAction<T> {
+  type: typeof OBJECTS_REMOVE_MEMBERS_BEGIN;
+  payload: T;
+}
+
+export interface RemoveMembersErrorAction<T> {
+  type: typeof OBJECTS_REMOVE_MEMBERS_ERROR;
+  payload: PubNubObjectApiError<T>;
+}
+
+export interface FetchMembershipsBeginAction {
+  type: typeof OBJECTS_FETCH_MEMBERSHIPS_BEGIN;
+  payload: { label: string };
 }
 
 export interface FetchMembershipsAction {
   type: typeof OBJECTS_FETCH_MEMBERSHIPS;
-  payload: ObjectsResponsePayload;
+  payload: MembershipResult;
 }
 
-export interface FetchMemershipsErrorAction {
+export interface FetchMembershipsErrorAction {
   type: typeof OBJECTS_FETCH_MEMBERSHIPS_ERROR;
-  payload: ObjectsStatusPayload;
+  payload: PubNubObjectApiError;
+}
+
+export interface MembershipUpdatedAction<T> {
+  type: typeof OBJECTS_UPDATE_MEMBERSHIP;
+  payload: PubNubObjectApiSuccess<T>;
+}
+
+export interface UpdateMembershipBeginAction<T> {
+  type: typeof OBJECTS_UPDATE_MEMBERSHIP_BEGIN;
+  payload: T;
+}
+
+export interface UpdateMembershipErrorAction<T> {
+  type: typeof OBJECTS_UPDATE_MEMBERSHIP_ERROR;
+  payload: PubNubObjectApiError<T>;
+}
+
+export interface SpacesJoinedAction<T> {
+  type: typeof OBJECTS_SPACES_JOINED;
+  payload: PubNubObjectApiSuccess<T>;
+}
+
+export interface JoinSpacesBeginAction<T> {
+  type: typeof OBJECTS_JOIN_SPACES_BEGIN;
+  payload: T;
+}
+
+export interface JoinSpacesErrorAction<T> {
+  type: typeof OBJECTS_JOIN_SPACES_ERROR;
+  payload: PubNubObjectApiError<T>;
+}
+
+export interface SpacesLeftAction<T> {
+  type: typeof OBJECTS_SPACES_LEFT;
+  payload: PubNubObjectApiSuccess<T>;
+}
+
+export interface LeaveSpacesBeginAction<T> {
+  type: typeof OBJECTS_LEAVE_SPACES_BEGIN;
+  payload: T;
+}
+
+export interface LeaveSpacesErrorAction<T> {
+  type: typeof OBJECTS_LEAVE_SPACES_ERROR;
+  payload: PubNubObjectApiError<T>;
 }
 
 export interface MessageAction {
@@ -417,11 +537,33 @@ export type SpaceActions<T> =
   | FetchSpaceByIdBeginAction
   | FetchSpaceByIdErrorAction<T>;
 
-export type MembershipActions =
+export type MembershipActions<T> =
+  | FetchMembershipsBeginAction
   | FetchMembershipsAction
+  | FetchMembershipsErrorAction
+  | UpdateMembershipBeginAction<T>
+  | MembershipUpdatedAction<T>
+  | UpdateMembershipErrorAction<T>
+  | JoinSpacesBeginAction<T>
+  | SpacesJoinedAction<T>
+  | JoinSpacesErrorAction<T>
+  | LeaveSpacesBeginAction<T>
+  | SpacesLeftAction<T>
+  | LeaveSpacesErrorAction<T>;
+
+export type MembersActions<T> =
+  | FetchMembersBeginAction
   | FetchMembersAction
-  | FetchMemershipsErrorAction
-  | FetchMembersErrorAction;
+  | FetchMembersErrorAction
+  | UpdateMembersBeginAction<T>
+  | MembersUpdatedAction<T>
+  | UpdateMembersErrorAction<T>
+  | AddMembersBeginAction<T>
+  | MembersAddedAction<T>
+  | AddMembersErrorAction<T>
+  | RemoveMembersBeginAction<T>
+  | MembersRemovedAction<T>
+  | RemoveMembersErrorAction<T>;
 
 export type UserListenerActions<T> =
   | UserUpdatedAction<T>

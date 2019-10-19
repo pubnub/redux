@@ -12,15 +12,9 @@ export interface ObjectsData {
 }
 
 export interface ObjectsActionPayload<T extends Identifiable> {
-  channel: string;
-  message: {
-    data: T;
-    event: string;
-    type: string;
-  };
-  publisher?: string | undefined;
-  subscription: string | null;
-  timetoken: string;
+  data: T;
+  event: string;
+  type: string;
 }
 
 export interface ObjectsStatusPayload {
