@@ -1,4 +1,8 @@
-import { SpaceActions, SpaceListenerActions } from '../actions/Actions';
+import {
+  SpaceActions,
+  SpaceListenerActions,
+  MembershipActions,
+} from '../actions/Actions';
 import { actionType } from '../actions/ActionType.enum';
 import { SpaceMap } from '../api/Space';
 import {
@@ -14,6 +18,7 @@ import {
   successDeleteObjectById,
   successObjectList,
 } from './reducerUtil';
+import { MembershipList, MembershipResult } from 'api/Membership';
 
 const createInitialState = <T extends Identifiable>(): PubNubObjectApiState<
   T
@@ -88,9 +93,31 @@ const fetchSpaceError = <T extends Identifiable>(
   payload: PubNubObjectApiError<T>
 ) => errorObjectById<T>(state, payload);
 
+const fetchMemberships = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiSuccess<MembershipResult>
+) => {
+  let newState = state;
+
+  if (payload.data.spaces.length > 0) {
+    for (let i = 0; i < payload.data.spaces.length; i++) {
+      if (payload.data.spaces[i].space !== undefined) {
+        newState = successObjectById<T>(newState, {
+          data: (payload.data.spaces[i].space as unknown) as T,
+        });
+      }
+    }
+  }
+
+  return newState;
+};
+
 export const createSpaceReducer = <T extends Identifiable>() => (
   state: PubNubObjectApiState<T> = createInitialState<T>(),
-  action: SpaceActions<T> | SpaceListenerActions<T>
+  action:
+    | SpaceActions<T>
+    | SpaceListenerActions<T>
+    | MembershipActions<MembershipList>
 ): PubNubObjectApiState<T> => {
   switch (action.type) {
     case actionType.OBJECTS_CREATE_SPACE_BEGIN:
@@ -127,6 +154,8 @@ export const createSpaceReducer = <T extends Identifiable>() => (
       return fetchSpaceById<T>(state, action.payload);
     case actionType.OBJECTS_FETCH_SPACE_BY_ID_ERROR:
       return fetchSpaceError<T>(state, action.payload);
+    case actionType.OBJECTS_FETCH_MEMBERSHIPS:
+      return fetchMemberships<T>(state, action.payload);
     default:
       return state;
   }

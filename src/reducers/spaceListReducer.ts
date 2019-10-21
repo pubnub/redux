@@ -7,19 +7,19 @@ import { actionType } from '../actions/ActionType.enum';
 import { Space, SpaceMap } from '../api/Space';
 import { PubNubObjectApiSuccess, PubNubObjectApiError } from '../api/PubNubApi';
 
-export interface SpaceListState {
+export interface SpaceListState<T> {
   data: string[];
   loading: boolean;
-  error?: PubNubObjectApiError;
+  error?: PubNubObjectApiError<T>;
 }
 
-const createInitialState = (): SpaceListState => ({
+const createInitialState = <T>(): SpaceListState<T> => ({
   data: [],
   loading: false,
   error: undefined,
 });
 
-const beginFetchSpaces = (state: SpaceListState) => ({
+const beginFetchSpaces = <T>(state: SpaceListState<T>) => ({
   data: [...state.data],
   loading: true,
   error: undefined,
@@ -35,22 +35,22 @@ const fetchSpaces = (payload: PubNubObjectApiSuccess<SpaceMap<Space>>) => {
   };
 };
 
-const fetchSpacesError = (
-  state: SpaceListState,
-  payload: PubNubObjectApiError
+const fetchSpacesError = <T>(
+  state: SpaceListState<T>,
+  payload: PubNubObjectApiError<T>
 ) => ({
   data: [...state.data],
   loading: false,
   error: payload,
 });
 
-export const createSpaceListReducer = (label: string = 'all') => (
-  state: SpaceListState = createInitialState(),
+export const createSpaceListReducer = <T>(label: string = 'all') => (
+  state: SpaceListState<T> = createInitialState(),
   action:
     | SpaceListRetrievedAction<Space>
     | FetchSpacesBeginAction
-    | FetchSpacesErrorAction
-): SpaceListState => {
+    | FetchSpacesErrorAction<T>
+): SpaceListState<T> => {
   if (action.payload !== undefined && action.payload.label === label) {
     switch (action.type) {
       case actionType.OBJECTS_FETCH_SPACES_BEGIN:

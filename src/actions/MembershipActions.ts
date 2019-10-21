@@ -1,9 +1,5 @@
 import { Dispatch } from 'redux';
-import {
-  ObjectsActionPayload,
-  ObjectsListInput,
-  ObjectsResponsePayload,
-} from '../api/Objects';
+import { ObjectsActionPayload, ObjectsResponsePayload } from '../api/Objects';
 import {
   UserMembershipUpdatedOnSpaceAction,
   UserAddedToSpaceAction,
@@ -32,6 +28,7 @@ import {
   MembershipList,
   MembershipResult,
   Membership,
+  MembershipOptions,
 } from '../api/Membership';
 
 export const userMembershipUpdatedOnSpace = <T extends Identifiable>(
@@ -138,7 +135,7 @@ export const leaveSpacesError = <T>(
 export const fetchMemberships = (
   pubnub: any,
   userId: string,
-  options: ObjectsListInput = {}
+  options: MembershipOptions = {}
 ) => (dispatch: Dispatch) => {
   dispatch(fetchMembershipsBegin(userId));
 

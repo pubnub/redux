@@ -1,10 +1,18 @@
+import { Space } from './Space';
+
+export interface MembershipOptions {
+  include?: {
+    customFields?: boolean;
+    spaceFields?: boolean;
+    customSpaceFields?: boolean;
+    totalCount?: boolean;
+  };
+}
+
 export interface Membership {
   userId: string;
   spaces: MembershipList;
   custom?: object;
-  include?: {
-    customFields?: boolean;
-  };
 }
 
 export interface MembershipResult {
@@ -12,4 +20,4 @@ export interface MembershipResult {
   spaces: MembershipList;
 }
 
-export type MembershipList = { id: string }[];
+export type MembershipList = { id: string; space?: Space }[];

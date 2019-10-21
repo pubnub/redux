@@ -126,7 +126,7 @@ const fetchMembers = <T extends MembersList>(
     newState.loadingById[id] > 0 ? newState.loadingById[id] - 1 : 0;
 
   // set response payload
-  newState.byId[id] = ([...payload.data.spaces] as unknown) as T;
+  newState.byId[id] = ([...payload.data.users] as unknown) as T;
 
   return newState;
 };

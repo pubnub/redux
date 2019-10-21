@@ -11,6 +11,7 @@ import {
 } from '../api/PubNubApi';
 import { MembershipResult } from '../api/Membership';
 import { actionType } from './ActionType.enum';
+import { MembersResult } from 'api/Member';
 
 export interface JoinAction {
   type: typeof actionType.JOIN;
@@ -262,7 +263,7 @@ export interface FetchMembersBeginAction {
 
 export interface FetchMembersAction {
   type: typeof actionType.OBJECTS_FETCH_MEMBERS;
-  payload: MembershipResult;
+  payload: PubNubObjectApiSuccess<MembersResult>;
 }
 
 export interface FetchMembersErrorAction<T> {

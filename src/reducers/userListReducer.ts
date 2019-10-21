@@ -7,19 +7,19 @@ import { actionType } from '../actions/ActionType.enum';
 import { User, UserMap } from '../api/User';
 import { PubNubObjectApiSuccess, PubNubObjectApiError } from '../api/PubNubApi';
 
-export interface UserListState {
+export interface UserListState<T> {
   data: string[];
   loading: boolean;
-  error?: PubNubObjectApiError;
+  error?: PubNubObjectApiError<T>;
 }
 
-const createInitialState = (): UserListState => ({
+const createInitialState = <T>(): UserListState<T> => ({
   data: [],
   loading: false,
   error: undefined,
 });
 
-const beginFetchUsers = (state: UserListState) => ({
+const beginFetchUsers = <T>(state: UserListState<T>) => ({
   data: [...state.data],
   loading: true,
   error: undefined,
@@ -35,22 +35,22 @@ const fetchUsers = (payload: PubNubObjectApiSuccess<UserMap<User>>) => {
   };
 };
 
-const fetchUsersError = (
-  state: UserListState,
-  payload: PubNubObjectApiError
+const fetchUsersError = <T>(
+  state: UserListState<T>,
+  payload: PubNubObjectApiError<T>
 ) => ({
   data: [...state.data],
   loading: false,
   error: payload,
 });
 
-export const createUserListReducer = (label: string = 'all') => (
-  state: UserListState = createInitialState(),
+export const createUserListReducer = <T>(label: string = 'all') => (
+  state: UserListState<T> = createInitialState(),
   action:
     | UserListRetrievedAction<User>
     | FetchUsersBeginAction
-    | FetchUsersErrorAction
-): UserListState => {
+    | FetchUsersErrorAction<T>
+): UserListState<T> => {
   if (action.payload !== undefined && action.payload.label === label) {
     switch (action.type) {
       case actionType.OBJECTS_FETCH_USERS_BEGIN:

@@ -1,4 +1,8 @@
-import { UserActions, UserListenerActions } from '../actions/Actions';
+import {
+  UserActions,
+  UserListenerActions,
+  MembersActions,
+} from '../actions/Actions';
 import { actionType } from '../actions/ActionType.enum';
 import { UserMap } from '../api/User';
 import {
@@ -14,6 +18,7 @@ import {
   successDeleteObjectById,
   successObjectList,
 } from './reducerUtil';
+import { MembersResult, MembersList } from 'api/Member';
 
 const createInitialState = <T extends Identifiable>(): PubNubObjectApiState<
   T
@@ -88,9 +93,28 @@ const fetchUserError = <T extends Identifiable>(
   payload: PubNubObjectApiError<T>
 ) => errorObjectById<T>(state, payload);
 
+const fetchMembers = <T extends Identifiable>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiSuccess<MembersResult>
+) => {
+  let newState = state;
+
+  if (payload.data.users.length > 0) {
+    for (let i = 0; i < payload.data.users.length; i++) {
+      if (payload.data.users[i].user !== undefined) {
+        newState = successObjectById<T>(newState, {
+          data: (payload.data.users[i].user as unknown) as T,
+        });
+      }
+    }
+  }
+
+  return newState;
+};
+
 export const createUserReducer = <T extends Identifiable>() => (
   state: PubNubObjectApiState<T> = createInitialState<T>(),
-  action: UserActions<T> | UserListenerActions<T>
+  action: UserActions<T> | UserListenerActions<T> | MembersActions<MembersList>
 ): PubNubObjectApiState<T> => {
   switch (action.type) {
     case actionType.OBJECTS_CREATE_USER_BEGIN:
@@ -127,6 +151,8 @@ export const createUserReducer = <T extends Identifiable>() => (
       return fetchUserById<T>(state, action.payload);
     case actionType.OBJECTS_FETCH_USER_BY_ID_ERROR:
       return fetchUserError<T>(state, action.payload);
+    case actionType.OBJECTS_FETCH_MEMBERS:
+      return fetchMembers<T>(state, action.payload);
     default:
       return state;
   }

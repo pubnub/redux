@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { ObjectsListInput, ObjectsResponsePayload } from '../api/Objects';
+import { ObjectsResponsePayload } from '../api/Objects';
 import {
   RemoveMembersErrorAction,
   MembersRemovedAction,
@@ -20,7 +20,12 @@ import {
   PubNubApiStatus,
   PubNubObjectApiSuccess,
 } from '../api/PubNubApi';
-import { MembersList, MembersResult, Members } from '../api/Member';
+import {
+  MembersList,
+  MembersResult,
+  Members,
+  MembersOptions,
+} from '../api/Member';
 
 export const fetchMembersBegin = (
   payload: string
@@ -29,7 +34,9 @@ export const fetchMembersBegin = (
   payload,
 });
 
-const membersRetrieved = (payload: MembersResult): FetchMembersAction => ({
+const membersRetrieved = (
+  payload: PubNubObjectApiSuccess<MembersResult>
+): FetchMembersAction => ({
   type: actionType.OBJECTS_FETCH_MEMBERS,
   payload,
 });
@@ -105,10 +112,9 @@ export const removeMembersError = <T>(
 export const fetchMembers = (
   pubnub: any,
   spaceId: string,
-  options: ObjectsListInput = {},
-  label: string = 'all'
+  options: MembersOptions = {}
 ) => (dispatch: Dispatch) => {
-  dispatch(fetchMembersBegin(label));
+  dispatch(fetchMembersBegin(spaceId));
 
   pubnub.getMembers(
     {
@@ -129,9 +135,9 @@ export const fetchMembers = (
       } else {
         let result = {
           id: spaceId,
-          spaces: response.data,
+          users: response.data,
         };
-        dispatch(membersRetrieved(result));
+        dispatch(membersRetrieved({ data: result }));
       }
     }
   );
@@ -148,7 +154,7 @@ export const updateMembers = (pubnub: any, members: Members) => (
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
-        let errorData = { id: members.userId, value: { ...members } };
+        let errorData = { id: members.spaceId, value: { ...members } };
 
         dispatch(
           updateMembersError({
@@ -179,7 +185,7 @@ export const addMembers = (pubnub: any, members: Members) => (
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
-        let errorData = { id: members.userId, value: { ...members } };
+        let errorData = { id: members.spaceId, value: { ...members } };
 
         dispatch(
           addMembersError({
@@ -210,7 +216,7 @@ export const removeMembers = (pubnub: any, members: Members) => (
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
-        let errorData = { id: members.userId, value: { ...members } };
+        let errorData = { id: members.spaceId, value: { ...members } };
 
         dispatch(
           removeMembersError({
