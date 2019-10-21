@@ -1,18 +1,6 @@
 import { Dispatch } from 'redux';
-import { ObjectsListInput, ObjectsResponsePayload } from '../types/Objects';
+import { ObjectsListInput, ObjectsResponsePayload } from '../api/Objects';
 import {
-  OBJECTS_REMOVE_MEMBERS_ERROR,
-  OBJECTS_MEMBERS_REMOVED,
-  OBJECTS_REMOVE_MEMBERS_BEGIN,
-  OBJECTS_ADD_MEMBERS_ERROR,
-  OBJECTS_MEMBERS_ADDED,
-  OBJECTS_ADD_MEMBERS_BEGIN,
-  OBJECTS_FETCH_MEMBERS_BEGIN,
-  OBJECTS_FETCH_MEMBERS,
-  OBJECTS_UPDATE_MEMBERS_BEGIN,
-  OBJECTS_UPDATE_MEMBERS,
-  OBJECTS_UPDATE_MEMBERS_ERROR,
-  OBJECTS_FETCH_MEMBERS_ERROR,
   RemoveMembersErrorAction,
   MembersRemovedAction,
   RemoveMembersBeginAction,
@@ -25,92 +13,92 @@ import {
   UpdateMembersBeginAction,
   UpdateMembersErrorAction,
   MembersUpdatedAction,
-} from '../types/actions';
+} from './Actions';
+import { actionType } from './ActionType.enum';
 import {
-  Identifiable,
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
-} from '../types/PubNubApi';
-import { MembersList, MembersResult, Members } from '../types/Member';
+} from '../api/PubNubApi';
+import { MembersList, MembersResult, Members } from '../api/Member';
 
-export const fetchMembersBegin = (payload: {
-  label: string;
-}): FetchMembersBeginAction => ({
-  type: OBJECTS_FETCH_MEMBERS_BEGIN,
+export const fetchMembersBegin = (
+  payload: string
+): FetchMembersBeginAction => ({
+  type: actionType.OBJECTS_FETCH_MEMBERS_BEGIN,
   payload,
 });
 
 const membersRetrieved = (payload: MembersResult): FetchMembersAction => ({
-  type: OBJECTS_FETCH_MEMBERS,
+  type: actionType.OBJECTS_FETCH_MEMBERS,
   payload,
 });
 
-const fetchMembersError = (
-  payload: PubNubObjectApiError
-): FetchMembersErrorAction => ({
-  type: OBJECTS_FETCH_MEMBERS_ERROR,
+const fetchMembersError = <T>(
+  payload: PubNubObjectApiError<T>
+): FetchMembersErrorAction<T> => ({
+  type: actionType.OBJECTS_FETCH_MEMBERS_ERROR,
   payload,
 });
 
 export const updateMembersBegin = <T>(
   payload: T
 ): UpdateMembersBeginAction<T> => ({
-  type: OBJECTS_UPDATE_MEMBERS_BEGIN,
+  type: actionType.OBJECTS_UPDATE_MEMBERS_BEGIN,
   payload,
 });
 
 export const membersUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): MembersUpdatedAction<T> => ({
-  type: OBJECTS_UPDATE_MEMBERS,
+  type: actionType.OBJECTS_UPDATE_MEMBERS,
   payload,
 });
 
 export const updateMembersError = <T>(
   payload: PubNubObjectApiError<T>
 ): UpdateMembersErrorAction<T> => ({
-  type: OBJECTS_UPDATE_MEMBERS_ERROR,
+  type: actionType.OBJECTS_UPDATE_MEMBERS_ERROR,
   payload,
 });
 
 export const addMembersBegin = <T>(payload: T): AddMembersBeginAction<T> => ({
-  type: OBJECTS_ADD_MEMBERS_BEGIN,
+  type: actionType.OBJECTS_ADD_MEMBERS_BEGIN,
   payload,
 });
 
 export const membersAdded = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): MembersAddedAction<T> => ({
-  type: OBJECTS_MEMBERS_ADDED,
+  type: actionType.OBJECTS_MEMBERS_ADDED,
   payload,
 });
 
 export const addMembersError = <T>(
   payload: PubNubObjectApiError<T>
 ): AddMembersErrorAction<T> => ({
-  type: OBJECTS_ADD_MEMBERS_ERROR,
+  type: actionType.OBJECTS_ADD_MEMBERS_ERROR,
   payload,
 });
 
 export const removeMembersBegin = <T>(
   payload: T
 ): RemoveMembersBeginAction<T> => ({
-  type: OBJECTS_REMOVE_MEMBERS_BEGIN,
+  type: actionType.OBJECTS_REMOVE_MEMBERS_BEGIN,
   payload,
 });
 
 export const membersRemoved = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): MembersRemovedAction<T> => ({
-  type: OBJECTS_MEMBERS_REMOVED,
+  type: actionType.OBJECTS_MEMBERS_REMOVED,
   payload,
 });
 
 export const removeMembersError = <T>(
   payload: PubNubObjectApiError<T>
 ): RemoveMembersErrorAction<T> => ({
-  type: OBJECTS_REMOVE_MEMBERS_ERROR,
+  type: actionType.OBJECTS_REMOVE_MEMBERS_ERROR,
   payload,
 });
 
@@ -120,26 +108,28 @@ export const fetchMembers = (
   options: ObjectsListInput = {},
   label: string = 'all'
 ) => (dispatch: Dispatch) => {
-  dispatch(fetchMembersBegin({ label: label }));
+  dispatch(fetchMembersBegin(label));
 
   pubnub.getMembers(
     {
       spaceId,
       ...options,
     },
-    (status: PubNubApiStatus, response: MembersList) => {
+    (status: PubNubApiStatus, response: { data: MembersList }) => {
       if (status.error) {
+        let errorData = { id: spaceId };
+
         dispatch(
           fetchMembersError({
             code: status.category,
             message: status.errorData,
-            data: { id: spaceId },
+            data: errorData,
           })
         );
       } else {
         let result = {
           id: spaceId,
-          spaces: response,
+          spaces: response.data,
         };
         dispatch(membersRetrieved(result));
       }
@@ -158,11 +148,13 @@ export const updateMembers = (pubnub: any, members: Members) => (
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: members.userId, value: { ...members } };
+
         dispatch(
           updateMembersError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { ...members },
+            data: errorData,
           })
         );
       } else {
@@ -187,11 +179,13 @@ export const addMembers = (pubnub: any, members: Members) => (
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: members.userId, value: { ...members } };
+
         dispatch(
           addMembersError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { ...members },
+            data: errorData,
           })
         );
       } else {
@@ -216,11 +210,13 @@ export const removeMembers = (pubnub: any, members: Members) => (
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: members.userId, value: { ...members } };
+
         dispatch(
           removeMembersError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { ...members },
+            data: errorData,
           })
         );
       } else {

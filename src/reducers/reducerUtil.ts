@@ -3,8 +3,8 @@ import {
   PubNubObjectApiError,
   Identifiable,
   PubNubObjectApiSuccess,
-} from '../types/PubNubApi';
-import { SpaceMap } from 'types/Space';
+} from '../api/PubNubApi';
+import { SpaceMap } from 'api/Space';
 
 export const beginObjectById = <T extends object>(
   state: PubNubObjectApiState<T>,

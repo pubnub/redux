@@ -1,13 +1,5 @@
-import { ObjectsResponsePayload, ObjectsListInput } from '../types/Objects';
+import { ObjectsResponsePayload, ObjectsListInput } from '../api/Objects';
 import {
-  OBJECTS_UPDATE_USER,
-  OBJECTS_DELETE_USER,
-  OBJECTS_FETCH_USERS_ERROR,
-  OBJECTS_FETCH_USERS,
-  OBJECTS_CREATE_USER,
-  OBJECTS_FETCH_USER_BY_ID,
-  OBJECTS_FETCH_USER_BY_ID_ERROR,
-  OBJECTS_CREATE_USER_ERROR,
   UserDeletedAction,
   UserUpdatedAction,
   CreateUserErrorAction,
@@ -17,124 +9,118 @@ import {
   UserListRetrievedAction,
   UserCreatedAction,
   CreateUserBeginAction,
-  OBJECTS_CREATE_USER_BEGIN,
-  OBJECTS_FETCH_USERS_BEGIN,
   FetchUsersBeginAction,
   FetchUserByIdBeginAction,
-  OBJECTS_FETCH_USER_BY_ID_BEGIN,
   UpdateUserBeginAction,
-  OBJECTS_UPDATE_USER_BEGIN,
   UpdateUserErrorAction,
-  OBJECTS_UPDATE_USER_ERROR,
-  OBJECTS_DELETE_USER_BEGIN,
   DeleteUserBeginAction,
   DeleteUserErrorAction,
-  OBJECTS_DELETE_USER_ERROR,
-} from '../types/actions';
+} from './Actions';
+import { actionType } from './ActionType.enum';
 import { Dispatch } from 'redux';
-import { User, UserMap } from '../types/User';
+import { User, UserMap } from '../api/User';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
-} from 'types/PubNubApi';
+} from 'api/PubNubApi';
 
 export const createUserBegin = <T>(payload: T): CreateUserBeginAction<T> => ({
-  type: OBJECTS_CREATE_USER_BEGIN,
+  type: actionType.OBJECTS_CREATE_USER_BEGIN,
   payload,
 });
 
 export const userCreated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): UserCreatedAction<T> => ({
-  type: OBJECTS_CREATE_USER,
+  type: actionType.OBJECTS_CREATE_USER,
   payload,
 });
 
 export const createUserError = <T>(
   payload: PubNubObjectApiError<T>
 ): CreateUserErrorAction<T> => ({
-  type: OBJECTS_CREATE_USER_ERROR,
+  type: actionType.OBJECTS_CREATE_USER_ERROR,
   payload,
 });
 
 export const userListRetrieved = <T>(
   payload: PubNubObjectApiSuccess<UserMap<T>>
 ): UserListRetrievedAction<T> => ({
-  type: OBJECTS_FETCH_USERS,
+  type: actionType.OBJECTS_FETCH_USERS,
   payload,
 });
 
 export const fetchUsersBegin = (payload: {
   label: string;
 }): FetchUsersBeginAction => ({
-  type: OBJECTS_FETCH_USERS_BEGIN,
+  type: actionType.OBJECTS_FETCH_USERS_BEGIN,
   payload,
 });
 
-export const fetchUsersError = (
-  payload: PubNubObjectApiError<object>
-): FetchUsersErrorAction => ({
-  type: OBJECTS_FETCH_USERS_ERROR,
+export const fetchUsersError = <T>(
+  payload: PubNubObjectApiError<T>
+): FetchUsersErrorAction<T> => ({
+  type: actionType.OBJECTS_FETCH_USERS_ERROR,
   payload,
 });
 
 export const userRetrievedById = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): FetchUserByIdAction<T> => ({
-  type: OBJECTS_FETCH_USER_BY_ID,
+  type: actionType.OBJECTS_FETCH_USER_BY_ID,
   payload,
 });
 
 export const fetchUserByIdBegin = (
   payload: string
 ): FetchUserByIdBeginAction => ({
-  type: OBJECTS_FETCH_USER_BY_ID_BEGIN,
+  type: actionType.OBJECTS_FETCH_USER_BY_ID_BEGIN,
   payload,
 });
 
 export const fetchUserByIdError = <T>(
   payload: PubNubObjectApiError<T>
 ): FetchUserByIdErrorAction<T> => ({
-  type: OBJECTS_FETCH_USER_BY_ID_ERROR,
+  type: actionType.OBJECTS_FETCH_USER_BY_ID_ERROR,
   payload,
 });
 
 export const userUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): UserUpdatedAction<T> => ({
-  type: OBJECTS_UPDATE_USER,
+  type: actionType.OBJECTS_UPDATE_USER,
   payload,
 });
 
 export const updateUserBegin = <T>(payload: T): UpdateUserBeginAction<T> => ({
-  type: OBJECTS_UPDATE_USER_BEGIN,
+  type: actionType.OBJECTS_UPDATE_USER_BEGIN,
   payload,
 });
 
 export const updateUserError = <T>(
   payload: PubNubObjectApiError<T>
 ): UpdateUserErrorAction<T> => ({
-  type: OBJECTS_UPDATE_USER_ERROR,
+  type: actionType.OBJECTS_UPDATE_USER_ERROR,
   payload,
 });
 
 export const userDeleted = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): UserDeletedAction<T> => ({
-  type: OBJECTS_DELETE_USER,
+  type: actionType.OBJECTS_DELETE_USER,
   payload,
 });
 
 export const deleteUserBegin = (payload: string): DeleteUserBeginAction => ({
-  type: OBJECTS_DELETE_USER_BEGIN,
+  type: actionType.OBJECTS_DELETE_USER_BEGIN,
   payload,
 });
 
 export const deleteUserError = <T>(
   payload: PubNubObjectApiError<T>
 ): DeleteUserErrorAction<T> => ({
-  type: OBJECTS_DELETE_USER_ERROR,
+  type: actionType.OBJECTS_DELETE_USER_ERROR,
   payload,
 });
 
@@ -147,11 +133,13 @@ export const createUser = (pubnub: any, user: User) => (dispatch: Dispatch) => {
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: user.id, value: user };
+
         dispatch(
           createUserError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { ...user },
+            data: errorData,
           })
         );
       } else {
@@ -174,11 +162,13 @@ export const updateUser = (pubnub: any, user: User) => (dispatch: Dispatch) => {
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: user.id, value: user };
+
         dispatch(
           updateUserError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { ...user },
+            data: errorData,
           })
         );
       } else {
@@ -199,11 +189,13 @@ export const deleteUser = (pubnub: any, id: string) => (dispatch: Dispatch) => {
     id,
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: id };
+
         dispatch(
           deleteUserError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { id: id },
+            data: errorData,
           })
         );
       } else {
@@ -228,11 +220,13 @@ export const fetchUsers = (
     { ...options },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: '' };
+
         dispatch(
           fetchUsersError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : {},
+            data: errorData,
             label: label,
           })
         );
@@ -268,11 +262,13 @@ export const fetchUserById = (
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: userId };
+
         dispatch(
           fetchUserByIdError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { id: userId },
+            data: errorData,
           })
         );
       } else {

@@ -1,29 +1,12 @@
-import {
-  OBJECTS_FETCH_SPACES,
-  OBJECTS_CREATE_SPACE,
-  OBJECTS_CREATE_SPACE_ERROR,
-  OBJECTS_DELETE_SPACE,
-  OBJECTS_FETCH_SPACES_ERROR,
-  OBJECTS_FETCH_SPACE_BY_ID_ERROR,
-  OBJECTS_UPDATE_SPACE,
-  OBJECTS_FETCH_SPACE_BY_ID,
-  SpaceActions,
-  SpaceListenerActions,
-  OBJECTS_DELETE_SPACE_ERROR,
-  OBJECTS_UPDATE_SPACE_ERROR,
-  OBJECTS_CREATE_SPACE_BEGIN,
-  OBJECTS_UPDATE_SPACE_BEGIN,
-  OBJECTS_DELETE_SPACE_BEGIN,
-  OBJECTS_FETCH_SPACES_BEGIN,
-  OBJECTS_FETCH_SPACE_BY_ID_BEGIN,
-} from '../types/actions';
-import { SpaceMap } from '../types/Space';
+import { SpaceActions, SpaceListenerActions } from '../actions/Actions';
+import { actionType } from '../actions/ActionType.enum';
+import { SpaceMap } from '../api/Space';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiState,
   PubNubObjectApiError,
   Identifiable,
-} from '../types/PubNubApi';
+} from '../api/PubNubApi';
 import {
   beginObjectById,
   errorObjectById,
@@ -110,39 +93,39 @@ export const createSpaceReducer = <T extends Identifiable>() => (
   action: SpaceActions<T> | SpaceListenerActions<T>
 ): PubNubObjectApiState<T> => {
   switch (action.type) {
-    case OBJECTS_CREATE_SPACE_BEGIN:
+    case actionType.OBJECTS_CREATE_SPACE_BEGIN:
       return beginCreateSpace<T>(state, action.payload);
-    case OBJECTS_CREATE_SPACE:
+    case actionType.OBJECTS_CREATE_SPACE:
       return createSpace<T>(state, action.payload);
-    case OBJECTS_CREATE_SPACE_ERROR:
+    case actionType.OBJECTS_CREATE_SPACE_ERROR:
       return createSpaceError<T>(state, action.payload);
-    case OBJECTS_UPDATE_SPACE_BEGIN:
+    case actionType.OBJECTS_UPDATE_SPACE_BEGIN:
       return beginUpdateSpace<T>(state, action.payload);
-    case OBJECTS_UPDATE_SPACE:
+    case actionType.OBJECTS_UPDATE_SPACE:
       return updateSpace<T>(state, action.payload);
-    case OBJECTS_UPDATE_SPACE_ERROR:
+    case actionType.OBJECTS_UPDATE_SPACE_ERROR:
       return updateSpaceError<T>(state, action.payload);
-    case OBJECTS_DELETE_SPACE_BEGIN:
+    case actionType.OBJECTS_DELETE_SPACE_BEGIN:
       return beginDeleteSpace<T>(state, action.payload);
-    case OBJECTS_DELETE_SPACE:
+    case actionType.OBJECTS_DELETE_SPACE:
       return deleteSpace<T>(state, action.payload);
-    case OBJECTS_DELETE_SPACE_ERROR:
+    case actionType.OBJECTS_DELETE_SPACE_ERROR:
       return deleteSpaceError<T>(state, action.payload);
-    case OBJECTS_FETCH_SPACES_BEGIN:
+    case actionType.OBJECTS_FETCH_SPACES_BEGIN:
       // nothing to do here
       // loading multiples will be tracked in spaceListReducer
       return state;
-    case OBJECTS_FETCH_SPACES:
+    case actionType.OBJECTS_FETCH_SPACES:
       return fetchSpaces<T>(state, action.payload);
-    case OBJECTS_FETCH_SPACES_ERROR:
+    case actionType.OBJECTS_FETCH_SPACES_ERROR:
       // nothing to do here
       // loading multiples will be tracked in spaceListReducer
       return state;
-    case OBJECTS_FETCH_SPACE_BY_ID_BEGIN:
+    case actionType.OBJECTS_FETCH_SPACE_BY_ID_BEGIN:
       return beginFetchSpaceById<T>(state, action.payload);
-    case OBJECTS_FETCH_SPACE_BY_ID:
+    case actionType.OBJECTS_FETCH_SPACE_BY_ID:
       return fetchSpaceById<T>(state, action.payload);
-    case OBJECTS_FETCH_SPACE_BY_ID_ERROR:
+    case actionType.OBJECTS_FETCH_SPACE_BY_ID_ERROR:
       return fetchSpaceError<T>(state, action.payload);
     default:
       return state;

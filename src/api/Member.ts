@@ -1,5 +1,5 @@
 export interface Members {
-  spaceId: string;
+  userId: string;
   spaces: MembersList;
   custom?: object;
   include?: {

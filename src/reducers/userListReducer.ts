@@ -1,16 +1,11 @@
 import {
-  OBJECTS_FETCH_USERS,
-  OBJECTS_FETCH_USERS_ERROR,
-  OBJECTS_FETCH_USERS_BEGIN,
   FetchUsersErrorAction,
   FetchUsersBeginAction,
   UserListRetrievedAction,
-} from '../types/actions';
-import { User, UserMap } from '../types/User';
-import {
-  PubNubObjectApiSuccess,
-  PubNubObjectApiError,
-} from '../types/PubNubApi';
+} from '../actions/Actions';
+import { actionType } from '../actions/ActionType.enum';
+import { User, UserMap } from '../api/User';
+import { PubNubObjectApiSuccess, PubNubObjectApiError } from '../api/PubNubApi';
 
 export interface UserListState {
   data: string[];
@@ -58,11 +53,11 @@ export const createUserListReducer = (label: string = 'all') => (
 ): UserListState => {
   if (action.payload !== undefined && action.payload.label === label) {
     switch (action.type) {
-      case OBJECTS_FETCH_USERS_BEGIN:
+      case actionType.OBJECTS_FETCH_USERS_BEGIN:
         return beginFetchUsers(state);
-      case OBJECTS_FETCH_USERS:
+      case actionType.OBJECTS_FETCH_USERS:
         return fetchUsers(action.payload);
-      case OBJECTS_FETCH_USERS_ERROR:
+      case actionType.OBJECTS_FETCH_USERS_ERROR:
         return fetchUsersError(state, action.payload);
       default:
         return state;

@@ -1,38 +1,36 @@
 import { Dispatch } from 'redux';
-import { ObjectsActionPayload } from '../types/Objects';
+import { ObjectsActionPayload } from '../api/Objects';
 import {
-  OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
-  OBJECTS_USER_ADDED_TO_SPACE,
-  OBJECTS_USER_REMOVED_FROM_SPACE,
   UserMembershipUpdatedOnSpaceAction,
   UserAddedToSpaceAction,
   UserRemovedFromSpaceAction,
   MembershipListenerActions,
-} from '../types/actions';
-import { PubNubObjectApiSuccess, MembershipInfo } from '../types/PubNubApi';
+} from '../actions/Actions';
+import { actionType } from '../actions/ActionType.enum';
+import { PubNubObjectApiSuccess, ListenerEventData } from '../api/PubNubApi';
 
-export const userMembershipUpdatedOnSpace = <T extends MembershipInfo>(
+export const userMembershipUpdatedOnSpace = <T extends ListenerEventData>(
   payload: PubNubObjectApiSuccess<T>
 ): UserMembershipUpdatedOnSpaceAction<T> => ({
-  type: OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
+  type: actionType.OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
   payload,
 });
 
-export const userAddedToSpace = <T extends MembershipInfo>(
+export const userAddedToSpace = <T extends ListenerEventData>(
   payload: PubNubObjectApiSuccess<T>
 ): UserAddedToSpaceAction<T> => ({
-  type: OBJECTS_USER_ADDED_TO_SPACE,
+  type: actionType.OBJECTS_USER_ADDED_TO_SPACE,
   payload,
 });
 
-export const userRemovedFromSpace = <T extends MembershipInfo>(
+export const userRemovedFromSpace = <T extends ListenerEventData>(
   payload: PubNubObjectApiSuccess<T>
 ): UserRemovedFromSpaceAction<T> => ({
-  type: OBJECTS_USER_REMOVED_FROM_SPACE,
+  type: actionType.OBJECTS_USER_REMOVED_FROM_SPACE,
   payload,
 });
 
-export const createMembershipActionListener = <T extends MembershipInfo>(
+export const createMembershipActionListener = <T extends ListenerEventData>(
   dispatch: Dispatch<MembershipListenerActions<T>>
 ) => ({
   membership: (payload: ObjectsActionPayload<T>) => {

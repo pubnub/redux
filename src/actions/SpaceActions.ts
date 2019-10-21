@@ -1,13 +1,5 @@
-import { ObjectsResponsePayload, ObjectsListInput } from '../types/Objects';
+import { ObjectsResponsePayload, ObjectsListInput } from '../api/Objects';
 import {
-  OBJECTS_UPDATE_SPACE,
-  OBJECTS_DELETE_SPACE,
-  OBJECTS_FETCH_SPACES_ERROR,
-  OBJECTS_FETCH_SPACES,
-  OBJECTS_CREATE_SPACE,
-  OBJECTS_FETCH_SPACE_BY_ID,
-  OBJECTS_FETCH_SPACE_BY_ID_ERROR,
-  OBJECTS_CREATE_SPACE_ERROR,
   SpaceDeletedAction,
   SpaceUpdatedAction,
   CreateSpaceErrorAction,
@@ -17,124 +9,118 @@ import {
   SpaceListRetrievedAction,
   SpaceCreatedAction,
   CreateSpaceBeginAction,
-  OBJECTS_CREATE_SPACE_BEGIN,
-  OBJECTS_FETCH_SPACES_BEGIN,
   FetchSpacesBeginAction,
   FetchSpaceByIdBeginAction,
-  OBJECTS_FETCH_SPACE_BY_ID_BEGIN,
   UpdateSpaceBeginAction,
-  OBJECTS_UPDATE_SPACE_BEGIN,
   UpdateSpaceErrorAction,
-  OBJECTS_UPDATE_SPACE_ERROR,
-  OBJECTS_DELETE_SPACE_BEGIN,
   DeleteSpaceBeginAction,
   DeleteSpaceErrorAction,
-  OBJECTS_DELETE_SPACE_ERROR,
-} from '../types/actions';
+} from './Actions';
+import { actionType } from './ActionType.enum';
 import { Dispatch } from 'redux';
-import { Space, SpaceMap } from '../types/Space';
+import { Space, SpaceMap } from '../api/Space';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
-} from 'types/PubNubApi';
+} from 'api/PubNubApi';
 
 export const createSpaceBegin = <T>(payload: T): CreateSpaceBeginAction<T> => ({
-  type: OBJECTS_CREATE_SPACE_BEGIN,
+  type: actionType.OBJECTS_CREATE_SPACE_BEGIN,
   payload,
 });
 
 export const spaceCreated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceCreatedAction<T> => ({
-  type: OBJECTS_CREATE_SPACE,
+  type: actionType.OBJECTS_CREATE_SPACE,
   payload,
 });
 
 export const createSpaceError = <T>(
   payload: PubNubObjectApiError<T>
 ): CreateSpaceErrorAction<T> => ({
-  type: OBJECTS_CREATE_SPACE_ERROR,
+  type: actionType.OBJECTS_CREATE_SPACE_ERROR,
   payload,
 });
 
 export const spaceListRetrieved = <T>(
   payload: PubNubObjectApiSuccess<SpaceMap<T>>
 ): SpaceListRetrievedAction<T> => ({
-  type: OBJECTS_FETCH_SPACES,
+  type: actionType.OBJECTS_FETCH_SPACES,
   payload,
 });
 
 export const fetchSpacesBegin = (payload: {
   label: string;
 }): FetchSpacesBeginAction => ({
-  type: OBJECTS_FETCH_SPACES_BEGIN,
+  type: actionType.OBJECTS_FETCH_SPACES_BEGIN,
   payload,
 });
 
-export const fetchSpacesError = (
-  payload: PubNubObjectApiError<object>
-): FetchSpacesErrorAction => ({
-  type: OBJECTS_FETCH_SPACES_ERROR,
+export const fetchSpacesError = <T>(
+  payload: PubNubObjectApiError<T>
+): FetchSpacesErrorAction<T> => ({
+  type: actionType.OBJECTS_FETCH_SPACES_ERROR,
   payload,
 });
 
 export const spaceRetrievedById = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): FetchSpaceByIdAction<T> => ({
-  type: OBJECTS_FETCH_SPACE_BY_ID,
+  type: actionType.OBJECTS_FETCH_SPACE_BY_ID,
   payload,
 });
 
 export const fetchSpaceByIdBegin = (
   payload: string
 ): FetchSpaceByIdBeginAction => ({
-  type: OBJECTS_FETCH_SPACE_BY_ID_BEGIN,
+  type: actionType.OBJECTS_FETCH_SPACE_BY_ID_BEGIN,
   payload,
 });
 
 export const fetchSpaceByIdError = <T>(
   payload: PubNubObjectApiError<T>
 ): FetchSpaceByIdErrorAction<T> => ({
-  type: OBJECTS_FETCH_SPACE_BY_ID_ERROR,
+  type: actionType.OBJECTS_FETCH_SPACE_BY_ID_ERROR,
   payload,
 });
 
 export const spaceUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceUpdatedAction<T> => ({
-  type: OBJECTS_UPDATE_SPACE,
+  type: actionType.OBJECTS_UPDATE_SPACE,
   payload,
 });
 
 export const updateSpaceBegin = <T>(payload: T): UpdateSpaceBeginAction<T> => ({
-  type: OBJECTS_UPDATE_SPACE_BEGIN,
+  type: actionType.OBJECTS_UPDATE_SPACE_BEGIN,
   payload,
 });
 
 export const updateSpaceError = <T>(
   payload: PubNubObjectApiError<T>
 ): UpdateSpaceErrorAction<T> => ({
-  type: OBJECTS_UPDATE_SPACE_ERROR,
+  type: actionType.OBJECTS_UPDATE_SPACE_ERROR,
   payload,
 });
 
 export const spaceDeleted = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceDeletedAction<T> => ({
-  type: OBJECTS_DELETE_SPACE,
+  type: actionType.OBJECTS_DELETE_SPACE,
   payload,
 });
 
 export const deleteSpaceBegin = (payload: string): DeleteSpaceBeginAction => ({
-  type: OBJECTS_DELETE_SPACE_BEGIN,
+  type: actionType.OBJECTS_DELETE_SPACE_BEGIN,
   payload,
 });
 
 export const deleteSpaceError = <T>(
   payload: PubNubObjectApiError<T>
 ): DeleteSpaceErrorAction<T> => ({
-  type: OBJECTS_DELETE_SPACE_ERROR,
+  type: actionType.OBJECTS_DELETE_SPACE_ERROR,
   payload,
 });
 
@@ -149,11 +135,13 @@ export const createSpace = (pubnub: any, space: Space) => (
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: space.id, value: space };
+
         dispatch(
           createSpaceError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { ...space },
+            data: errorData,
           })
         );
       } else {
@@ -178,11 +166,13 @@ export const updateSpace = (pubnub: any, space: Space) => (
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: space.id, value: space };
+
         dispatch(
           updateSpaceError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { ...space },
+            data: errorData,
           })
         );
       } else {
@@ -205,11 +195,13 @@ export const deleteSpace = (pubnub: any, id: string) => (
     id,
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: id };
+
         dispatch(
           deleteSpaceError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { id: id },
+            data: errorData,
           })
         );
       } else {
@@ -234,11 +226,13 @@ export const fetchSpaces = (
     { ...options },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: '' };
+
         dispatch(
           fetchSpacesError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : {},
+            data: errorData,
             label: label,
           })
         );
@@ -278,11 +272,13 @@ export const fetchSpaceById = (
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: spaceId };
+
         dispatch(
           fetchSpaceByIdError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { id: spaceId },
+            data: errorData,
           })
         );
       } else {

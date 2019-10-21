@@ -1,17 +1,13 @@
 import { createNetworkStatusReducer } from '../createNetworkStatusReducer';
-import {
-  NETWORK_UP,
-  NETWORK_DOWN,
-  NetworkUpAction,
-  NetworkDownAction,
-} from '../../types/actions';
+import { NetworkUpAction, NetworkDownAction } from '../../actions/Actions';
+import { actionType } from '../../actions/actionType.enum';
 
 export const networkUp = (): NetworkUpAction => ({
-  type: NETWORK_UP,
+  type: actionType.NETWORK_UP,
 });
 
 export const networkDown = (): NetworkDownAction => ({
-  type: NETWORK_DOWN,
+  type: actionType.NETWORK_DOWN,
 });
 
 describe('createNetworkStatusReducer', () => {

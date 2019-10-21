@@ -71,13 +71,13 @@ import { createUserReducer } from './reducers/userReducer';
 import { createUserListReducer } from './reducers/userListReducer';
 import { createSpaceReducer } from './reducers/spaceReducer';
 import { createSpaceListReducer } from './reducers/spaceListReducer';
-import { membershipReducer } from './reducers/membershipReducer';
-import { Identifiable, PubNubObjectApiState } from './types/PubNubApi';
+import { createMembershipReducer } from './reducers/membershipReducer';
+import { Identifiable, PubNubObjectApiState } from './api/PubNubApi';
 
-import { Space } from './types/Space';
+import { Space } from './api/Space';
 import { SpaceListState } from './reducers/spaceListReducer';
 
-import { User } from './types/User';
+import { User } from './api/User';
 import { UserListState } from './reducers/userListReducer';
 
 export {
@@ -140,6 +140,6 @@ export {
   createUserListReducer,
   createSpaceReducer,
   createSpaceListReducer,
-  membershipReducer,
+  createMembershipReducer,
   combineListeners,
 };

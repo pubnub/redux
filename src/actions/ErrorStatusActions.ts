@@ -1,13 +1,4 @@
 import {
-  ACCESS_DENIED,
-  MALFORMED_RESPONSE,
-  BAD_REQUEST,
-  DECRYPTION_ERROR,
-  ErrorStatusListenerActions,
-  NETWORK_ISSUES,
-  TIMEOUT_CONNECTION,
-  REQUEST_MESSAGE_COUNT_EXCEED,
-  UNKNOWN,
   NetworkIssuesAction,
   AccessDeniedAction,
   MalformedResponseAction,
@@ -16,59 +7,61 @@ import {
   TimeoutConnectionAction,
   RequestMessageCountExceedAction,
   UnknownAction,
-} from '../types/actions';
-import { StatusActionPayload } from '../types/Status';
+  ErrorStatusListenerActions,
+} from './Actions';
+import { actionType } from './ActionType.enum';
+import { StatusActionPayload } from '../api/Status';
 import { Dispatch } from 'redux';
 
 export const networkIssues = (
   payload: StatusActionPayload
 ): NetworkIssuesAction => ({
-  type: NETWORK_ISSUES,
+  type: actionType.NETWORK_ISSUES,
   payload,
 });
 
 export const accessDenied = (
   payload: StatusActionPayload
 ): AccessDeniedAction => ({
-  type: ACCESS_DENIED,
+  type: actionType.ACCESS_DENIED,
   payload,
 });
 
 export const malformedResponse = (
   payload: StatusActionPayload
 ): MalformedResponseAction => ({
-  type: MALFORMED_RESPONSE,
+  type: actionType.MALFORMED_RESPONSE,
   payload,
 });
 
 export const badRequest = (payload: StatusActionPayload): BadRequestAction => ({
-  type: BAD_REQUEST,
+  type: actionType.BAD_REQUEST,
   payload,
 });
 
 export const decryptionError = (
   payload: StatusActionPayload
 ): DecryptionErrorAction => ({
-  type: DECRYPTION_ERROR,
+  type: actionType.DECRYPTION_ERROR,
   payload,
 });
 
 export const timeoutConnection = (
   payload: StatusActionPayload
 ): TimeoutConnectionAction => ({
-  type: TIMEOUT_CONNECTION,
+  type: actionType.TIMEOUT_CONNECTION,
   payload,
 });
 
 export const requestMessageCountExceed = (
   payload: StatusActionPayload
 ): RequestMessageCountExceedAction => ({
-  type: REQUEST_MESSAGE_COUNT_EXCEED,
+  type: actionType.REQUEST_MESSAGE_COUNT_EXCEED,
   payload,
 });
 
 export const unknown = (payload: StatusActionPayload): UnknownAction => ({
-  type: UNKNOWN,
+  type: actionType.UNKNOWN,
   payload,
 });
 

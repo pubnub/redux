@@ -1,24 +1,20 @@
-import { ObjectsActionPayload } from '../types/Objects';
-import {
-  OBJECTS_UPDATE_USER,
-  OBJECTS_DELETE_USER,
-  UserDeletedAction,
-  UserUpdatedAction,
-} from '../types/actions';
+import { ObjectsActionPayload } from '../api/Objects';
+import { UserDeletedAction, UserUpdatedAction } from '../actions/Actions';
+import { actionType } from '../actions/ActionType.enum';
 import { Dispatch } from 'redux';
-import { PubNubObjectApiSuccess, Identifiable } from 'types/PubNubApi';
+import { PubNubObjectApiSuccess, Identifiable } from 'api/PubNubApi';
 
 export const userUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): UserUpdatedAction<T> => ({
-  type: OBJECTS_UPDATE_USER,
+  type: actionType.OBJECTS_UPDATE_USER,
   payload,
 });
 
 export const userDeleted = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): UserDeletedAction<T> => ({
-  type: OBJECTS_DELETE_USER,
+  type: actionType.OBJECTS_DELETE_USER,
   payload,
 });
 

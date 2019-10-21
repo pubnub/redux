@@ -4,23 +4,23 @@ import { createSubscribeStatusActionListener } from './SubscribeStatusActions';
 import { createErrorStatusActionListener } from './ErrorStatusActions';
 import { createMessageActionListener } from './MessageActions';
 import { createSignalActionListener } from './SignalActions';
-import { createUserActionListener } from './UserActions';
-import { createSpaceActionListener } from './SpaceActions';
-import { createMembershipActionListener } from './MembershipActions';
+import { createUserActionListener } from '../listeners/UserListener';
+import { createSpaceActionListener } from '../listeners/SpaceListener';
+import { createMembershipActionListener } from '../listeners/MembershipListener';
 import { Dispatch } from 'redux';
-import { ListenerActions } from '../types/actions';
-import { Identifiable } from 'types/PubNubApi';
+import { ListenerActions } from './Actions';
+import { ListenerEventData } from 'api/PubNubApi';
 
-export const createPubNubActionListener = <T extends Identifiable>(
+export const createPubNubActionListener = <T extends ListenerEventData>(
   dispatch: Dispatch<ListenerActions<T>>
 ) =>
   combineListeners(
     createMessageActionListener(dispatch),
     createPresenceActionListener(dispatch),
     createSignalActionListener(dispatch),
-    createUserActionListener(dispatch),
+    createUserActionListener<T>(dispatch),
     createSpaceActionListener<T>(dispatch),
-    createMembershipActionListener(dispatch),
+    createMembershipActionListener<T>(dispatch),
     createNetworkStatusActionListener(dispatch),
     createSubscribeStatusActionListener(dispatch),
     createErrorStatusActionListener(dispatch)

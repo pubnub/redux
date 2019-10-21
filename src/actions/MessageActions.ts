@@ -1,5 +1,6 @@
-import { MessageActionPayload } from '../types/Message';
-import { MESSAGE, MessageAction } from '../types/actions';
+import { MessageActionPayload } from '../api/Message';
+import { MessageAction } from './Actions';
+import { actionType } from './ActionType.enum';
 import { Dispatch } from 'redux';
 
 export const createMessageActionListener = (
@@ -7,7 +8,7 @@ export const createMessageActionListener = (
 ) => ({
   message: (payload: MessageActionPayload): MessageAction =>
     dispatch({
-      type: MESSAGE,
+      type: actionType.MESSAGE,
       payload,
     }),
 });

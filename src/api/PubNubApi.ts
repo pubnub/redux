@@ -10,7 +10,7 @@ export interface Identifiable extends Object {
   id: string;
 }
 
-export interface MembershipInfo extends Identifiable {
+export interface ListenerEventData extends Identifiable {
   spaceId: string;
   userId: string;
 }
@@ -20,10 +20,10 @@ export interface PubNubObjectApiSuccess<T> {
   label?: string;
 }
 
-export interface PubNubObjectApiError<T = object> {
+export interface PubNubObjectApiError<T> {
   code: string;
   message: string;
-  data: T;
+  data: { id?: string; value?: T };
   label?: string;
 }
 

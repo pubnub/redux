@@ -3,23 +3,8 @@ import {
   ObjectsActionPayload,
   ObjectsListInput,
   ObjectsResponsePayload,
-} from '../types/Objects';
+} from '../api/Objects';
 import {
-  OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
-  OBJECTS_USER_ADDED_TO_SPACE,
-  OBJECTS_USER_REMOVED_FROM_SPACE,
-  OBJECTS_FETCH_MEMBERSHIPS,
-  OBJECTS_FETCH_MEMBERSHIPS_ERROR,
-  OBJECTS_FETCH_MEMBERSHIPS_BEGIN,
-  OBJECTS_UPDATE_MEMBERSHIP_BEGIN,
-  OBJECTS_UPDATE_MEMBERSHIP_ERROR,
-  OBJECTS_UPDATE_MEMBERSHIP,
-  OBJECTS_JOIN_SPACES_BEGIN,
-  OBJECTS_SPACES_JOINED,
-  OBJECTS_JOIN_SPACES_ERROR,
-  OBJECTS_LEAVE_SPACES_BEGIN,
-  OBJECTS_SPACES_LEFT,
-  OBJECTS_LEAVE_SPACES_ERROR,
   UserMembershipUpdatedOnSpaceAction,
   UserAddedToSpaceAction,
   UserRemovedFromSpaceAction,
@@ -35,148 +20,150 @@ import {
   SpacesLeftAction,
   LeaveSpacesErrorAction,
   FetchMembershipsErrorAction,
-} from '../types/actions';
+} from './Actions';
+import { actionType } from './ActionType.enum';
 import {
   Identifiable,
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
-} from '../types/PubNubApi';
+} from '../api/PubNubApi';
 import {
   MembershipList,
   MembershipResult,
   Membership,
-} from '../types/Membership';
+} from '../api/Membership';
 
 export const userMembershipUpdatedOnSpace = <T extends Identifiable>(
   payload: ObjectsActionPayload<T>
 ): UserMembershipUpdatedOnSpaceAction<T> => ({
-  type: OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
+  type: actionType.OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
   payload,
 });
 
 export const userAddedToSpace = <T extends Identifiable>(
   payload: ObjectsActionPayload<T>
 ): UserAddedToSpaceAction<T> => ({
-  type: OBJECTS_USER_ADDED_TO_SPACE,
+  type: actionType.OBJECTS_USER_ADDED_TO_SPACE,
   payload,
 });
 
 export const userRemovedFromSpace = <T extends Identifiable>(
   payload: ObjectsActionPayload<T>
 ): UserRemovedFromSpaceAction<T> => ({
-  type: OBJECTS_USER_REMOVED_FROM_SPACE,
+  type: actionType.OBJECTS_USER_REMOVED_FROM_SPACE,
   payload,
 });
 
-export const fetchMembershipsBegin = (payload: {
-  label: string;
-}): FetchMembershipsBeginAction => ({
-  type: OBJECTS_FETCH_MEMBERSHIPS_BEGIN,
+export const fetchMembershipsBegin = (
+  payload: string
+): FetchMembershipsBeginAction => ({
+  type: actionType.OBJECTS_FETCH_MEMBERSHIPS_BEGIN,
   payload,
 });
 
 const membershipsRetrieved = (
-  payload: MembershipResult
+  payload: PubNubObjectApiSuccess<MembershipResult>
 ): FetchMembershipsAction => ({
-  type: OBJECTS_FETCH_MEMBERSHIPS,
+  type: actionType.OBJECTS_FETCH_MEMBERSHIPS,
   payload,
 });
 
-const fetchMembershipsError = (
-  payload: PubNubObjectApiError
-): FetchMembershipsErrorAction => ({
-  type: OBJECTS_FETCH_MEMBERSHIPS_ERROR,
+const fetchMembershipsError = <T>(
+  payload: PubNubObjectApiError<T>
+): FetchMembershipsErrorAction<T> => ({
+  type: actionType.OBJECTS_FETCH_MEMBERSHIPS_ERROR,
   payload,
 });
 
 export const updateMembershipBegin = <T>(
   payload: T
 ): UpdateMembershipBeginAction<T> => ({
-  type: OBJECTS_UPDATE_MEMBERSHIP_BEGIN,
+  type: actionType.OBJECTS_UPDATE_MEMBERSHIP_BEGIN,
   payload,
 });
 
 export const membershipUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): MembershipUpdatedAction<T> => ({
-  type: OBJECTS_UPDATE_MEMBERSHIP,
+  type: actionType.OBJECTS_UPDATE_MEMBERSHIP,
   payload,
 });
 
 export const updateMembershipError = <T>(
   payload: PubNubObjectApiError<T>
 ): UpdateMembershipErrorAction<T> => ({
-  type: OBJECTS_UPDATE_MEMBERSHIP_ERROR,
+  type: actionType.OBJECTS_UPDATE_MEMBERSHIP_ERROR,
   payload,
 });
 
 export const joinSpacesBegin = <T>(payload: T): JoinSpacesBeginAction<T> => ({
-  type: OBJECTS_JOIN_SPACES_BEGIN,
+  type: actionType.OBJECTS_JOIN_SPACES_BEGIN,
   payload,
 });
 
 export const spacesJoined = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpacesJoinedAction<T> => ({
-  type: OBJECTS_SPACES_JOINED,
+  type: actionType.OBJECTS_SPACES_JOINED,
   payload,
 });
 
 export const joinSpacesError = <T>(
   payload: PubNubObjectApiError<T>
 ): JoinSpacesErrorAction<T> => ({
-  type: OBJECTS_JOIN_SPACES_ERROR,
+  type: actionType.OBJECTS_JOIN_SPACES_ERROR,
   payload,
 });
 
 export const leaveSpacesBegin = <T>(payload: T): LeaveSpacesBeginAction<T> => ({
-  type: OBJECTS_LEAVE_SPACES_BEGIN,
+  type: actionType.OBJECTS_LEAVE_SPACES_BEGIN,
   payload,
 });
 
 export const spacesLeft = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpacesLeftAction<T> => ({
-  type: OBJECTS_SPACES_LEFT,
+  type: actionType.OBJECTS_SPACES_LEFT,
   payload,
 });
 
 export const leaveSpacesError = <T>(
   payload: PubNubObjectApiError<T>
 ): LeaveSpacesErrorAction<T> => ({
-  type: OBJECTS_LEAVE_SPACES_ERROR,
+  type: actionType.OBJECTS_LEAVE_SPACES_ERROR,
   payload,
 });
 
 export const fetchMemberships = (
   pubnub: any,
   userId: string,
-  options: ObjectsListInput = {},
-  label: string = 'all'
+  options: ObjectsListInput = {}
 ) => (dispatch: Dispatch) => {
-  dispatch(fetchMembershipsBegin({ label: label }));
+  dispatch(fetchMembershipsBegin(userId));
 
   pubnub.getMemberships(
     {
       userId,
       ...options,
     },
-    (status: PubNubApiStatus, response: MembershipList) => {
+    (status: PubNubApiStatus, response: { data: MembershipList }) => {
       if (status.error) {
+        let errorData = { id: userId };
+
         dispatch(
           fetchMembershipsError({
             code: status.category,
             message: status.errorData,
-            data: { id: userId },
+            data: errorData,
           })
         );
       } else {
         let result = {
           id: userId,
-          spaces: response,
+          spaces: response.data,
         };
-        dispatch(membershipsRetrieved(result));
+        dispatch(membershipsRetrieved({ data: result }));
       }
     }
   );
@@ -193,11 +180,13 @@ export const updateMembership = (pubnub: any, membership: Membership) => (
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: membership.userId, value: { ...membership } };
+
         dispatch(
           updateMembershipError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { ...membership },
+            data: errorData,
           })
         );
       } else {
@@ -222,11 +211,13 @@ export const joinSpaces = (pubnub: any, membership: Membership) => (
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: membership.userId, value: { ...membership } };
+
         dispatch(
           joinSpacesError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { ...membership },
+            data: errorData,
           })
         );
       } else {
@@ -251,11 +242,13 @@ export const leaveSpaces = (pubnub: any, membership: Membership) => (
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
+        let errorData = { id: membership.userId, value: { ...membership } };
+
         dispatch(
           leaveSpacesError({
             code: status.category,
             message: status.errorData,
-            data: response ? response.data : { ...membership },
+            data: errorData,
           })
         );
       } else {

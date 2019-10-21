@@ -1,16 +1,11 @@
 import {
-  OBJECTS_FETCH_SPACES,
-  OBJECTS_FETCH_SPACES_ERROR,
-  OBJECTS_FETCH_SPACES_BEGIN,
   FetchSpacesErrorAction,
   FetchSpacesBeginAction,
   SpaceListRetrievedAction,
-} from '../types/actions';
-import { Space, SpaceMap } from '../types/Space';
-import {
-  PubNubObjectApiSuccess,
-  PubNubObjectApiError,
-} from '../types/PubNubApi';
+} from '../actions/Actions';
+import { actionType } from '../actions/ActionType.enum';
+import { Space, SpaceMap } from '../api/Space';
+import { PubNubObjectApiSuccess, PubNubObjectApiError } from '../api/PubNubApi';
 
 export interface SpaceListState {
   data: string[];
@@ -58,11 +53,11 @@ export const createSpaceListReducer = (label: string = 'all') => (
 ): SpaceListState => {
   if (action.payload !== undefined && action.payload.label === label) {
     switch (action.type) {
-      case OBJECTS_FETCH_SPACES_BEGIN:
+      case actionType.OBJECTS_FETCH_SPACES_BEGIN:
         return beginFetchSpaces(state);
-      case OBJECTS_FETCH_SPACES:
+      case actionType.OBJECTS_FETCH_SPACES:
         return fetchSpaces(action.payload);
-      case OBJECTS_FETCH_SPACES_ERROR:
+      case actionType.OBJECTS_FETCH_SPACES_ERROR:
         return fetchSpacesError(state, action.payload);
       default:
         return state;

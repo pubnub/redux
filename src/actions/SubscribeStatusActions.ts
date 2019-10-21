@@ -1,22 +1,21 @@
 import {
-  RECONNECTED,
-  CONNECTED,
   ReconnectedAction,
   ConnectedAction,
   SubscriptionStatusListenerActions,
-} from '../types/actions';
-import { StatusActionPayload } from '../types/Status';
+} from './Actions';
+import { actionType } from './ActionType.enum';
+import { StatusActionPayload } from '../api/Status';
 import { Dispatch } from 'redux';
 
 export const reconnected = (
   payload: StatusActionPayload
 ): ReconnectedAction => ({
-  type: RECONNECTED,
+  type: actionType.RECONNECTED,
   payload,
 });
 
 export const connected = (payload: StatusActionPayload): ConnectedAction => ({
-  type: CONNECTED,
+  type: actionType.CONNECTED,
   payload,
 });
 
