@@ -12,9 +12,11 @@ export interface ObjectsData {
 }
 
 export interface ObjectsActionPayload<T extends Identifiable> {
-  data: T;
-  event: string;
-  type: string;
+  message: {
+    data: T;
+    event: string;
+    type: string;
+  };
 }
 
 export interface ObjectsStatusPayload {

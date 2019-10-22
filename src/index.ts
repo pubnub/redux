@@ -1,7 +1,7 @@
 import {
   createPubNubActionListener,
   combineListeners,
-} from './actions/ListenerAction';
+} from './listeners/PubNubListener';
 import { createUserActionListener } from './listeners/UserListener';
 import { createSpaceActionListener } from './listeners/SpaceListener';
 import { createMembershipActionListener } from './listeners/MembershipListener';

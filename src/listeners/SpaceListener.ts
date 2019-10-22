@@ -22,18 +22,18 @@ export const createSpaceActionListener = <T extends Identifiable>(
   dispatch: Dispatch<SpaceUpdatedAction<T> | SpaceDeletedAction<T>>
 ) => ({
   space: (payload: ObjectsActionPayload<T>) => {
-    switch (payload.event) {
+    switch (payload.message.event) {
       case 'update':
         dispatch(
           spaceUpdated({
-            data: payload.data,
+            data: payload.message.data,
           })
         );
         break;
       case 'delete':
         dispatch(
           spaceDeleted({
-            data: payload.data,
+            data: payload.message.data,
           })
         );
         break;

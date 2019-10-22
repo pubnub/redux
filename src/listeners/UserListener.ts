@@ -22,18 +22,18 @@ export const createUserActionListener = <T extends Identifiable>(
   dispatch: Dispatch<UserUpdatedAction<T> | UserDeletedAction<T>>
 ) => ({
   user: (payload: ObjectsActionPayload<T>) => {
-    switch (payload.event) {
+    switch (payload.message.event) {
       case 'update':
         dispatch(
           userUpdated({
-            data: payload.data,
+            data: payload.message.data,
           })
         );
         break;
       case 'delete':
         dispatch(
           userDeleted({
-            data: payload.data,
+            data: payload.message.data,
           })
         );
         break;

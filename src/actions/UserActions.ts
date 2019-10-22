@@ -18,11 +18,12 @@ import {
 } from './Actions';
 import { actionType } from './ActionType.enum';
 import { Dispatch } from 'redux';
-import { User, UserMap } from '../api/User';
+import { User } from '../api/User';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
+  ItemMap,
 } from 'api/PubNubApi';
 
 export const createUserBegin = <T>(payload: T): CreateUserBeginAction<T> => ({
@@ -45,7 +46,7 @@ export const createUserError = <T>(
 });
 
 export const userListRetrieved = <T>(
-  payload: PubNubObjectApiSuccess<UserMap<T>>
+  payload: PubNubObjectApiSuccess<ItemMap<T>>
 ): UserListRetrievedAction<T> => ({
   type: actionType.OBJECTS_FETCH_USERS,
   payload,

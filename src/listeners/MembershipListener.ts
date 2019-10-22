@@ -35,10 +35,10 @@ export const createMembershipActionListener = <T extends ListenerEventData>(
 ) => ({
   membership: (payload: ObjectsActionPayload<T>) => {
     let result = {
-      id: payload.data.userId + '_' + payload.data.spaceId,
-      data: payload.data,
+      id: payload.message.data.userId + '_' + payload.message.data.spaceId,
+      data: payload.message.data,
     };
-    switch (payload.event) {
+    switch (payload.message.event) {
       case 'create':
         dispatch(userAddedToSpace(result));
         break;

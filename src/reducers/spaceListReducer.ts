@@ -4,8 +4,12 @@ import {
   SpaceListRetrievedAction,
 } from '../actions/Actions';
 import { actionType } from '../actions/ActionType.enum';
-import { Space, SpaceMap } from '../api/Space';
-import { PubNubObjectApiSuccess, PubNubObjectApiError } from '../api/PubNubApi';
+import { Space } from '../api/Space';
+import {
+  PubNubObjectApiSuccess,
+  PubNubObjectApiError,
+  ItemMap,
+} from '../api/PubNubApi';
 
 export interface SpaceListState<T> {
   data: string[];
@@ -25,7 +29,7 @@ const beginFetchSpaces = <T>(state: SpaceListState<T>) => ({
   error: undefined,
 });
 
-const fetchSpaces = (payload: PubNubObjectApiSuccess<SpaceMap<Space>>) => {
+const fetchSpaces = (payload: PubNubObjectApiSuccess<ItemMap<Space>>) => {
   let data = Object.keys(payload.data).map((key) => payload.data[key].id);
 
   return {

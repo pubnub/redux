@@ -18,11 +18,12 @@ import {
 } from './Actions';
 import { actionType } from './ActionType.enum';
 import { Dispatch } from 'redux';
-import { Space, SpaceMap } from '../api/Space';
+import { Space } from '../api/Space';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
+  ItemMap,
 } from 'api/PubNubApi';
 
 export const createSpaceBegin = <T>(payload: T): CreateSpaceBeginAction<T> => ({
@@ -45,7 +46,7 @@ export const createSpaceError = <T>(
 });
 
 export const spaceListRetrieved = <T>(
-  payload: PubNubObjectApiSuccess<SpaceMap<T>>
+  payload: PubNubObjectApiSuccess<ItemMap<T>>
 ): SpaceListRetrievedAction<T> => ({
   type: actionType.OBJECTS_FETCH_SPACES,
   payload,

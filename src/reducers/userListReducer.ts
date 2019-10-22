@@ -4,8 +4,12 @@ import {
   UserListRetrievedAction,
 } from '../actions/Actions';
 import { actionType } from '../actions/ActionType.enum';
-import { User, UserMap } from '../api/User';
-import { PubNubObjectApiSuccess, PubNubObjectApiError } from '../api/PubNubApi';
+import { User } from '../api/User';
+import {
+  PubNubObjectApiSuccess,
+  PubNubObjectApiError,
+  ItemMap,
+} from '../api/PubNubApi';
 
 export interface UserListState<T> {
   data: string[];
@@ -25,7 +29,7 @@ const beginFetchUsers = <T>(state: UserListState<T>) => ({
   error: undefined,
 });
 
-const fetchUsers = (payload: PubNubObjectApiSuccess<UserMap<User>>) => {
+const fetchUsers = (payload: PubNubObjectApiSuccess<ItemMap<User>>) => {
   let data = Object.keys(payload.data).map((key) => payload.data[key].id);
 
   return {

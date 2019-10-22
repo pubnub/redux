@@ -1,14 +1,14 @@
-import { createPresenceActionListener } from './PresenceActions';
-import { createNetworkStatusActionListener } from './NetworkStatusActions';
-import { createSubscribeStatusActionListener } from './SubscribeStatusActions';
-import { createErrorStatusActionListener } from './ErrorStatusActions';
-import { createMessageActionListener } from './MessageActions';
-import { createSignalActionListener } from './SignalActions';
-import { createUserActionListener } from '../listeners/UserListener';
-import { createSpaceActionListener } from '../listeners/SpaceListener';
-import { createMembershipActionListener } from '../listeners/MembershipListener';
+import { createPresenceActionListener } from '../actions/PresenceActions';
+import { createNetworkStatusActionListener } from '../actions/NetworkStatusActions';
+import { createSubscribeStatusActionListener } from '../actions/SubscribeStatusActions';
+import { createErrorStatusActionListener } from '../actions/ErrorStatusActions';
+import { createMessageActionListener } from '../actions/MessageActions';
+import { createSignalActionListener } from '../actions/SignalActions';
+import { createUserActionListener } from './UserListener';
+import { createSpaceActionListener } from './SpaceListener';
+import { createMembershipActionListener } from './MembershipListener';
 import { Dispatch } from 'redux';
-import { ListenerActions } from './Actions';
+import { ListenerActions } from '../actions/Actions';
 import { ListenerEventData } from 'api/PubNubApi';
 
 export const createPubNubActionListener = <T extends ListenerEventData>(
@@ -86,7 +86,10 @@ const createCombinedListener = (listenerType: string, listeners: any): any => {
   // returns a single listener which invokes each of the incomming listeners
   return {
     [listenerType]: (payload: any) => {
-      listeners.forEach((listener: any) => listener[listenerType](payload));
+      listeners.forEach((listener: any) => {
+        console.log('any event', JSON.stringify(payload));
+        listener[listenerType](payload);
+      });
     },
   };
 };
