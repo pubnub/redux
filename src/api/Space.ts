@@ -9,7 +9,3 @@ export interface Space {
     customFields?: boolean;
   };
 }
-
-export interface SpaceMap<T> {
-  [key: string]: T;
-}

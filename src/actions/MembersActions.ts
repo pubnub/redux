@@ -48,9 +48,9 @@ const fetchMembersError = <T>(
   payload,
 });
 
-export const updateMembersBegin = <T>(
-  payload: T
-): UpdateMembersBeginAction<T> => ({
+export const updateMembersBegin = (
+  payload: string
+): UpdateMembersBeginAction => ({
   type: actionType.OBJECTS_UPDATE_MEMBERS_BEGIN,
   payload,
 });
@@ -146,7 +146,7 @@ export const fetchMembers = (
 export const updateMembers = (pubnub: any, members: Members) => (
   dispatch: Dispatch
 ) => {
-  dispatch(updateMembersBegin(members));
+  dispatch(updateMembersBegin(members.spaceId));
 
   pubnub.updateMembers(
     {

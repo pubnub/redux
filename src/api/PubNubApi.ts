@@ -23,7 +23,7 @@ export interface PubNubObjectApiSuccess<T> {
 export interface PubNubObjectApiError<T> {
   code: string;
   message: string;
-  data: { id?: string; value?: T };
+  data: { id: string; value?: T };
   label?: string;
 }
 
@@ -31,4 +31,8 @@ export interface PubNubObjectApiState<T> {
   byId: { [key: string]: T };
   loadingById: { [key: string]: number };
   errorById: { [key: string]: PubNubObjectApiError<T> };
+}
+
+export interface ItemMap<T> {
+  [key: string]: T;
 }

@@ -1,10 +1,9 @@
 import {
   PubNubObjectApiState,
   PubNubObjectApiError,
-  Identifiable,
+  ItemMap,
   PubNubObjectApiSuccess,
 } from '../api/PubNubApi';
-import { SpaceMap } from 'api/Space';
 
 export const beginObjectById = <T extends object>(
   state: PubNubObjectApiState<T>,
@@ -22,12 +21,12 @@ export const beginObjectById = <T extends object>(
   return newState;
 };
 
-export const errorObjectById = <T extends Identifiable>(
+export const errorObjectById = <T>(
   state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiError<T>
+  payload: PubNubObjectApiError<T>,
+  id: string
 ): PubNubObjectApiState<T> => {
   let newState = clonePubNubObjectApiState<T>(state);
-  let id = payload.data.id;
 
   // decrement loading count or set to 0
   newState.loadingById[id] =
@@ -39,43 +38,48 @@ export const errorObjectById = <T extends Identifiable>(
   return newState;
 };
 
-export const successObjectById = <T extends Identifiable>(
+export const successObjectById = <T>(
   state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiSuccess<T>
+  payload: PubNubObjectApiSuccess<T>,
+  id: string
 ): PubNubObjectApiState<T> => {
   let newState = clonePubNubObjectApiState<T>(state);
-  let id = payload.data.id;
 
   // decrement loading count or set to 0
   newState.loadingById[id] =
     newState.loadingById[id] > 0 ? newState.loadingById[id] - 1 : 0;
 
   // set response payload
-  newState.byId[id] = { ...payload.data };
+  if (Object.prototype.toString.call(payload.data) === '[object Array]') {
+    newState.byId[id] = (cloneArray(
+      (payload.data as unknown) as any[]
+    ) as unknown) as T;
+  } else if (typeof payload.data === 'object') {
+    newState.byId[id] = cloneObject(payload.data);
+  }
 
   return newState;
 };
 
-export const successObjectList = <T extends object>(
+export const successObjectList = <T>(
   state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiSuccess<SpaceMap<T>>
+  payload: PubNubObjectApiSuccess<ItemMap<T>>
 ): PubNubObjectApiState<T> => {
   let newState = clonePubNubObjectApiState<T>(state);
 
   newState.byId = {
     ...newState.byId,
-    ...cloneObject<SpaceMap<T>>(payload.data),
+    ...cloneObject<ItemMap<T>>(payload.data),
   };
 
   return newState;
 };
 
-export const successDeleteObjectById = <T extends Identifiable>(
+export const successDeleteObjectById = <T>(
   state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiSuccess<T>
+  id: string
 ): PubNubObjectApiState<T> => {
   let newState = clonePubNubObjectApiState<T>(state);
-  let id = payload.data.id;
 
   // decrement loading count or set to 0
   newState.loadingById[id] =
@@ -87,7 +91,7 @@ export const successDeleteObjectById = <T extends Identifiable>(
   return newState;
 };
 
-export const clonePubNubObjectApiState = <T extends object>(
+export const clonePubNubObjectApiState = <T>(
   state: PubNubObjectApiState<T>
 ): PubNubObjectApiState<T> => {
   let newState: PubNubObjectApiState<T> = {
@@ -97,7 +101,15 @@ export const clonePubNubObjectApiState = <T extends object>(
   };
 
   Object.keys(state.byId).forEach((id) => {
-    newState.byId[id] = cloneObject<T>(state.byId[id]);
+    if (Object.prototype.toString.call(state.byId[id]) === '[object Array]') {
+      newState.byId[id] = (cloneArray((state.byId[
+        id
+      ] as unknown) as any[]) as unknown) as T;
+    } else if (typeof state.byId[id] === 'object') {
+      newState.byId[id] = (cloneObject((state.byId[
+        id
+      ] as unknown) as object) as unknown) as T;
+    }
   });
 
   Object.keys(state.errorById).forEach((id) => {
@@ -109,11 +121,11 @@ export const clonePubNubObjectApiState = <T extends object>(
   return newState;
 };
 
-const cloneObject = <T extends object = object>(obj: T): T => {
+const cloneObject = <T>(obj: T): T => {
   let newObj = { ...obj };
 
   for (let attr in obj) {
-    if (obj.hasOwnProperty(attr)) {
+    if (((obj as unknown) as object).hasOwnProperty(attr)) {
       if (Object.prototype.toString.call(obj[attr]) === '[object Array]') {
         // TODO: find a better way to make types happy with unknown attribute types
         newObj[attr] = (cloneArray((obj[

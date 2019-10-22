@@ -6,7 +6,12 @@ import {
   ListenerEventData,
   PubNubObjectApiError,
 } from '../api/PubNubApi';
-import { MembersList, MembersResult } from '../api/Member';
+import { MembersList, MembersResult, Members } from '../api/Member';
+import {
+  errorObjectById,
+  successObjectById,
+  beginObjectById,
+} from './reducerUtil';
 
 let createInitialState = <T extends MembersList>(): PubNubObjectApiState<
   T
@@ -155,6 +160,72 @@ const fetchMembersError = <T extends MembersList>(
   return newState;
 };
 
+const beginUpdateMembers = <T extends MembersList>(
+  state: PubNubObjectApiState<T>,
+  payload: string
+): PubNubObjectApiState<T> => beginObjectById<T>(state, payload);
+
+const updateMembers = <T extends MembersList>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiSuccess<Members>
+) =>
+  successObjectById<T>(
+    state,
+    {
+      data: payload.data.users as T,
+    },
+    payload.data.spaceId
+  );
+
+const updateMembersError = <T extends MembersList>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiError<T>
+) => errorObjectById<T>(state, payload, payload.data.id);
+
+const beginAddMembers = <T extends MembersList>(
+  state: PubNubObjectApiState<T>,
+  payload: string
+): PubNubObjectApiState<T> => beginObjectById<T>(state, payload);
+
+const addMembers = <T extends MembersList>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiSuccess<Members>
+) =>
+  successObjectById<T>(
+    state,
+    {
+      data: payload.data.users as T,
+    },
+    payload.data.spaceId
+  );
+
+const addMembersError = <T extends MembersList>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiError<T>
+) => errorObjectById<T>(state, payload, payload.data.id);
+
+const beginRemoveMembers = <T extends MembersList>(
+  state: PubNubObjectApiState<T>,
+  payload: string
+): PubNubObjectApiState<T> => beginObjectById<T>(state, payload);
+
+const removeMembers = <T extends MembersList>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiSuccess<Members>
+) =>
+  successObjectById<T>(
+    state,
+    {
+      data: payload.data.users as T,
+    },
+    payload.data.spaceId
+  );
+
+const removeMembersError = <T extends MembersList>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiError<T>
+) => errorObjectById<T>(state, payload, payload.data.id);
+
 export const createMembersReducer = <T extends MembersList = MembersList>() => (
   state = createInitialState<T>(),
   action: MembersActions<T> | MembershipListenerActions<ListenerEventData>
@@ -163,35 +234,46 @@ export const createMembersReducer = <T extends MembersList = MembersList>() => (
     case actionType.OBJECTS_USER_ADDED_TO_SPACE:
       return userAddedToSpace<T>(state, action.payload);
     case actionType.OBJECTS_USER_REMOVED_FROM_SPACE:
-      return userRemovedFromSpace(state, action.payload);
+      return userRemovedFromSpace<T>(state, action.payload);
     case actionType.OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE:
-      return userMembersUpdatedOnSpace(state, action.payload);
+      return userMembersUpdatedOnSpace<T>(state, action.payload);
     case actionType.OBJECTS_FETCH_MEMBERS_BEGIN:
-      return beginFetchMembers(state, action.payload);
+      return beginFetchMembers<T>(state, action.payload);
     case actionType.OBJECTS_FETCH_MEMBERS:
-      return fetchMembers(state, action.payload);
+      return fetchMembers<T>(state, action.payload);
     case actionType.OBJECTS_FETCH_MEMBERS_ERROR:
-      return fetchMembersError(state, action.payload);
+      return fetchMembersError<T>(state, action.payload);
+    case actionType.OBJECTS_UPDATE_MEMBERS_BEGIN:
+      return beginUpdateMembers<T>(state, action.payload);
+    case actionType.OBJECTS_UPDATE_MEMBERS:
+      return updateMembers(state, action.payload);
+    case actionType.OBJECTS_UPDATE_MEMBERS_ERROR:
+      return updateMembersError<T>(state, action.payload);
+    case actionType.OBJECTS_ADD_MEMBERS_BEGIN:
+      return beginAddMembers<T>(state, action.payload);
+    case actionType.OBJECTS_MEMBERS_ADDED:
+      return addMembers(state, action.payload);
+    case actionType.OBJECTS_ADD_MEMBERS_ERROR:
+      return addMembersError<T>(state, action.payload);
+    case actionType.OBJECTS_REMOVE_MEMBERS_BEGIN:
+      return beginRemoveMembers<T>(state, action.payload);
+    case actionType.OBJECTS_MEMBERS_REMOVED:
+      return removeMembers(state, action.payload);
+    case actionType.OBJECTS_REMOVE_MEMBERS_ERROR:
+      return removeMembersError<T>(state, action.payload);
     default:
       return state;
   }
 };
 
-// export type MembersListenerActions<T extends Identifiable> =
-//   | UserAddedToSpaceAction<T>
-//   | UserRemovedFromSpaceAction<T>
-//   | UserMembersUpdatedOnSpaceAction<T>;
-
-// export type MembersActions<T> =
-//   | FetchMemberssBeginAction
-//   | FetchMemberssAction
-//   | FetchMemberssErrorAction
 //   | UpdateMembersBeginAction<T>
 //   | MembersUpdatedAction<T>
 //   | UpdateMembersErrorAction<T>
+
 //   | JoinSpacesBeginAction<T>
 //   | SpacesJoinedAction<T>
 //   | JoinSpacesErrorAction<T>
+
 //   | LeaveSpacesBeginAction<T>
 //   | SpacesLeftAction<T>
 //   | LeaveSpacesErrorAction<T>;

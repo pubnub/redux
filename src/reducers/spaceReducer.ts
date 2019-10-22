@@ -4,12 +4,12 @@ import {
   MembershipActions,
 } from '../actions/Actions';
 import { actionType } from '../actions/ActionType.enum';
-import { SpaceMap } from '../api/Space';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiState,
   PubNubObjectApiError,
   Identifiable,
+  ItemMap,
 } from '../api/PubNubApi';
 import {
   beginObjectById,
@@ -36,12 +36,12 @@ const beginCreateSpace = <T extends Identifiable>(
 const createSpace = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
-) => successObjectById<T>(state, payload);
+) => successObjectById<T>(state, payload, payload.data.id);
 
 const createSpaceError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
-) => errorObjectById<T>(state, payload);
+) => errorObjectById<T>(state, payload, payload.data.id);
 
 const beginUpdateSpace = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
@@ -51,12 +51,12 @@ const beginUpdateSpace = <T extends Identifiable>(
 const updateSpace = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
-) => successObjectById<T>(state, payload);
+) => successObjectById<T>(state, payload, payload.data.id);
 
 const updateSpaceError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
-) => errorObjectById<T>(state, payload);
+) => errorObjectById<T>(state, payload, payload.data.id);
 
 const beginDeleteSpace = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
@@ -66,16 +66,16 @@ const beginDeleteSpace = <T extends Identifiable>(
 const deleteSpace = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
-) => successDeleteObjectById<T>(state, payload);
+) => successDeleteObjectById<T>(state, payload.data.id);
 
 const deleteSpaceError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
-) => errorObjectById<T>(state, payload);
+) => errorObjectById<T>(state, payload, payload.data.id);
 
 const fetchSpaces = <T extends object>(
   state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiSuccess<SpaceMap<T>>
+  payload: PubNubObjectApiSuccess<ItemMap<T>>
 ) => successObjectList<T>(state, payload);
 
 const beginFetchSpaceById = <T extends Identifiable>(
@@ -86,12 +86,12 @@ const beginFetchSpaceById = <T extends Identifiable>(
 const fetchSpaceById = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
-) => successObjectById<T>(state, payload);
+) => successObjectById<T>(state, payload, payload.data.id);
 
 const fetchSpaceError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
-) => errorObjectById<T>(state, payload);
+) => errorObjectById<T>(state, payload, payload.data.id);
 
 const fetchMemberships = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
@@ -101,10 +101,15 @@ const fetchMemberships = <T extends Identifiable>(
 
   if (payload.data.spaces.length > 0) {
     for (let i = 0; i < payload.data.spaces.length; i++) {
-      if (payload.data.spaces[i].space !== undefined) {
-        newState = successObjectById<T>(newState, {
-          data: (payload.data.spaces[i].space as unknown) as T,
-        });
+      let currentSpace = payload.data.spaces[i].space;
+      if (currentSpace !== undefined) {
+        newState = successObjectById<T>(
+          newState,
+          {
+            data: (currentSpace as unknown) as T,
+          },
+          currentSpace.id
+        );
       }
     }
   }

@@ -9,7 +9,3 @@ export interface User {
     customFields?: boolean;
   };
 }
-
-export interface UserMap<T> {
-  [key: string]: T;
-}

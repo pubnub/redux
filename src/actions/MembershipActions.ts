@@ -73,9 +73,9 @@ const fetchMembershipsError = <T>(
   payload,
 });
 
-export const updateMembershipBegin = <T>(
-  payload: T
-): UpdateMembershipBeginAction<T> => ({
+export const updateMembershipBegin = (
+  payload: string
+): UpdateMembershipBeginAction => ({
   type: actionType.OBJECTS_UPDATE_MEMBERSHIP_BEGIN,
   payload,
 });
@@ -169,7 +169,7 @@ export const fetchMemberships = (
 export const updateMembership = (pubnub: any, membership: Membership) => (
   dispatch: Dispatch
 ) => {
-  dispatch(updateMembershipBegin(membership));
+  dispatch(updateMembershipBegin(membership.userId));
 
   pubnub.updateMembership(
     {

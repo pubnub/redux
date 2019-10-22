@@ -9,7 +9,16 @@ import {
   ListenerEventData,
   PubNubObjectApiError,
 } from '../api/PubNubApi';
-import { MembershipList, MembershipResult } from '../api/Membership';
+import {
+  MembershipList,
+  MembershipResult,
+  Membership,
+} from '../api/Membership';
+import {
+  beginObjectById,
+  successObjectById,
+  errorObjectById,
+} from './reducerUtil';
 
 let createInitialState = <T extends MembershipList>(): PubNubObjectApiState<
   T
@@ -93,70 +102,101 @@ const userMembershipUpdatedOnSpace = <T extends MembershipList>(
 const beginFetchMemberships = <T extends MembershipList>(
   state: PubNubObjectApiState<T>,
   payload: string
-) => {
-  let newState = { ...state };
-
-  Object.keys(newState.byId).forEach((key) => {
-    newState.byId[key] = ([...state.byId[key]] as unknown) as T;
-  });
-
-  // increment loading count or set to 1
-  newState.loadingById[payload] =
-    newState.loadingById[payload] !== undefined
-      ? newState.loadingById[payload] + 1
-      : 1;
-
-  // clear error
-  delete newState.errorById[payload];
-
-  return newState;
-};
+) => beginObjectById(state, payload);
 
 const fetchMemberships = <T extends MembershipList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<MembershipResult>
-) => {
-  let newState = { ...state };
-
-  Object.keys(newState.byId).forEach((key) => {
-    newState.byId[key] = ([...state.byId[key]] as unknown) as T;
-  });
-
-  let id = payload.data.id;
-
-  // decrement loading count or set to 0
-  newState.loadingById[id] =
-    newState.loadingById[id] > 0 ? newState.loadingById[id] - 1 : 0;
-
-  // set response payload
-  newState.byId[id] = ([...payload.data.spaces] as unknown) as T;
-
-  return newState;
-};
+) =>
+  successObjectById<T>(
+    state,
+    {
+      data: payload.data.spaces as T,
+    },
+    payload.data.id
+  );
 
 const fetchMembershipsError = <T extends MembershipList>(
   state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiError<MembershipResult>
+) =>
+  errorObjectById<T>(
+    state,
+    {
+      code: payload.code,
+      message: payload.message,
+      data: {
+        id: payload.data.id,
+      },
+    },
+    payload.data.id
+  );
+
+const beginUpdateMembership = <T extends MembershipList>(
+  state: PubNubObjectApiState<T>,
+  payload: string
+): PubNubObjectApiState<T> => beginObjectById<T>(state, payload);
+
+const updateMembership = <T extends MembershipList>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiSuccess<Membership>
+) =>
+  successObjectById<T>(
+    state,
+    {
+      data: payload.data.spaces as T,
+    },
+    payload.data.userId
+  );
+
+const updateMembershipError = <T extends MembershipList>(
+  state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
-) => {
-  let newState = { ...state };
+) => errorObjectById<T>(state, payload, payload.data.id);
 
-  Object.keys(newState.byId).forEach((key) => {
-    newState.byId[key] = ([...state.byId[key]] as unknown) as T;
-  });
+const beginJoinSpaces = <T extends MembershipList>(
+  state: PubNubObjectApiState<T>,
+  payload: string
+): PubNubObjectApiState<T> => beginObjectById<T>(state, payload);
 
-  if (payload.data.id) {
-    let id = payload.data.id;
+const joinSpaces = <T extends MembershipList>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiSuccess<Membership>
+) =>
+  successObjectById<T>(
+    state,
+    {
+      data: payload.data.spaces as T,
+    },
+    payload.data.userId
+  );
 
-    // decrement loading count or set to 0
-    newState.loadingById[id] =
-      newState.loadingById[id] > 0 ? newState.loadingById[id] - 1 : 0;
+const joinSpacesError = <T extends MembershipList>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiError<T>
+) => errorObjectById<T>(state, payload, payload.data.id);
 
-    // set error payload
-    newState.errorById[id] = payload;
-  }
+const beginLeaveSpaces = <T extends MembershipList>(
+  state: PubNubObjectApiState<T>,
+  payload: string
+): PubNubObjectApiState<T> => beginObjectById<T>(state, payload);
 
-  return newState;
-};
+const leaveSpaces = <T extends MembershipList>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiSuccess<Membership>
+) =>
+  successObjectById<T>(
+    state,
+    {
+      data: payload.data.spaces as T,
+    },
+    payload.data.userId
+  );
+
+const leaveSpacesError = <T extends MembershipList>(
+  state: PubNubObjectApiState<T>,
+  payload: PubNubObjectApiError<T>
+) => errorObjectById<T>(state, payload, payload.data.id);
 
 export const createMembershipReducer = <
   T extends MembershipList = MembershipList
@@ -168,35 +208,34 @@ export const createMembershipReducer = <
     case actionType.OBJECTS_USER_ADDED_TO_SPACE:
       return userAddedToSpace<T>(state, action.payload);
     case actionType.OBJECTS_USER_REMOVED_FROM_SPACE:
-      return userRemovedFromSpace(state, action.payload);
+      return userRemovedFromSpace<T>(state, action.payload);
     case actionType.OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE:
-      return userMembershipUpdatedOnSpace(state, action.payload);
+      return userMembershipUpdatedOnSpace<T>(state, action.payload);
     case actionType.OBJECTS_FETCH_MEMBERSHIPS_BEGIN:
-      return beginFetchMemberships(state, action.payload);
+      return beginFetchMemberships<T>(state, action.payload);
     case actionType.OBJECTS_FETCH_MEMBERSHIPS:
-      return fetchMemberships(state, action.payload);
+      return fetchMemberships<T>(state, action.payload);
     case actionType.OBJECTS_FETCH_MEMBERSHIPS_ERROR:
-      return fetchMembershipsError(state, action.payload);
+      return fetchMembershipsError<T>(state, action.payload);
+    case actionType.OBJECTS_UPDATE_MEMBERSHIP_BEGIN:
+      return beginUpdateMembership<T>(state, action.payload);
+    case actionType.OBJECTS_UPDATE_MEMBERSHIP:
+      return updateMembership(state, action.payload);
+    case actionType.OBJECTS_UPDATE_MEMBERSHIP_ERROR:
+      return updateMembershipError<T>(state, action.payload);
+    case actionType.OBJECTS_JOIN_SPACES_BEGIN:
+      return beginJoinSpaces<T>(state, action.payload);
+    case actionType.OBJECTS_SPACES_JOINED:
+      return joinSpaces(state, action.payload);
+    case actionType.OBJECTS_JOIN_SPACES_ERROR:
+      return joinSpacesError<T>(state, action.payload);
+    case actionType.OBJECTS_LEAVE_SPACES_BEGIN:
+      return beginLeaveSpaces<T>(state, action.payload);
+    case actionType.OBJECTS_SPACES_LEFT:
+      return leaveSpaces(state, action.payload);
+    case actionType.OBJECTS_LEAVE_SPACES_ERROR:
+      return leaveSpacesError<T>(state, action.payload);
     default:
       return state;
   }
 };
-
-// export type MembershipListenerActions<T extends Identifiable> =
-//   | UserAddedToSpaceAction<T>
-//   | UserRemovedFromSpaceAction<T>
-//   | UserMembershipUpdatedOnSpaceAction<T>;
-
-// export type MembershipActions<T> =
-//   | FetchMembershipsBeginAction
-//   | FetchMembershipsAction
-//   | FetchMembershipsErrorAction
-//   | UpdateMembershipBeginAction<T>
-//   | MembershipUpdatedAction<T>
-//   | UpdateMembershipErrorAction<T>
-//   | JoinSpacesBeginAction<T>
-//   | SpacesJoinedAction<T>
-//   | JoinSpacesErrorAction<T>
-//   | LeaveSpacesBeginAction<T>
-//   | SpacesLeftAction<T>
-//   | LeaveSpacesErrorAction<T>;

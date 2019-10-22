@@ -276,9 +276,9 @@ export interface MembersUpdatedAction<T> {
   payload: PubNubObjectApiSuccess<T>;
 }
 
-export interface UpdateMembersBeginAction<T> {
+export interface UpdateMembersBeginAction {
   type: typeof actionType.OBJECTS_UPDATE_MEMBERS_BEGIN;
-  payload: T;
+  payload: string;
 }
 
 export interface UpdateMembersErrorAction<T> {
@@ -340,9 +340,9 @@ export interface MembershipUpdatedAction<T> {
   payload: PubNubObjectApiSuccess<T>;
 }
 
-export interface UpdateMembershipBeginAction<T> {
+export interface UpdateMembershipBeginAction {
   type: typeof actionType.OBJECTS_UPDATE_MEMBERSHIP_BEGIN;
-  payload: T;
+  payload: string;
 }
 
 export interface UpdateMembershipErrorAction<T> {

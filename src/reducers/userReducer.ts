@@ -4,12 +4,12 @@ import {
   MembersActions,
 } from '../actions/Actions';
 import { actionType } from '../actions/ActionType.enum';
-import { UserMap } from '../api/User';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiState,
   PubNubObjectApiError,
   Identifiable,
+  ItemMap,
 } from '../api/PubNubApi';
 import {
   beginObjectById,
@@ -36,12 +36,12 @@ const beginCreateUser = <T extends Identifiable>(
 const createUser = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
-) => successObjectById<T>(state, payload);
+) => successObjectById<T>(state, payload, payload.data.id);
 
 const createUserError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
-) => errorObjectById<T>(state, payload);
+) => errorObjectById<T>(state, payload, payload.data.id);
 
 const beginUpdateUser = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
@@ -51,12 +51,12 @@ const beginUpdateUser = <T extends Identifiable>(
 const updateUser = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
-) => successObjectById<T>(state, payload);
+) => successObjectById<T>(state, payload, payload.data.id);
 
 const updateUserError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
-) => errorObjectById<T>(state, payload);
+) => errorObjectById<T>(state, payload, payload.data.id);
 
 const beginDeleteUser = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
@@ -66,16 +66,16 @@ const beginDeleteUser = <T extends Identifiable>(
 const deleteUser = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
-) => successDeleteObjectById<T>(state, payload);
+) => successDeleteObjectById<T>(state, payload.data.id);
 
 const deleteUserError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
-) => errorObjectById<T>(state, payload);
+) => errorObjectById<T>(state, payload, payload.data.id);
 
 const fetchUsers = <T extends object>(
   state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiSuccess<UserMap<T>>
+  payload: PubNubObjectApiSuccess<ItemMap<T>>
 ) => successObjectList<T>(state, payload);
 
 const beginFetchUserById = <T extends Identifiable>(
@@ -86,12 +86,12 @@ const beginFetchUserById = <T extends Identifiable>(
 const fetchUserById = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
-) => successObjectById<T>(state, payload);
+) => successObjectById<T>(state, payload, payload.data.id);
 
 const fetchUserError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
-) => errorObjectById<T>(state, payload);
+) => errorObjectById<T>(state, payload, payload.data.id);
 
 const fetchMembers = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
@@ -101,10 +101,16 @@ const fetchMembers = <T extends Identifiable>(
 
   if (payload.data.users.length > 0) {
     for (let i = 0; i < payload.data.users.length; i++) {
-      if (payload.data.users[i].user !== undefined) {
-        newState = successObjectById<T>(newState, {
-          data: (payload.data.users[i].user as unknown) as T,
-        });
+      let currentUser = payload.data.users[i].user;
+
+      if (currentUser !== undefined) {
+        newState = successObjectById<T>(
+          newState,
+          {
+            data: (currentUser as unknown) as T,
+          },
+          currentUser.id
+        );
       }
     }
   }
