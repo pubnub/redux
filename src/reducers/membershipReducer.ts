@@ -33,7 +33,7 @@ const userAddedToSpace = <T extends MembershipList>(
   payload: PubNubObjectApiSuccess<ListenerEventData>
 ) => {
   let newState = { ...state };
-
+  console.log('user added to space', JSON.stringify(payload));
   Object.keys(newState.byId).forEach((key) => {
     newState.byId[key] = ([...newState.byId[key]] as unknown) as T;
   });

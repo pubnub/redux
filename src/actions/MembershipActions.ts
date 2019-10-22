@@ -235,7 +235,8 @@ export const leaveSpaces = (pubnub: any, membership: Membership) => (
 
   pubnub.leaveSpaces(
     {
-      ...membership,
+      userId: membership.userId,
+      spaces: membership.spaces.map((space) => space.id),
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {

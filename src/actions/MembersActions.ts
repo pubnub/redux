@@ -212,7 +212,8 @@ export const removeMembers = (pubnub: any, members: Members) => (
 
   pubnub.removeMembers(
     {
-      ...members,
+      spaceId: members.spaceId,
+      users: members.users.map((user) => user.id),
     },
     (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
       if (status.error) {
