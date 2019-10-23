@@ -72,6 +72,7 @@ import { createUserListReducer } from './reducers/userListReducer';
 import { createSpaceReducer } from './reducers/spaceReducer';
 import { createSpaceListReducer } from './reducers/spaceListReducer';
 import { createMembershipReducer } from './reducers/membershipReducer';
+import { createMembersReducer } from './reducers/membersReducer';
 import { Identifiable, PubNubObjectApiState } from './api/PubNubApi';
 
 import { Space } from './api/Space';
@@ -141,5 +142,6 @@ export {
   createSpaceReducer,
   createSpaceListReducer,
   createMembershipReducer,
+  createMembersReducer,
   combineListeners,
 };
