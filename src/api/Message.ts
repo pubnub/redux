@@ -1,7 +1,7 @@
-export interface MessageActionPayload {
+export interface Message {
   channel: string;
   message: object;
-  publisher: string;
-  subscription: string | null;
-  timetoken: string;
+  publisher?: string;
+  subscription?: string | null;
+  timetoken?: string;
 }

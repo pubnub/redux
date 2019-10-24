@@ -11,12 +11,14 @@ export interface ObjectsData {
   custom?: string | null;
 }
 
+export interface ObjectsActionMessage<T extends Identifiable> {
+  data: T;
+  event: string;
+  type: string;
+}
+
 export interface ObjectsActionPayload<T extends Identifiable> {
-  message: {
-    data: T;
-    event: string;
-    type: string;
-  };
+  message: ObjectsActionMessage<T>;
 }
 
 export interface ObjectsStatusPayload {

@@ -25,7 +25,11 @@ const userAddedToSpace = <T extends MembersList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<ListenerEventData>
 ) => {
-  let newState = { ...state };
+  let newState = {
+    byId: { ...state.byId },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
 
   Object.keys(newState.byId).forEach((key) => {
     newState.byId[key] = ([...newState.byId[key]] as unknown) as T;
@@ -50,7 +54,11 @@ const userRemovedFromSpace = <T extends MembersList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<ListenerEventData>
 ) => {
-  let newState = { ...state };
+  let newState = {
+    byId: { ...state.byId },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
 
   Object.keys(newState.byId).forEach((key) => {
     newState.byId[key] = ([...state.byId[key]] as unknown) as T;
@@ -70,7 +78,11 @@ const userMembersUpdatedOnSpace = <T extends MembersList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<ListenerEventData>
 ) => {
-  let newState = { ...state };
+  let newState = {
+    byId: { ...state.byId },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
 
   Object.keys(newState.byId).forEach((key) => {
     newState.byId[key] = ([...state.byId[key]] as unknown) as T;
@@ -96,7 +108,11 @@ const beginFetchMembers = <T extends MembersList>(
   state: PubNubObjectApiState<T>,
   payload: string
 ) => {
-  let newState = { ...state };
+  let newState = {
+    byId: { ...state.byId },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
 
   Object.keys(newState.byId).forEach((key) => {
     newState.byId[key] = ([...state.byId[key]] as unknown) as T;
@@ -118,7 +134,11 @@ const fetchMembers = <T extends MembersList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<MembersResult>
 ) => {
-  let newState = { ...state };
+  let newState = {
+    byId: { ...state.byId },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
 
   Object.keys(newState.byId).forEach((key) => {
     newState.byId[key] = ([...state.byId[key]] as unknown) as T;
@@ -140,7 +160,11 @@ const fetchMembersError = <T extends MembersList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
 ) => {
-  let newState = { ...state };
+  let newState = {
+    byId: { ...state.byId },
+    loadingById: { ...state.loadingById },
+    errorById: { ...state.errorById },
+  };
 
   Object.keys(newState.byId).forEach((key) => {
     newState.byId[key] = ([...state.byId[key]] as unknown) as T;
@@ -246,19 +270,31 @@ export const createMembersReducer = <T extends MembersList = MembersList>() => (
     case actionType.OBJECTS_UPDATE_MEMBERS_BEGIN:
       return beginUpdateMembers<T>(state, action.payload);
     case actionType.OBJECTS_UPDATE_MEMBERS:
-      return updateMembers(state, action.payload);
+      return updateMembers(
+        state,
+        (action.payload as unknown) as PubNubObjectApiSuccess<Members>
+      );
     case actionType.OBJECTS_UPDATE_MEMBERS_ERROR:
       return updateMembersError<T>(state, action.payload);
     case actionType.OBJECTS_ADD_MEMBERS_BEGIN:
-      return beginAddMembers<T>(state, action.payload);
+      return beginAddMembers<T>(state, (action.payload as unknown) as string);
     case actionType.OBJECTS_MEMBERS_ADDED:
-      return addMembers(state, action.payload);
+      return addMembers(
+        state,
+        (action.payload as unknown) as PubNubObjectApiSuccess<Members>
+      );
     case actionType.OBJECTS_ADD_MEMBERS_ERROR:
       return addMembersError<T>(state, action.payload);
     case actionType.OBJECTS_REMOVE_MEMBERS_BEGIN:
-      return beginRemoveMembers<T>(state, action.payload);
+      return beginRemoveMembers<T>(
+        state,
+        (action.payload as unknown) as string
+      );
     case actionType.OBJECTS_MEMBERS_REMOVED:
-      return removeMembers(state, action.payload);
+      return removeMembers(
+        state,
+        (action.payload as unknown) as PubNubObjectApiSuccess<Members>
+      );
     case actionType.OBJECTS_REMOVE_MEMBERS_ERROR:
       return removeMembersError<T>(state, action.payload);
     default:

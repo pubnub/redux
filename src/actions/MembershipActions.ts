@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { ObjectsActionPayload, ObjectsResponsePayload } from '../api/Objects';
+import { ObjectsActionMessage, ObjectsResponsePayload } from '../api/Objects';
 import {
   UserMembershipUpdatedOnSpaceAction,
   UserAddedToSpaceAction,
@@ -32,21 +32,21 @@ import {
 } from '../api/Membership';
 
 export const userMembershipUpdatedOnSpace = <T extends Identifiable>(
-  payload: ObjectsActionPayload<T>
+  payload: ObjectsActionMessage<T>
 ): UserMembershipUpdatedOnSpaceAction<T> => ({
   type: actionType.OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
   payload,
 });
 
 export const userAddedToSpace = <T extends Identifiable>(
-  payload: ObjectsActionPayload<T>
+  payload: ObjectsActionMessage<T>
 ): UserAddedToSpaceAction<T> => ({
   type: actionType.OBJECTS_USER_ADDED_TO_SPACE,
   payload,
 });
 
 export const userRemovedFromSpace = <T extends Identifiable>(
-  payload: ObjectsActionPayload<T>
+  payload: ObjectsActionMessage<T>
 ): UserRemovedFromSpaceAction<T> => ({
   type: actionType.OBJECTS_USER_REMOVED_FROM_SPACE,
   payload,

@@ -17,7 +17,10 @@ import {
   addMembers,
   removeMembers,
 } from './actions/MembersActions';
-import { createMessageActionListener } from './actions/MessageActions';
+import {
+  createMessageActionListener,
+  sendMessage,
+} from './actions/MessageActions';
 import {
   createPresenceActionListener,
   userJoin,
@@ -66,6 +69,7 @@ import {
   fetchUserById,
 } from './actions/UserActions';
 
+import { createMessageReducer } from './reducers/messageReducer';
 import { createNetworkStatusReducer } from './reducers/createNetworkStatusReducer';
 import { createUserReducer } from './reducers/userReducer';
 import { createUserListReducer } from './reducers/userListReducer';
@@ -75,6 +79,7 @@ import { createMembershipReducer } from './reducers/membershipReducer';
 import { createMembersReducer } from './reducers/membersReducer';
 import { Identifiable, PubNubObjectApiState } from './api/PubNubApi';
 
+import { Message } from './api/Message';
 import { Space } from './api/Space';
 import { SpaceListState } from './reducers/spaceListReducer';
 
@@ -82,6 +87,7 @@ import { User } from './api/User';
 import { UserListState } from './reducers/userListReducer';
 
 export {
+  Message,
   Identifiable,
   PubNubObjectApiState as PubNubApiState,
   Space,
@@ -90,6 +96,7 @@ export {
   UserListState,
   createPubNubActionListener,
   createMembershipActionListener,
+  sendMessage,
   fetchMembers,
   updateMembers,
   addMembers,
@@ -136,6 +143,7 @@ export {
   fetchUserById,
   userListRetrieved,
   fetchUsersError,
+  createMessageReducer,
   createNetworkStatusReducer,
   createUserReducer,
   createUserListReducer,

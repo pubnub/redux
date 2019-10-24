@@ -1,5 +1,8 @@
 export enum actionType {
   MESSAGE = 'pubnub/MESSAGE',
+  SEND_MESSAGE = 'pubnub/SEND_MESSAGE',
+  SEND_MESSAGE_BEGIN = 'pubnub/SEND_MESSAGE_BEGIN',
+  SEND_MESSAGE_ERROR = 'pubnub/SEND_MESSAGE_ERROR',
   JOIN = 'pubnub/JOIN',
   LEAVE = 'pubnub/LEAVE',
   TIMEOUT = 'pubnub/TIMEOUT',

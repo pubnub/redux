@@ -1,13 +1,12 @@
-import { MessageActionPayload } from '../api/Message';
+import { Message } from '../api/Message';
 import { PresenceActionPayload } from '../api/Presence';
 import { StatusActionPayload } from '../api/Status';
 import { SignalActionPayload } from '../api/Signal';
-import { UserMap } from '../api/User';
-import { SpaceMap } from '../api/Space';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   Identifiable,
+  ItemMap,
 } from '../api/PubNubApi';
 import { MembershipResult } from '../api/Membership';
 import { actionType } from './ActionType.enum';
@@ -143,7 +142,7 @@ export interface FetchUsersBeginAction {
 
 export interface UserListRetrievedAction<T> {
   type: typeof actionType.OBJECTS_FETCH_USERS;
-  payload: PubNubObjectApiSuccess<UserMap<T>>;
+  payload: PubNubObjectApiSuccess<ItemMap<T>>;
 }
 
 export interface FetchUsersErrorAction<T> {
@@ -168,7 +167,7 @@ export interface FetchUserByIdAction<T> {
 
 export interface SpaceListRetrievedAction<T> {
   type: typeof actionType.OBJECTS_FETCH_SPACES;
-  payload: PubNubObjectApiSuccess<SpaceMap<T>>;
+  payload: PubNubObjectApiSuccess<ItemMap<T>>;
 }
 
 export interface FetchSpacesBeginAction {
@@ -382,7 +381,22 @@ export interface LeaveSpacesErrorAction<T> {
 
 export interface MessageAction {
   type: typeof actionType.MESSAGE;
-  payload: MessageActionPayload;
+  payload: Message;
+}
+
+export interface SendMessageBeginAction<T extends { channel: string }> {
+  type: typeof actionType.SEND_MESSAGE_BEGIN;
+  payload: T;
+}
+
+export interface SendMessageAction<T extends { channel: string }> {
+  type: typeof actionType.SEND_MESSAGE;
+  payload: PubNubObjectApiSuccess<T>;
+}
+
+export interface SendMessageErrorAction<T extends { channel: string }> {
+  type: typeof actionType.SEND_MESSAGE_ERROR;
+  payload: PubNubObjectApiError<T>;
 }
 
 export interface SignalAction {
@@ -455,7 +469,7 @@ export type MembershipActions<T> =
   | FetchMembershipsBeginAction
   | FetchMembershipsAction
   | FetchMembershipsErrorAction<T>
-  | UpdateMembershipBeginAction<T>
+  | UpdateMembershipBeginAction
   | MembershipUpdatedAction<T>
   | UpdateMembershipErrorAction<T>
   | JoinSpacesBeginAction<T>
@@ -469,7 +483,7 @@ export type MembersActions<T> =
   | FetchMembersBeginAction
   | FetchMembersAction
   | FetchMembersErrorAction<T>
-  | UpdateMembersBeginAction<T>
+  | UpdateMembersBeginAction
   | MembersUpdatedAction<T>
   | UpdateMembersErrorAction<T>
   | AddMembersBeginAction<T>
@@ -503,3 +517,9 @@ export type ListenerActions<T extends Identifiable> =
   | PresenceListenerActions
   | StatusListenerActions
   | ObjectListenerActions<T>;
+
+export type MessageActions<T extends { channel: string }> =
+  | MessageAction
+  | SendMessageAction<T>
+  | SendMessageBeginAction<T>
+  | SendMessageErrorAction<T>;
