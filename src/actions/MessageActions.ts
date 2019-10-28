@@ -13,27 +13,34 @@ import {
   PubNubObjectApiSuccess,
 } from 'api/PubNubApi';
 
+// tag::[RED-139]
 export const sendMessageBegin = <T extends { channel: string }>(
   payload: T
 ): SendMessageBeginAction<T> => ({
   type: actionType.SEND_MESSAGE_BEGIN,
   payload,
 });
+// end::[RED-139]
 
+// tag::[RED-140]
 export const sendMessageSuccess = <T extends { channel: string }>(
   payload: PubNubObjectApiSuccess<T>
 ): SendMessageAction<T> => ({
   type: actionType.SEND_MESSAGE,
   payload,
 });
+// end::[RED-140]
 
+// tag::[RED-141]
 export const sendMessageError = <T extends { channel: string }>(
   payload: PubNubObjectApiError<T>
 ): SendMessageErrorAction<T> => ({
   type: actionType.SEND_MESSAGE_ERROR,
   payload,
 });
+// end::[RED-141]
 
+// tag::[RED-142]
 export const sendMessage = (pubnub: any, message: Message) => (
   dispatch: Dispatch
 ) => {
@@ -66,7 +73,9 @@ export const sendMessage = (pubnub: any, message: Message) => (
     }
   );
 };
+// end::[RED-142]
 
+// tag::[RED-143]
 export const createMessageActionListener = (
   dispatch: Dispatch<MessageAction>
 ) => ({
@@ -76,3 +85,4 @@ export const createMessageActionListener = (
       payload,
     }),
 });
+// end::[RED-143]

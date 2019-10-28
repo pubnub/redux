@@ -7,14 +7,19 @@ import { actionType } from './ActionType.enum';
 import { StatusActionPayload } from '../api/Status';
 import { Dispatch } from 'redux';
 
+// tag::[RED-144]
 export const networkUp = (): NetworkUpAction => ({
   type: actionType.NETWORK_UP,
 });
+// end::[RED-144]
 
+// tag::[RED-145]
 export const networkDown = (): NetworkDownAction => ({
   type: actionType.NETWORK_DOWN,
 });
+// end::[RED-145]
 
+// tag::[RED-146]
 export const createNetworkStatusActionListener = (
   dispatch: Dispatch<NetworkStatusListenerActions>
 ) => ({
@@ -43,3 +48,4 @@ export const createNetworkStatusActionListener = (
     }
   },
 });
+// end::[RED-146]
