@@ -3,6 +3,7 @@ import { SignalAction } from './Actions';
 import { actionType } from './ActionType.enum';
 import { Dispatch } from 'redux';
 
+// tag::[RED-152]
 export const createSignalActionListener = (
   dispatch: Dispatch<SignalAction>
 ) => ({
@@ -12,3 +13,4 @@ export const createSignalActionListener = (
       payload,
     }),
 });
+// end::[RED-152]
