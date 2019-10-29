@@ -40,8 +40,6 @@ export interface PubNubObjectApiError<T> {
 // tag::RDX-022[]
 export interface PubNubObjectApiState<T> {
   byId: { [key: string]: T };
-  loadingById: { [key: string]: number };
-  errorById: { [key: string]: PubNubObjectApiError<T> };
 }
 // end::RDX-022[]
 

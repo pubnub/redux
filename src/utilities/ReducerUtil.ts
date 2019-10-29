@@ -1,42 +1,8 @@
 import {
   PubNubObjectApiState,
-  PubNubObjectApiError,
   ItemMap,
   PubNubObjectApiSuccess,
 } from 'api/PubNubApi';
-
-export const beginObjectById = <T extends object>(
-  state: PubNubObjectApiState<T>,
-  id: string
-): PubNubObjectApiState<T> => {
-  let newState = clonePubNubObjectApiState<T>(state);
-
-  // increment loading count or set to 1
-  newState.loadingById[id] =
-    newState.loadingById[id] !== undefined ? newState.loadingById[id] + 1 : 1;
-
-  // clear error
-  delete newState.errorById[id];
-
-  return newState;
-};
-
-export const errorObjectById = <T>(
-  state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiError<T>,
-  id: string
-): PubNubObjectApiState<T> => {
-  let newState = clonePubNubObjectApiState<T>(state);
-
-  // decrement loading count or set to 0
-  newState.loadingById[id] =
-    newState.loadingById[id] > 0 ? newState.loadingById[id] - 1 : 0;
-
-  // set error payload
-  newState.errorById[id] = payload;
-
-  return newState;
-};
 
 export const successObjectById = <T>(
   state: PubNubObjectApiState<T>,
@@ -44,10 +10,6 @@ export const successObjectById = <T>(
   id: string
 ): PubNubObjectApiState<T> => {
   let newState = clonePubNubObjectApiState<T>(state);
-
-  // decrement loading count or set to 0
-  newState.loadingById[id] =
-    newState.loadingById[id] > 0 ? newState.loadingById[id] - 1 : 0;
 
   // set response payload
   if (Object.prototype.toString.call(payload.data) === '[object Array]') {
@@ -81,10 +43,6 @@ export const successDeleteObjectById = <T>(
 ): PubNubObjectApiState<T> => {
   let newState = clonePubNubObjectApiState<T>(state);
 
-  // decrement loading count or set to 0
-  newState.loadingById[id] =
-    newState.loadingById[id] > 0 ? newState.loadingById[id] - 1 : 0;
-
   // delete the item
   delete newState.byId[id];
 
@@ -96,8 +54,6 @@ export const clonePubNubObjectApiState = <T>(
 ): PubNubObjectApiState<T> => {
   let newState: PubNubObjectApiState<T> = {
     byId: {},
-    loadingById: { ...state.loadingById },
-    errorById: {},
   };
 
   Object.keys(state.byId).forEach((id) => {
@@ -110,12 +66,6 @@ export const clonePubNubObjectApiState = <T>(
         id
       ] as unknown) as object) as unknown) as T;
     }
-  });
-
-  Object.keys(state.errorById).forEach((id) => {
-    newState.errorById[id] = cloneObject<PubNubObjectApiError<T>>(
-      state.errorById[id]
-    );
   });
 
   return newState;

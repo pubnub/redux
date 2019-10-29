@@ -43,9 +43,12 @@
     "redux": "^4.0.4"
   },
   "jest": {
-    "rootDir": "./src",
-    "testMatch": [
-      "<rootDir>/**/*.(spec|test).{ts,tsx}"
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
+    "roots": [
+      "<rootDir>/src"
     ]
   }
 }

@@ -1,4 +1,3 @@
-
 // tag::RDX-025[]
 export interface Space {
   id: string;
@@ -25,7 +24,7 @@ export interface SpaceOutput extends Space {}
 // tag::RDX-148[]
 export interface SpaceState {
   byId: {
-    [spaceId: string]: Space
-  }
-};
+    [spaceId: string]: Space;
+  };
+}
 // end::RDX-148[]
