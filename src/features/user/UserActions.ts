@@ -27,101 +27,101 @@ import {
 } from 'api/PubNubApi';
 
 export const createUserBegin = <T>(payload: T): CreateUserBeginAction<T> => ({
-  type: ActionType.OBJECTS_CREATE_USER_BEGIN,
+  type: ActionType.CREATING_USER,
   payload,
 });
 
 export const userCreated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): UserCreatedAction<T> => ({
-  type: ActionType.OBJECTS_CREATE_USER,
+  type: ActionType.USER_CREATED,
   payload,
 });
 
 export const createUserError = <T>(
   payload: PubNubObjectApiError<T>
 ): CreateUserErrorAction<T> => ({
-  type: ActionType.OBJECTS_CREATE_USER_ERROR,
+  type: ActionType.ERROR_CREATING_USER,
   payload,
 });
 
 export const userListRetrieved = <T>(
   payload: PubNubObjectApiSuccess<ItemMap<T>>
 ): UserListRetrievedAction<T> => ({
-  type: ActionType.OBJECTS_FETCH_USERS,
+  type: ActionType.USERS_RETRIEVED,
   payload,
 });
 
 export const fetchUsersBegin = (payload: {
   label: string;
 }): FetchUsersBeginAction => ({
-  type: ActionType.OBJECTS_FETCH_USERS_BEGIN,
+  type: ActionType.FETCHING_USERS,
   payload,
 });
 
 export const fetchUsersError = <T>(
   payload: PubNubObjectApiError<T>
 ): FetchUsersErrorAction<T> => ({
-  type: ActionType.OBJECTS_FETCH_USERS_ERROR,
+  type: ActionType.ERROR_FETCHING_USERS,
   payload,
 });
 
 export const userRetrievedById = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): FetchUserByIdAction<T> => ({
-  type: ActionType.OBJECTS_FETCH_USER_BY_ID,
+  type: ActionType.USER_RETRIEVED,
   payload,
 });
 
 export const fetchUserByIdBegin = (
   payload: string
 ): FetchUserByIdBeginAction => ({
-  type: ActionType.OBJECTS_FETCH_USER_BY_ID_BEGIN,
+  type: ActionType.FETCHING_USER_BY_ID,
   payload,
 });
 
 export const fetchUserByIdError = <T>(
   payload: PubNubObjectApiError<T>
 ): FetchUserByIdErrorAction<T> => ({
-  type: ActionType.OBJECTS_FETCH_USER_BY_ID_ERROR,
+  type: ActionType.ERROR_FETCHING_USER_BY_ID,
   payload,
 });
 
 export const userUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): UserUpdatedAction<T> => ({
-  type: ActionType.OBJECTS_UPDATE_USER,
+  type: ActionType.USER_UPDATED,
   payload,
 });
 
 export const updateUserBegin = <T>(payload: T): UpdateUserBeginAction<T> => ({
-  type: ActionType.OBJECTS_UPDATE_USER_BEGIN,
+  type: ActionType.UPDATING_USER,
   payload,
 });
 
 export const updateUserError = <T>(
   payload: PubNubObjectApiError<T>
 ): UpdateUserErrorAction<T> => ({
-  type: ActionType.OBJECTS_UPDATE_USER_ERROR,
+  type: ActionType.ERROR_UPDATING_USER,
   payload,
 });
 
 export const userDeleted = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): UserDeletedAction<T> => ({
-  type: ActionType.OBJECTS_DELETE_USER,
+  type: ActionType.USER_DELETED,
   payload,
 });
 
 export const deleteUserBegin = (payload: string): DeleteUserBeginAction => ({
-  type: ActionType.OBJECTS_DELETE_USER_BEGIN,
+  type: ActionType.DELETING_USER,
   payload,
 });
 
 export const deleteUserError = <T>(
   payload: PubNubObjectApiError<T>
 ): DeleteUserErrorAction<T> => ({
-  type: ActionType.OBJECTS_DELETE_USER_ERROR,
+  type: ActionType.ERROR_DELETING_USER,
   payload,
 });
 

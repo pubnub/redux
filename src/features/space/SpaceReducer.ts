@@ -94,17 +94,17 @@ export const createSpaceReducer = <T extends Identifiable>() => (
     | MembershipActions<MembershipList>
 ): PubNubObjectApiState<T> => {
   switch (action.type) {
-    case ActionType.OBJECTS_CREATE_SPACE:
+    case ActionType.SPACE_CREATED:
       return createSpace<T>(state, action.payload);
-    case ActionType.OBJECTS_UPDATE_SPACE:
+    case ActionType.SPACE_UPDATED:
       return updateSpace<T>(state, action.payload);
-    case ActionType.OBJECTS_DELETE_SPACE:
+    case ActionType.SPACE_DELETED:
       return deleteSpace<T>(state, action.payload);
-    case ActionType.OBJECTS_FETCH_SPACES:
+    case ActionType.SPACES_RETRIEVED:
       return fetchSpaces<T>(state, action.payload);
-    case ActionType.OBJECTS_FETCH_SPACE_BY_ID:
+    case ActionType.SPACE_RETRIEVED:
       return fetchSpaceById<T>(state, action.payload);
-    case ActionType.OBJECTS_FETCH_MEMBERSHIPS:
+    case ActionType.MEMBERSHIPS_RETRIEVED:
       return fetchMemberships<T>(state, action.payload);
     default:
       return state;

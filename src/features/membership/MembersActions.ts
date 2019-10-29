@@ -30,82 +30,82 @@ import {
 export const fetchMembersBegin = (
   payload: string
 ): FetchMembersBeginAction => ({
-  type: ActionType.OBJECTS_FETCH_MEMBERS_BEGIN,
+  type: ActionType.FETCHING_MEMBERS,
   payload,
 });
 
 const membersRetrieved = (
   payload: PubNubObjectApiSuccess<MembersResult>
 ): FetchMembersAction => ({
-  type: ActionType.OBJECTS_FETCH_MEMBERS,
+  type: ActionType.MEMBERS_RETRIEVED,
   payload,
 });
 
 const fetchMembersError = <T>(
   payload: PubNubObjectApiError<T>
 ): FetchMembersErrorAction<T> => ({
-  type: ActionType.OBJECTS_FETCH_MEMBERS_ERROR,
+  type: ActionType.ERROR_FETCHING_MEMBERS,
   payload,
 });
 
 export const updateMembersBegin = (
   payload: string
 ): UpdateMembersBeginAction => ({
-  type: ActionType.OBJECTS_UPDATE_MEMBERS_BEGIN,
+  type: ActionType.UPDATING_MEMBERS,
   payload,
 });
 
 export const membersUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): MembersUpdatedAction<T> => ({
-  type: ActionType.OBJECTS_UPDATE_MEMBERS,
+  type: ActionType.MEMBERS_UPDATED,
   payload,
 });
 
 export const updateMembersError = <T>(
   payload: PubNubObjectApiError<T>
 ): UpdateMembersErrorAction<T> => ({
-  type: ActionType.OBJECTS_UPDATE_MEMBERS_ERROR,
+  type: ActionType.ERROR_UPDATING_MEMBERS,
   payload,
 });
 
 export const addMembersBegin = <T>(payload: T): AddMembersBeginAction<T> => ({
-  type: ActionType.OBJECTS_ADD_MEMBERS_BEGIN,
+  type: ActionType.ADDING_MEMBERS,
   payload,
 });
 
 export const membersAdded = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): MembersAddedAction<T> => ({
-  type: ActionType.OBJECTS_MEMBERS_ADDED,
+  type: ActionType.MEMBERS_ADDED,
   payload,
 });
 
 export const addMembersError = <T>(
   payload: PubNubObjectApiError<T>
 ): AddMembersErrorAction<T> => ({
-  type: ActionType.OBJECTS_ADD_MEMBERS_ERROR,
+  type: ActionType.ERROR_ADDING_MEMBERS,
   payload,
 });
 
 export const removeMembersBegin = <T>(
   payload: T
 ): RemoveMembersBeginAction<T> => ({
-  type: ActionType.OBJECTS_REMOVE_MEMBERS_BEGIN,
+  type: ActionType.REMOVING_MEMBERS,
   payload,
 });
 
 export const membersRemoved = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): MembersRemovedAction<T> => ({
-  type: ActionType.OBJECTS_MEMBERS_REMOVED,
+  type: ActionType.MEMBERS_REMOVED,
   payload,
 });
 
 export const removeMembersError = <T>(
   payload: PubNubObjectApiError<T>
 ): RemoveMembersErrorAction<T> => ({
-  type: ActionType.OBJECTS_REMOVE_MEMBERS_ERROR,
+  type: ActionType.ERROR_REMOVING_MEMBERS,
   payload,
 });
 

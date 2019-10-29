@@ -152,25 +152,25 @@ export const createMembersReducer = <T extends MembersList = MembersList>() => (
   action: MembersActions<T> | MembershipListenerActions<ListenerEventData>
 ): PubNubObjectApiState<T> => {
   switch (action.type) {
-    case ActionType.OBJECTS_USER_ADDED_TO_SPACE:
+    case ActionType.USER_ADDED_TO_SPACE:
       return userAddedToSpace<T>(state, action.payload);
-    case ActionType.OBJECTS_USER_REMOVED_FROM_SPACE:
+    case ActionType.USER_REMOVED_FROM_SPACE:
       return userRemovedFromSpace<T>(state, action.payload);
-    case ActionType.OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE:
+    case ActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE:
       return userMembersUpdatedOnSpace<T>(state, action.payload);
-    case ActionType.OBJECTS_FETCH_MEMBERS:
+    case ActionType.MEMBERS_RETRIEVED:
       return fetchMembers<T>(state, action.payload);
-    case ActionType.OBJECTS_UPDATE_MEMBERS:
+    case ActionType.MEMBERS_UPDATED:
       return updateMembers(
         state,
         (action.payload as unknown) as PubNubObjectApiSuccess<Members>
       );
-    case ActionType.OBJECTS_MEMBERS_ADDED:
+    case ActionType.MEMBERS_ADDED:
       return addMembers(
         state,
         (action.payload as unknown) as PubNubObjectApiSuccess<Members>
       );
-    case ActionType.OBJECTS_MEMBERS_REMOVED:
+    case ActionType.MEMBERS_REMOVED:
       return removeMembers(
         state,
         (action.payload as unknown) as PubNubObjectApiSuccess<Members>

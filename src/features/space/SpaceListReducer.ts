@@ -67,11 +67,11 @@ export const createSpaceListReducer = <T>(label: string = 'all') => (
 ): SpaceListState<T> => {
   if (action.payload !== undefined && action.payload.label === label) {
     switch (action.type) {
-      case ActionType.OBJECTS_FETCH_SPACES_BEGIN:
+      case ActionType.FETCHING_SPACES:
         return beginFetchSpaces(state);
-      case ActionType.OBJECTS_FETCH_SPACES:
+      case ActionType.SPACES_RETRIEVED:
         return fetchSpaces(action.payload);
-      case ActionType.OBJECTS_FETCH_SPACES_ERROR:
+      case ActionType.ERROR_FETCHING_SPACES:
         return fetchSpacesError(state, action.payload);
       default:
         return state;

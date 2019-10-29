@@ -67,11 +67,11 @@ export const createUserListReducer = <T>(label: string = 'all') => (
 ): UserListState<T> => {
   if (action.payload !== undefined && action.payload.label === label) {
     switch (action.type) {
-      case ActionType.OBJECTS_FETCH_USERS_BEGIN:
+      case ActionType.FETCHING_USERS:
         return beginFetchUsers(state);
-      case ActionType.OBJECTS_FETCH_USERS:
+      case ActionType.USERS_RETRIEVED:
         return fetchUsers(action.payload);
-      case ActionType.OBJECTS_FETCH_USERS_ERROR:
+      case ActionType.ERROR_FETCHING_USERS:
         return fetchUsersError(state, action.payload);
       default:
         return state;

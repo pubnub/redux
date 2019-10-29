@@ -30,7 +30,7 @@ export const createMessageReducer = <T extends { channel: string }>() => (
   action: MessageActions<T>
 ): PubNubObjectApiState<T[]> => {
   switch (action.type) {
-    case ActionType.MESSAGE:
+    case ActionType.MESSAGE_RECEIVED:
       return messageRecieved<T>(state, {
         data: (action.payload as unknown) as T,
       });

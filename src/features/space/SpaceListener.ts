@@ -7,14 +7,14 @@ import { PubNubObjectApiSuccess, Identifiable } from 'api/PubNubApi';
 export const spaceUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceUpdatedAction<T> => ({
-  type: ActionType.OBJECTS_UPDATE_SPACE,
+  type: ActionType.SPACE_UPDATED,
   payload,
 });
 
 export const spaceDeleted = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceDeletedAction<T> => ({
-  type: ActionType.OBJECTS_DELETE_SPACE,
+  type: ActionType.SPACE_DELETED,
   payload,
 });
 

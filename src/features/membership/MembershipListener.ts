@@ -12,21 +12,21 @@ import { PubNubObjectApiSuccess, ListenerEventData } from 'api/PubNubApi';
 export const userMembershipUpdatedOnSpace = <T extends ListenerEventData>(
   payload: PubNubObjectApiSuccess<T>
 ): UserMembershipUpdatedOnSpaceAction<T> => ({
-  type: ActionType.OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
+  type: ActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE,
   payload,
 });
 
 export const userAddedToSpace = <T extends ListenerEventData>(
   payload: PubNubObjectApiSuccess<T>
 ): UserAddedToSpaceAction<T> => ({
-  type: ActionType.OBJECTS_USER_ADDED_TO_SPACE,
+  type: ActionType.USER_ADDED_TO_SPACE,
   payload,
 });
 
 export const userRemovedFromSpace = <T extends ListenerEventData>(
   payload: PubNubObjectApiSuccess<T>
 ): UserRemovedFromSpaceAction<T> => ({
-  type: ActionType.OBJECTS_USER_REMOVED_FROM_SPACE,
+  type: ActionType.USER_REMOVED_FROM_SPACE,
   payload,
 });
 

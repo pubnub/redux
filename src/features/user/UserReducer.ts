@@ -92,17 +92,17 @@ export const createUserReducer = <T extends Identifiable>() => (
   action: UserActions<T> | UserListenerActions<T> | MembersActions<MembersList>
 ): PubNubObjectApiState<T> => {
   switch (action.type) {
-    case ActionType.OBJECTS_CREATE_USER:
+    case ActionType.USER_CREATED:
       return createUser<T>(state, action.payload);
-    case ActionType.OBJECTS_UPDATE_USER:
+    case ActionType.USER_UPDATED:
       return updateUser<T>(state, action.payload);
-    case ActionType.OBJECTS_DELETE_USER:
+    case ActionType.USER_DELETED:
       return deleteUser<T>(state, action.payload);
-    case ActionType.OBJECTS_FETCH_USERS:
+    case ActionType.USERS_RETRIEVED:
       return fetchUsers<T>(state, action.payload);
-    case ActionType.OBJECTS_FETCH_USER_BY_ID:
+    case ActionType.USER_RETRIEVED:
       return fetchUserById<T>(state, action.payload);
-    case ActionType.OBJECTS_FETCH_MEMBERS:
+    case ActionType.MEMBERS_RETRIEVED:
       return fetchMembers<T>(state, action.payload);
     default:
       return state;

@@ -16,21 +16,21 @@ import {
 export const sendMessageBegin = <T extends { channel: string }>(
   payload: T
 ): SendMessageBeginAction<T> => ({
-  type: ActionType.SEND_MESSAGE_BEGIN,
+  type: ActionType.SENDING_MESSAGE,
   payload,
 });
 
 export const sendMessageSuccess = <T extends { channel: string }>(
   payload: PubNubObjectApiSuccess<T>
 ): SendMessageAction<T> => ({
-  type: ActionType.SEND_MESSAGE,
+  type: ActionType.MESSAGE_SENT,
   payload,
 });
 
 export const sendMessageError = <T extends { channel: string }>(
   payload: PubNubObjectApiError<T>
 ): SendMessageErrorAction<T> => ({
-  type: ActionType.SEND_MESSAGE_ERROR,
+  type: ActionType.ERROR_SENDING_MESSAGE,
   payload,
 });
 
@@ -72,7 +72,7 @@ export const createMessageActionListener = (
 ) => ({
   message: (payload: Message): MessageAction =>
     dispatch({
-      type: ActionType.MESSAGE,
+      type: ActionType.MESSAGE_RECEIVED,
       payload,
     }),
 });
