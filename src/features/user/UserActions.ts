@@ -2,19 +2,19 @@ import { ObjectsResponsePayload, ObjectsListInput } from 'api/Objects';
 import {
   UserDeletedAction,
   UserUpdatedAction,
-  CreateUserErrorAction,
-  FetchUserByIdErrorAction,
-  FetchUsersErrorAction,
-  FetchUserByIdAction,
-  UserListRetrievedAction,
+  ErrorCreatingUserAction,
+  ErrorFetchingUserByIdAction,
+  ErrorFetchingUsersAction,
+  UserRetrievedAction,
+  UsersRetrievedAction,
   UserCreatedAction,
-  CreateUserBeginAction,
-  FetchUsersBeginAction,
-  FetchUserByIdBeginAction,
-  UpdateUserBeginAction,
-  UpdateUserErrorAction,
-  DeleteUserBeginAction,
-  DeleteUserErrorAction,
+  CreatingUserAction,
+  FetchingUsersAction,
+  FetchingUserByIdAction,
+  UpdatingUserAction,
+  ErrorUpdatingUserAction,
+  DeletingUserAction,
+  ErrorDeletingUserAction,
 } from 'actions/Actions';
 import { ActionType } from 'actions/ActionType.enum';
 import { Dispatch } from 'redux';
@@ -26,7 +26,7 @@ import {
   ItemMap,
 } from 'api/PubNubApi';
 
-export const createUserBegin = <T>(payload: T): CreateUserBeginAction<T> => ({
+export const createUserBegin = <T>(payload: T): CreatingUserAction<T> => ({
   type: ActionType.CREATING_USER,
   payload,
 });
@@ -40,49 +40,49 @@ export const userCreated = <T>(
 
 export const createUserError = <T>(
   payload: PubNubObjectApiError<T>
-): CreateUserErrorAction<T> => ({
+): ErrorCreatingUserAction<T> => ({
   type: ActionType.ERROR_CREATING_USER,
   payload,
 });
 
 export const userListRetrieved = <T>(
   payload: PubNubObjectApiSuccess<ItemMap<T>>
-): UserListRetrievedAction<T> => ({
+): UsersRetrievedAction<T> => ({
   type: ActionType.USERS_RETRIEVED,
   payload,
 });
 
 export const fetchUsersBegin = (payload: {
   label: string;
-}): FetchUsersBeginAction => ({
+}): FetchingUsersAction => ({
   type: ActionType.FETCHING_USERS,
   payload,
 });
 
 export const fetchUsersError = <T>(
   payload: PubNubObjectApiError<T>
-): FetchUsersErrorAction<T> => ({
+): ErrorFetchingUsersAction<T> => ({
   type: ActionType.ERROR_FETCHING_USERS,
   payload,
 });
 
 export const userRetrievedById = <T>(
   payload: PubNubObjectApiSuccess<T>
-): FetchUserByIdAction<T> => ({
+): UserRetrievedAction<T> => ({
   type: ActionType.USER_RETRIEVED,
   payload,
 });
 
 export const fetchUserByIdBegin = (
   payload: string
-): FetchUserByIdBeginAction => ({
+): FetchingUserByIdAction => ({
   type: ActionType.FETCHING_USER_BY_ID,
   payload,
 });
 
 export const fetchUserByIdError = <T>(
   payload: PubNubObjectApiError<T>
-): FetchUserByIdErrorAction<T> => ({
+): ErrorFetchingUserByIdAction<T> => ({
   type: ActionType.ERROR_FETCHING_USER_BY_ID,
   payload,
 });
@@ -94,14 +94,14 @@ export const userUpdated = <T>(
   payload,
 });
 
-export const updateUserBegin = <T>(payload: T): UpdateUserBeginAction<T> => ({
+export const updateUserBegin = <T>(payload: T): UpdatingUserAction<T> => ({
   type: ActionType.UPDATING_USER,
   payload,
 });
 
 export const updateUserError = <T>(
   payload: PubNubObjectApiError<T>
-): UpdateUserErrorAction<T> => ({
+): ErrorUpdatingUserAction<T> => ({
   type: ActionType.ERROR_UPDATING_USER,
   payload,
 });
@@ -113,14 +113,14 @@ export const userDeleted = <T>(
   payload,
 });
 
-export const deleteUserBegin = (payload: string): DeleteUserBeginAction => ({
+export const deleteUserBegin = (payload: string): DeletingUserAction => ({
   type: ActionType.DELETING_USER,
   payload,
 });
 
 export const deleteUserError = <T>(
   payload: PubNubObjectApiError<T>
-): DeleteUserErrorAction<T> => ({
+): ErrorDeletingUserAction<T> => ({
   type: ActionType.ERROR_DELETING_USER,
   payload,
 });

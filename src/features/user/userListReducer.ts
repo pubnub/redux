@@ -1,7 +1,7 @@
 import {
-  FetchUsersErrorAction,
-  FetchUsersBeginAction,
-  UserListRetrievedAction,
+  ErrorFetchingUsersAction,
+  FetchingUsersAction,
+  UsersRetrievedAction,
 } from 'actions/Actions';
 import { ActionType } from 'actions/ActionType.enum';
 import { User } from 'api/User';
@@ -61,9 +61,9 @@ const fetchUsersError = <T>(
 export const createUserListReducer = <T>(label: string = 'all') => (
   state: UserListState<T> = createInitialState(),
   action:
-    | UserListRetrievedAction<User>
-    | FetchUsersBeginAction
-    | FetchUsersErrorAction<T>
+    | UsersRetrievedAction<User>
+    | FetchingUsersAction
+    | ErrorFetchingUsersAction<T>
 ): UserListState<T> => {
   if (action.payload !== undefined && action.payload.label === label) {
     switch (action.type) {

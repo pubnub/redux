@@ -1,17 +1,17 @@
 import { Dispatch } from 'redux';
 import { ObjectsResponsePayload } from 'api/Objects';
 import {
-  RemoveMembersErrorAction,
+  ErrorRemovingMembersAction,
   MembersRemovedAction,
-  RemoveMembersBeginAction,
-  AddMembersErrorAction,
+  RemovingMembersAction,
+  ErrorAddingMembersAction,
   MembersAddedAction,
-  AddMembersBeginAction,
-  FetchMembersBeginAction,
+  AddingMembersAction,
+  FetchingMembersAction,
   FetchMembersAction,
-  FetchMembersErrorAction,
-  UpdateMembersBeginAction,
-  UpdateMembersErrorAction,
+  ErrorFetchingMembersAction,
+  UpdatingMembersAction,
+  ErrorUpdatingMembersAction,
   MembersUpdatedAction,
 } from 'actions/Actions';
 import { ActionType } from 'actions/ActionType.enum';
@@ -27,9 +27,7 @@ import {
   MembersOptions,
 } from 'api/Member';
 
-export const fetchMembersBegin = (
-  payload: string
-): FetchMembersBeginAction => ({
+export const fetchMembersBegin = (payload: string): FetchingMembersAction => ({
   type: ActionType.FETCHING_MEMBERS,
   payload,
 });
@@ -43,14 +41,12 @@ const membersRetrieved = (
 
 const fetchMembersError = <T>(
   payload: PubNubObjectApiError<T>
-): FetchMembersErrorAction<T> => ({
+): ErrorFetchingMembersAction<T> => ({
   type: ActionType.ERROR_FETCHING_MEMBERS,
   payload,
 });
 
-export const updateMembersBegin = (
-  payload: string
-): UpdateMembersBeginAction => ({
+export const updateMembersBegin = (payload: string): UpdatingMembersAction => ({
   type: ActionType.UPDATING_MEMBERS,
   payload,
 });
@@ -64,12 +60,12 @@ export const membersUpdated = <T>(
 
 export const updateMembersError = <T>(
   payload: PubNubObjectApiError<T>
-): UpdateMembersErrorAction<T> => ({
+): ErrorUpdatingMembersAction<T> => ({
   type: ActionType.ERROR_UPDATING_MEMBERS,
   payload,
 });
 
-export const addMembersBegin = <T>(payload: T): AddMembersBeginAction<T> => ({
+export const addMembersBegin = <T>(payload: T): AddingMembersAction<T> => ({
   type: ActionType.ADDING_MEMBERS,
   payload,
 });
@@ -83,14 +79,14 @@ export const membersAdded = <T>(
 
 export const addMembersError = <T>(
   payload: PubNubObjectApiError<T>
-): AddMembersErrorAction<T> => ({
+): ErrorAddingMembersAction<T> => ({
   type: ActionType.ERROR_ADDING_MEMBERS,
   payload,
 });
 
 export const removeMembersBegin = <T>(
   payload: T
-): RemoveMembersBeginAction<T> => ({
+): RemovingMembersAction<T> => ({
   type: ActionType.REMOVING_MEMBERS,
   payload,
 });
@@ -104,7 +100,7 @@ export const membersRemoved = <T>(
 
 export const removeMembersError = <T>(
   payload: PubNubObjectApiError<T>
-): RemoveMembersErrorAction<T> => ({
+): ErrorRemovingMembersAction<T> => ({
   type: ActionType.ERROR_REMOVING_MEMBERS,
   payload,
 });

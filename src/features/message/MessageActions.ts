@@ -1,9 +1,9 @@
 import { Dispatch } from 'redux';
 import {
-  MessageAction,
-  SendMessageAction,
-  SendMessageBeginAction,
-  SendMessageErrorAction,
+  MessageRecievedAction,
+  MessageSentAction,
+  SendingMessageAction,
+  ErrorSendingMessageAction,
 } from 'actions/Actions';
 import { ActionType } from 'actions/ActionType.enum';
 import { Message } from 'api/Message';
@@ -15,21 +15,21 @@ import {
 
 export const sendMessageBegin = <T extends { channel: string }>(
   payload: T
-): SendMessageBeginAction<T> => ({
+): SendingMessageAction<T> => ({
   type: ActionType.SENDING_MESSAGE,
   payload,
 });
 
 export const sendMessageSuccess = <T extends { channel: string }>(
   payload: PubNubObjectApiSuccess<T>
-): SendMessageAction<T> => ({
+): MessageSentAction<T> => ({
   type: ActionType.MESSAGE_SENT,
   payload,
 });
 
 export const sendMessageError = <T extends { channel: string }>(
   payload: PubNubObjectApiError<T>
-): SendMessageErrorAction<T> => ({
+): ErrorSendingMessageAction<T> => ({
   type: ActionType.ERROR_SENDING_MESSAGE,
   payload,
 });
@@ -68,9 +68,9 @@ export const sendMessage = (pubnub: any, message: Message) => (
 };
 
 export const createMessageActionListener = (
-  dispatch: Dispatch<MessageAction>
+  dispatch: Dispatch<MessageRecievedAction>
 ) => ({
-  message: (payload: Message): MessageAction =>
+  message: (payload: Message): MessageRecievedAction =>
     dispatch({
       type: ActionType.MESSAGE_RECEIVED,
       payload,

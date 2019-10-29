@@ -130,14 +130,14 @@ export interface UserUpdatedAction<T> {
 // end::RDX-085[]
 
 // tag::RDX-086[]
-export interface UpdateUserBeginAction<T> {
+export interface UpdatingUserAction<T> {
   type: typeof ActionType.UPDATING_USER;
   payload: T;
 }
 // end::RDX-086[]
 
 // tag::RDX-087[]
-export interface UpdateUserErrorAction<T> {
+export interface ErrorUpdatingUserAction<T> {
   type: typeof ActionType.ERROR_UPDATING_USER;
   payload: PubNubObjectApiError<T>;
 }
@@ -151,14 +151,14 @@ export interface UserDeletedAction<T> {
 // end::RDX-088[]
 
 // tag::RDX-089[]
-export interface DeleteUserBeginAction {
+export interface DeletingUserAction {
   type: typeof ActionType.DELETING_USER;
   payload: string;
 }
 // end::RDX-089[]
 
 // tag::RDX-090[]
-export interface DeleteUserErrorAction<T> {
+export interface ErrorDeletingUserAction<T> {
   type: typeof ActionType.ERROR_DELETING_USER;
   payload: PubNubObjectApiError<T>;
 }
@@ -172,81 +172,88 @@ export interface UserCreatedAction<T> {
 // end::RDX-091[]
 
 // tag::RDX-092[]
-export interface CreateUserBeginAction<T> {
+export interface CreatingUserAction<T> {
   type: typeof ActionType.CREATING_USER;
   payload: T;
 }
 // end::RDX-092[]
 
 // tag::RDX-093[]
-export interface CreateUserErrorAction<T> {
+export interface ErrorCreatingUserAction<T> {
   type: typeof ActionType.ERROR_CREATING_USER;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-093[]
 
 // tag::RDX-094[]
-export interface FetchUsersBeginAction {
+export interface FetchingUsersAction {
   type: typeof ActionType.FETCHING_USERS;
   payload: { label: string };
 }
 // end::RDX-094[]
 
 // tag::RDX-095[]
-export interface UserListRetrievedAction<T> {
+export interface UsersRetrievedAction<T> {
   type: typeof ActionType.USERS_RETRIEVED;
   payload: PubNubObjectApiSuccess<ItemMap<T>>;
 }
 // end::RDX-095[]
 
 // tag::RDX-096[]
-export interface FetchUsersErrorAction<T> {
+export interface ErrorFetchingUsersAction<T> {
   type: typeof ActionType.ERROR_FETCHING_USERS;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-096[]
 
-// tag::RDX-097[]
-export interface FetchUserByIdErrorAction<T> {
-  type: typeof ActionType.ERROR_FETCHING_USER_BY_ID;
-  payload: PubNubObjectApiError<T>;
-}
-// end::RDX-097[]
-
 // tag::RDX-098[]
-export interface FetchUserByIdBeginAction {
+export interface FetchingUserByIdAction {
   type: typeof ActionType.FETCHING_USER_BY_ID;
   payload: string;
 }
 // end::RDX-098[]
 
 // tag::RDX-099[]
-export interface FetchUserByIdAction<T> {
+export interface UserRetrievedAction<T> {
   type: typeof ActionType.USER_RETRIEVED;
   payload: PubNubObjectApiSuccess<T>;
 }
 // end::RDX-099[]
 
-// tag::RDX-100[]
-export interface SpaceListRetrievedAction<T> {
-  type: typeof ActionType.SPACES_RETRIEVED;
-  payload: PubNubObjectApiSuccess<ItemMap<T>>;
+// tag::RDX-097[]
+export interface ErrorFetchingUserByIdAction<T> {
+  type: typeof ActionType.ERROR_FETCHING_USER_BY_ID;
+  payload: PubNubObjectApiError<T>;
 }
-// end::RDX-100[]
+// end::RDX-097[]
 
 // tag::RDX-101[]
-export interface FetchSpacesBeginAction {
+export interface FetchingSpacesAction {
   type: typeof ActionType.FETCHING_SPACES;
   payload: { label: string };
 }
 // end::RDX-101[]
 
+// tag::RDX-100[]
+export interface SpacesRetrievedAction<T> {
+  type: typeof ActionType.SPACES_RETRIEVED;
+  payload: PubNubObjectApiSuccess<ItemMap<T>>;
+}
+// end::RDX-100[]
+
 // tag::RDX-102[]
-export interface FetchSpacesErrorAction<T> {
+export interface ErrorFetchingSpacesAction<T> {
   type: typeof ActionType.ERROR_FETCHING_SPACES;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-102[]
+
+// tag::RDX-104[]
+export interface CreatingSpaceAction<T> {
+  type: typeof ActionType.CREATING_SPACE;
+  payload: T;
+}
+// end::RDX-104[]
 
 // tag::RDX-103[]
 export interface SpaceCreatedAction<T> {
@@ -255,19 +262,19 @@ export interface SpaceCreatedAction<T> {
 }
 // end::RDX-103[]
 
-// tag::RDX-104[]
-export interface CreateSpaceBeginAction<T> {
-  type: typeof ActionType.CREATING_SPACE;
-  payload: T;
-}
-// end::RDX-104[]
-
 // tag::RDX-105[]
-export interface CreateSpaceErrorAction<T> {
+export interface ErrorCreatingSpaceAction<T> {
   type: typeof ActionType.ERROR_CREATING_SPACE;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-105[]
+
+// tag::RDX-107[]
+export interface UpdatingSpaceAction<T> {
+  type: typeof ActionType.UPDATING_SPACE;
+  payload: T;
+}
+// end::RDX-107[]
 
 // tag::RDX-106[]
 export interface SpaceUpdatedAction<T> {
@@ -276,19 +283,19 @@ export interface SpaceUpdatedAction<T> {
 }
 // end::RDX-106[]
 
-// tag::RDX-107[]
-export interface UpdateSpaceBeginAction<T> {
-  type: typeof ActionType.UPDATING_SPACE;
-  payload: T;
-}
-// end::RDX-107[]
-
 // tag::RDX-108[]
-export interface UpdateSpaceErrorAction<T> {
+export interface ErrorUpdatingSpaceAction<T> {
   type: typeof ActionType.ERROR_UPDATING_SPACE;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-108[]
+
+// tag::RDX-110[]
+export interface DeletingSpaceAction {
+  type: typeof ActionType.DELETING_SPACE;
+  payload: string;
+}
+// end::RDX-110[]
 
 // tag::RDX-109[]
 export interface SpaceDeletedAction<T> {
@@ -297,36 +304,29 @@ export interface SpaceDeletedAction<T> {
 }
 // end::RDX-109[]
 
-// tag::RDX-110[]
-export interface DeleteSpaceBeginAction {
-  type: typeof ActionType.DELETING_SPACE;
-  payload: string;
-}
-// end::RDX-110[]
-
 // tag::RDX-111[]
-export interface DeleteSpaceErrorAction<T> {
+export interface ErrorDeletingSpaceAction<T> {
   type: typeof ActionType.ERROR_DELETING_SPACE;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-111[]
 
-// tag::RDX-112[]
-export interface FetchSpaceByIdAction<T> {
-  type: typeof ActionType.SPACE_RETRIEVED;
-  payload: PubNubObjectApiSuccess<T>;
-}
-// end::RDX-112[]
-
 // tag::RDX-113[]
-export interface FetchSpaceByIdBeginAction {
+export interface FetchingSpaceByIdAction {
   type: typeof ActionType.FETCHING_SPACE_BY_ID;
   payload: string;
 }
 // end::RDX-113[]
 
+// tag::RDX-112[]
+export interface SpaceRetrievedAction<T> {
+  type: typeof ActionType.SPACE_RETRIEVED;
+  payload: PubNubObjectApiSuccess<T>;
+}
+// end::RDX-112[]
+
 // tag::RDX-114[]
-export interface FetchSpaceByIdErrorAction<T> {
+export interface ErrorFetchingSpaceByIdAction<T> {
   type: typeof ActionType.ERROR_FETCHING_SPACE_BY_ID;
   payload: PubNubObjectApiError<T>;
 }
@@ -354,7 +354,7 @@ export interface UserMembershipUpdatedOnSpaceAction<T extends Identifiable> {
 // end::RDX-117[]
 
 // tag::RDX-118[]
-export interface FetchMembersBeginAction {
+export interface FetchingMembersAction {
   type: typeof ActionType.FETCHING_MEMBERS;
   payload: string;
 }
@@ -368,11 +368,18 @@ export interface FetchMembersAction {
 // end::RDX-119[]
 
 // tag::RDX-120[]
-export interface FetchMembersErrorAction<T> {
+export interface ErrorFetchingMembersAction<T> {
   type: typeof ActionType.ERROR_FETCHING_MEMBERS;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-120[]
+
+// tag::RDX-122[]
+export interface UpdatingMembersAction {
+  type: typeof ActionType.UPDATING_MEMBERS;
+  payload: string;
+}
+// end::RDX-122[]
 
 // tag::RDX-121[]
 export interface MembersUpdatedAction<T> {
@@ -381,19 +388,19 @@ export interface MembersUpdatedAction<T> {
 }
 // end::RDX-121[]
 
-// tag::RDX-122[]
-export interface UpdateMembersBeginAction {
-  type: typeof ActionType.UPDATING_MEMBERS;
-  payload: string;
-}
-// end::RDX-122[]
-
 // tag::RDX-123[]
-export interface UpdateMembersErrorAction<T> {
+export interface ErrorUpdatingMembersAction<T> {
   type: typeof ActionType.ERROR_UPDATING_MEMBERS;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-123[]
+
+// tag::RDX-125[]
+export interface AddingMembersAction<T> {
+  type: typeof ActionType.ADDING_MEMBERS;
+  payload: T;
+}
+// end::RDX-125[]
 
 // tag::RDX-124[]
 export interface MembersAddedAction<T> {
@@ -402,19 +409,19 @@ export interface MembersAddedAction<T> {
 }
 // end::RDX-124[]
 
-// tag::RDX-125[]
-export interface AddMembersBeginAction<T> {
-  type: typeof ActionType.ADDING_MEMBERS;
-  payload: T;
-}
-// end::RDX-125[]
-
 // tag::RDX-126[]
-export interface AddMembersErrorAction<T> {
+export interface ErrorAddingMembersAction<T> {
   type: typeof ActionType.ERROR_ADDING_MEMBERS;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-126[]
+
+// tag::RDX-128[]
+export interface RemovingMembersAction<T> {
+  type: typeof ActionType.REMOVING_MEMBERS;
+  payload: T;
+}
+// end::RDX-128[]
 
 // tag::RDX-127[]
 export interface MembersRemovedAction<T> {
@@ -423,47 +430,40 @@ export interface MembersRemovedAction<T> {
 }
 // end::RDX-127[]
 
-// tag::RDX-128[]
-export interface RemoveMembersBeginAction<T> {
-  type: typeof ActionType.REMOVING_MEMBERS;
-  payload: T;
-}
-// end::RDX-128[]
-
 // tag::RDX-129[]
-export interface RemoveMembersErrorAction<T> {
+export interface ErrorRemovingMembersAction<T> {
   type: typeof ActionType.ERROR_REMOVING_MEMBERS;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-129[]
 
-// tag::RDX-130[]
-export interface FetchUserByIdAction<T> {
-  type: typeof ActionType.USER_RETRIEVED;
-  payload: PubNubObjectApiSuccess<T>;
-}
-// end::RDX-130[]
-
 // tag::RDX-131[]
-export interface FetchMembershipsBeginAction {
+export interface FetchingMembershipsAction {
   type: typeof ActionType.FETCHING_MEMBERSHIPS;
   payload: string;
 }
 // end::RDX-131[]
 
 // tag::RDX-132[]
-export interface FetchMembershipsAction {
+export interface MembershipsRetrievedAction {
   type: typeof ActionType.MEMBERSHIPS_RETRIEVED;
   payload: PubNubObjectApiSuccess<MembershipResult>;
 }
 // end::RDX-132[]
 
 // tag::RDX-133[]
-export interface FetchMembershipsErrorAction<T> {
+export interface ErrorFetchingMembershipsAction<T> {
   type: typeof ActionType.ERROR_FETCHING_MEMBERSHIPS;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-133[]
+
+// tag::RDX-135[]
+export interface UpdatingMembershipAction {
+  type: typeof ActionType.UPDATING_MEMBERSHIP;
+  payload: string;
+}
+// end::RDX-135[]
 
 // tag::RDX-134[]
 export interface MembershipUpdatedAction<T> {
@@ -472,19 +472,19 @@ export interface MembershipUpdatedAction<T> {
 }
 // end::RDX-134[]
 
-// tag::RDX-135[]
-export interface UpdateMembershipBeginAction {
-  type: typeof ActionType.UPDATING_MEMBERSHIP;
-  payload: string;
-}
-// end::RDX-135[]
-
 // tag::RDX-136[]
-export interface UpdateMembershipErrorAction<T> {
+export interface ErrorUpdatingMembershipAction<T> {
   type: typeof ActionType.ERROR_UPDATING_MEMBERSHIP;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-136[]
+
+// tag::RDX-138[]
+export interface JoiningSpacesAction<T> {
+  type: typeof ActionType.JOINING_SPACES;
+  payload: T;
+}
+// end::RDX-138[]
 
 // tag::RDX-137[]
 export interface SpacesJoinedAction<T> {
@@ -493,19 +493,19 @@ export interface SpacesJoinedAction<T> {
 }
 // end::RDX-137[]
 
-// tag::RDX-138[]
-export interface JoinSpacesBeginAction<T> {
-  type: typeof ActionType.JOINING_SPACES;
-  payload: T;
-}
-// end::RDX-138[]
-
 // tag::RDX-139[]
-export interface JoinSpacesErrorAction<T> {
+export interface ErrorJoiningSpacesAction<T> {
   type: typeof ActionType.ERROR_JOINING_SPACES;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-139[]
+
+// tag::RDX-141[]
+export interface LeavingSpacesAction<T> {
+  type: typeof ActionType.LEAVING_SPACES;
+  payload: T;
+}
+// end::RDX-141[]
 
 // tag::RDX-140[]
 export interface SpacesLeftAction<T> {
@@ -514,43 +514,36 @@ export interface SpacesLeftAction<T> {
 }
 // end::RDX-140[]
 
-// tag::RDX-141[]
-export interface LeaveSpacesBeginAction<T> {
-  type: typeof ActionType.LEAVING_SPACES;
-  payload: T;
-}
-// end::RDX-141[]
-
 // tag::RDX-142[]
-export interface LeaveSpacesErrorAction<T> {
+export interface ErrorLeavingSpacesAction<T> {
   type: typeof ActionType.ERROR_LEAVING_SPACES;
   payload: PubNubObjectApiError<T>;
 }
 // end::RDX-142[]
 
 // tag::RDX-143[]
-export interface MessageAction {
+export interface MessageRecievedAction {
   type: typeof ActionType.MESSAGE_RECEIVED;
   payload: Message;
 }
 // end::RDX-143[]
 
 // tag::RDX-144[]
-export interface SendMessageBeginAction<T extends { channel: string }> {
+export interface SendingMessageAction<T extends { channel: string }> {
   type: typeof ActionType.SENDING_MESSAGE;
   payload: T;
 }
 // end::RDX-144[]
 
 // tag::RDX-145[]
-export interface SendMessageAction<T extends { channel: string }> {
+export interface MessageSentAction<T extends { channel: string }> {
   type: typeof ActionType.MESSAGE_SENT;
   payload: PubNubObjectApiSuccess<T>;
 }
 // end::RDX-145[]
 
 // tag::RDX-146[]
-export interface SendMessageErrorAction<T extends { channel: string }> {
+export interface ErrorSendingMessageAction<T extends { channel: string }> {
   type: typeof ActionType.ERROR_SENDING_MESSAGE;
   payload: PubNubObjectApiError<T>;
 }
@@ -592,65 +585,65 @@ export type StatusListenerActions =
 
 export type UserActions<T> =
   | UserCreatedAction<T>
-  | CreateUserBeginAction<T>
-  | CreateUserErrorAction<T>
+  | CreatingUserAction<T>
+  | ErrorCreatingUserAction<T>
   | UserUpdatedAction<T>
-  | UpdateUserBeginAction<T>
-  | UpdateUserErrorAction<T>
+  | UpdatingUserAction<T>
+  | ErrorUpdatingUserAction<T>
   | UserDeletedAction<T>
-  | DeleteUserBeginAction
-  | DeleteUserErrorAction<T>
-  | UserListRetrievedAction<T>
-  | FetchUsersBeginAction
-  | FetchUsersErrorAction<T>
-  | FetchUserByIdAction<T>
-  | FetchUserByIdBeginAction
-  | FetchUserByIdErrorAction<T>;
+  | DeletingUserAction
+  | ErrorDeletingUserAction<T>
+  | UsersRetrievedAction<T>
+  | FetchingUsersAction
+  | ErrorFetchingUsersAction<T>
+  | UserRetrievedAction<T>
+  | FetchingUserByIdAction
+  | ErrorFetchingUserByIdAction<T>;
 
 export type SpaceActions<T> =
   | SpaceCreatedAction<T>
-  | CreateSpaceBeginAction<T>
-  | CreateSpaceErrorAction<T>
+  | CreatingSpaceAction<T>
+  | ErrorCreatingSpaceAction<T>
   | SpaceUpdatedAction<T>
-  | UpdateSpaceBeginAction<T>
-  | UpdateSpaceErrorAction<T>
+  | UpdatingSpaceAction<T>
+  | ErrorUpdatingSpaceAction<T>
   | SpaceDeletedAction<T>
-  | DeleteSpaceBeginAction
-  | DeleteSpaceErrorAction<T>
-  | SpaceListRetrievedAction<T>
-  | FetchSpacesBeginAction
-  | FetchSpacesErrorAction<T>
-  | FetchSpaceByIdAction<T>
-  | FetchSpaceByIdBeginAction
-  | FetchSpaceByIdErrorAction<T>;
+  | DeletingSpaceAction
+  | ErrorDeletingSpaceAction<T>
+  | SpacesRetrievedAction<T>
+  | FetchingSpacesAction
+  | ErrorFetchingSpacesAction<T>
+  | SpaceRetrievedAction<T>
+  | FetchingSpaceByIdAction
+  | ErrorFetchingSpaceByIdAction<T>;
 
 export type MembershipActions<T> =
-  | FetchMembershipsBeginAction
-  | FetchMembershipsAction
-  | FetchMembershipsErrorAction<T>
-  | UpdateMembershipBeginAction
+  | FetchingMembershipsAction
+  | MembershipsRetrievedAction
+  | ErrorFetchingMembershipsAction<T>
+  | UpdatingMembershipAction
   | MembershipUpdatedAction<T>
-  | UpdateMembershipErrorAction<T>
-  | JoinSpacesBeginAction<T>
+  | ErrorUpdatingMembershipAction<T>
+  | JoiningSpacesAction<T>
   | SpacesJoinedAction<T>
-  | JoinSpacesErrorAction<T>
-  | LeaveSpacesBeginAction<T>
+  | ErrorJoiningSpacesAction<T>
+  | LeavingSpacesAction<T>
   | SpacesLeftAction<T>
-  | LeaveSpacesErrorAction<T>;
+  | ErrorLeavingSpacesAction<T>;
 
 export type MembersActions<T> =
-  | FetchMembersBeginAction
+  | FetchingMembersAction
   | FetchMembersAction
-  | FetchMembersErrorAction<T>
-  | UpdateMembersBeginAction
+  | ErrorFetchingMembersAction<T>
+  | UpdatingMembersAction
   | MembersUpdatedAction<T>
-  | UpdateMembersErrorAction<T>
-  | AddMembersBeginAction<T>
+  | ErrorUpdatingMembersAction<T>
+  | AddingMembersAction<T>
   | MembersAddedAction<T>
-  | AddMembersErrorAction<T>
-  | RemoveMembersBeginAction<T>
+  | ErrorAddingMembersAction<T>
+  | RemovingMembersAction<T>
   | MembersRemovedAction<T>
-  | RemoveMembersErrorAction<T>;
+  | ErrorRemovingMembersAction<T>;
 
 export type UserListenerActions<T> =
   | UserUpdatedAction<T>
@@ -671,14 +664,14 @@ export type ObjectListenerActions<T extends Identifiable> =
   | MembershipListenerActions<T>;
 
 export type ListenerActions<T extends Identifiable> =
-  | MessageAction
+  | MessageRecievedAction
   | SignalAction
   | PresenceListenerActions
   | StatusListenerActions
   | ObjectListenerActions<T>;
 
 export type MessageActions<T extends { channel: string }> =
-  | MessageAction
-  | SendMessageAction<T>
-  | SendMessageBeginAction<T>
-  | SendMessageErrorAction<T>;
+  | MessageRecievedAction
+  | MessageSentAction<T>
+  | SendingMessageAction<T>
+  | ErrorSendingMessageAction<T>;

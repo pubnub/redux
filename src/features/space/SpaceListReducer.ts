@@ -1,7 +1,7 @@
 import {
-  FetchSpacesErrorAction,
-  FetchSpacesBeginAction,
-  SpaceListRetrievedAction,
+  ErrorFetchingSpacesAction,
+  FetchingSpacesAction,
+  SpacesRetrievedAction,
 } from 'actions/Actions';
 import { ActionType } from 'actions/ActionType.enum';
 import { Space } from 'api/Space';
@@ -61,9 +61,9 @@ const fetchSpacesError = <T>(
 export const createSpaceListReducer = <T>(label: string = 'all') => (
   state: SpaceListState<T> = createInitialState(),
   action:
-    | SpaceListRetrievedAction<Space>
-    | FetchSpacesBeginAction
-    | FetchSpacesErrorAction<T>
+    | SpacesRetrievedAction<Space>
+    | FetchingSpacesAction
+    | ErrorFetchingSpacesAction<T>
 ): SpaceListState<T> => {
   if (action.payload !== undefined && action.payload.label === label) {
     switch (action.type) {

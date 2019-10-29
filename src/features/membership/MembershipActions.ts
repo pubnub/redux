@@ -4,18 +4,18 @@ import {
   UserMembershipUpdatedOnSpaceAction,
   UserAddedToSpaceAction,
   UserRemovedFromSpaceAction,
-  FetchMembershipsAction,
-  FetchMembershipsBeginAction,
-  UpdateMembershipBeginAction,
-  UpdateMembershipErrorAction,
+  MembershipsRetrievedAction,
+  FetchingMembershipsAction,
+  UpdatingMembershipAction,
+  ErrorUpdatingMembershipAction,
   MembershipUpdatedAction,
-  JoinSpacesBeginAction,
+  JoiningSpacesAction,
   SpacesJoinedAction,
-  JoinSpacesErrorAction,
-  LeaveSpacesBeginAction,
+  ErrorJoiningSpacesAction,
+  LeavingSpacesAction,
   SpacesLeftAction,
-  LeaveSpacesErrorAction,
-  FetchMembershipsErrorAction,
+  ErrorLeavingSpacesAction,
+  ErrorFetchingMembershipsAction,
 } from 'actions/Actions';
 import { ActionType } from 'actions/ActionType.enum';
 import {
@@ -54,28 +54,28 @@ export const userRemovedFromSpace = <T extends Identifiable>(
 
 export const fetchMembershipsBegin = (
   payload: string
-): FetchMembershipsBeginAction => ({
+): FetchingMembershipsAction => ({
   type: ActionType.FETCHING_MEMBERSHIPS,
   payload,
 });
 
 const membershipsRetrieved = (
   payload: PubNubObjectApiSuccess<MembershipResult>
-): FetchMembershipsAction => ({
+): MembershipsRetrievedAction => ({
   type: ActionType.MEMBERSHIPS_RETRIEVED,
   payload,
 });
 
 const fetchMembershipsError = <T>(
   payload: PubNubObjectApiError<T>
-): FetchMembershipsErrorAction<T> => ({
+): ErrorFetchingMembershipsAction<T> => ({
   type: ActionType.ERROR_FETCHING_MEMBERSHIPS,
   payload,
 });
 
 export const updateMembershipBegin = (
   payload: string
-): UpdateMembershipBeginAction => ({
+): UpdatingMembershipAction => ({
   type: ActionType.UPDATING_MEMBERSHIP,
   payload,
 });
@@ -89,12 +89,12 @@ export const membershipUpdated = <T>(
 
 export const updateMembershipError = <T>(
   payload: PubNubObjectApiError<T>
-): UpdateMembershipErrorAction<T> => ({
+): ErrorUpdatingMembershipAction<T> => ({
   type: ActionType.ERROR_UPDATING_MEMBERSHIP,
   payload,
 });
 
-export const joinSpacesBegin = <T>(payload: T): JoinSpacesBeginAction<T> => ({
+export const joinSpacesBegin = <T>(payload: T): JoiningSpacesAction<T> => ({
   type: ActionType.JOINING_SPACES,
   payload,
 });
@@ -108,12 +108,12 @@ export const spacesJoined = <T>(
 
 export const joinSpacesError = <T>(
   payload: PubNubObjectApiError<T>
-): JoinSpacesErrorAction<T> => ({
+): ErrorJoiningSpacesAction<T> => ({
   type: ActionType.ERROR_JOINING_SPACES,
   payload,
 });
 
-export const leaveSpacesBegin = <T>(payload: T): LeaveSpacesBeginAction<T> => ({
+export const leaveSpacesBegin = <T>(payload: T): LeavingSpacesAction<T> => ({
   type: ActionType.LEAVING_SPACES,
   payload,
 });
@@ -127,7 +127,7 @@ export const spacesLeft = <T>(
 
 export const leaveSpacesError = <T>(
   payload: PubNubObjectApiError<T>
-): LeaveSpacesErrorAction<T> => ({
+): ErrorLeavingSpacesAction<T> => ({
   type: ActionType.ERROR_LEAVING_SPACES,
   payload,
 });

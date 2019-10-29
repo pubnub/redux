@@ -3,19 +3,19 @@ import { ObjectsResponsePayload, ObjectsListInput } from 'api/Objects';
 import {
   SpaceDeletedAction,
   SpaceUpdatedAction,
-  CreateSpaceErrorAction,
-  FetchSpaceByIdErrorAction,
-  FetchSpacesErrorAction,
-  FetchSpaceByIdAction,
-  SpaceListRetrievedAction,
+  ErrorCreatingSpaceAction,
+  ErrorFetchingSpaceByIdAction,
+  ErrorFetchingSpacesAction,
+  SpaceRetrievedAction,
+  SpacesRetrievedAction,
   SpaceCreatedAction,
-  CreateSpaceBeginAction,
-  FetchSpacesBeginAction,
-  FetchSpaceByIdBeginAction,
-  UpdateSpaceBeginAction,
-  UpdateSpaceErrorAction,
-  DeleteSpaceBeginAction,
-  DeleteSpaceErrorAction,
+  CreatingSpaceAction,
+  FetchingSpacesAction,
+  FetchingSpaceByIdAction,
+  UpdatingSpaceAction,
+  ErrorUpdatingSpaceAction,
+  DeletingSpaceAction,
+  ErrorDeletingSpaceAction,
 } from 'actions/Actions';
 import { ActionType } from 'actions/ActionType.enum';
 import { Space } from 'api/Space';
@@ -26,7 +26,7 @@ import {
   ItemMap,
 } from 'api/PubNubApi';
 
-export const createSpaceBegin = <T>(payload: T): CreateSpaceBeginAction<T> => ({
+export const createSpaceBegin = <T>(payload: T): CreatingSpaceAction<T> => ({
   type: ActionType.CREATING_SPACE,
   payload,
 });
@@ -40,49 +40,49 @@ export const spaceCreated = <T>(
 
 export const createSpaceError = <T>(
   payload: PubNubObjectApiError<T>
-): CreateSpaceErrorAction<T> => ({
+): ErrorCreatingSpaceAction<T> => ({
   type: ActionType.ERROR_CREATING_SPACE,
   payload,
 });
 
 export const spaceListRetrieved = <T>(
   payload: PubNubObjectApiSuccess<ItemMap<T>>
-): SpaceListRetrievedAction<T> => ({
+): SpacesRetrievedAction<T> => ({
   type: ActionType.SPACES_RETRIEVED,
   payload,
 });
 
 export const fetchSpacesBegin = (payload: {
   label: string;
-}): FetchSpacesBeginAction => ({
+}): FetchingSpacesAction => ({
   type: ActionType.FETCHING_SPACES,
   payload,
 });
 
 export const fetchSpacesError = <T>(
   payload: PubNubObjectApiError<T>
-): FetchSpacesErrorAction<T> => ({
+): ErrorFetchingSpacesAction<T> => ({
   type: ActionType.ERROR_FETCHING_SPACES,
   payload,
 });
 
 export const spaceRetrievedById = <T>(
   payload: PubNubObjectApiSuccess<T>
-): FetchSpaceByIdAction<T> => ({
+): SpaceRetrievedAction<T> => ({
   type: ActionType.SPACE_RETRIEVED,
   payload,
 });
 
 export const fetchSpaceByIdBegin = (
   payload: string
-): FetchSpaceByIdBeginAction => ({
+): FetchingSpaceByIdAction => ({
   type: ActionType.FETCHING_SPACE_BY_ID,
   payload,
 });
 
 export const fetchSpaceByIdError = <T>(
   payload: PubNubObjectApiError<T>
-): FetchSpaceByIdErrorAction<T> => ({
+): ErrorFetchingSpaceByIdAction<T> => ({
   type: ActionType.ERROR_FETCHING_SPACE_BY_ID,
   payload,
 });
@@ -94,14 +94,14 @@ export const spaceUpdated = <T>(
   payload,
 });
 
-export const updateSpaceBegin = <T>(payload: T): UpdateSpaceBeginAction<T> => ({
+export const updateSpaceBegin = <T>(payload: T): UpdatingSpaceAction<T> => ({
   type: ActionType.UPDATING_SPACE,
   payload,
 });
 
 export const updateSpaceError = <T>(
   payload: PubNubObjectApiError<T>
-): UpdateSpaceErrorAction<T> => ({
+): ErrorUpdatingSpaceAction<T> => ({
   type: ActionType.ERROR_UPDATING_SPACE,
   payload,
 });
@@ -113,14 +113,14 @@ export const spaceDeleted = <T>(
   payload,
 });
 
-export const deleteSpaceBegin = (payload: string): DeleteSpaceBeginAction => ({
+export const deleteSpaceBegin = (payload: string): DeletingSpaceAction => ({
   type: ActionType.DELETING_SPACE,
   payload,
 });
 
 export const deleteSpaceError = <T>(
   payload: PubNubObjectApiError<T>
-): DeleteSpaceErrorAction<T> => ({
+): ErrorDeletingSpaceAction<T> => ({
   type: ActionType.ERROR_DELETING_SPACE,
   payload,
 });
