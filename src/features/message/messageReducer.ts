@@ -1,7 +1,7 @@
-import { MessageActions } from '../actions/Actions';
-import { PubNubObjectApiState, PubNubObjectApiSuccess } from '../api/PubNubApi';
-import { actionType } from '../actions/ActionType.enum';
-import { clonePubNubObjectApiState } from './reducerUtil';
+import { MessageActions } from 'actions/Actions';
+import { PubNubObjectApiState, PubNubObjectApiSuccess } from 'api/PubNubApi';
+import { ActionType } from 'actions/ActionType.enum';
+import { clonePubNubObjectApiState } from 'utilities/reducerUtil';
 
 const createInitialState = <T>(): PubNubObjectApiState<T> => ({
   byId: {},
@@ -34,7 +34,7 @@ export const createMessageReducer = <T extends { channel: string }>() => (
   action: MessageActions<T>
 ): PubNubObjectApiState<T[]> => {
   switch (action.type) {
-    case actionType.MESSAGE:
+    case ActionType.MESSAGE:
       return messageRecieved<T>(state, {
         data: (action.payload as unknown) as T,
       });

@@ -1,20 +1,20 @@
-import { ObjectsActionPayload } from '../api/Objects';
-import { SpaceDeletedAction, SpaceUpdatedAction } from '../actions/Actions';
-import { actionType } from '../actions/ActionType.enum';
 import { Dispatch } from 'redux';
+import { SpaceDeletedAction, SpaceUpdatedAction } from 'actions/Actions';
+import { ObjectsActionPayload } from 'api/Objects';
+import { ActionType } from 'actions/ActionType.enum';
 import { PubNubObjectApiSuccess, Identifiable } from 'api/PubNubApi';
 
 export const spaceUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceUpdatedAction<T> => ({
-  type: actionType.OBJECTS_UPDATE_SPACE,
+  type: ActionType.OBJECTS_UPDATE_SPACE,
   payload,
 });
 
 export const spaceDeleted = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceDeletedAction<T> => ({
-  type: actionType.OBJECTS_DELETE_SPACE,
+  type: ActionType.OBJECTS_DELETE_SPACE,
   payload,
 });
 

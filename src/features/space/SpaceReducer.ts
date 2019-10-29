@@ -2,22 +2,22 @@ import {
   SpaceActions,
   SpaceListenerActions,
   MembershipActions,
-} from '../actions/Actions';
-import { actionType } from '../actions/ActionType.enum';
+} from 'actions/Actions';
+import { ActionType } from 'actions/ActionType.enum';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiState,
   PubNubObjectApiError,
   Identifiable,
   ItemMap,
-} from '../api/PubNubApi';
+} from 'api/PubNubApi';
 import {
   beginObjectById,
   errorObjectById,
   successObjectById,
   successDeleteObjectById,
   successObjectList,
-} from './reducerUtil';
+} from 'utilities/reducerUtil';
 import { MembershipList, MembershipResult } from 'api/Membership';
 
 const createInitialState = <T extends Identifiable>(): PubNubObjectApiState<
@@ -125,41 +125,41 @@ export const createSpaceReducer = <T extends Identifiable>() => (
     | MembershipActions<MembershipList>
 ): PubNubObjectApiState<T> => {
   switch (action.type) {
-    case actionType.OBJECTS_CREATE_SPACE_BEGIN:
+    case ActionType.OBJECTS_CREATE_SPACE_BEGIN:
       return beginCreateSpace<T>(state, action.payload);
-    case actionType.OBJECTS_CREATE_SPACE:
+    case ActionType.OBJECTS_CREATE_SPACE:
       return createSpace<T>(state, action.payload);
-    case actionType.OBJECTS_CREATE_SPACE_ERROR:
+    case ActionType.OBJECTS_CREATE_SPACE_ERROR:
       return createSpaceError<T>(state, action.payload);
-    case actionType.OBJECTS_UPDATE_SPACE_BEGIN:
+    case ActionType.OBJECTS_UPDATE_SPACE_BEGIN:
       return beginUpdateSpace<T>(state, action.payload);
-    case actionType.OBJECTS_UPDATE_SPACE:
+    case ActionType.OBJECTS_UPDATE_SPACE:
       return updateSpace<T>(state, action.payload);
-    case actionType.OBJECTS_UPDATE_SPACE_ERROR:
+    case ActionType.OBJECTS_UPDATE_SPACE_ERROR:
       return updateSpaceError<T>(state, action.payload);
-    case actionType.OBJECTS_DELETE_SPACE_BEGIN:
+    case ActionType.OBJECTS_DELETE_SPACE_BEGIN:
       return beginDeleteSpace<T>(state, action.payload);
-    case actionType.OBJECTS_DELETE_SPACE:
+    case ActionType.OBJECTS_DELETE_SPACE:
       return deleteSpace<T>(state, action.payload);
-    case actionType.OBJECTS_DELETE_SPACE_ERROR:
+    case ActionType.OBJECTS_DELETE_SPACE_ERROR:
       return deleteSpaceError<T>(state, action.payload);
-    case actionType.OBJECTS_FETCH_SPACES_BEGIN:
+    case ActionType.OBJECTS_FETCH_SPACES_BEGIN:
       // nothing to do here
       // loading multiples will be tracked in spaceListReducer
       return state;
-    case actionType.OBJECTS_FETCH_SPACES:
+    case ActionType.OBJECTS_FETCH_SPACES:
       return fetchSpaces<T>(state, action.payload);
-    case actionType.OBJECTS_FETCH_SPACES_ERROR:
+    case ActionType.OBJECTS_FETCH_SPACES_ERROR:
       // nothing to do here
       // loading multiples will be tracked in spaceListReducer
       return state;
-    case actionType.OBJECTS_FETCH_SPACE_BY_ID_BEGIN:
+    case ActionType.OBJECTS_FETCH_SPACE_BY_ID_BEGIN:
       return beginFetchSpaceById<T>(state, action.payload);
-    case actionType.OBJECTS_FETCH_SPACE_BY_ID:
+    case ActionType.OBJECTS_FETCH_SPACE_BY_ID:
       return fetchSpaceById<T>(state, action.payload);
-    case actionType.OBJECTS_FETCH_SPACE_BY_ID_ERROR:
+    case ActionType.OBJECTS_FETCH_SPACE_BY_ID_ERROR:
       return fetchSpaceError<T>(state, action.payload);
-    case actionType.OBJECTS_FETCH_MEMBERSHIPS:
+    case ActionType.OBJECTS_FETCH_MEMBERSHIPS:
       return fetchMemberships<T>(state, action.payload);
     default:
       return state;

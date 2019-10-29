@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { ObjectsActionMessage, ObjectsResponsePayload } from '../api/Objects';
+import { ObjectsActionMessage, ObjectsResponsePayload } from 'api/Objects';
 import {
   UserMembershipUpdatedOnSpaceAction,
   UserAddedToSpaceAction,
@@ -16,26 +16,26 @@ import {
   SpacesLeftAction,
   LeaveSpacesErrorAction,
   FetchMembershipsErrorAction,
-} from './Actions';
-import { actionType } from './ActionType.enum';
+} from 'actions/Actions';
+import { ActionType } from 'actions/ActionType.enum';
 import {
   Identifiable,
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
-} from '../api/PubNubApi';
+} from 'api/PubNubApi';
 import {
   MembershipList,
   MembershipResult,
   Membership,
   MembershipOptions,
-} from '../api/Membership';
+} from 'api/Membership';
 
 // tag::[RED-120]
 export const userMembershipUpdatedOnSpace = <T extends Identifiable>(
   payload: ObjectsActionMessage<T>
 ): UserMembershipUpdatedOnSpaceAction<T> => ({
-  type: actionType.OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
+  type: ActionType.OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE,
   payload,
 });
 // end::[RED-120]
@@ -44,7 +44,7 @@ export const userMembershipUpdatedOnSpace = <T extends Identifiable>(
 export const userAddedToSpace = <T extends Identifiable>(
   payload: ObjectsActionMessage<T>
 ): UserAddedToSpaceAction<T> => ({
-  type: actionType.OBJECTS_USER_ADDED_TO_SPACE,
+  type: ActionType.OBJECTS_USER_ADDED_TO_SPACE,
   payload,
 });
 // end::[RED-121]
@@ -53,7 +53,7 @@ export const userAddedToSpace = <T extends Identifiable>(
 export const userRemovedFromSpace = <T extends Identifiable>(
   payload: ObjectsActionMessage<T>
 ): UserRemovedFromSpaceAction<T> => ({
-  type: actionType.OBJECTS_USER_REMOVED_FROM_SPACE,
+  type: ActionType.OBJECTS_USER_REMOVED_FROM_SPACE,
   payload,
 });
 // end::[RED-122]
@@ -62,7 +62,7 @@ export const userRemovedFromSpace = <T extends Identifiable>(
 export const fetchMembershipsBegin = (
   payload: string
 ): FetchMembershipsBeginAction => ({
-  type: actionType.OBJECTS_FETCH_MEMBERSHIPS_BEGIN,
+  type: ActionType.OBJECTS_FETCH_MEMBERSHIPS_BEGIN,
   payload,
 });
 // end::[RED-123]
@@ -71,7 +71,7 @@ export const fetchMembershipsBegin = (
 const membershipsRetrieved = (
   payload: PubNubObjectApiSuccess<MembershipResult>
 ): FetchMembershipsAction => ({
-  type: actionType.OBJECTS_FETCH_MEMBERSHIPS,
+  type: ActionType.OBJECTS_FETCH_MEMBERSHIPS,
   payload,
 });
 // end::[RED-124]
@@ -80,7 +80,7 @@ const membershipsRetrieved = (
 const fetchMembershipsError = <T>(
   payload: PubNubObjectApiError<T>
 ): FetchMembershipsErrorAction<T> => ({
-  type: actionType.OBJECTS_FETCH_MEMBERSHIPS_ERROR,
+  type: ActionType.OBJECTS_FETCH_MEMBERSHIPS_ERROR,
   payload,
 });
 // end::[RED-125]
@@ -89,7 +89,7 @@ const fetchMembershipsError = <T>(
 export const updateMembershipBegin = (
   payload: string
 ): UpdateMembershipBeginAction => ({
-  type: actionType.OBJECTS_UPDATE_MEMBERSHIP_BEGIN,
+  type: ActionType.OBJECTS_UPDATE_MEMBERSHIP_BEGIN,
   payload,
 });
 // end::[RED-126]
@@ -98,7 +98,7 @@ export const updateMembershipBegin = (
 export const membershipUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): MembershipUpdatedAction<T> => ({
-  type: actionType.OBJECTS_UPDATE_MEMBERSHIP,
+  type: ActionType.OBJECTS_UPDATE_MEMBERSHIP,
   payload,
 });
 // end::[RED-127]
@@ -107,14 +107,14 @@ export const membershipUpdated = <T>(
 export const updateMembershipError = <T>(
   payload: PubNubObjectApiError<T>
 ): UpdateMembershipErrorAction<T> => ({
-  type: actionType.OBJECTS_UPDATE_MEMBERSHIP_ERROR,
+  type: ActionType.OBJECTS_UPDATE_MEMBERSHIP_ERROR,
   payload,
 });
 // end::[RED-128]
 
 // tag::[RED-129]
 export const joinSpacesBegin = <T>(payload: T): JoinSpacesBeginAction<T> => ({
-  type: actionType.OBJECTS_JOIN_SPACES_BEGIN,
+  type: ActionType.OBJECTS_JOIN_SPACES_BEGIN,
   payload,
 });
 // end::[RED-129]
@@ -123,7 +123,7 @@ export const joinSpacesBegin = <T>(payload: T): JoinSpacesBeginAction<T> => ({
 export const spacesJoined = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpacesJoinedAction<T> => ({
-  type: actionType.OBJECTS_SPACES_JOINED,
+  type: ActionType.OBJECTS_SPACES_JOINED,
   payload,
 });
 // end::[RED-130]
@@ -132,14 +132,14 @@ export const spacesJoined = <T>(
 export const joinSpacesError = <T>(
   payload: PubNubObjectApiError<T>
 ): JoinSpacesErrorAction<T> => ({
-  type: actionType.OBJECTS_JOIN_SPACES_ERROR,
+  type: ActionType.OBJECTS_JOIN_SPACES_ERROR,
   payload,
 });
 // end::[RED-131]
 
 // tag::[RED-132]
 export const leaveSpacesBegin = <T>(payload: T): LeaveSpacesBeginAction<T> => ({
-  type: actionType.OBJECTS_LEAVE_SPACES_BEGIN,
+  type: ActionType.OBJECTS_LEAVE_SPACES_BEGIN,
   payload,
 });
 // end::[RED-132]
@@ -148,7 +148,7 @@ export const leaveSpacesBegin = <T>(payload: T): LeaveSpacesBeginAction<T> => ({
 export const spacesLeft = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpacesLeftAction<T> => ({
-  type: actionType.OBJECTS_SPACES_LEFT,
+  type: ActionType.OBJECTS_SPACES_LEFT,
   payload,
 });
 // end::[RED-133]
@@ -157,7 +157,7 @@ export const spacesLeft = <T>(
 export const leaveSpacesError = <T>(
   payload: PubNubObjectApiError<T>
 ): LeaveSpacesErrorAction<T> => ({
-  type: actionType.OBJECTS_LEAVE_SPACES_ERROR,
+  type: ActionType.OBJECTS_LEAVE_SPACES_ERROR,
   payload,
 });
 // end::[RED-134]

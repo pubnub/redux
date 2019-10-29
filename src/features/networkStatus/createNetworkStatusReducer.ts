@@ -1,6 +1,6 @@
-import { NetworkStatusListenerActions } from '../actions/Actions';
-import { actionType } from '../actions/ActionType.enum';
-import { NetworkStatus } from '../api/NetworkStatus';
+import { NetworkStatusListenerActions } from 'actions/Actions';
+import { ActionType } from 'actions/ActionType.enum';
+import { NetworkStatus } from 'api/NetworkStatus';
 
 type NetworkStatusInitializerFunction = () => boolean;
 
@@ -28,12 +28,12 @@ export const createNetworkStatusReducer = (
     action: NetworkStatusListenerActions
   ): NetworkStatus {
     switch (action.type) {
-      case actionType.NETWORK_UP:
+      case ActionType.NETWORK_UP:
         return {
           ...state,
           isConnected: true,
         };
-      case actionType.NETWORK_DOWN:
+      case ActionType.NETWORK_DOWN:
         return {
           ...state,
           isConnected: false,

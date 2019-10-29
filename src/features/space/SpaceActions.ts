@@ -1,4 +1,5 @@
-import { ObjectsResponsePayload, ObjectsListInput } from '../api/Objects';
+import { Dispatch } from 'redux';
+import { ObjectsResponsePayload, ObjectsListInput } from 'api/Objects';
 import {
   SpaceDeletedAction,
   SpaceUpdatedAction,
@@ -15,10 +16,9 @@ import {
   UpdateSpaceErrorAction,
   DeleteSpaceBeginAction,
   DeleteSpaceErrorAction,
-} from './Actions';
-import { actionType } from './ActionType.enum';
-import { Dispatch } from 'redux';
-import { Space } from '../api/Space';
+} from 'actions/Actions';
+import { ActionType } from 'actions/ActionType.enum';
+import { Space } from 'api/Space';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
@@ -28,7 +28,7 @@ import {
 
 // tag::[RED-156]
 export const createSpaceBegin = <T>(payload: T): CreateSpaceBeginAction<T> => ({
-  type: actionType.OBJECTS_CREATE_SPACE_BEGIN,
+  type: ActionType.OBJECTS_CREATE_SPACE_BEGIN,
   payload,
 });
 // end::[RED-156]
@@ -37,7 +37,7 @@ export const createSpaceBegin = <T>(payload: T): CreateSpaceBeginAction<T> => ({
 export const spaceCreated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceCreatedAction<T> => ({
-  type: actionType.OBJECTS_CREATE_SPACE,
+  type: ActionType.OBJECTS_CREATE_SPACE,
   payload,
 });
 // end::[RED-157]
@@ -46,7 +46,7 @@ export const spaceCreated = <T>(
 export const createSpaceError = <T>(
   payload: PubNubObjectApiError<T>
 ): CreateSpaceErrorAction<T> => ({
-  type: actionType.OBJECTS_CREATE_SPACE_ERROR,
+  type: ActionType.OBJECTS_CREATE_SPACE_ERROR,
   payload,
 });
 // end::[RED-158]
@@ -55,7 +55,7 @@ export const createSpaceError = <T>(
 export const spaceListRetrieved = <T>(
   payload: PubNubObjectApiSuccess<ItemMap<T>>
 ): SpaceListRetrievedAction<T> => ({
-  type: actionType.OBJECTS_FETCH_SPACES,
+  type: ActionType.OBJECTS_FETCH_SPACES,
   payload,
 });
 // end::[RED-159]
@@ -64,7 +64,7 @@ export const spaceListRetrieved = <T>(
 export const fetchSpacesBegin = (payload: {
   label: string;
 }): FetchSpacesBeginAction => ({
-  type: actionType.OBJECTS_FETCH_SPACES_BEGIN,
+  type: ActionType.OBJECTS_FETCH_SPACES_BEGIN,
   payload,
 });
 // end::[RED-160]
@@ -73,7 +73,7 @@ export const fetchSpacesBegin = (payload: {
 export const fetchSpacesError = <T>(
   payload: PubNubObjectApiError<T>
 ): FetchSpacesErrorAction<T> => ({
-  type: actionType.OBJECTS_FETCH_SPACES_ERROR,
+  type: ActionType.OBJECTS_FETCH_SPACES_ERROR,
   payload,
 });
 // end::[RED-161]
@@ -82,7 +82,7 @@ export const fetchSpacesError = <T>(
 export const spaceRetrievedById = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): FetchSpaceByIdAction<T> => ({
-  type: actionType.OBJECTS_FETCH_SPACE_BY_ID,
+  type: ActionType.OBJECTS_FETCH_SPACE_BY_ID,
   payload,
 });
 // end::[RED-162]
@@ -91,7 +91,7 @@ export const spaceRetrievedById = <T>(
 export const fetchSpaceByIdBegin = (
   payload: string
 ): FetchSpaceByIdBeginAction => ({
-  type: actionType.OBJECTS_FETCH_SPACE_BY_ID_BEGIN,
+  type: ActionType.OBJECTS_FETCH_SPACE_BY_ID_BEGIN,
   payload,
 });
 // end::[RED-163]
@@ -100,7 +100,7 @@ export const fetchSpaceByIdBegin = (
 export const fetchSpaceByIdError = <T>(
   payload: PubNubObjectApiError<T>
 ): FetchSpaceByIdErrorAction<T> => ({
-  type: actionType.OBJECTS_FETCH_SPACE_BY_ID_ERROR,
+  type: ActionType.OBJECTS_FETCH_SPACE_BY_ID_ERROR,
   payload,
 });
 // end::[RED-164]
@@ -109,14 +109,14 @@ export const fetchSpaceByIdError = <T>(
 export const spaceUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceUpdatedAction<T> => ({
-  type: actionType.OBJECTS_UPDATE_SPACE,
+  type: ActionType.OBJECTS_UPDATE_SPACE,
   payload,
 });
 // end::[RED-165]
 
 // tag::[RED-166]
 export const updateSpaceBegin = <T>(payload: T): UpdateSpaceBeginAction<T> => ({
-  type: actionType.OBJECTS_UPDATE_SPACE_BEGIN,
+  type: ActionType.OBJECTS_UPDATE_SPACE_BEGIN,
   payload,
 });
 // end::[RED-166]
@@ -125,7 +125,7 @@ export const updateSpaceBegin = <T>(payload: T): UpdateSpaceBeginAction<T> => ({
 export const updateSpaceError = <T>(
   payload: PubNubObjectApiError<T>
 ): UpdateSpaceErrorAction<T> => ({
-  type: actionType.OBJECTS_UPDATE_SPACE_ERROR,
+  type: ActionType.OBJECTS_UPDATE_SPACE_ERROR,
   payload,
 });
 // end::[RED-167]
@@ -134,14 +134,14 @@ export const updateSpaceError = <T>(
 export const spaceDeleted = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceDeletedAction<T> => ({
-  type: actionType.OBJECTS_DELETE_SPACE,
+  type: ActionType.OBJECTS_DELETE_SPACE,
   payload,
 });
 // end::[RED-168]
 
 // tag::[RED-169]
 export const deleteSpaceBegin = (payload: string): DeleteSpaceBeginAction => ({
-  type: actionType.OBJECTS_DELETE_SPACE_BEGIN,
+  type: ActionType.OBJECTS_DELETE_SPACE_BEGIN,
   payload,
 });
 // end::[RED-169]
@@ -150,7 +150,7 @@ export const deleteSpaceBegin = (payload: string): DeleteSpaceBeginAction => ({
 export const deleteSpaceError = <T>(
   payload: PubNubObjectApiError<T>
 ): DeleteSpaceErrorAction<T> => ({
-  type: actionType.OBJECTS_DELETE_SPACE_ERROR,
+  type: ActionType.OBJECTS_DELETE_SPACE_ERROR,
   payload,
 });
 // end::[RED-170]

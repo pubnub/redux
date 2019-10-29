@@ -1,4 +1,4 @@
-import { Identifiable } from './PubNubApi';
+import { Identifiable } from 'api/PubNubApi';
 
 export interface ObjectsData {
   id: string;

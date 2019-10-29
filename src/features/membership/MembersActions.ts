@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from '../api/Objects';
+import { ObjectsResponsePayload } from 'api/Objects';
 import {
   RemoveMembersErrorAction,
   MembersRemovedAction,
@@ -13,25 +13,25 @@ import {
   UpdateMembersBeginAction,
   UpdateMembersErrorAction,
   MembersUpdatedAction,
-} from './Actions';
-import { actionType } from './ActionType.enum';
+} from 'actions/Actions';
+import { ActionType } from 'actions/ActionType.enum';
 import {
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
-} from '../api/PubNubApi';
+} from 'api/PubNubApi';
 import {
   MembersList,
   MembersResult,
   Members,
   MembersOptions,
-} from '../api/Member';
+} from 'api/Member';
 
 // tag::[RED-104]
 export const fetchMembersBegin = (
   payload: string
 ): FetchMembersBeginAction => ({
-  type: actionType.OBJECTS_FETCH_MEMBERS_BEGIN,
+  type: ActionType.OBJECTS_FETCH_MEMBERS_BEGIN,
   payload,
 });
 // end::[RED-104]
@@ -40,7 +40,7 @@ export const fetchMembersBegin = (
 const membersRetrieved = (
   payload: PubNubObjectApiSuccess<MembersResult>
 ): FetchMembersAction => ({
-  type: actionType.OBJECTS_FETCH_MEMBERS,
+  type: ActionType.OBJECTS_FETCH_MEMBERS,
   payload,
 });
 // end::[RED-105]
@@ -49,7 +49,7 @@ const membersRetrieved = (
 const fetchMembersError = <T>(
   payload: PubNubObjectApiError<T>
 ): FetchMembersErrorAction<T> => ({
-  type: actionType.OBJECTS_FETCH_MEMBERS_ERROR,
+  type: ActionType.OBJECTS_FETCH_MEMBERS_ERROR,
   payload,
 });
 // end::[RED-106]
@@ -58,7 +58,7 @@ const fetchMembersError = <T>(
 export const updateMembersBegin = (
   payload: string
 ): UpdateMembersBeginAction => ({
-  type: actionType.OBJECTS_UPDATE_MEMBERS_BEGIN,
+  type: ActionType.OBJECTS_UPDATE_MEMBERS_BEGIN,
   payload,
 });
 // end::[RED-107]
@@ -67,7 +67,7 @@ export const updateMembersBegin = (
 export const membersUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): MembersUpdatedAction<T> => ({
-  type: actionType.OBJECTS_UPDATE_MEMBERS,
+  type: ActionType.OBJECTS_UPDATE_MEMBERS,
   payload,
 });
 // end::[RED-108]
@@ -76,14 +76,14 @@ export const membersUpdated = <T>(
 export const updateMembersError = <T>(
   payload: PubNubObjectApiError<T>
 ): UpdateMembersErrorAction<T> => ({
-  type: actionType.OBJECTS_UPDATE_MEMBERS_ERROR,
+  type: ActionType.OBJECTS_UPDATE_MEMBERS_ERROR,
   payload,
 });
 // end::[RED-109]
 
 // tag::[RED-110]
 export const addMembersBegin = <T>(payload: T): AddMembersBeginAction<T> => ({
-  type: actionType.OBJECTS_ADD_MEMBERS_BEGIN,
+  type: ActionType.OBJECTS_ADD_MEMBERS_BEGIN,
   payload,
 });
 // end::[RED-110]
@@ -92,7 +92,7 @@ export const addMembersBegin = <T>(payload: T): AddMembersBeginAction<T> => ({
 export const membersAdded = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): MembersAddedAction<T> => ({
-  type: actionType.OBJECTS_MEMBERS_ADDED,
+  type: ActionType.OBJECTS_MEMBERS_ADDED,
   payload,
 });
 // end::[RED-111]
@@ -101,7 +101,7 @@ export const membersAdded = <T>(
 export const addMembersError = <T>(
   payload: PubNubObjectApiError<T>
 ): AddMembersErrorAction<T> => ({
-  type: actionType.OBJECTS_ADD_MEMBERS_ERROR,
+  type: ActionType.OBJECTS_ADD_MEMBERS_ERROR,
   payload,
 });
 // end::[RED-112]
@@ -110,7 +110,7 @@ export const addMembersError = <T>(
 export const removeMembersBegin = <T>(
   payload: T
 ): RemoveMembersBeginAction<T> => ({
-  type: actionType.OBJECTS_REMOVE_MEMBERS_BEGIN,
+  type: ActionType.OBJECTS_REMOVE_MEMBERS_BEGIN,
   payload,
 });
 // end::[RED-113]
@@ -119,7 +119,7 @@ export const removeMembersBegin = <T>(
 export const membersRemoved = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): MembersRemovedAction<T> => ({
-  type: actionType.OBJECTS_MEMBERS_REMOVED,
+  type: ActionType.OBJECTS_MEMBERS_REMOVED,
   payload,
 });
 // end::[RED-114]
@@ -128,7 +128,7 @@ export const membersRemoved = <T>(
 export const removeMembersError = <T>(
   payload: PubNubObjectApiError<T>
 ): RemoveMembersErrorAction<T> => ({
-  type: actionType.OBJECTS_REMOVE_MEMBERS_ERROR,
+  type: ActionType.OBJECTS_REMOVE_MEMBERS_ERROR,
   payload,
 });
 // end::[RED-115]

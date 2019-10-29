@@ -1,4 +1,4 @@
-import { Space } from './Space';
+import { Space } from 'api/Space';
 
 export interface MembershipOptions {
   include?: {

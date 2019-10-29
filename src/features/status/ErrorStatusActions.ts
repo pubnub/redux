@@ -1,3 +1,4 @@
+import { Dispatch } from 'redux';
 import {
   NetworkIssuesAction,
   AccessDeniedAction,
@@ -8,16 +9,15 @@ import {
   RequestMessageCountExceedAction,
   UnknownAction,
   ErrorStatusListenerActions,
-} from './Actions';
-import { actionType } from './ActionType.enum';
-import { StatusActionPayload } from '../api/Status';
-import { Dispatch } from 'redux';
+} from 'actions/Actions';
+import { ActionType } from 'actions/ActionType.enum';
+import { StatusActionPayload } from 'api/Status';
 
 // tag::[RED-095]
 export const networkIssues = (
   payload: StatusActionPayload
 ): NetworkIssuesAction => ({
-  type: actionType.NETWORK_ISSUES,
+  type: ActionType.NETWORK_ISSUES,
   payload,
 });
 // end::[RED-095]
@@ -26,7 +26,7 @@ export const networkIssues = (
 export const accessDenied = (
   payload: StatusActionPayload
 ): AccessDeniedAction => ({
-  type: actionType.ACCESS_DENIED,
+  type: ActionType.ACCESS_DENIED,
   payload,
 });
 // end::[RED-096]
@@ -35,14 +35,14 @@ export const accessDenied = (
 export const malformedResponse = (
   payload: StatusActionPayload
 ): MalformedResponseAction => ({
-  type: actionType.MALFORMED_RESPONSE,
+  type: ActionType.MALFORMED_RESPONSE,
   payload,
 });
 // end::[RED-097]
 
 // tag::[RED-098]
 export const badRequest = (payload: StatusActionPayload): BadRequestAction => ({
-  type: actionType.BAD_REQUEST,
+  type: ActionType.BAD_REQUEST,
   payload,
 });
 // end::[RED-098]
@@ -51,7 +51,7 @@ export const badRequest = (payload: StatusActionPayload): BadRequestAction => ({
 export const decryptionError = (
   payload: StatusActionPayload
 ): DecryptionErrorAction => ({
-  type: actionType.DECRYPTION_ERROR,
+  type: ActionType.DECRYPTION_ERROR,
   payload,
 });
 // end::[RED-099]
@@ -60,7 +60,7 @@ export const decryptionError = (
 export const timeoutConnection = (
   payload: StatusActionPayload
 ): TimeoutConnectionAction => ({
-  type: actionType.TIMEOUT_CONNECTION,
+  type: ActionType.TIMEOUT_CONNECTION,
   payload,
 });
 // end::[RED-100]
@@ -69,14 +69,14 @@ export const timeoutConnection = (
 export const requestMessageCountExceed = (
   payload: StatusActionPayload
 ): RequestMessageCountExceedAction => ({
-  type: actionType.REQUEST_MESSAGE_COUNT_EXCEED,
+  type: ActionType.REQUEST_MESSAGE_COUNT_EXCEED,
   payload,
 });
 // end::[RED-101]
 
 // tag::[RED-102]
 export const unknown = (payload: StatusActionPayload): UnknownAction => ({
-  type: actionType.UNKNOWN,
+  type: ActionType.UNKNOWN,
   payload,
 });
 // end::[RED-102]

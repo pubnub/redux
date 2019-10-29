@@ -1,34 +1,34 @@
 import {
   createPubNubActionListener,
   combineListeners,
-} from './listeners/PubNubListener';
-import { createUserActionListener } from './listeners/UserListener';
-import { createSpaceActionListener } from './listeners/SpaceListener';
-import { createMembershipActionListener } from './listeners/MembershipListener';
+} from 'features/subscribe/PubNubListener';
+import { createUserActionListener } from 'features/user/UserListener';
+import { createSpaceActionListener } from 'features/space/SpaceListener';
+import { createMembershipActionListener } from 'features/membership/MembershipListener';
 import {
   joinSpaces,
   leaveSpaces,
   fetchMemberships,
   updateMembership,
-} from './actions/MembershipActions';
+} from 'features/membership/MembershipActions';
 import {
   fetchMembers,
   updateMembers,
   addMembers,
   removeMembers,
-} from './actions/MembersActions';
+} from 'features/membership/MembersActions';
 import {
   createMessageActionListener,
   sendMessage,
-} from './actions/MessageActions';
+} from 'features/message/MessageActions';
 import {
   createPresenceActionListener,
   userJoin,
   userLeave,
   userStateChange,
   userTimeout,
-} from './actions/PresenceActions';
-import { createSignalActionListener } from './actions/SignalActions';
+} from 'features/presence/PresenceActions';
+import { createSignalActionListener } from 'features/signal/SignalActions';
 import {
   spaceDeleted,
   spaceUpdated,
@@ -37,17 +37,17 @@ import {
   fetchSpacesError,
   createSpace,
   fetchSpaceById,
-} from './actions/SpaceActions';
+} from 'features/space/SpaceActions';
 import {
   createNetworkStatusActionListener,
   networkDown,
   networkUp,
-} from './actions/NetworkStatusActions';
+} from 'features/networkStatus/NetworkStatusActions';
 import {
   createSubscribeStatusActionListener,
   reconnected,
   connected,
-} from './actions/SubscribeStatusActions';
+} from 'features/status/SubscribeStatusActions';
 import {
   createErrorStatusActionListener,
   timeoutConnection,
@@ -58,7 +58,7 @@ import {
   decryptionError,
   requestMessageCountExceed,
   unknown,
-} from './actions/ErrorStatusActions';
+} from 'features/status/ErrorStatusActions';
 import {
   userDeleted,
   userUpdated,
@@ -67,24 +67,24 @@ import {
   fetchUsersError,
   createUser,
   fetchUserById,
-} from './actions/UserActions';
+} from 'features/user/UserActions';
 
-import { createMessageReducer } from './reducers/messageReducer';
-import { createNetworkStatusReducer } from './reducers/createNetworkStatusReducer';
-import { createUserReducer } from './reducers/userReducer';
-import { createUserListReducer } from './reducers/userListReducer';
-import { createSpaceReducer } from './reducers/spaceReducer';
-import { createSpaceListReducer } from './reducers/spaceListReducer';
-import { createMembershipReducer } from './reducers/membershipReducer';
-import { createMembersReducer } from './reducers/membersReducer';
-import { Identifiable, PubNubObjectApiState } from './api/PubNubApi';
+import { createMessageReducer } from 'features/message/messageReducer';
+import { createNetworkStatusReducer } from 'features/networkStatus/createNetworkStatusReducer';
+import { createUserReducer } from 'features/user/userReducer';
+import { createUserListReducer } from 'features/user/userListReducer';
+import { createSpaceReducer } from 'features/space/spaceReducer';
+import { createSpaceListReducer } from 'features/space/spaceListReducer';
+import { createMembershipReducer } from 'features/membership/membershipReducer';
+import { createMembersReducer } from 'features/membership/membersReducer';
+import { Identifiable, PubNubObjectApiState } from 'api/PubNubApi';
 
-import { Message } from './api/Message';
-import { Space } from './api/Space';
-import { SpaceListState } from './reducers/spaceListReducer';
+import { Message } from 'api/Message';
+import { Space } from 'api/Space';
+import { SpaceListState } from 'features/space/spaceListReducer';
 
-import { User } from './api/User';
-import { UserListState } from './reducers/userListReducer';
+import { User } from 'api/User';
+import { UserListState } from 'features/user/userListReducer';
 
 export {
   Message,

@@ -1,12 +1,12 @@
+import { Dispatch } from 'redux';
 import {
   MessageAction,
   SendMessageAction,
   SendMessageBeginAction,
   SendMessageErrorAction,
-} from './Actions';
-import { actionType } from './ActionType.enum';
-import { Dispatch } from 'redux';
-import { Message } from '../api/Message';
+} from 'actions/Actions';
+import { ActionType } from 'actions/ActionType.enum';
+import { Message } from 'api/Message';
 import {
   PubNubApiStatus,
   PubNubObjectApiError,
@@ -17,7 +17,7 @@ import {
 export const sendMessageBegin = <T extends { channel: string }>(
   payload: T
 ): SendMessageBeginAction<T> => ({
-  type: actionType.SEND_MESSAGE_BEGIN,
+  type: ActionType.SEND_MESSAGE_BEGIN,
   payload,
 });
 // end::[RED-139]
@@ -26,7 +26,7 @@ export const sendMessageBegin = <T extends { channel: string }>(
 export const sendMessageSuccess = <T extends { channel: string }>(
   payload: PubNubObjectApiSuccess<T>
 ): SendMessageAction<T> => ({
-  type: actionType.SEND_MESSAGE,
+  type: ActionType.SEND_MESSAGE,
   payload,
 });
 // end::[RED-140]
@@ -35,7 +35,7 @@ export const sendMessageSuccess = <T extends { channel: string }>(
 export const sendMessageError = <T extends { channel: string }>(
   payload: PubNubObjectApiError<T>
 ): SendMessageErrorAction<T> => ({
-  type: actionType.SEND_MESSAGE_ERROR,
+  type: ActionType.SEND_MESSAGE_ERROR,
   payload,
 });
 // end::[RED-141]
@@ -81,7 +81,7 @@ export const createMessageActionListener = (
 ) => ({
   message: (payload: Message): MessageAction =>
     dispatch({
-      type: actionType.MESSAGE,
+      type: ActionType.MESSAGE,
       payload,
     }),
 });

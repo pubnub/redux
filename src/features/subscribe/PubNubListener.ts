@@ -1,14 +1,14 @@
-import { createPresenceActionListener } from '../actions/PresenceActions';
-import { createNetworkStatusActionListener } from '../actions/NetworkStatusActions';
-import { createSubscribeStatusActionListener } from '../actions/SubscribeStatusActions';
-import { createErrorStatusActionListener } from '../actions/ErrorStatusActions';
-import { createMessageActionListener } from '../actions/MessageActions';
-import { createSignalActionListener } from '../actions/SignalActions';
-import { createUserActionListener } from './UserListener';
-import { createSpaceActionListener } from './SpaceListener';
-import { createMembershipActionListener } from './MembershipListener';
 import { Dispatch } from 'redux';
-import { ListenerActions } from '../actions/Actions';
+import { createPresenceActionListener } from 'features/presence/PresenceActions';
+import { createNetworkStatusActionListener } from 'features/networkStatus/NetworkStatusActions';
+import { createSubscribeStatusActionListener } from 'features/status/SubscribeStatusActions';
+import { createErrorStatusActionListener } from 'features/status/ErrorStatusActions';
+import { createMessageActionListener } from 'features/message/MessageActions';
+import { createSignalActionListener } from 'features/signal/SignalActions';
+import { createUserActionListener } from 'features/user/UserListener';
+import { createSpaceActionListener } from 'features/space/SpaceListener';
+import { createMembershipActionListener } from 'features/membership/MembershipListener';
+import { ListenerActions } from 'actions/Actions';
 import { ListenerEventData } from 'api/PubNubApi';
 
 export const createPubNubActionListener = <T extends ListenerEventData>(

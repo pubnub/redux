@@ -3,7 +3,7 @@ import {
   PubNubObjectApiError,
   ItemMap,
   PubNubObjectApiSuccess,
-} from '../api/PubNubApi';
+} from 'api/PubNubApi';
 
 export const beginObjectById = <T extends object>(
   state: PubNubObjectApiState<T>,

@@ -1,17 +1,17 @@
-import { MembershipListenerActions, MembersActions } from '../actions/actions';
-import { actionType } from '../actions/ActionType.enum';
+import { MembershipListenerActions, MembersActions } from 'actions/actions';
+import { ActionType } from 'actions/ActionType.enum';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiState,
   ListenerEventData,
   PubNubObjectApiError,
-} from '../api/PubNubApi';
-import { MembersList, MembersResult, Members } from '../api/Member';
+} from 'api/PubNubApi';
+import { MembersList, MembersResult, Members } from 'api/Member';
 import {
   errorObjectById,
   successObjectById,
   beginObjectById,
-} from './reducerUtil';
+} from 'utilities/reducerUtil';
 
 let createInitialState = <T extends MembersList>(): PubNubObjectApiState<
   T
@@ -255,47 +255,47 @@ export const createMembersReducer = <T extends MembersList = MembersList>() => (
   action: MembersActions<T> | MembershipListenerActions<ListenerEventData>
 ): PubNubObjectApiState<T> => {
   switch (action.type) {
-    case actionType.OBJECTS_USER_ADDED_TO_SPACE:
+    case ActionType.OBJECTS_USER_ADDED_TO_SPACE:
       return userAddedToSpace<T>(state, action.payload);
-    case actionType.OBJECTS_USER_REMOVED_FROM_SPACE:
+    case ActionType.OBJECTS_USER_REMOVED_FROM_SPACE:
       return userRemovedFromSpace<T>(state, action.payload);
-    case actionType.OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE:
+    case ActionType.OBJECTS_USER_MEMBERSHIP_UPDATED_ON_SPACE:
       return userMembersUpdatedOnSpace<T>(state, action.payload);
-    case actionType.OBJECTS_FETCH_MEMBERS_BEGIN:
+    case ActionType.OBJECTS_FETCH_MEMBERS_BEGIN:
       return beginFetchMembers<T>(state, action.payload);
-    case actionType.OBJECTS_FETCH_MEMBERS:
+    case ActionType.OBJECTS_FETCH_MEMBERS:
       return fetchMembers<T>(state, action.payload);
-    case actionType.OBJECTS_FETCH_MEMBERS_ERROR:
+    case ActionType.OBJECTS_FETCH_MEMBERS_ERROR:
       return fetchMembersError<T>(state, action.payload);
-    case actionType.OBJECTS_UPDATE_MEMBERS_BEGIN:
+    case ActionType.OBJECTS_UPDATE_MEMBERS_BEGIN:
       return beginUpdateMembers<T>(state, action.payload);
-    case actionType.OBJECTS_UPDATE_MEMBERS:
+    case ActionType.OBJECTS_UPDATE_MEMBERS:
       return updateMembers(
         state,
         (action.payload as unknown) as PubNubObjectApiSuccess<Members>
       );
-    case actionType.OBJECTS_UPDATE_MEMBERS_ERROR:
+    case ActionType.OBJECTS_UPDATE_MEMBERS_ERROR:
       return updateMembersError<T>(state, action.payload);
-    case actionType.OBJECTS_ADD_MEMBERS_BEGIN:
+    case ActionType.OBJECTS_ADD_MEMBERS_BEGIN:
       return beginAddMembers<T>(state, (action.payload as unknown) as string);
-    case actionType.OBJECTS_MEMBERS_ADDED:
+    case ActionType.OBJECTS_MEMBERS_ADDED:
       return addMembers(
         state,
         (action.payload as unknown) as PubNubObjectApiSuccess<Members>
       );
-    case actionType.OBJECTS_ADD_MEMBERS_ERROR:
+    case ActionType.OBJECTS_ADD_MEMBERS_ERROR:
       return addMembersError<T>(state, action.payload);
-    case actionType.OBJECTS_REMOVE_MEMBERS_BEGIN:
+    case ActionType.OBJECTS_REMOVE_MEMBERS_BEGIN:
       return beginRemoveMembers<T>(
         state,
         (action.payload as unknown) as string
       );
-    case actionType.OBJECTS_MEMBERS_REMOVED:
+    case ActionType.OBJECTS_MEMBERS_REMOVED:
       return removeMembers(
         state,
         (action.payload as unknown) as PubNubObjectApiSuccess<Members>
       );
-    case actionType.OBJECTS_REMOVE_MEMBERS_ERROR:
+    case ActionType.OBJECTS_REMOVE_MEMBERS_ERROR:
       return removeMembersError<T>(state, action.payload);
     default:
       return state;

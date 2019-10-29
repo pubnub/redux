@@ -1,4 +1,4 @@
-import { User } from './User';
+import { User } from 'api/User';
 
 export interface MembersOptions {
   include?: {

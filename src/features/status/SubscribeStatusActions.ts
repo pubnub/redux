@@ -1,24 +1,24 @@
+import { Dispatch } from 'redux';
 import {
   ReconnectedAction,
   ConnectedAction,
   SubscriptionStatusListenerActions,
-} from './Actions';
-import { actionType } from './ActionType.enum';
-import { StatusActionPayload } from '../api/Status';
-import { Dispatch } from 'redux';
+} from 'actions/Actions';
+import { ActionType } from 'actions/ActionType.enum';
+import { StatusActionPayload } from 'api/Status';
 
 // tag::[RED-153]
 export const reconnected = (
   payload: StatusActionPayload
 ): ReconnectedAction => ({
-  type: actionType.RECONNECTED,
+  type: ActionType.RECONNECTED,
   payload,
 });
 // end::[RED-153]
 
 // tag::[RED-154]
 export const connected = (payload: StatusActionPayload): ConnectedAction => ({
-  type: actionType.CONNECTED,
+  type: ActionType.CONNECTED,
   payload,
 });
 // end::[RED-154]

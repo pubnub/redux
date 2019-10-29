@@ -1,4 +1,4 @@
-import { ObjectsResponsePayload, ObjectsListInput } from '../api/Objects';
+import { ObjectsResponsePayload, ObjectsListInput } from 'api/Objects';
 import {
   UserDeletedAction,
   UserUpdatedAction,
@@ -15,10 +15,10 @@ import {
   UpdateUserErrorAction,
   DeleteUserBeginAction,
   DeleteUserErrorAction,
-} from './Actions';
-import { actionType } from './ActionType.enum';
+} from 'actions/Actions';
+import { ActionType } from 'actions/ActionType.enum';
 import { Dispatch } from 'redux';
-import { User } from '../api/User';
+import { User } from 'api/User';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
@@ -28,7 +28,7 @@ import {
 
 // tag::[RED-176]
 export const createUserBegin = <T>(payload: T): CreateUserBeginAction<T> => ({
-  type: actionType.OBJECTS_CREATE_USER_BEGIN,
+  type: ActionType.OBJECTS_CREATE_USER_BEGIN,
   payload,
 });
 // end::[RED-176]
@@ -37,7 +37,7 @@ export const createUserBegin = <T>(payload: T): CreateUserBeginAction<T> => ({
 export const userCreated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): UserCreatedAction<T> => ({
-  type: actionType.OBJECTS_CREATE_USER,
+  type: ActionType.OBJECTS_CREATE_USER,
   payload,
 });
 // end::[RED-177]
@@ -46,7 +46,7 @@ export const userCreated = <T>(
 export const createUserError = <T>(
   payload: PubNubObjectApiError<T>
 ): CreateUserErrorAction<T> => ({
-  type: actionType.OBJECTS_CREATE_USER_ERROR,
+  type: ActionType.OBJECTS_CREATE_USER_ERROR,
   payload,
 });
 // end::[RED-178]
@@ -55,7 +55,7 @@ export const createUserError = <T>(
 export const userListRetrieved = <T>(
   payload: PubNubObjectApiSuccess<ItemMap<T>>
 ): UserListRetrievedAction<T> => ({
-  type: actionType.OBJECTS_FETCH_USERS,
+  type: ActionType.OBJECTS_FETCH_USERS,
   payload,
 });
 // end::[RED-179]
@@ -64,7 +64,7 @@ export const userListRetrieved = <T>(
 export const fetchUsersBegin = (payload: {
   label: string;
 }): FetchUsersBeginAction => ({
-  type: actionType.OBJECTS_FETCH_USERS_BEGIN,
+  type: ActionType.OBJECTS_FETCH_USERS_BEGIN,
   payload,
 });
 // end::[RED-180]
@@ -73,7 +73,7 @@ export const fetchUsersBegin = (payload: {
 export const fetchUsersError = <T>(
   payload: PubNubObjectApiError<T>
 ): FetchUsersErrorAction<T> => ({
-  type: actionType.OBJECTS_FETCH_USERS_ERROR,
+  type: ActionType.OBJECTS_FETCH_USERS_ERROR,
   payload,
 });
 // end::[RED-181]
@@ -82,7 +82,7 @@ export const fetchUsersError = <T>(
 export const userRetrievedById = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): FetchUserByIdAction<T> => ({
-  type: actionType.OBJECTS_FETCH_USER_BY_ID,
+  type: ActionType.OBJECTS_FETCH_USER_BY_ID,
   payload,
 });
 // end::[RED-182]
@@ -91,7 +91,7 @@ export const userRetrievedById = <T>(
 export const fetchUserByIdBegin = (
   payload: string
 ): FetchUserByIdBeginAction => ({
-  type: actionType.OBJECTS_FETCH_USER_BY_ID_BEGIN,
+  type: ActionType.OBJECTS_FETCH_USER_BY_ID_BEGIN,
   payload,
 });
 // end::[RED-183]
@@ -100,7 +100,7 @@ export const fetchUserByIdBegin = (
 export const fetchUserByIdError = <T>(
   payload: PubNubObjectApiError<T>
 ): FetchUserByIdErrorAction<T> => ({
-  type: actionType.OBJECTS_FETCH_USER_BY_ID_ERROR,
+  type: ActionType.OBJECTS_FETCH_USER_BY_ID_ERROR,
   payload,
 });
 // end::[RED-184]
@@ -109,14 +109,14 @@ export const fetchUserByIdError = <T>(
 export const userUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): UserUpdatedAction<T> => ({
-  type: actionType.OBJECTS_UPDATE_USER,
+  type: ActionType.OBJECTS_UPDATE_USER,
   payload,
 });
 // end::[RED-185]
 
 // tag::[RED-186]
 export const updateUserBegin = <T>(payload: T): UpdateUserBeginAction<T> => ({
-  type: actionType.OBJECTS_UPDATE_USER_BEGIN,
+  type: ActionType.OBJECTS_UPDATE_USER_BEGIN,
   payload,
 });
 // end::[RED-186]
@@ -125,7 +125,7 @@ export const updateUserBegin = <T>(payload: T): UpdateUserBeginAction<T> => ({
 export const updateUserError = <T>(
   payload: PubNubObjectApiError<T>
 ): UpdateUserErrorAction<T> => ({
-  type: actionType.OBJECTS_UPDATE_USER_ERROR,
+  type: ActionType.OBJECTS_UPDATE_USER_ERROR,
   payload,
 });
 // end::[RED-187]
@@ -134,14 +134,14 @@ export const updateUserError = <T>(
 export const userDeleted = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): UserDeletedAction<T> => ({
-  type: actionType.OBJECTS_DELETE_USER,
+  type: ActionType.OBJECTS_DELETE_USER,
   payload,
 });
 // end::[RED-188]
 
 // tag::[RED-189]
 export const deleteUserBegin = (payload: string): DeleteUserBeginAction => ({
-  type: actionType.OBJECTS_DELETE_USER_BEGIN,
+  type: ActionType.OBJECTS_DELETE_USER_BEGIN,
   payload,
 });
 // end::[RED-189]
@@ -150,7 +150,7 @@ export const deleteUserBegin = (payload: string): DeleteUserBeginAction => ({
 export const deleteUserError = <T>(
   payload: PubNubObjectApiError<T>
 ): DeleteUserErrorAction<T> => ({
-  type: actionType.OBJECTS_DELETE_USER_ERROR,
+  type: ActionType.OBJECTS_DELETE_USER_ERROR,
   payload,
 });
 // end::[RED-190]

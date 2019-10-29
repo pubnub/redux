@@ -1,7 +1,7 @@
-import { SignalActionPayload } from '../api/Signal';
-import { SignalAction } from './Actions';
-import { actionType } from './ActionType.enum';
 import { Dispatch } from 'redux';
+import { SignalActionPayload } from 'api/Signal';
+import { SignalAction } from 'actions/Actions';
+import { ActionType } from 'actions/ActionType.enum';
 
 // tag::[RED-152]
 export const createSignalActionListener = (
@@ -9,7 +9,7 @@ export const createSignalActionListener = (
 ) => ({
   signal: (payload: SignalActionPayload): SignalAction =>
     dispatch({
-      type: actionType.SIGNAL,
+      type: ActionType.SIGNAL,
       payload,
     }),
 });

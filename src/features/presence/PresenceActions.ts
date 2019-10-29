@@ -1,31 +1,31 @@
-import { PresenceActionPayload } from '../api/Presence';
+import { Dispatch } from 'redux';
+import { PresenceActionPayload } from 'api/Presence';
 import {
   JoinAction,
   LeaveAction,
   TimeoutAction,
   StateChangeAction,
   PresenceListenerActions,
-} from './Actions';
-import { actionType } from './ActionType.enum';
-import { Dispatch } from 'redux';
+} from 'actions/Actions';
+import { ActionType } from 'actions/ActionType.enum';
 
 // tag::[RED-147]
 export const userJoin = (payload: PresenceActionPayload): JoinAction => ({
-  type: actionType.JOIN,
+  type: ActionType.JOIN,
   payload,
 });
 // end::[RED-147]
 
 // tag::[RED-148]
 export const userLeave = (payload: PresenceActionPayload): LeaveAction => ({
-  type: actionType.LEAVE,
+  type: ActionType.LEAVE,
   payload,
 });
 // end::[RED-148]
 
 // tag::[RED-149]
 export const userTimeout = (payload: PresenceActionPayload): TimeoutAction => ({
-  type: actionType.TIMEOUT,
+  type: ActionType.TIMEOUT,
   payload,
 });
 // end::[RED-149]
@@ -34,7 +34,7 @@ export const userTimeout = (payload: PresenceActionPayload): TimeoutAction => ({
 export const userStateChange = (
   payload: PresenceActionPayload
 ): StateChangeAction => ({
-  type: actionType.STATE_CHANGE,
+  type: ActionType.STATE_CHANGE,
   payload,
 });
 // end::[RED-150]

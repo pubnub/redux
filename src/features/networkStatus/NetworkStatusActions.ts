@@ -1,21 +1,21 @@
+import { Dispatch } from 'redux';
 import {
   NetworkStatusListenerActions,
   NetworkUpAction,
   NetworkDownAction,
-} from './Actions';
-import { actionType } from './ActionType.enum';
-import { StatusActionPayload } from '../api/Status';
-import { Dispatch } from 'redux';
+} from 'actions/Actions';
+import { ActionType } from 'actions/ActionType.enum';
+import { StatusActionPayload } from 'api/Status';
 
 // tag::[RED-144]
 export const networkUp = (): NetworkUpAction => ({
-  type: actionType.NETWORK_UP,
+  type: ActionType.NETWORK_UP,
 });
 // end::[RED-144]
 
 // tag::[RED-145]
 export const networkDown = (): NetworkDownAction => ({
-  type: actionType.NETWORK_DOWN,
+  type: ActionType.NETWORK_DOWN,
 });
 // end::[RED-145]
 

@@ -1,5 +1,5 @@
 // tag::[RED-000]
-export enum actionType {
+export enum ActionType {
   MESSAGE = 'pubnub/MESSAGE',
   SEND_MESSAGE = 'pubnub/SEND_MESSAGE',
   SEND_MESSAGE_BEGIN = 'pubnub/SEND_MESSAGE_BEGIN',
