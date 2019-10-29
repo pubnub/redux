@@ -1,3 +1,4 @@
+// tag::RDX-026[]
 export interface StatusActionPayload {
   affectedChannelGroups: string[];
   affectedChannels: string[];
@@ -7,3 +8,4 @@ export interface StatusActionPayload {
   currentTimetoken: string;
   subscribedChannels: string[];
 }
+// end::RDX-026[]

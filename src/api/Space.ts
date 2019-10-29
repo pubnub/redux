@@ -1,3 +1,4 @@
+// tag::RDX-025[]
 export interface Space {
   id: string;
   name: string;
@@ -9,3 +10,4 @@ export interface Space {
     customFields?: boolean;
   };
 }
+// end::RDX-025[]

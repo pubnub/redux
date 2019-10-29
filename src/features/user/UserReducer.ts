@@ -20,6 +20,7 @@ import {
 } from 'utilities/reducerUtil';
 import { MembersResult, MembersList } from 'api/Member';
 
+// tag::RDX-054[]
 const createInitialState = <T extends Identifiable>(): PubNubObjectApiState<
   T
 > => ({
@@ -27,72 +28,100 @@ const createInitialState = <T extends Identifiable>(): PubNubObjectApiState<
   loadingById: {},
   errorById: {},
 });
+// end::RDX-054[]
 
+// tag::RDX-055[]
 const beginCreateUser = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: T
 ) => beginObjectById<T>(state, payload.id);
+// end::RDX-055[]
 
+// tag::RDX-056[]
 const createUser = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
 ) => successObjectById<T>(state, payload, payload.data.id);
+// end::RDX-056[]
 
+// tag::RDX-057[]
 const createUserError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
 ) => errorObjectById<T>(state, payload, payload.data.id);
+// end::RDX-057[]
 
+// tag::RDX-058[]
 const beginUpdateUser = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: T
 ) => beginObjectById<T>(state, payload.id);
+// end::RDX-058[]
 
+// tag::RDX-059[]
 const updateUser = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
 ) => successObjectById<T>(state, payload, payload.data.id);
+// end::RDX-059[]
 
+// tag::RDX-060[]
 const updateUserError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
 ) => errorObjectById<T>(state, payload, payload.data.id);
+// end::RDX-060[]
 
+// tag::RDX-061[]
 const beginDeleteUser = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: string
 ) => beginObjectById<T>(state, payload);
+// end::RDX-061[]
 
+// tag::RDX-062[]
 const deleteUser = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
 ) => successDeleteObjectById<T>(state, payload.data.id);
+// end::RDX-062[]
 
+// tag::RDX-063[]
 const deleteUserError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
 ) => errorObjectById<T>(state, payload, payload.data.id);
+// end::RDX-063[]
 
+// tag::RDX-064[]
 const fetchUsers = <T extends object>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<ItemMap<T>>
 ) => successObjectList<T>(state, payload);
+// end::RDX-064[]
 
+// tag::RDX-065[]
 const beginFetchUserById = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: string
 ) => beginObjectById<T>(state, payload);
+// end::RDX-065[]
 
+// tag::RDX-066[]
 const fetchUserById = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
 ) => successObjectById<T>(state, payload, payload.data.id);
+// end::RDX-066[]
 
+// tag::RDX-067[]
 const fetchUserError = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiError<T>
 ) => errorObjectById<T>(state, payload, payload.data.id);
+// end::RDX-067[]
 
+// tag::RDX-068[]
 const fetchMembers = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<MembersResult>
@@ -117,6 +146,7 @@ const fetchMembers = <T extends Identifiable>(
 
   return newState;
 };
+// end::RDX-068[]
 
 export const createUserReducer = <T extends Identifiable>() => (
   state: PubNubObjectApiState<T> = createInitialState<T>(),

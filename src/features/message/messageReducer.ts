@@ -3,11 +3,13 @@ import { PubNubObjectApiState, PubNubObjectApiSuccess } from 'api/PubNubApi';
 import { ActionType } from 'actions/ActionType.enum';
 import { clonePubNubObjectApiState } from 'utilities/reducerUtil';
 
+// tag::RDX-028[]
 const createInitialState = <T>(): PubNubObjectApiState<T> => ({
   byId: {},
   loadingById: {},
   errorById: {},
 });
+// end::RDX-028[]
 
 export const messageRecieved = <T extends { channel: string }>(
   state: PubNubObjectApiState<T[]>,

@@ -1,4 +1,3 @@
-// tag::[RED-000]
 export enum ActionType {
   MESSAGE = 'pubnub/MESSAGE',
   SEND_MESSAGE = 'pubnub/SEND_MESSAGE',
@@ -79,4 +78,3 @@ export enum ActionType {
   OBJECTS_LEAVE_SPACES_ERROR = 'pubnub/OBJECTS_LEAVE_SPACES_ERROR',
   SIGNAL = 'pubnub/SIGNAL',
 }
-// end::[RED-000]

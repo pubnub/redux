@@ -26,136 +26,105 @@ import {
   ItemMap,
 } from 'api/PubNubApi';
 
-// tag::[RED-156]
 export const createSpaceBegin = <T>(payload: T): CreateSpaceBeginAction<T> => ({
   type: ActionType.OBJECTS_CREATE_SPACE_BEGIN,
   payload,
 });
-// end::[RED-156]
 
-// tag::[RED-157]
 export const spaceCreated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceCreatedAction<T> => ({
   type: ActionType.OBJECTS_CREATE_SPACE,
   payload,
 });
-// end::[RED-157]
 
-// tag::[RED-158]
 export const createSpaceError = <T>(
   payload: PubNubObjectApiError<T>
 ): CreateSpaceErrorAction<T> => ({
   type: ActionType.OBJECTS_CREATE_SPACE_ERROR,
   payload,
 });
-// end::[RED-158]
 
-// tag::[RED-159]
 export const spaceListRetrieved = <T>(
   payload: PubNubObjectApiSuccess<ItemMap<T>>
 ): SpaceListRetrievedAction<T> => ({
   type: ActionType.OBJECTS_FETCH_SPACES,
   payload,
 });
-// end::[RED-159]
 
-// tag::[RED-160]
 export const fetchSpacesBegin = (payload: {
   label: string;
 }): FetchSpacesBeginAction => ({
   type: ActionType.OBJECTS_FETCH_SPACES_BEGIN,
   payload,
 });
-// end::[RED-160]
 
-// tag::[RED-161]
 export const fetchSpacesError = <T>(
   payload: PubNubObjectApiError<T>
 ): FetchSpacesErrorAction<T> => ({
   type: ActionType.OBJECTS_FETCH_SPACES_ERROR,
   payload,
 });
-// end::[RED-161]
 
-// tag::[RED-162]
 export const spaceRetrievedById = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): FetchSpaceByIdAction<T> => ({
   type: ActionType.OBJECTS_FETCH_SPACE_BY_ID,
   payload,
 });
-// end::[RED-162]
 
-// tag::[RED-163]
 export const fetchSpaceByIdBegin = (
   payload: string
 ): FetchSpaceByIdBeginAction => ({
   type: ActionType.OBJECTS_FETCH_SPACE_BY_ID_BEGIN,
   payload,
 });
-// end::[RED-163]
 
-// tag::[RED-164]
 export const fetchSpaceByIdError = <T>(
   payload: PubNubObjectApiError<T>
 ): FetchSpaceByIdErrorAction<T> => ({
   type: ActionType.OBJECTS_FETCH_SPACE_BY_ID_ERROR,
   payload,
 });
-// end::[RED-164]
 
-// tag::[RED-165]
 export const spaceUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceUpdatedAction<T> => ({
   type: ActionType.OBJECTS_UPDATE_SPACE,
   payload,
 });
-// end::[RED-165]
 
-// tag::[RED-166]
 export const updateSpaceBegin = <T>(payload: T): UpdateSpaceBeginAction<T> => ({
   type: ActionType.OBJECTS_UPDATE_SPACE_BEGIN,
   payload,
 });
-// end::[RED-166]
 
-// tag::[RED-167]
 export const updateSpaceError = <T>(
   payload: PubNubObjectApiError<T>
 ): UpdateSpaceErrorAction<T> => ({
   type: ActionType.OBJECTS_UPDATE_SPACE_ERROR,
   payload,
 });
-// end::[RED-167]
 
-// tag::[RED-168]
 export const spaceDeleted = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceDeletedAction<T> => ({
   type: ActionType.OBJECTS_DELETE_SPACE,
   payload,
 });
-// end::[RED-168]
 
-// tag::[RED-169]
 export const deleteSpaceBegin = (payload: string): DeleteSpaceBeginAction => ({
   type: ActionType.OBJECTS_DELETE_SPACE_BEGIN,
   payload,
 });
-// end::[RED-169]
 
-// tag::[RED-170]
 export const deleteSpaceError = <T>(
   payload: PubNubObjectApiError<T>
 ): DeleteSpaceErrorAction<T> => ({
   type: ActionType.OBJECTS_DELETE_SPACE_ERROR,
   payload,
 });
-// end::[RED-170]
 
-// tag::[RED-171]
 export const createSpace = (pubnub: any, space: Space) => (
   dispatch: Dispatch
 ) => {
@@ -186,9 +155,7 @@ export const createSpace = (pubnub: any, space: Space) => (
     }
   );
 };
-// end::[RED-171]
 
-// tag::[RED-172]
 export const updateSpace = (pubnub: any, space: Space) => (
   dispatch: Dispatch
 ) => {
@@ -219,9 +186,7 @@ export const updateSpace = (pubnub: any, space: Space) => (
     }
   );
 };
-// end::[RED-172]
 
-// tag::[RED-173]
 export const deleteSpace = (pubnub: any, id: string) => (
   dispatch: Dispatch
 ) => {
@@ -250,9 +215,7 @@ export const deleteSpace = (pubnub: any, id: string) => (
     }
   );
 };
-// end::[RED-173]
 
-// tag::[RED-174]
 export const fetchSpaces = (
   pubnub: any,
   options: ObjectsListInput = {},
@@ -295,9 +258,7 @@ export const fetchSpaces = (
     }
   );
 };
-// end::[RED-174]
 
-// tag::[RED-175]
 export const fetchSpaceById = (
   pubnub: any,
   spaceId: string,
@@ -331,4 +292,3 @@ export const fetchSpaceById = (
     }
   );
 };
-// end::[RED-175]

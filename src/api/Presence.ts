@@ -1,3 +1,4 @@
+// tag::RDX-016[]
 export interface PresenceActionPayload {
   channel: string;
   subscription: string | null;
@@ -10,3 +11,4 @@ export interface PresenceActionPayload {
   uuid: string;
   timestamp: number;
 }
+// end::RDX-016[]
