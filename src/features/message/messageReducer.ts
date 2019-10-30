@@ -9,7 +9,7 @@ const createInitialState = <T>(): PubNubObjectApiState<T> => ({
 });
 // end::RDX-028[]
 
-export const messageRecieved = <T extends { channel: string }>(
+export const messageReceived = <T extends { channel: string }>(
   state: PubNubObjectApiState<T[]>,
   payload: PubNubObjectApiSuccess<T>
 ) => {
@@ -31,7 +31,7 @@ export const createMessageReducer = <T extends { channel: string }>() => (
 ): PubNubObjectApiState<T[]> => {
   switch (action.type) {
     case ActionType.MESSAGE_RECEIVED:
-      return messageRecieved<T>(state, {
+      return messageReceived<T>(state, {
         data: (action.payload as unknown) as T,
       });
     default:
