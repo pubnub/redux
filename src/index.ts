@@ -1,22 +1,18 @@
+import { createUserActionListener } from 'features/user/UserListener';
+import { createSpaceActionListener } from 'features/space/SpaceListener';
+import { createMembershipActionListener } from 'features/membership/MembershipListener';
+import { joinSpaces } from 'features/membership/commands/JoinSpaces';
+import { leaveSpaces } from 'features/membership/commands/LeaveSpaces';
+import { fetchMemberships } from 'features/membership/commands/FetchMemberships';
+import { updateMembership } from 'features/membership/commands/UpdateMembership';
+import { fetchMembers } from 'features/members/commands/FetchMembers';
+import { updateMembers } from 'features/members/commands/UpdateMembers';
+import { addMembers } from 'features/members/commands/AddMembers';
+import { removeMembers } from 'features/members/commands/RemoveMembers';
 import {
   createPubNubActionListener,
   combineListeners,
 } from 'features/subscribe/PubNubListener';
-import { createUserActionListener } from 'features/user/UserListener';
-import { createSpaceActionListener } from 'features/space/SpaceListener';
-import { createMembershipActionListener } from 'features/membership/MembershipListener';
-import {
-  joinSpaces,
-  leaveSpaces,
-  fetchMemberships,
-  updateMembership,
-} from 'features/membership/MembershipActions';
-import {
-  fetchMembers,
-  updateMembers,
-  addMembers,
-  removeMembers,
-} from 'features/membership/MembersActions';
 import {
   createMessageActionListener,
   sendMessage,
@@ -76,7 +72,7 @@ import { createUserListReducer } from 'features/user/userListReducer';
 import { createSpaceReducer } from 'features/space/spaceReducer';
 import { createSpaceListReducer } from 'features/space/spaceListReducer';
 import { createMembershipReducer } from 'features/membership/membershipReducer';
-import { createMembersReducer } from 'features/membership/membersReducer';
+import { createMembersReducer } from 'features/members/MembersReducer';
 import { Identifiable, PubNubObjectApiState } from 'api/PubNubApi';
 
 import { Message } from 'api/Message';
