@@ -37,7 +37,9 @@ const fetchingUsers = <T>(state: UserListState<T>) => ({
 // end::RDX-051[]
 
 // tag::RDX-052[]
-const usersRetrieved = <T extends Identifiable>(payload: PubNubObjectApiSuccess<ItemMap<T>>) => {
+const usersRetrieved = <T extends Identifiable>(
+  payload: PubNubObjectApiSuccess<ItemMap<T>>
+) => {
   let data = Object.keys(payload.data).map((key) => payload.data[key].id);
 
   return {
@@ -59,7 +61,9 @@ const errorFetchingUsers = <T>(
 });
 // end::RDX-053[]
 
-export const createUserListReducer = <T extends Identifiable = User>(label: string = 'all') => (
+export const createUserListReducer = <T extends Identifiable = User>(
+  label: string = 'all'
+) => (
   state: UserListState<T> = createInitialState(),
   action:
     | UsersRetrievedAction<User>

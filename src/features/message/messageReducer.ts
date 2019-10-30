@@ -1,5 +1,8 @@
 import { MessageActions } from '../../actions/Actions';
-import { PubNubObjectApiState, PubNubObjectApiSuccess } from '../../api/PubNubApi';
+import {
+  PubNubObjectApiState,
+  PubNubObjectApiSuccess,
+} from '../../api/PubNubApi';
 import { ActionType } from '../../actions/ActionType.enum';
 import { clonePubNubObjectApiState } from '../../utilities/reducerUtil';
 

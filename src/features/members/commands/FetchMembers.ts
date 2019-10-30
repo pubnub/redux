@@ -10,7 +10,11 @@ import {
   PubNubApiStatus,
   PubNubObjectApiSuccess,
 } from '../../../api/PubNubApi';
-import { MembersList, MembersResult, MembersOptions } from '../../../api/Member';
+import {
+  MembersList,
+  MembersResult,
+  MembersOptions,
+} from '../../../api/Member';
 
 const fetchingMembers = (payload: string): FetchingMembersAction => ({
   type: ActionType.FETCHING_MEMBERS,

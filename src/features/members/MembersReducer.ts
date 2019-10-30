@@ -1,4 +1,7 @@
-import { MembershipListenerActions, MembersActions } from '../../actions/actions';
+import {
+  MembershipListenerActions,
+  MembersActions,
+} from '../../actions/actions';
 import { ActionType } from '../../actions/ActionType.enum';
 import {
   PubNubObjectApiSuccess,

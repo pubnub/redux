@@ -37,7 +37,9 @@ const fetchingSpaces = <T>(state: SpaceListState<T>) => ({
 // end::RDX-031[]
 
 // tag::RDX-032[]
-const spacesRetrieved = <T extends Identifiable>(payload: PubNubObjectApiSuccess<ItemMap<T>>) => {
+const spacesRetrieved = <T extends Identifiable>(
+  payload: PubNubObjectApiSuccess<ItemMap<T>>
+) => {
   let data = Object.keys(payload.data).map((key) => payload.data[key].id);
 
   return {
@@ -59,7 +61,9 @@ const errorFetchingSpaces = <T>(
 });
 // end::RDX-033[]
 
-export const createSpaceListReducer = <T extends Identifiable = Space>(label: string = 'all') => (
+export const createSpaceListReducer = <T extends Identifiable = Space>(
+  label: string = 'all'
+) => (
   state: SpaceListState<T> = createInitialState(),
   action:
     | SpacesRetrievedAction<T>

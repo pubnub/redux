@@ -1,11 +1,18 @@
-import { MembershipListenerActions, MembershipActions } from '../../actions/actions';
+import {
+  MembershipListenerActions,
+  MembershipActions,
+} from '../../actions/actions';
 import { ActionType } from '../../actions/ActionType.enum';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiState,
   ListenerEventData,
 } from '../../api/PubNubApi';
-import { MembershipList, MembershipResult, Membership } from '../../api/Membership';
+import {
+  MembershipList,
+  MembershipResult,
+  Membership,
+} from '../../api/Membership';
 import { successObjectById } from '../../utilities/reducerUtil';
 
 let createInitialState = <T extends MembershipList>(): PubNubObjectApiState<
