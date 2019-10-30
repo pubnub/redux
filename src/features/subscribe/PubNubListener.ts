@@ -3,11 +3,11 @@ import { createPresenceActionListener } from 'features/presence/PresenceActions'
 import { createNetworkStatusActionListener } from 'features/networkStatus/NetworkStatusActions';
 import { createSubscribeStatusActionListener } from 'features/status/SubscribeStatusActions';
 import { createErrorStatusActionListener } from 'features/status/ErrorStatusActions';
-import { createMessageActionListener } from 'features/message/MessageActions';
+import { createMessageActionListener } from 'features/message/MessageListener';
 import { createSignalActionListener } from 'features/signal/SignalActions';
 import { createUserActionListener } from 'features/user/UserListener';
 import { createSpaceActionListener } from 'features/space/SpaceListener';
-import { createMembershipActionListener } from 'features/membership/MembershipListener';
+import { createMembershipListener } from 'features/membership/MembershipListener';
 import { ListenerActions } from 'actions/Actions';
 import { ListenerEventData } from 'api/PubNubApi';
 
@@ -20,7 +20,7 @@ export const createPubNubActionListener = <T extends ListenerEventData>(
     createSignalActionListener(dispatch),
     createUserActionListener<T>(dispatch),
     createSpaceActionListener<T>(dispatch),
-    createMembershipActionListener<T>(dispatch),
+    createMembershipListener<T>(dispatch),
     createNetworkStatusActionListener(dispatch),
     createSubscribeStatusActionListener(dispatch),
     createErrorStatusActionListener(dispatch)

@@ -1,6 +1,5 @@
 import { Dispatch } from 'redux';
 import {
-  MessageReceivedAction,
   MessageSentAction,
   SendingMessageAction,
   ErrorSendingMessageAction,
@@ -67,12 +66,3 @@ export const sendMessage = (pubnub: any, message: Message) => (
   );
 };
 
-export const createMessageActionListener = (
-  dispatch: Dispatch<MessageReceivedAction>
-) => ({
-  message: (payload: Message): MessageReceivedAction =>
-    dispatch({
-      type: ActionType.MESSAGE_RECEIVED,
-      payload,
-    }),
-});

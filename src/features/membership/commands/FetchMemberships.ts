@@ -16,7 +16,7 @@ import {
   MembershipOptions,
 } from 'api/Membership';
 
-export const fetchingMemberships = (
+const fetchingMemberships = (
   payload: string
 ): FetchingMembershipsAction => ({
   type: ActionType.FETCHING_MEMBERSHIPS,

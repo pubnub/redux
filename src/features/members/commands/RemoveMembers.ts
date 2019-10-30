@@ -13,19 +13,19 @@ import {
   PubNubObjectApiSuccess,
 } from 'api/PubNubApi';
 
-export const removingMembers = <T>(payload: T): RemovingMembersAction<T> => ({
+const removingMembers = <T>(payload: T): RemovingMembersAction<T> => ({
   type: ActionType.REMOVING_MEMBERS,
   payload,
 });
 
-export const membersRemoved = <T>(
+const membersRemoved = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): MembersRemovedAction<T> => ({
   type: ActionType.MEMBERS_REMOVED,
   payload,
 });
 
-export const errorRemovingMembers = <T>(
+const errorRemovingMembers = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorRemovingMembersAction<T> => ({
   type: ActionType.ERROR_REMOVING_MEMBERS,

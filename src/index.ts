@@ -1,6 +1,6 @@
 import { createUserActionListener } from 'features/user/UserListener';
 import { createSpaceActionListener } from 'features/space/SpaceListener';
-import { createMembershipActionListener } from 'features/membership/MembershipListener';
+import { createMembershipListener } from 'features/membership/MembershipListener';
 import { joinSpaces } from 'features/membership/commands/JoinSpaces';
 import { leaveSpaces } from 'features/membership/commands/LeaveSpaces';
 import { fetchMemberships } from 'features/membership/commands/FetchMemberships';
@@ -13,10 +13,8 @@ import {
   createPubNubActionListener,
   combineListeners,
 } from 'features/subscribe/PubNubListener';
-import {
-  createMessageActionListener,
-  sendMessage,
-} from 'features/message/MessageActions';
+import { createMessageActionListener } from 'features/message/MessageListener';
+import { sendMessage } from 'features/message/commands/SendMessage';
 import {
   createPresenceActionListener,
   userJoin,
@@ -91,7 +89,7 @@ export {
   User,
   UserListState,
   createPubNubActionListener,
-  createMembershipActionListener,
+  createMembershipListener as createMembershipActionListener,
   sendMessage,
   fetchMembers,
   updateMembers,

@@ -30,7 +30,7 @@ export const userRemovedFromSpace = <T extends ListenerEventData>(
   payload,
 });
 
-export const createMembershipActionListener = <T extends ListenerEventData>(
+export const createMembershipListener = <T extends ListenerEventData>(
   dispatch: Dispatch<MembershipListenerActions<T>>
 ) => ({
   membership: (payload: ObjectsActionPayload<T>) => {

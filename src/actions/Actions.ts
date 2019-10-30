@@ -1,4 +1,3 @@
-import { Message } from 'api/Message';
 import { PresenceActionPayload } from 'api/Presence';
 import { StatusActionPayload } from 'api/Status';
 import { SignalActionPayload } from 'api/Signal';
@@ -12,7 +11,7 @@ import { MembershipResult } from 'api/Membership';
 import { ActionType } from 'actions/ActionType.enum';
 import { MembersResult } from 'api/Member';
 
-// tag:RDX-069[]
+// tag::RDX-069[]
 export interface JoinAction {
   type: typeof ActionType.JOIN;
   payload: PresenceActionPayload;
@@ -522,9 +521,9 @@ export interface ErrorLeavingSpacesAction<T> {
 // end::RDX-142[]
 
 // tag::RDX-143[]
-export interface MessageReceivedAction {
+export interface MessageReceivedAction<T extends { channel: string }> {
   type: typeof ActionType.MESSAGE_RECEIVED;
-  payload: Message;
+  payload: PubNubObjectApiSuccess<T>;
 }
 // end::RDX-143[]
 
@@ -663,15 +662,15 @@ export type ObjectListenerActions<T extends Identifiable> =
   | SpaceListenerActions<T>
   | MembershipListenerActions<T>;
 
-export type ListenerActions<T extends Identifiable> =
-  | MessageReceivedAction
+export type ListenerActions<T extends Identifiable, TT extends { channel: string }> =
+  | MessageReceivedAction<TT>
   | SignalAction
   | PresenceListenerActions
   | StatusListenerActions
   | ObjectListenerActions<T>;
 
 export type MessageActions<T extends { channel: string }> =
-  | MessageReceivedAction
+  | MessageReceivedAction<T>
   | MessageSentAction<T>
   | SendingMessageAction<T>
   | ErrorSendingMessageAction<T>;

@@ -12,7 +12,7 @@ import {
 } from 'api/PubNubApi';
 import { MembersList, MembersResult, MembersOptions } from 'api/Member';
 
-export const fetchingMembers = (payload: string): FetchingMembersAction => ({
+const fetchingMembers = (payload: string): FetchingMembersAction => ({
   type: ActionType.FETCHING_MEMBERS,
   payload,
 });

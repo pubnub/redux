@@ -13,19 +13,19 @@ import {
 } from 'api/PubNubApi';
 import { Membership } from 'api/Membership';
 
-export const joiningSpaces = <T>(payload: T): JoiningSpacesAction<T> => ({
+const joiningSpaces = <T>(payload: T): JoiningSpacesAction<T> => ({
   type: ActionType.JOINING_SPACES,
   payload,
 });
 
-export const spacesJoined = <T>(
+const spacesJoined = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpacesJoinedAction<T> => ({
   type: ActionType.SPACES_JOINED,
   payload,
 });
 
-export const errorJoiningSpaces = <T>(
+const errorJoiningSpaces = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorJoiningSpacesAction<T> => ({
   type: ActionType.ERROR_JOINING_SPACES,
