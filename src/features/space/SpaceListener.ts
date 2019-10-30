@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux';
-import { SpaceDeletedAction, SpaceUpdatedAction } from 'actions/Actions';
-import { ObjectsActionPayload } from 'api/Objects';
-import { ActionType } from 'actions/ActionType.enum';
-import { PubNubObjectApiSuccess, Identifiable } from 'api/PubNubApi';
+import { SpaceDeletedAction, SpaceUpdatedAction } from '../../actions/Actions';
+import { ObjectsActionPayload } from '../../api/Objects';
+import { ActionType } from '../../actions/ActionType.enum';
+import { PubNubObjectApiSuccess, Identifiable } from '../../api/PubNubApi';
 
 const spaceUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
@@ -18,7 +18,7 @@ const spaceDeleted = <T>(
   payload,
 });
 
-export const createSpaceActionListener = <T extends Identifiable>(
+export const createSpaceListener = <T extends Identifiable>(
   dispatch: Dispatch<SpaceUpdatedAction<T> | SpaceDeletedAction<T>>
 ) => ({
   space: (payload: ObjectsActionPayload<T>) => {

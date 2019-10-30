@@ -1,4 +1,4 @@
-import { Space } from 'api/Space';
+import { Space } from './Space';
 
 // tag::RDX-004[]
 export interface MembershipOptions {

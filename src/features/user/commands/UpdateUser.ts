@@ -1,17 +1,18 @@
-import { ObjectsResponsePayload } from 'api/Objects';
+
+import { Dispatch } from 'redux';
+import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
   UserUpdatedAction,
   UpdatingUserAction,
   ErrorUpdatingUserAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { Dispatch } from 'redux';
-import { User } from 'api/User';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
+import { User } from '../../../api/User';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
-} from 'api/PubNubApi';
+} from '../../../api/PubNubApi';
 
 const updatingUser = <T>(payload: T): UpdatingUserAction<T> => ({
   type: ActionType.UPDATING_USER,

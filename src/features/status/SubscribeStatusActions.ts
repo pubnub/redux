@@ -3,9 +3,9 @@ import {
   ReconnectedAction,
   ConnectedAction,
   SubscriptionStatusListenerActions,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { StatusActionPayload } from 'api/Status';
+} from '../../actions/Actions';
+import { ActionType } from '../../actions/ActionType.enum';
+import { StatusActionPayload } from '../../api/Status';
 
 const reconnected = (payload: StatusActionPayload): ReconnectedAction => ({
   type: ActionType.RECONNECTED,
@@ -17,7 +17,7 @@ const connected = (payload: StatusActionPayload): ConnectedAction => ({
   payload,
 });
 
-export const createSubscribeStatusActionListener = (
+export const createSubscribeStatusListener = (
   dispatch: Dispatch<SubscriptionStatusListenerActions>
 ) => ({
   status: (payload: StatusActionPayload) => {

@@ -9,9 +9,9 @@ import {
   RequestMessageCountExceedAction,
   UnknownAction,
   ErrorStatusListenerActions,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { StatusActionPayload } from 'api/Status';
+} from '../../actions/Actions';
+import { ActionType } from '../../actions/ActionType.enum';
+import { StatusActionPayload } from '../../api/Status';
 
 const networkIssues = (payload: StatusActionPayload): NetworkIssuesAction => ({
   type: ActionType.NETWORK_ISSUES,
@@ -61,7 +61,7 @@ const unknown = (payload: StatusActionPayload): UnknownAction => ({
   payload,
 });
 
-export const createErrorStatusActionListener = (
+export const createErrorStatusListener = (
   dispatch: Dispatch<ErrorStatusListenerActions>
 ) => ({
   status: (payload: StatusActionPayload) => {

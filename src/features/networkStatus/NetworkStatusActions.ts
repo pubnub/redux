@@ -3,9 +3,9 @@ import {
   NetworkStatusListenerActions,
   NetworkUpAction,
   NetworkDownAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { StatusActionPayload } from 'api/Status';
+} from '../../actions/Actions';
+import { ActionType } from '../../actions/ActionType.enum';
+import { StatusActionPayload } from '../../api/Status';
 
 const networkUp = (): NetworkUpAction => ({
   type: ActionType.NETWORK_UP,
@@ -15,7 +15,7 @@ const networkDown = (): NetworkDownAction => ({
   type: ActionType.NETWORK_DOWN,
 });
 
-export const createNetworkStatusActionListener = (
+export const createNetworkStatusListener = (
   dispatch: Dispatch<NetworkStatusListenerActions>
 ) => ({
   status: (payload: StatusActionPayload) => {

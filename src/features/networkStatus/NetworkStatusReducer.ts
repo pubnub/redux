@@ -1,6 +1,6 @@
-import { NetworkStatusListenerActions } from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { NetworkStatus } from 'api/NetworkStatus';
+import { NetworkStatusListenerActions } from '../../actions/Actions';
+import { ActionType } from '../../actions/ActionType.enum';
+import { NetworkStatus } from '../../api/NetworkStatus';
 
 type NetworkStatusInitializerFunction = () => boolean;
 
@@ -23,6 +23,7 @@ export const createNetworkStatusReducer = (
       'The initializer parameter must be a boolean value (true or false) or function'
     );
   }
+
   return function networkStatusReducer(
     state = initialState,
     action: NetworkStatusListenerActions

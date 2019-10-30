@@ -1,13 +1,13 @@
 import { Dispatch } from 'redux';
-import { ObjectsActionPayload } from 'api/Objects';
+import { ObjectsActionPayload } from '../../api/Objects';
 import {
   UserMembershipUpdatedOnSpaceAction,
   UserAddedToSpaceAction,
   UserRemovedFromSpaceAction,
   MembershipListenerActions,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { PubNubObjectApiSuccess, ListenerEventData } from 'api/PubNubApi';
+} from '../../actions/Actions';
+import { ActionType } from '../../actions/ActionType.enum';
+import { PubNubObjectApiSuccess, ListenerEventData } from '../../api/PubNubApi';
 
 const userMembershipUpdatedOnSpace = <T extends ListenerEventData>(
   payload: PubNubObjectApiSuccess<T>

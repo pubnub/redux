@@ -1,17 +1,17 @@
-import { ObjectsResponsePayload } from 'api/Objects';
+import { Dispatch } from 'redux';
+import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
   ErrorCreatingUserAction,
   UserCreatedAction,
   CreatingUserAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { Dispatch } from 'redux';
-import { User } from 'api/User';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
+import { User } from '../../../api/User';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
-} from 'api/PubNubApi';
+} from '../../../api/PubNubApi';
 
 const creatingUser = <T>(payload: T): CreatingUserAction<T> => ({
   type: ActionType.CREATING_USER,

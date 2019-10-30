@@ -2,20 +2,21 @@ import {
   SpaceActions,
   SpaceListenerActions,
   MembershipActions,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
+} from '../../actions/Actions';
+import { ActionType } from '../../actions/ActionType.enum';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiState,
   Identifiable,
   ItemMap,
-} from 'api/PubNubApi';
+} from '../../api/PubNubApi';
 import {
   successObjectById,
   successDeleteObjectById,
   successObjectList,
-} from 'utilities/reducerUtil';
-import { MembershipList, MembershipResult } from 'api/Membership';
+} from '../../utilities/reducerUtil';
+import { MembershipList, MembershipResult } from '../../api/Membership';
+import { Space } from '../../api/Space';
 
 // tag::RDX-034[]
 const createInitialState = <T extends Identifiable>(): PubNubObjectApiState<
@@ -86,7 +87,7 @@ const membershipsRetrieved = <T extends Identifiable>(
 };
 // end::RDX-048[]
 
-export const createSpaceReducer = <T extends Identifiable>() => (
+export const createSpaceReducer = <T extends Identifiable = Space>() => (
   state: PubNubObjectApiState<T> = createInitialState<T>(),
   action:
     | SpaceActions<T>

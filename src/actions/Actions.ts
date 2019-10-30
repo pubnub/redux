@@ -1,15 +1,15 @@
-import { PresenceActionPayload } from 'api/Presence';
-import { StatusActionPayload } from 'api/Status';
-import { SignalActionPayload } from 'api/Signal';
+import { PresenceActionPayload } from '../api/Presence';
+import { StatusActionPayload } from '../api/Status';
+import { SignalActionPayload } from '../api/Signal';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   Identifiable,
   ItemMap,
-} from 'api/PubNubApi';
-import { MembershipResult } from 'api/Membership';
-import { ActionType } from 'actions/ActionType.enum';
-import { MembersResult } from 'api/Member';
+} from '../api/PubNubApi';
+import { MembershipResult } from '../api/Membership';
+import { ActionType } from '../actions/ActionType.enum';
+import { MembersResult } from '../api/Member';
 
 // tag::RDX-069[]
 export interface JoinAction {

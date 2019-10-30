@@ -1,18 +1,18 @@
-import { ObjectsResponsePayload, ObjectsListInput } from 'api/Objects';
+import { Dispatch } from 'redux';
+import { ObjectsResponsePayload, ObjectsListInput } from '../../../api/Objects';
 import {
   ErrorFetchingUsersAction,
   UsersRetrievedAction,
   FetchingUsersAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { Dispatch } from 'redux';
-import { User } from 'api/User';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
+import { User } from '../../../api/User';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
   ItemMap,
-} from 'api/PubNubApi';
+} from '../../../api/PubNubApi';
 
 const fetchingUsers = (payload: { label: string }): FetchingUsersAction => ({
   type: ActionType.FETCHING_USERS,

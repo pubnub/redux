@@ -1,13 +1,13 @@
 import { Dispatch } from 'redux';
-import { PresenceActionPayload } from 'api/Presence';
+import { PresenceActionPayload } from '../../api/Presence';
 import {
   JoinAction,
   LeaveAction,
   TimeoutAction,
   StateChangeAction,
   PresenceListenerActions,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
+} from '../../actions/Actions';
+import { ActionType } from '../../actions/ActionType.enum';
 
 const userJoin = (payload: PresenceActionPayload): JoinAction => ({
   type: ActionType.JOIN,
@@ -31,7 +31,7 @@ const userStateChange = (
   payload,
 });
 
-export const createPresenceActionListener = (
+export const createPresenceListener = (
   dispatch: Dispatch<PresenceListenerActions>
 ) => ({
   presence: (payload: PresenceActionPayload) => {

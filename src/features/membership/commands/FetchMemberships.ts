@@ -3,18 +3,18 @@ import {
   MembershipsRetrievedAction,
   FetchingMembershipsAction,
   ErrorFetchingMembershipsAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
 import {
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
-} from 'api/PubNubApi';
+} from '../../../api/PubNubApi';
 import {
   MembershipList,
   MembershipResult,
   MembershipOptions,
-} from 'api/Membership';
+} from '../../../api/Membership';
 
 const fetchingMemberships = (payload: string): FetchingMembershipsAction => ({
   type: ActionType.FETCHING_MEMBERSHIPS,

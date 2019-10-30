@@ -1,17 +1,17 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from 'api/Objects';
-import { Members } from 'api/Member';
+import { ObjectsResponsePayload } from '../../../api/Objects';
+import { Members } from '../../../api/Member';
 import {
   ErrorRemovingMembersAction,
   MembersRemovedAction,
   RemovingMembersAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
 import {
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
-} from 'api/PubNubApi';
+} from '../../../api/PubNubApi';
 
 const removingMembers = <T>(payload: T): RemovingMembersAction<T> => ({
   type: ActionType.REMOVING_MEMBERS,

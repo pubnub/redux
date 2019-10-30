@@ -1,17 +1,17 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from 'api/Objects';
+import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
   ErrorCreatingSpaceAction,
   SpaceCreatedAction,
   CreatingSpaceAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { Space } from 'api/Space';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
+import { Space } from '../../../api/Space';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
-} from 'api/PubNubApi';
+} from '../../../api/PubNubApi';
 
 const creatingSpace = <T>(payload: T): CreatingSpaceAction<T> => ({
   type: ActionType.CREATING_SPACE,

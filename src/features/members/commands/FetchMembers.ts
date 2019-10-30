@@ -3,14 +3,14 @@ import {
   FetchingMembersAction,
   MembersRetrievedAction,
   ErrorFetchingMembersAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
 import {
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
-} from 'api/PubNubApi';
-import { MembersList, MembersResult, MembersOptions } from 'api/Member';
+} from '../../../api/PubNubApi';
+import { MembersList, MembersResult, MembersOptions } from '../../../api/Member';
 
 const fetchingMembers = (payload: string): FetchingMembersAction => ({
   type: ActionType.FETCHING_MEMBERS,

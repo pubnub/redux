@@ -1,16 +1,16 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from 'api/Objects';
+import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
   SpaceDeletedAction,
   DeletingSpaceAction,
   ErrorDeletingSpaceAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
-} from 'api/PubNubApi';
+} from '../../../api/PubNubApi';
 
 const deletingSpace = (payload: string): DeletingSpaceAction => ({
   type: ActionType.DELETING_SPACE,

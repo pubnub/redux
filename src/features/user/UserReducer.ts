@@ -2,20 +2,21 @@ import {
   UserActions,
   UserListenerActions,
   MembersActions,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
+} from '../../actions/Actions';
+import { ActionType } from '../../actions/ActionType.enum';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiState,
   Identifiable,
   ItemMap,
-} from 'api/PubNubApi';
+} from '../../api/PubNubApi';
 import {
   successObjectById,
   successDeleteObjectById,
   successObjectList,
-} from 'utilities/reducerUtil';
+} from '../../utilities/reducerUtil';
 import { MembersResult, MembersList } from 'api/Member';
+import { User } from '../../api/User';
 
 // tag::RDX-054[]
 const createInitialState = <T extends Identifiable>(): PubNubObjectApiState<
@@ -87,7 +88,7 @@ const membersRetrieved = <T extends Identifiable>(
 };
 // end::RDX-068[]
 
-export const createUserReducer = <T extends Identifiable>() => (
+export const createUserReducer = <T extends Identifiable = User>() => (
   state: PubNubObjectApiState<T> = createInitialState<T>(),
   action: UserActions<T> | UserListenerActions<T> | MembersActions<MembersList>
 ): PubNubObjectApiState<T> => {

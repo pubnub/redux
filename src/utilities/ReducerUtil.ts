@@ -2,7 +2,7 @@ import {
   PubNubObjectApiState,
   ItemMap,
   PubNubObjectApiSuccess,
-} from 'api/PubNubApi';
+} from '../api/PubNubApi';
 
 export const successObjectById = <T>(
   state: PubNubObjectApiState<T>,

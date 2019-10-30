@@ -1,8 +1,8 @@
-import { ObjectsActionPayload } from 'api/Objects';
-import { UserDeletedAction, UserUpdatedAction } from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
 import { Dispatch } from 'redux';
-import { PubNubObjectApiSuccess, Identifiable } from 'api/PubNubApi';
+import { ObjectsActionPayload } from '../../api/Objects';
+import { UserDeletedAction, UserUpdatedAction } from '../../actions/Actions';
+import { ActionType } from '../../actions/ActionType.enum';
+import { PubNubObjectApiSuccess, Identifiable } from '../../api/PubNubApi';
 
 const userUpdated = <T extends Identifiable>(
   payload: PubNubObjectApiSuccess<T>
@@ -18,7 +18,7 @@ const userDeleted = <T extends Identifiable>(
   payload,
 });
 
-export const createUserActionListener = <T extends Identifiable>(
+export const createUserListener = <T extends Identifiable>(
   dispatch: Dispatch<UserUpdatedAction<T> | UserDeletedAction<T>>
 ) => ({
   user: (payload: ObjectsActionPayload<T>) => {

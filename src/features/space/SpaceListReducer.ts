@@ -2,14 +2,15 @@ import {
   ErrorFetchingSpacesAction,
   FetchingSpacesAction,
   SpacesRetrievedAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { Space } from 'api/Space';
+} from '../../actions/Actions';
+import { ActionType } from '../../actions/ActionType.enum';
+import { Space } from '../../api/Space';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   ItemMap,
-} from 'api/PubNubApi';
+  Identifiable,
+} from '../../api/PubNubApi';
 
 // tag::RDX-029[]
 interface SpaceListState<T> {
@@ -36,7 +37,7 @@ const fetchingSpaces = <T>(state: SpaceListState<T>) => ({
 // end::RDX-031[]
 
 // tag::RDX-032[]
-const spacesRetrieved = (payload: PubNubObjectApiSuccess<ItemMap<Space>>) => {
+const spacesRetrieved = <T extends Identifiable>(payload: PubNubObjectApiSuccess<ItemMap<T>>) => {
   let data = Object.keys(payload.data).map((key) => payload.data[key].id);
 
   return {
@@ -58,10 +59,10 @@ const errorFetchingSpaces = <T>(
 });
 // end::RDX-033[]
 
-export const createSpaceListReducer = <T>(label: string = 'all') => (
+export const createSpaceListReducer = <T extends Identifiable = Space>(label: string = 'all') => (
   state: SpaceListState<T> = createInitialState(),
   action:
-    | SpacesRetrievedAction<Space>
+    | SpacesRetrievedAction<T>
     | FetchingSpacesAction
     | ErrorFetchingSpacesAction<T>
 ): SpaceListState<T> => {

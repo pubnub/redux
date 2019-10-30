@@ -3,14 +3,14 @@ import {
   MessageSentAction,
   SendingMessageAction,
   ErrorSendingMessageAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { Message } from 'api/Message';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
+import { Message } from '../../../api/Message';
 import {
   PubNubApiStatus,
   PubNubObjectApiError,
   PubNubObjectApiSuccess,
-} from 'api/PubNubApi';
+} from '../../../api/PubNubApi';
 
 const sendingMessage = <T extends { channel: string }>(
   payload: T

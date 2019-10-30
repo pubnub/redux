@@ -1,17 +1,17 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from 'api/Objects';
+import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
   JoiningSpacesAction,
   SpacesJoinedAction,
   ErrorJoiningSpacesAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
 import {
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
-} from 'api/PubNubApi';
-import { Membership } from 'api/Membership';
+} from '../../../api/PubNubApi';
+import { Membership } from '../../../api/Membership';
 
 const joiningSpaces = <T>(payload: T): JoiningSpacesAction<T> => ({
   type: ActionType.JOINING_SPACES,

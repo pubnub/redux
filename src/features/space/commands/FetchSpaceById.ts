@@ -1,16 +1,16 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from 'api/Objects';
+import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
   ErrorFetchingSpaceByIdAction,
   SpaceRetrievedAction,
   FetchingSpaceByIdAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
-} from 'api/PubNubApi';
+} from '../../../api/PubNubApi';
 
 const fetchingSpaceById = (payload: string): FetchingSpaceByIdAction => ({
   type: ActionType.FETCHING_SPACE_BY_ID,

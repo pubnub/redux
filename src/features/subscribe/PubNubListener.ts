@@ -1,15 +1,15 @@
 import { Dispatch } from 'redux';
-import { createPresenceActionListener } from 'features/presence/PresenceActions';
-import { createNetworkStatusActionListener } from 'features/networkStatus/NetworkStatusActions';
-import { createSubscribeStatusActionListener } from 'features/status/SubscribeStatusActions';
-import { createErrorStatusActionListener } from 'features/status/ErrorStatusActions';
-import { createMessageActionListener } from 'features/message/MessageListener';
-import { createSignalActionListener } from 'features/signal/SignalActions';
-import { createUserActionListener } from 'features/user/UserListener';
-import { createSpaceActionListener } from 'features/space/SpaceListener';
-import { createMembershipListener } from 'features/membership/MembershipListener';
-import { ListenerEventData } from 'api/PubNubApi';
-import { ListenerActions } from 'actions/Actions';
+import { createPresenceListener } from '../../features/presence/PresenceActions';
+import { createNetworkStatusListener } from '../../features/networkStatus/NetworkStatusActions';
+import { createSubscribeStatusListener } from '../../features/status/SubscribeStatusActions';
+import { createErrorStatusListener } from '../../features/status/ErrorStatusActions';
+import { createMessageListener } from '../../features/message/MessageListener';
+import { createSignalListener } from '../../features/signal/SignalActions';
+import { createUserListener } from '../../features/user/UserListener';
+import { createSpaceListener } from '../../features/space/SpaceListener';
+import { createMembershipListener } from '../../features/membership/MembershipListener';
+import { ListenerEventData } from '../../api/PubNubApi';
+import { ListenerActions } from '../../actions/Actions';
 
 export const createPubNubListener = <
   T extends ListenerEventData,
@@ -18,15 +18,15 @@ export const createPubNubListener = <
   dispatch: Dispatch<ListenerActions<T, TT>>
 ) =>
   combineListeners(
-    createMessageActionListener<TT>(dispatch),
-    createPresenceActionListener(dispatch),
-    createSignalActionListener(dispatch),
-    createUserActionListener<T>(dispatch),
-    createSpaceActionListener<T>(dispatch),
+    createMessageListener<TT>(dispatch),
+    createPresenceListener(dispatch),
+    createSignalListener(dispatch),
+    createUserListener<T>(dispatch),
+    createSpaceListener<T>(dispatch),
     createMembershipListener<T>(dispatch),
-    createNetworkStatusActionListener(dispatch),
-    createSubscribeStatusActionListener(dispatch),
-    createErrorStatusActionListener(dispatch)
+    createNetworkStatusListener(dispatch),
+    createSubscribeStatusListener(dispatch),
+    createErrorStatusListener(dispatch)
   );
 
 /**

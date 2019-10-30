@@ -1,18 +1,18 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload, ObjectsListInput } from 'api/Objects';
+import { ObjectsResponsePayload, ObjectsListInput } from '../../../api/Objects';
 import {
   ErrorFetchingSpacesAction,
   SpacesRetrievedAction,
   FetchingSpacesAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { Space } from 'api/Space';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
+import { Space } from '../../../api/Space';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
   ItemMap,
-} from 'api/PubNubApi';
+} from '../../../api/PubNubApi';
 
 const fetchingSpaces = (payload: { label: string }): FetchingSpacesAction => ({
   type: ActionType.FETCHING_SPACES,

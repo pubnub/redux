@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
-import { MessageReceivedAction } from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { PubNubObjectApiSuccess } from 'api/PubNubApi';
+import { MessageReceivedAction } from '../../actions/Actions';
+import { ActionType } from '../../actions/ActionType.enum';
+import { PubNubObjectApiSuccess } from '../../api/PubNubApi';
 
 const messageRecieved = <T extends { channel: string }>(
   payload: PubNubObjectApiSuccess<T>
@@ -10,7 +10,7 @@ const messageRecieved = <T extends { channel: string }>(
   payload,
 });
 
-export const createMessageActionListener = <T extends { channel: string }>(
+export const createMessageListener = <T extends { channel: string }>(
   dispatch: Dispatch<MessageReceivedAction<T>>
 ) => ({
   message: (payload: T): MessageReceivedAction<T> =>

@@ -1,4 +1,4 @@
-import { Identifiable } from 'api/PubNubApi';
+import { Identifiable } from './PubNubApi';
 
 // tag::RDX-010[]
 export interface ObjectsData {

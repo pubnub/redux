@@ -1,7 +1,7 @@
-import { MessageActions } from 'actions/Actions';
-import { PubNubObjectApiState, PubNubObjectApiSuccess } from 'api/PubNubApi';
-import { ActionType } from 'actions/ActionType.enum';
-import { clonePubNubObjectApiState } from 'utilities/reducerUtil';
+import { MessageActions } from '../../actions/Actions';
+import { PubNubObjectApiState, PubNubObjectApiSuccess } from '../../api/PubNubApi';
+import { ActionType } from '../../actions/ActionType.enum';
+import { clonePubNubObjectApiState } from '../../utilities/reducerUtil';
 
 // tag::RDX-028[]
 const createInitialState = <T>(): PubNubObjectApiState<T> => ({

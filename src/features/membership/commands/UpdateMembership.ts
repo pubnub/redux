@@ -1,17 +1,17 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from 'api/Objects';
+import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
   UpdatingMembershipAction,
   ErrorUpdatingMembershipAction,
   MembershipUpdatedAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
 import {
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
-} from 'api/PubNubApi';
-import { Membership } from 'api/Membership';
+} from '../../../api/PubNubApi';
+import { Membership } from '../../../api/Membership';
 
 const updatingMemberships = (payload: string): UpdatingMembershipAction => ({
   type: ActionType.UPDATING_MEMBERSHIP,

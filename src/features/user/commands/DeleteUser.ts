@@ -1,16 +1,16 @@
-import { ObjectsResponsePayload } from 'api/Objects';
+import { Dispatch } from 'redux';
+import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
   UserDeletedAction,
   DeletingUserAction,
   ErrorDeletingUserAction,
-} from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
-import { Dispatch } from 'redux';
+} from '../../../actions/Actions';
+import { ActionType } from '../../../actions/ActionType.enum';
 import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
-} from 'api/PubNubApi';
+} from '../../../api/PubNubApi';
 
 const deletingUser = (payload: string): DeletingUserAction => ({
   type: ActionType.DELETING_USER,

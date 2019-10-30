@@ -1,6 +1,6 @@
-import { createNetworkStatusReducer } from 'features/networkStatus/createNetworkStatusReducer';
-import { NetworkUpAction, NetworkDownAction } from 'actions/Actions';
-import { ActionType } from 'actions/ActionType.enum';
+import { createNetworkStatusReducer } from '../../features/networkStatus/NetworkStatusReducer';
+import { NetworkUpAction, NetworkDownAction } from '../../actions/Actions';
+import { ActionType } from '../../actions/ActionType.enum';
 
 const networkUp = (): NetworkUpAction => ({
   type: ActionType.NETWORK_UP,

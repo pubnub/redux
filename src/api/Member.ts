@@ -1,4 +1,4 @@
-import { User } from 'api/User';
+import { User } from './User';
 
 // tag::RDX-000[]
 export interface MembersOptions {
