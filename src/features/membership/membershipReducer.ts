@@ -92,7 +92,7 @@ const userMembershipUpdatedOnSpace = <T extends MembershipList>(
   return newState;
 };
 
-const fetchMemberships = <T extends MembershipList>(
+const membershipsRetrieved = <T extends MembershipList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<MembershipResult>
 ) =>
@@ -104,7 +104,7 @@ const fetchMemberships = <T extends MembershipList>(
     payload.data.id
   );
 
-const updateMembership = <T extends MembershipList>(
+const membershipsUpdated = <T extends MembershipList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<Membership>
 ) =>
@@ -116,7 +116,7 @@ const updateMembership = <T extends MembershipList>(
     payload.data.userId
   );
 
-const joinSpaces = <T extends MembershipList>(
+const spacesJoined = <T extends MembershipList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<Membership>
 ) =>
@@ -128,7 +128,7 @@ const joinSpaces = <T extends MembershipList>(
     payload.data.userId
   );
 
-const leaveSpaces = <T extends MembershipList>(
+const spacesLeft = <T extends MembershipList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<Membership>
 ) =>
@@ -154,19 +154,19 @@ export const createMembershipReducer = <
     case ActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE:
       return userMembershipUpdatedOnSpace<T>(state, action.payload);
     case ActionType.MEMBERSHIPS_RETRIEVED:
-      return fetchMemberships<T>(state, action.payload);
+      return membershipsRetrieved<T>(state, action.payload);
     case ActionType.MEMBERSHIP_UPDATED:
-      return updateMembership(
+      return membershipsUpdated(
         state,
         (action.payload as unknown) as PubNubObjectApiSuccess<Membership>
       );
     case ActionType.SPACES_JOINED:
-      return joinSpaces(
+      return spacesJoined(
         state,
         (action.payload as unknown) as PubNubObjectApiSuccess<Membership>
       );
     case ActionType.SPACES_LEFT:
-      return leaveSpaces(
+      return spacesLeft(
         state,
         (action.payload as unknown) as PubNubObjectApiSuccess<Membership>
       );

@@ -26,7 +26,7 @@ import {
   ItemMap,
 } from 'api/PubNubApi';
 
-export const createUserBegin = <T>(payload: T): CreatingUserAction<T> => ({
+export const creatingUser = <T>(payload: T): CreatingUserAction<T> => ({
   type: ActionType.CREATING_USER,
   payload,
 });
@@ -38,52 +38,55 @@ export const userCreated = <T>(
   payload,
 });
 
-export const createUserError = <T>(
+export const errorCreatingUser = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorCreatingUserAction<T> => ({
   type: ActionType.ERROR_CREATING_USER,
   payload,
 });
 
-export const userListRetrieved = <T>(
-  payload: PubNubObjectApiSuccess<ItemMap<T>>
-): UsersRetrievedAction<T> => ({
-  type: ActionType.USERS_RETRIEVED,
-  payload,
-});
-
-export const fetchUsersBegin = (payload: {
+export const fetchingUsers = (payload: {
   label: string;
 }): FetchingUsersAction => ({
   type: ActionType.FETCHING_USERS,
   payload,
 });
 
-export const fetchUsersError = <T>(
+export const usersRetrieved = <T>(
+  payload: PubNubObjectApiSuccess<ItemMap<T>>
+): UsersRetrievedAction<T> => ({
+  type: ActionType.USERS_RETRIEVED,
+  payload,
+});
+
+export const errorFetchingUsers = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorFetchingUsersAction<T> => ({
   type: ActionType.ERROR_FETCHING_USERS,
   payload,
 });
 
-export const userRetrievedById = <T>(
+export const fetchingUserById = (payload: string): FetchingUserByIdAction => ({
+  type: ActionType.FETCHING_USER_BY_ID,
+  payload,
+});
+
+export const userRetrieved = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): UserRetrievedAction<T> => ({
   type: ActionType.USER_RETRIEVED,
   payload,
 });
 
-export const fetchUserByIdBegin = (
-  payload: string
-): FetchingUserByIdAction => ({
-  type: ActionType.FETCHING_USER_BY_ID,
-  payload,
-});
-
-export const fetchUserByIdError = <T>(
+export const errorFetchingUserById = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorFetchingUserByIdAction<T> => ({
   type: ActionType.ERROR_FETCHING_USER_BY_ID,
+  payload,
+});
+
+export const updatingUser = <T>(payload: T): UpdatingUserAction<T> => ({
+  type: ActionType.UPDATING_USER,
   payload,
 });
 
@@ -94,15 +97,15 @@ export const userUpdated = <T>(
   payload,
 });
 
-export const updateUserBegin = <T>(payload: T): UpdatingUserAction<T> => ({
-  type: ActionType.UPDATING_USER,
-  payload,
-});
-
-export const updateUserError = <T>(
+export const errorUpdatingUser = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorUpdatingUserAction<T> => ({
   type: ActionType.ERROR_UPDATING_USER,
+  payload,
+});
+
+export const deletingUser = (payload: string): DeletingUserAction => ({
+  type: ActionType.DELETING_USER,
   payload,
 });
 
@@ -113,12 +116,7 @@ export const userDeleted = <T>(
   payload,
 });
 
-export const deleteUserBegin = (payload: string): DeletingUserAction => ({
-  type: ActionType.DELETING_USER,
-  payload,
-});
-
-export const deleteUserError = <T>(
+export const errorDeletingUser = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorDeletingUserAction<T> => ({
   type: ActionType.ERROR_DELETING_USER,
@@ -126,7 +124,7 @@ export const deleteUserError = <T>(
 });
 
 export const createUser = (pubnub: any, user: User) => (dispatch: Dispatch) => {
-  dispatch(createUserBegin(user));
+  dispatch(creatingUser(user));
 
   pubnub.createUser(
     {
@@ -137,7 +135,7 @@ export const createUser = (pubnub: any, user: User) => (dispatch: Dispatch) => {
         let errorData = { id: user.id, value: user };
 
         dispatch(
-          createUserError({
+          errorCreatingUser({
             code: status.category,
             message: status.errorData,
             data: errorData,
@@ -155,7 +153,7 @@ export const createUser = (pubnub: any, user: User) => (dispatch: Dispatch) => {
 };
 
 export const updateUser = (pubnub: any, user: User) => (dispatch: Dispatch) => {
-  dispatch(updateUserBegin(user));
+  dispatch(updatingUser(user));
 
   pubnub.updateUser(
     {
@@ -166,7 +164,7 @@ export const updateUser = (pubnub: any, user: User) => (dispatch: Dispatch) => {
         let errorData = { id: user.id, value: user };
 
         dispatch(
-          updateUserError({
+          errorUpdatingUser({
             code: status.category,
             message: status.errorData,
             data: errorData,
@@ -184,7 +182,7 @@ export const updateUser = (pubnub: any, user: User) => (dispatch: Dispatch) => {
 };
 
 export const deleteUser = (pubnub: any, id: string) => (dispatch: Dispatch) => {
-  dispatch(deleteUserBegin(id));
+  dispatch(deletingUser(id));
 
   pubnub.deleteUser(
     id,
@@ -193,7 +191,7 @@ export const deleteUser = (pubnub: any, id: string) => (dispatch: Dispatch) => {
         let errorData = { id: id };
 
         dispatch(
-          deleteUserError({
+          errorDeletingUser({
             code: status.category,
             message: status.errorData,
             data: errorData,
@@ -215,7 +213,7 @@ export const fetchUsers = (
   options: ObjectsListInput = {},
   label: string = 'all'
 ) => (dispatch: Dispatch) => {
-  dispatch(fetchUsersBegin({ label: label }));
+  dispatch(fetchingUsers({ label: label }));
 
   pubnub.getUsers(
     { ...options },
@@ -224,7 +222,7 @@ export const fetchUsers = (
         let errorData = { id: '' };
 
         dispatch(
-          fetchUsersError({
+          errorFetchingUsers({
             code: status.category,
             message: status.errorData,
             data: errorData,
@@ -233,7 +231,7 @@ export const fetchUsers = (
         );
       } else {
         dispatch(
-          userListRetrieved({
+          usersRetrieved({
             label: label,
             data: (response.data as User[]).reduce(
               (result: { [key: string]: User }, value) => {
@@ -254,7 +252,7 @@ export const fetchUserById = (
   userId: string,
   include?: object
 ) => (dispatch: Dispatch) => {
-  dispatch(fetchUserByIdBegin(userId));
+  dispatch(fetchingUserById(userId));
 
   pubnub.getUser(
     {
@@ -266,7 +264,7 @@ export const fetchUserById = (
         let errorData = { id: userId };
 
         dispatch(
-          fetchUserByIdError({
+          errorFetchingUserById({
             code: status.category,
             message: status.errorData,
             data: errorData,
@@ -274,7 +272,7 @@ export const fetchUserById = (
         );
       } else {
         dispatch(
-          userRetrievedById({
+          userRetrieved({
             data: response.data,
           })
         );

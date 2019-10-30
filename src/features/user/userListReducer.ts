@@ -28,7 +28,7 @@ const createInitialState = <T>(): UserListState<T> => ({
 // end::RDX-050[]
 
 // tag::RDX-051[]
-const beginFetchUsers = <T>(state: UserListState<T>) => ({
+const fetchingUsers = <T>(state: UserListState<T>) => ({
   data: [...state.data],
   loading: true,
   error: undefined,
@@ -36,7 +36,7 @@ const beginFetchUsers = <T>(state: UserListState<T>) => ({
 // end::RDX-051[]
 
 // tag::RDX-052[]
-const fetchUsers = (payload: PubNubObjectApiSuccess<ItemMap<User>>) => {
+const usersRetrieved = (payload: PubNubObjectApiSuccess<ItemMap<User>>) => {
   let data = Object.keys(payload.data).map((key) => payload.data[key].id);
 
   return {
@@ -48,7 +48,7 @@ const fetchUsers = (payload: PubNubObjectApiSuccess<ItemMap<User>>) => {
 // end::RDX-052[]
 
 // tag::RDX-053[]
-const fetchUsersError = <T>(
+const errorFetchingUsers = <T>(
   state: UserListState<T>,
   payload: PubNubObjectApiError<T>
 ) => ({
@@ -68,11 +68,11 @@ export const createUserListReducer = <T>(label: string = 'all') => (
   if (action.payload !== undefined && action.payload.label === label) {
     switch (action.type) {
       case ActionType.FETCHING_USERS:
-        return beginFetchUsers(state);
+        return fetchingUsers(state);
       case ActionType.USERS_RETRIEVED:
-        return fetchUsers(action.payload);
+        return usersRetrieved(action.payload);
       case ActionType.ERROR_FETCHING_USERS:
-        return fetchUsersError(state, action.payload);
+        return errorFetchingUsers(state, action.payload);
       default:
         return state;
     }

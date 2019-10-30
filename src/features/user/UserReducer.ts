@@ -26,42 +26,42 @@ const createInitialState = <T extends Identifiable>(): PubNubObjectApiState<
 // end::RDX-054[]
 
 // tag::RDX-056[]
-const createUser = <T extends Identifiable>(
+const userCreated = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
 ) => successObjectById<T>(state, payload, payload.data.id);
 // end::RDX-056[]
 
 // tag::RDX-059[]
-const updateUser = <T extends Identifiable>(
+const userUpdated = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
 ) => successObjectById<T>(state, payload, payload.data.id);
 // end::RDX-059[]
 
 // tag::RDX-062[]
-const deleteUser = <T extends Identifiable>(
+const userDeleted = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
 ) => successDeleteObjectById<T>(state, payload.data.id);
 // end::RDX-062[]
 
 // tag::RDX-064[]
-const fetchUsers = <T extends object>(
+const usersRetrieved = <T extends object>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<ItemMap<T>>
 ) => successObjectList<T>(state, payload);
 // end::RDX-064[]
 
 // tag::RDX-066[]
-const fetchUserById = <T extends Identifiable>(
+const userRetrieved = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
 ) => successObjectById<T>(state, payload, payload.data.id);
 // end::RDX-066[]
 
 // tag::RDX-068[]
-const fetchMembers = <T extends Identifiable>(
+const membersRetrieved = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<MembersResult>
 ) => {
@@ -93,17 +93,17 @@ export const createUserReducer = <T extends Identifiable>() => (
 ): PubNubObjectApiState<T> => {
   switch (action.type) {
     case ActionType.USER_CREATED:
-      return createUser<T>(state, action.payload);
+      return userCreated<T>(state, action.payload);
     case ActionType.USER_UPDATED:
-      return updateUser<T>(state, action.payload);
+      return userUpdated<T>(state, action.payload);
     case ActionType.USER_DELETED:
-      return deleteUser<T>(state, action.payload);
+      return userDeleted<T>(state, action.payload);
     case ActionType.USERS_RETRIEVED:
-      return fetchUsers<T>(state, action.payload);
+      return usersRetrieved<T>(state, action.payload);
     case ActionType.USER_RETRIEVED:
-      return fetchUserById<T>(state, action.payload);
+      return userRetrieved<T>(state, action.payload);
     case ActionType.MEMBERS_RETRIEVED:
-      return fetchMembers<T>(state, action.payload);
+      return membersRetrieved<T>(state, action.payload);
     default:
       return state;
   }

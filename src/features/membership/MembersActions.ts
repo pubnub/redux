@@ -8,7 +8,7 @@ import {
   MembersAddedAction,
   AddingMembersAction,
   FetchingMembersAction,
-  FetchMembersAction,
+  MembersRetrievedAction,
   ErrorFetchingMembersAction,
   UpdatingMembersAction,
   ErrorUpdatingMembersAction,
@@ -27,26 +27,26 @@ import {
   MembersOptions,
 } from 'api/Member';
 
-export const fetchMembersBegin = (payload: string): FetchingMembersAction => ({
+export const fetchingMembers = (payload: string): FetchingMembersAction => ({
   type: ActionType.FETCHING_MEMBERS,
   payload,
 });
 
 const membersRetrieved = (
   payload: PubNubObjectApiSuccess<MembersResult>
-): FetchMembersAction => ({
+): MembersRetrievedAction => ({
   type: ActionType.MEMBERS_RETRIEVED,
   payload,
 });
 
-const fetchMembersError = <T>(
+const errorFetchingMembers = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorFetchingMembersAction<T> => ({
   type: ActionType.ERROR_FETCHING_MEMBERS,
   payload,
 });
 
-export const updateMembersBegin = (payload: string): UpdatingMembersAction => ({
+export const updatingMembers = (payload: string): UpdatingMembersAction => ({
   type: ActionType.UPDATING_MEMBERS,
   payload,
 });
@@ -58,14 +58,14 @@ export const membersUpdated = <T>(
   payload,
 });
 
-export const updateMembersError = <T>(
+export const errorUpdatingMembers = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorUpdatingMembersAction<T> => ({
   type: ActionType.ERROR_UPDATING_MEMBERS,
   payload,
 });
 
-export const addMembersBegin = <T>(payload: T): AddingMembersAction<T> => ({
+export const addingMembers = <T>(payload: T): AddingMembersAction<T> => ({
   type: ActionType.ADDING_MEMBERS,
   payload,
 });
@@ -77,16 +77,14 @@ export const membersAdded = <T>(
   payload,
 });
 
-export const addMembersError = <T>(
+export const errorAddingMembers = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorAddingMembersAction<T> => ({
   type: ActionType.ERROR_ADDING_MEMBERS,
   payload,
 });
 
-export const removeMembersBegin = <T>(
-  payload: T
-): RemovingMembersAction<T> => ({
+export const removingMembers = <T>(payload: T): RemovingMembersAction<T> => ({
   type: ActionType.REMOVING_MEMBERS,
   payload,
 });
@@ -98,7 +96,7 @@ export const membersRemoved = <T>(
   payload,
 });
 
-export const removeMembersError = <T>(
+export const errorRemovingMembers = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorRemovingMembersAction<T> => ({
   type: ActionType.ERROR_REMOVING_MEMBERS,
@@ -110,7 +108,7 @@ export const fetchMembers = (
   spaceId: string,
   options: MembersOptions = {}
 ) => (dispatch: Dispatch) => {
-  dispatch(fetchMembersBegin(spaceId));
+  dispatch(fetchingMembers(spaceId));
 
   pubnub.getMembers(
     {
@@ -122,7 +120,7 @@ export const fetchMembers = (
         let errorData = { id: spaceId };
 
         dispatch(
-          fetchMembersError({
+          errorFetchingMembers({
             code: status.category,
             message: status.errorData,
             data: errorData,
@@ -142,7 +140,7 @@ export const fetchMembers = (
 export const updateMembers = (pubnub: any, members: Members) => (
   dispatch: Dispatch
 ) => {
-  dispatch(updateMembersBegin(members.spaceId));
+  dispatch(updatingMembers(members.spaceId));
 
   pubnub.updateMembers(
     {
@@ -153,7 +151,7 @@ export const updateMembers = (pubnub: any, members: Members) => (
         let errorData = { id: members.spaceId, value: { ...members } };
 
         dispatch(
-          updateMembersError({
+          errorUpdatingMembers({
             code: status.category,
             message: status.errorData,
             data: errorData,
@@ -173,7 +171,7 @@ export const updateMembers = (pubnub: any, members: Members) => (
 export const addMembers = (pubnub: any, members: Members) => (
   dispatch: Dispatch
 ) => {
-  dispatch(addMembersBegin(members));
+  dispatch(addingMembers(members));
 
   pubnub.addMembers(
     {
@@ -184,7 +182,7 @@ export const addMembers = (pubnub: any, members: Members) => (
         let errorData = { id: members.spaceId, value: { ...members } };
 
         dispatch(
-          addMembersError({
+          errorAddingMembers({
             code: status.category,
             message: status.errorData,
             data: errorData,
@@ -204,7 +202,7 @@ export const addMembers = (pubnub: any, members: Members) => (
 export const removeMembers = (pubnub: any, members: Members) => (
   dispatch: Dispatch
 ) => {
-  dispatch(removeMembersBegin(members));
+  dispatch(removingMembers(members));
 
   pubnub.removeMembers(
     {
@@ -216,7 +214,7 @@ export const removeMembers = (pubnub: any, members: Members) => (
         let errorData = { id: members.spaceId, value: { ...members } };
 
         dispatch(
-          removeMembersError({
+          errorRemovingMembers({
             code: status.category,
             message: status.errorData,
             data: errorData,

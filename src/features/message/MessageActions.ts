@@ -13,21 +13,21 @@ import {
   PubNubObjectApiSuccess,
 } from 'api/PubNubApi';
 
-export const sendMessageBegin = <T extends { channel: string }>(
+export const sendingMessage = <T extends { channel: string }>(
   payload: T
 ): SendingMessageAction<T> => ({
   type: ActionType.SENDING_MESSAGE,
   payload,
 });
 
-export const sendMessageSuccess = <T extends { channel: string }>(
+export const messageSent = <T extends { channel: string }>(
   payload: PubNubObjectApiSuccess<T>
 ): MessageSentAction<T> => ({
   type: ActionType.MESSAGE_SENT,
   payload,
 });
 
-export const sendMessageError = <T extends { channel: string }>(
+export const errorSendingmessage = <T extends { channel: string }>(
   payload: PubNubObjectApiError<T>
 ): ErrorSendingMessageAction<T> => ({
   type: ActionType.ERROR_SENDING_MESSAGE,
@@ -37,7 +37,7 @@ export const sendMessageError = <T extends { channel: string }>(
 export const sendMessage = (pubnub: any, message: Message) => (
   dispatch: Dispatch
 ) => {
-  dispatch(sendMessageBegin(message));
+  dispatch(sendingMessage(message));
 
   pubnub.publish(
     {
@@ -48,7 +48,7 @@ export const sendMessage = (pubnub: any, message: Message) => (
         let errorData = { id: message.channel, value: { ...message } };
 
         dispatch(
-          sendMessageError({
+          errorSendingmessage({
             code: status.category,
             message: status.errorData,
             data: errorData,
@@ -56,7 +56,7 @@ export const sendMessage = (pubnub: any, message: Message) => (
         );
       } else {
         dispatch(
-          sendMessageSuccess({
+          messageSent({
             data: {
               ...message,
             },

@@ -26,42 +26,42 @@ const createInitialState = <T extends Identifiable>(): PubNubObjectApiState<
 // end::RDX-034[]
 
 // tag::RDX-036[]
-const createSpace = <T extends Identifiable>(
+const spaceCreated = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
 ) => successObjectById<T>(state, payload, payload.data.id);
 // end::RDX-036[]
 
 // tag::RDX-039[]
-const updateSpace = <T extends Identifiable>(
+const spaceUpdated = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
 ) => successObjectById<T>(state, payload, payload.data.id);
 // end::RDX-039[]
 
 // tag::RDX-042[]
-const deleteSpace = <T extends Identifiable>(
+const spaceDeleted = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
 ) => successDeleteObjectById<T>(state, payload.data.id);
 // end::RDX-042[]
 
 // tag::RDX-044[]
-const fetchSpaces = <T extends object>(
+const spacesRetrieved = <T extends object>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<ItemMap<T>>
 ) => successObjectList<T>(state, payload);
 // end::RDX-044[]
 
 // tag::RDX-046[]
-const fetchSpaceById = <T extends Identifiable>(
+const spaceRetrieved = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<T>
 ) => successObjectById<T>(state, payload, payload.data.id);
 // end::RDX-046[]
 
 // tag::RDX-048[]
-const fetchMemberships = <T extends Identifiable>(
+const membershipsRetrieved = <T extends Identifiable>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<MembershipResult>
 ) => {
@@ -95,17 +95,17 @@ export const createSpaceReducer = <T extends Identifiable>() => (
 ): PubNubObjectApiState<T> => {
   switch (action.type) {
     case ActionType.SPACE_CREATED:
-      return createSpace<T>(state, action.payload);
+      return spaceCreated<T>(state, action.payload);
     case ActionType.SPACE_UPDATED:
-      return updateSpace<T>(state, action.payload);
+      return spaceUpdated<T>(state, action.payload);
     case ActionType.SPACE_DELETED:
-      return deleteSpace<T>(state, action.payload);
+      return spaceDeleted<T>(state, action.payload);
     case ActionType.SPACES_RETRIEVED:
-      return fetchSpaces<T>(state, action.payload);
+      return spacesRetrieved<T>(state, action.payload);
     case ActionType.SPACE_RETRIEVED:
-      return fetchSpaceById<T>(state, action.payload);
+      return spaceRetrieved<T>(state, action.payload);
     case ActionType.MEMBERSHIPS_RETRIEVED:
-      return fetchMemberships<T>(state, action.payload);
+      return membershipsRetrieved<T>(state, action.payload);
     default:
       return state;
   }

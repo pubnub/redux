@@ -52,7 +52,7 @@ export const userRemovedFromSpace = <T extends Identifiable>(
   payload,
 });
 
-export const fetchMembershipsBegin = (
+export const fetchingMemberships = (
   payload: string
 ): FetchingMembershipsAction => ({
   type: ActionType.FETCHING_MEMBERSHIPS,
@@ -66,14 +66,14 @@ const membershipsRetrieved = (
   payload,
 });
 
-const fetchMembershipsError = <T>(
+const errorFetchingMemberships = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorFetchingMembershipsAction<T> => ({
   type: ActionType.ERROR_FETCHING_MEMBERSHIPS,
   payload,
 });
 
-export const updateMembershipBegin = (
+export const updatingMemberships = (
   payload: string
 ): UpdatingMembershipAction => ({
   type: ActionType.UPDATING_MEMBERSHIP,
@@ -87,14 +87,14 @@ export const membershipUpdated = <T>(
   payload,
 });
 
-export const updateMembershipError = <T>(
+export const errorUpdatingMembership = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorUpdatingMembershipAction<T> => ({
   type: ActionType.ERROR_UPDATING_MEMBERSHIP,
   payload,
 });
 
-export const joinSpacesBegin = <T>(payload: T): JoiningSpacesAction<T> => ({
+export const joiningSpaces = <T>(payload: T): JoiningSpacesAction<T> => ({
   type: ActionType.JOINING_SPACES,
   payload,
 });
@@ -106,14 +106,14 @@ export const spacesJoined = <T>(
   payload,
 });
 
-export const joinSpacesError = <T>(
+export const errorJoiningSpaces = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorJoiningSpacesAction<T> => ({
   type: ActionType.ERROR_JOINING_SPACES,
   payload,
 });
 
-export const leaveSpacesBegin = <T>(payload: T): LeavingSpacesAction<T> => ({
+export const leavingSpaces = <T>(payload: T): LeavingSpacesAction<T> => ({
   type: ActionType.LEAVING_SPACES,
   payload,
 });
@@ -125,7 +125,7 @@ export const spacesLeft = <T>(
   payload,
 });
 
-export const leaveSpacesError = <T>(
+export const errorLeavingSpaces = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorLeavingSpacesAction<T> => ({
   type: ActionType.ERROR_LEAVING_SPACES,
@@ -137,7 +137,7 @@ export const fetchMemberships = (
   userId: string,
   options: MembershipOptions = {}
 ) => (dispatch: Dispatch) => {
-  dispatch(fetchMembershipsBegin(userId));
+  dispatch(fetchingMemberships(userId));
 
   pubnub.getMemberships(
     {
@@ -149,7 +149,7 @@ export const fetchMemberships = (
         let errorData = { id: userId };
 
         dispatch(
-          fetchMembershipsError({
+          errorFetchingMemberships({
             code: status.category,
             message: status.errorData,
             data: errorData,
@@ -169,7 +169,7 @@ export const fetchMemberships = (
 export const updateMembership = (pubnub: any, membership: Membership) => (
   dispatch: Dispatch
 ) => {
-  dispatch(updateMembershipBegin(membership.userId));
+  dispatch(updatingMemberships(membership.userId));
 
   pubnub.updateMembership(
     {
@@ -180,7 +180,7 @@ export const updateMembership = (pubnub: any, membership: Membership) => (
         let errorData = { id: membership.userId, value: { ...membership } };
 
         dispatch(
-          updateMembershipError({
+          errorUpdatingMembership({
             code: status.category,
             message: status.errorData,
             data: errorData,
@@ -200,7 +200,7 @@ export const updateMembership = (pubnub: any, membership: Membership) => (
 export const joinSpaces = (pubnub: any, membership: Membership) => (
   dispatch: Dispatch
 ) => {
-  dispatch(joinSpacesBegin(membership));
+  dispatch(joiningSpaces(membership));
 
   pubnub.joinSpaces(
     {
@@ -211,7 +211,7 @@ export const joinSpaces = (pubnub: any, membership: Membership) => (
         let errorData = { id: membership.userId, value: { ...membership } };
 
         dispatch(
-          joinSpacesError({
+          errorJoiningSpaces({
             code: status.category,
             message: status.errorData,
             data: errorData,
@@ -231,7 +231,7 @@ export const joinSpaces = (pubnub: any, membership: Membership) => (
 export const leaveSpaces = (pubnub: any, membership: Membership) => (
   dispatch: Dispatch
 ) => {
-  dispatch(leaveSpacesBegin(membership));
+  dispatch(leavingSpaces(membership));
 
   pubnub.leaveSpaces(
     {
@@ -243,7 +243,7 @@ export const leaveSpaces = (pubnub: any, membership: Membership) => (
         let errorData = { id: membership.userId, value: { ...membership } };
 
         dispatch(
-          leaveSpacesError({
+          errorLeavingSpaces({
             code: status.category,
             message: status.errorData,
             data: errorData,

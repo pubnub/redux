@@ -361,7 +361,7 @@ export interface FetchingMembersAction {
 // end::RDX-118[]
 
 // tag::RDX-119[]
-export interface FetchMembersAction {
+export interface MembersRetrievedAction {
   type: typeof ActionType.MEMBERS_RETRIEVED;
   payload: PubNubObjectApiSuccess<MembersResult>;
 }
@@ -633,7 +633,7 @@ export type MembershipActions<T> =
 
 export type MembersActions<T> =
   | FetchingMembersAction
-  | FetchMembersAction
+  | MembersRetrievedAction
   | ErrorFetchingMembersAction<T>
   | UpdatingMembersAction
   | MembersUpdatedAction<T>

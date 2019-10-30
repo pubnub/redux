@@ -28,7 +28,7 @@ const createInitialState = <T>(): SpaceListState<T> => ({
 // end::RDX-030[]
 
 // tag::RDX-031[]
-const beginFetchSpaces = <T>(state: SpaceListState<T>) => ({
+const fetchingSpaces = <T>(state: SpaceListState<T>) => ({
   data: [...state.data],
   loading: true,
   error: undefined,
@@ -36,7 +36,7 @@ const beginFetchSpaces = <T>(state: SpaceListState<T>) => ({
 // end::RDX-031[]
 
 // tag::RDX-032[]
-const fetchSpaces = (payload: PubNubObjectApiSuccess<ItemMap<Space>>) => {
+const spacesRetrieved = (payload: PubNubObjectApiSuccess<ItemMap<Space>>) => {
   let data = Object.keys(payload.data).map((key) => payload.data[key].id);
 
   return {
@@ -48,7 +48,7 @@ const fetchSpaces = (payload: PubNubObjectApiSuccess<ItemMap<Space>>) => {
 // end::RDX-032[]
 
 // tag::RDX-033[]
-const fetchSpacesError = <T>(
+const errorFetchingSpaces = <T>(
   state: SpaceListState<T>,
   payload: PubNubObjectApiError<T>
 ) => ({
@@ -68,11 +68,11 @@ export const createSpaceListReducer = <T>(label: string = 'all') => (
   if (action.payload !== undefined && action.payload.label === label) {
     switch (action.type) {
       case ActionType.FETCHING_SPACES:
-        return beginFetchSpaces(state);
+        return fetchingSpaces(state);
       case ActionType.SPACES_RETRIEVED:
-        return fetchSpaces(action.payload);
+        return spacesRetrieved(action.payload);
       case ActionType.ERROR_FETCHING_SPACES:
-        return fetchSpacesError(state, action.payload);
+        return errorFetchingSpaces(state, action.payload);
       default:
         return state;
     }

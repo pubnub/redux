@@ -91,7 +91,7 @@ const userMembersUpdatedOnSpace = <T extends MembersList>(
   return newState;
 };
 
-const fetchMembers = <T extends MembersList>(
+const membersRetrieved = <T extends MembersList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<MembersResult>
 ) => {
@@ -111,7 +111,7 @@ const fetchMembers = <T extends MembersList>(
   return newState;
 };
 
-const updateMembers = <T extends MembersList>(
+const membersUpdated = <T extends MembersList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<Members>
 ) =>
@@ -123,7 +123,7 @@ const updateMembers = <T extends MembersList>(
     payload.data.spaceId
   );
 
-const addMembers = <T extends MembersList>(
+const membersAdded = <T extends MembersList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<Members>
 ) =>
@@ -135,7 +135,7 @@ const addMembers = <T extends MembersList>(
     payload.data.spaceId
   );
 
-const removeMembers = <T extends MembersList>(
+const membersRemoved = <T extends MembersList>(
   state: PubNubObjectApiState<T>,
   payload: PubNubObjectApiSuccess<Members>
 ) =>
@@ -159,19 +159,19 @@ export const createMembersReducer = <T extends MembersList = MembersList>() => (
     case ActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE:
       return userMembersUpdatedOnSpace<T>(state, action.payload);
     case ActionType.MEMBERS_RETRIEVED:
-      return fetchMembers<T>(state, action.payload);
+      return membersRetrieved<T>(state, action.payload);
     case ActionType.MEMBERS_UPDATED:
-      return updateMembers(
+      return membersUpdated(
         state,
         (action.payload as unknown) as PubNubObjectApiSuccess<Members>
       );
     case ActionType.MEMBERS_ADDED:
-      return addMembers(
+      return membersAdded(
         state,
         (action.payload as unknown) as PubNubObjectApiSuccess<Members>
       );
     case ActionType.MEMBERS_REMOVED:
-      return removeMembers(
+      return membersRemoved(
         state,
         (action.payload as unknown) as PubNubObjectApiSuccess<Members>
       );
