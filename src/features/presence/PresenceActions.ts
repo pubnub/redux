@@ -9,22 +9,22 @@ import {
 } from 'actions/Actions';
 import { ActionType } from 'actions/ActionType.enum';
 
-export const userJoin = (payload: PresenceActionPayload): JoinAction => ({
+const userJoin = (payload: PresenceActionPayload): JoinAction => ({
   type: ActionType.JOIN,
   payload,
 });
 
-export const userLeave = (payload: PresenceActionPayload): LeaveAction => ({
+const userLeave = (payload: PresenceActionPayload): LeaveAction => ({
   type: ActionType.LEAVE,
   payload,
 });
 
-export const userTimeout = (payload: PresenceActionPayload): TimeoutAction => ({
+const userTimeout = (payload: PresenceActionPayload): TimeoutAction => ({
   type: ActionType.TIMEOUT,
   payload,
 });
 
-export const userStateChange = (
+const userStateChange = (
   payload: PresenceActionPayload
 ): StateChangeAction => ({
   type: ActionType.STATE_CHANGE,

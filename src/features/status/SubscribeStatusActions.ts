@@ -7,14 +7,12 @@ import {
 import { ActionType } from 'actions/ActionType.enum';
 import { StatusActionPayload } from 'api/Status';
 
-export const reconnected = (
-  payload: StatusActionPayload
-): ReconnectedAction => ({
+const reconnected = (payload: StatusActionPayload): ReconnectedAction => ({
   type: ActionType.RECONNECTED,
   payload,
 });
 
-export const connected = (payload: StatusActionPayload): ConnectedAction => ({
+const connected = (payload: StatusActionPayload): ConnectedAction => ({
   type: ActionType.CONNECTED,
   payload,
 });

@@ -9,7 +9,7 @@ const createInitialState = <T>(): PubNubObjectApiState<T> => ({
 });
 // end::RDX-028[]
 
-export const messageReceived = <T extends { channel: string }>(
+const messageReceived = <T extends { channel: string }>(
   state: PubNubObjectApiState<T[]>,
   payload: PubNubObjectApiSuccess<T>
 ) => {

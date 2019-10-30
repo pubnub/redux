@@ -16,9 +16,7 @@ import {
   MembershipOptions,
 } from 'api/Membership';
 
-const fetchingMemberships = (
-  payload: string
-): FetchingMembershipsAction => ({
+const fetchingMemberships = (payload: string): FetchingMembershipsAction => ({
   type: ActionType.FETCHING_MEMBERSHIPS,
   payload,
 });

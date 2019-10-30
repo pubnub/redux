@@ -12,21 +12,21 @@ import {
   PubNubObjectApiSuccess,
 } from 'api/PubNubApi';
 
-export const sendingMessage = <T extends { channel: string }>(
+const sendingMessage = <T extends { channel: string }>(
   payload: T
 ): SendingMessageAction<T> => ({
   type: ActionType.SENDING_MESSAGE,
   payload,
 });
 
-export const messageSent = <T extends { channel: string }>(
+const messageSent = <T extends { channel: string }>(
   payload: PubNubObjectApiSuccess<T>
 ): MessageSentAction<T> => ({
   type: ActionType.MESSAGE_SENT,
   payload,
 });
 
-export const errorSendingmessage = <T extends { channel: string }>(
+const errorSendingmessage = <T extends { channel: string }>(
   payload: PubNubObjectApiError<T>
 ): ErrorSendingMessageAction<T> => ({
   type: ActionType.ERROR_SENDING_MESSAGE,
@@ -65,4 +65,3 @@ export const sendMessage = (pubnub: any, message: Message) => (
     }
   );
 };
-

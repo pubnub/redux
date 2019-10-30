@@ -13,21 +13,19 @@ import {
 } from 'api/PubNubApi';
 import { Membership } from 'api/Membership';
 
-export const updatingMemberships = (
-  payload: string
-): UpdatingMembershipAction => ({
+const updatingMemberships = (payload: string): UpdatingMembershipAction => ({
   type: ActionType.UPDATING_MEMBERSHIP,
   payload,
 });
 
-export const membershipUpdated = <T>(
+const membershipUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): MembershipUpdatedAction<T> => ({
   type: ActionType.MEMBERSHIP_UPDATED,
   payload,
 });
 
-export const errorUpdatingMembership = <T>(
+const errorUpdatingMembership = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorUpdatingMembershipAction<T> => ({
   type: ActionType.ERROR_UPDATING_MEMBERSHIP,

@@ -4,14 +4,14 @@ import { ActionType } from 'actions/ActionType.enum';
 import { Dispatch } from 'redux';
 import { PubNubObjectApiSuccess, Identifiable } from 'api/PubNubApi';
 
-export const userUpdated = <T extends Identifiable>(
+const userUpdated = <T extends Identifiable>(
   payload: PubNubObjectApiSuccess<T>
 ): UserUpdatedAction<T> => ({
   type: ActionType.USER_UPDATED,
   payload,
 });
 
-export const userDeleted = <T extends Identifiable>(
+const userDeleted = <T extends Identifiable>(
   payload: PubNubObjectApiSuccess<T>
 ): UserDeletedAction<T> => ({
   type: ActionType.USER_DELETED,

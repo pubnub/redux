@@ -4,14 +4,14 @@ import { ObjectsActionPayload } from 'api/Objects';
 import { ActionType } from 'actions/ActionType.enum';
 import { PubNubObjectApiSuccess, Identifiable } from 'api/PubNubApi';
 
-export const spaceUpdated = <T>(
+const spaceUpdated = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceUpdatedAction<T> => ({
   type: ActionType.SPACE_UPDATED,
   payload,
 });
 
-export const spaceDeleted = <T>(
+const spaceDeleted = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpaceDeletedAction<T> => ({
   type: ActionType.SPACE_DELETED,

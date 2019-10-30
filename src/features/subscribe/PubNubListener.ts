@@ -8,14 +8,17 @@ import { createSignalActionListener } from 'features/signal/SignalActions';
 import { createUserActionListener } from 'features/user/UserListener';
 import { createSpaceActionListener } from 'features/space/SpaceListener';
 import { createMembershipListener } from 'features/membership/MembershipListener';
-import { ListenerActions } from 'actions/Actions';
 import { ListenerEventData } from 'api/PubNubApi';
+import { ListenerActions } from 'actions/Actions';
 
-export const createPubNubActionListener = <T extends ListenerEventData>(
-  dispatch: Dispatch<ListenerActions<T>>
+export const createPubNubListener = <
+  T extends ListenerEventData,
+  TT extends { channel: string }
+>(
+  dispatch: Dispatch<ListenerActions<T, TT>>
 ) =>
   combineListeners(
-    createMessageActionListener(dispatch),
+    createMessageActionListener<TT>(dispatch),
     createPresenceActionListener(dispatch),
     createSignalActionListener(dispatch),
     createUserActionListener<T>(dispatch),

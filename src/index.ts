@@ -10,59 +10,26 @@ import { updateMembers } from 'features/members/commands/UpdateMembers';
 import { addMembers } from 'features/members/commands/AddMembers';
 import { removeMembers } from 'features/members/commands/RemoveMembers';
 import {
-  createPubNubActionListener,
+  createPubNubListener,
   combineListeners,
 } from 'features/subscribe/PubNubListener';
 import { createMessageActionListener } from 'features/message/MessageListener';
-import { sendMessage } from 'features/message/commands/SendMessage';
-import {
-  createPresenceActionListener,
-  userJoin,
-  userLeave,
-  userStateChange,
-  userTimeout,
-} from 'features/presence/PresenceActions';
+import { createPresenceActionListener } from 'features/presence/PresenceActions';
 import { createSignalActionListener } from 'features/signal/SignalActions';
-import {
-  spaceDeleted,
-  spaceUpdated,
-  fetchSpaces,
-  spacesRetrieved,
-  errorFetchingSpaces,
-  createSpace,
-  fetchSpaceById,
-} from 'features/space/SpaceActions';
-import {
-  createNetworkStatusActionListener,
-  networkDown,
-  networkUp,
-} from 'features/networkStatus/NetworkStatusActions';
-import {
-  createSubscribeStatusActionListener,
-  reconnected,
-  connected,
-} from 'features/status/SubscribeStatusActions';
-import {
-  createErrorStatusActionListener,
-  timeoutConnection,
-  accessDenied,
-  networkIssues,
-  malformedResponse,
-  badRequest,
-  decryptionError,
-  requestMessageCountExceed,
-  unknown,
-} from 'features/status/ErrorStatusActions';
-import {
-  userDeleted,
-  userUpdated,
-  fetchUsers,
-  usersRetrieved,
-  errorFetchingUsers,
-  createUser,
-  fetchUserById,
-} from 'features/user/UserActions';
-
+import { sendMessage } from 'features/message/commands/SendMessage';
+import { createSpace } from 'features/space/commands/CreateSpace';
+import { deleteSpace } from 'features/space/commands/DeleteSpace';
+import { fetchSpaceById } from 'features/space/commands/FetchSpaceById';
+import { fetchSpaces } from 'features/space/commands/FetchSpaces';
+import { updateSpace } from 'features/space/commands/UpdateSpace';
+import { createUser } from 'features/user/commands/CreateUser';
+import { deleteUser } from 'features/user/commands/DeleteUser';
+import { fetchUserById } from 'features/user/commands/FetchUserById';
+import { fetchUsers } from 'features/user/commands/FetchUsers';
+import { updateUser } from 'features/user/commands/UpdateUser';
+import { createNetworkStatusActionListener } from 'features/networkStatus/NetworkStatusActions';
+import { createSubscribeStatusActionListener } from 'features/status/SubscribeStatusActions';
+import { createErrorStatusActionListener } from 'features/status/ErrorStatusActions';
 import { createMessageReducer } from 'features/message/messageReducer';
 import { createNetworkStatusReducer } from 'features/networkStatus/createNetworkStatusReducer';
 import { createUserReducer } from 'features/user/userReducer';
@@ -72,24 +39,16 @@ import { createSpaceListReducer } from 'features/space/spaceListReducer';
 import { createMembershipReducer } from 'features/membership/membershipReducer';
 import { createMembersReducer } from 'features/members/MembersReducer';
 import { Identifiable, PubNubObjectApiState } from 'api/PubNubApi';
-
 import { Message } from 'api/Message';
 import { Space } from 'api/Space';
-import { SpaceListState } from 'features/space/spaceListReducer';
-
 import { User } from 'api/User';
-import { UserListState } from 'features/user/userListReducer';
 
 export {
   Message,
   Identifiable,
-  PubNubObjectApiState as PubNubApiState,
+  PubNubObjectApiState,
   Space,
-  SpaceListState,
   User,
-  UserListState,
-  createPubNubActionListener,
-  createMembershipListener as createMembershipActionListener,
   sendMessage,
   fetchMembers,
   updateMembers,
@@ -99,44 +58,27 @@ export {
   updateMembership,
   joinSpaces,
   leaveSpaces,
+  createPubNubListener,
+  createMembershipListener,
   createMessageActionListener,
   createPresenceActionListener,
-  userJoin,
-  userLeave,
-  userStateChange,
-  userTimeout,
   createSignalActionListener,
   createSpaceActionListener,
-  spaceDeleted,
-  spaceUpdated,
-  fetchSpaces,
-  spacesRetrieved as spaceListRetrieved,
-  errorFetchingSpaces as fetchSpacesError,
-  createSpace,
-  fetchSpaceById,
   createNetworkStatusActionListener,
   createSubscribeStatusActionListener,
   createErrorStatusActionListener,
-  networkDown,
-  networkUp,
-  networkIssues,
-  reconnected,
-  connected,
-  timeoutConnection,
-  accessDenied,
-  malformedResponse,
-  badRequest,
-  decryptionError,
-  requestMessageCountExceed,
-  unknown,
   createUserActionListener,
-  userUpdated,
-  userDeleted,
+  combineListeners,
+  createSpace,
+  deleteSpace,
+  fetchSpaceById,
+  fetchSpaces,
+  updateSpace,
   createUser,
-  fetchUsers,
+  deleteUser,
   fetchUserById,
-  usersRetrieved as userListRetrieved,
-  errorFetchingUsers as fetchUsersError,
+  fetchUsers,
+  updateUser,
   createMessageReducer,
   createNetworkStatusReducer,
   createUserReducer,
@@ -145,5 +87,4 @@ export {
   createSpaceListReducer,
   createMembershipReducer,
   createMembersReducer,
-  combineListeners,
 };

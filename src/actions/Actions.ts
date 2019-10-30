@@ -662,7 +662,10 @@ export type ObjectListenerActions<T extends Identifiable> =
   | SpaceListenerActions<T>
   | MembershipListenerActions<T>;
 
-export type ListenerActions<T extends Identifiable, TT extends { channel: string }> =
+export type ListenerActions<
+  T extends Identifiable,
+  TT extends { channel: string }
+> =
   | MessageReceivedAction<TT>
   | SignalAction
   | PresenceListenerActions

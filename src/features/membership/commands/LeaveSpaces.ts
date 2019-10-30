@@ -13,19 +13,19 @@ import {
 } from 'api/PubNubApi';
 import { Membership } from 'api/Membership';
 
-export const leavingSpaces = <T>(payload: T): LeavingSpacesAction<T> => ({
+const leavingSpaces = <T>(payload: T): LeavingSpacesAction<T> => ({
   type: ActionType.LEAVING_SPACES,
   payload,
 });
 
-export const spacesLeft = <T>(
+const spacesLeft = <T>(
   payload: PubNubObjectApiSuccess<T>
 ): SpacesLeftAction<T> => ({
   type: ActionType.SPACES_LEFT,
   payload,
 });
 
-export const errorLeavingSpaces = <T>(
+const errorLeavingSpaces = <T>(
   payload: PubNubObjectApiError<T>
 ): ErrorLeavingSpacesAction<T> => ({
   type: ActionType.ERROR_LEAVING_SPACES,

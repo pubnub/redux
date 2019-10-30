@@ -9,21 +9,21 @@ import {
 import { ActionType } from 'actions/ActionType.enum';
 import { PubNubObjectApiSuccess, ListenerEventData } from 'api/PubNubApi';
 
-export const userMembershipUpdatedOnSpace = <T extends ListenerEventData>(
+const userMembershipUpdatedOnSpace = <T extends ListenerEventData>(
   payload: PubNubObjectApiSuccess<T>
 ): UserMembershipUpdatedOnSpaceAction<T> => ({
   type: ActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE,
   payload,
 });
 
-export const userAddedToSpace = <T extends ListenerEventData>(
+const userAddedToSpace = <T extends ListenerEventData>(
   payload: PubNubObjectApiSuccess<T>
 ): UserAddedToSpaceAction<T> => ({
   type: ActionType.USER_ADDED_TO_SPACE,
   payload,
 });
 
-export const userRemovedFromSpace = <T extends ListenerEventData>(
+const userRemovedFromSpace = <T extends ListenerEventData>(
   payload: PubNubObjectApiSuccess<T>
 ): UserRemovedFromSpaceAction<T> => ({
   type: ActionType.USER_REMOVED_FROM_SPACE,

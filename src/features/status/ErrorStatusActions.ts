@@ -13,54 +13,50 @@ import {
 import { ActionType } from 'actions/ActionType.enum';
 import { StatusActionPayload } from 'api/Status';
 
-export const networkIssues = (
-  payload: StatusActionPayload
-): NetworkIssuesAction => ({
+const networkIssues = (payload: StatusActionPayload): NetworkIssuesAction => ({
   type: ActionType.NETWORK_ISSUES,
   payload,
 });
 
-export const accessDenied = (
-  payload: StatusActionPayload
-): AccessDeniedAction => ({
+const accessDenied = (payload: StatusActionPayload): AccessDeniedAction => ({
   type: ActionType.ACCESS_DENIED,
   payload,
 });
 
-export const malformedResponse = (
+const malformedResponse = (
   payload: StatusActionPayload
 ): MalformedResponseAction => ({
   type: ActionType.MALFORMED_RESPONSE,
   payload,
 });
 
-export const badRequest = (payload: StatusActionPayload): BadRequestAction => ({
+const badRequest = (payload: StatusActionPayload): BadRequestAction => ({
   type: ActionType.BAD_REQUEST,
   payload,
 });
 
-export const decryptionError = (
+const decryptionError = (
   payload: StatusActionPayload
 ): DecryptionErrorAction => ({
   type: ActionType.DECRYPTION_ERROR,
   payload,
 });
 
-export const timeoutConnection = (
+const timeoutConnection = (
   payload: StatusActionPayload
 ): TimeoutConnectionAction => ({
   type: ActionType.TIMEOUT_CONNECTION,
   payload,
 });
 
-export const requestMessageCountExceed = (
+const requestMessageCountExceed = (
   payload: StatusActionPayload
 ): RequestMessageCountExceedAction => ({
   type: ActionType.REQUEST_MESSAGE_COUNT_EXCEED,
   payload,
 });
 
-export const unknown = (payload: StatusActionPayload): UnknownAction => ({
+const unknown = (payload: StatusActionPayload): UnknownAction => ({
   type: ActionType.UNKNOWN,
   payload,
 });

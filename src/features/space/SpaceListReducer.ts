@@ -12,7 +12,7 @@ import {
 } from 'api/PubNubApi';
 
 // tag::RDX-029[]
-export interface SpaceListState<T> {
+interface SpaceListState<T> {
   data: string[];
   loading: boolean;
   error?: PubNubObjectApiError<T>;

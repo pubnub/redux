@@ -2,11 +2,11 @@ import { createNetworkStatusReducer } from 'features/networkStatus/createNetwork
 import { NetworkUpAction, NetworkDownAction } from 'actions/Actions';
 import { ActionType } from 'actions/ActionType.enum';
 
-export const networkUp = (): NetworkUpAction => ({
+const networkUp = (): NetworkUpAction => ({
   type: ActionType.NETWORK_UP,
 });
 
-export const networkDown = (): NetworkDownAction => ({
+const networkDown = (): NetworkDownAction => ({
   type: ActionType.NETWORK_DOWN,
 });
 
