@@ -522,7 +522,7 @@ export interface ErrorLeavingSpacesAction<T> {
 // end::RDX-142[]
 
 // tag::RDX-143[]
-export interface MessageRecievedAction {
+export interface MessageReceivedAction {
   type: typeof ActionType.MESSAGE_RECEIVED;
   payload: Message;
 }
@@ -664,14 +664,14 @@ export type ObjectListenerActions<T extends Identifiable> =
   | MembershipListenerActions<T>;
 
 export type ListenerActions<T extends Identifiable> =
-  | MessageRecievedAction
+  | MessageReceivedAction
   | SignalAction
   | PresenceListenerActions
   | StatusListenerActions
   | ObjectListenerActions<T>;
 
 export type MessageActions<T extends { channel: string }> =
-  | MessageRecievedAction
+  | MessageReceivedAction
   | MessageSentAction<T>
   | SendingMessageAction<T>
   | ErrorSendingMessageAction<T>;
