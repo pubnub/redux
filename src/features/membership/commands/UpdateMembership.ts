@@ -10,55 +10,70 @@ import {
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
+  Meta,
 } from '../../../api/PubNubApi';
 import { Membership } from '../../../api/Membership';
 
-const updatingMemberships = (payload: string): UpdatingMembershipAction => ({
+export const updatingMemberships = (
+  payload: string,
+  meta?: Meta
+): UpdatingMembershipAction => ({
   type: ActionType.UPDATING_MEMBERSHIP,
   payload,
+  meta,
 });
 
-const membershipUpdated = <T>(
-  payload: PubNubObjectApiSuccess<T>
+export const membershipUpdated = <T>(
+  payload: PubNubObjectApiSuccess<T>,
+  meta?: Meta
 ): MembershipUpdatedAction<T> => ({
   type: ActionType.MEMBERSHIP_UPDATED,
   payload,
+  meta,
 });
 
-const errorUpdatingMembership = <T>(
-  payload: PubNubObjectApiError<T>
+export const errorUpdatingMembership = <T>(
+  payload: PubNubObjectApiError<T>,
+  meta?: Meta
 ): ErrorUpdatingMembershipAction<T> => ({
   type: ActionType.ERROR_UPDATING_MEMBERSHIP,
   payload,
+  meta,
 });
 
-export const updateMembership = (pubnub: any, membership: Membership) => (
-  dispatch: Dispatch
+export const updateMembership = (
+  pubnub: any,
+  membership: Membership,
+  meta?: Meta
 ) => {
-  dispatch(updatingMemberships(membership.userId));
+  const thunkFunction = (dispatch: Dispatch) =>
+    new Promise<void>((resolve, reject) => {
+      dispatch(updatingMemberships(membership.userId, meta));
 
-  pubnub.updateMembership(
-    {
-      ...membership,
-    },
-    (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
-      if (status.error) {
-        let errorData = { id: membership.userId, value: { ...membership } };
+      pubnub.updateMembership(
+        {
+          ...membership,
+        },
+        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+          if (status.error) {
+            let errorData = { id: membership.userId, value: { ...membership } };
+            let payload = {
+              code: status.category,
+              message: status.errorData,
+              data: errorData,
+            };
 
-        dispatch(
-          errorUpdatingMembership({
-            code: status.category,
-            message: status.errorData,
-            data: errorData,
-          })
-        );
-      } else {
-        dispatch(
-          membershipUpdated({
-            data: response.data,
-          })
-        );
-      }
-    }
-  );
+            dispatch(errorUpdatingMembership(payload, meta));
+            reject(payload);
+          } else {
+            dispatch(membershipUpdated({ data: response.data }, meta));
+            resolve();
+          }
+        }
+      );
+    });
+
+  thunkFunction.type = ActionType.COMMAND;
+
+  return thunkFunction;
 };

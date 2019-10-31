@@ -10,56 +10,71 @@ import {
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
+  Meta,
 } from '../../../api/PubNubApi';
 import { Membership } from '../../../api/Membership';
 
-const leavingSpaces = <T>(payload: T): LeavingSpacesAction<T> => ({
+export const leavingSpaces = <T>(
+  payload: T,
+  meta?: Meta
+): LeavingSpacesAction<T> => ({
   type: ActionType.LEAVING_SPACES,
   payload,
+  meta,
 });
 
-const spacesLeft = <T>(
-  payload: PubNubObjectApiSuccess<T>
+export const spacesLeft = <T>(
+  payload: PubNubObjectApiSuccess<T>,
+  meta?: Meta
 ): SpacesLeftAction<T> => ({
   type: ActionType.SPACES_LEFT,
   payload,
+  meta,
 });
 
-const errorLeavingSpaces = <T>(
-  payload: PubNubObjectApiError<T>
+export const errorLeavingSpaces = <T>(
+  payload: PubNubObjectApiError<T>,
+  meta?: Meta
 ): ErrorLeavingSpacesAction<T> => ({
   type: ActionType.ERROR_LEAVING_SPACES,
   payload,
+  meta,
 });
 
-export const leaveSpaces = (pubnub: any, membership: Membership) => (
-  dispatch: Dispatch
+export const leaveSpaces = (
+  pubnub: any,
+  membership: Membership,
+  meta?: Meta
 ) => {
-  dispatch(leavingSpaces(membership));
+  const thunkFunction = (dispatch: Dispatch) =>
+    new Promise<void>((resolve, reject) => {
+      dispatch(leavingSpaces(membership, meta));
 
-  pubnub.leaveSpaces(
-    {
-      userId: membership.userId,
-      spaces: membership.spaces.map((space) => space.id),
-    },
-    (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
-      if (status.error) {
-        let errorData = { id: membership.userId, value: { ...membership } };
+      pubnub.leaveSpaces(
+        {
+          userId: membership.userId,
+          spaces: membership.spaces.map((space) => space.id),
+        },
+        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+          if (status.error) {
+            let errorData = { id: membership.userId, value: { ...membership } };
+            let payload = {
+              code: status.category,
+              message: status.errorData,
+              data: errorData,
+            };
 
-        dispatch(
-          errorLeavingSpaces({
-            code: status.category,
-            message: status.errorData,
-            data: errorData,
-          })
-        );
-      } else {
-        dispatch(
-          spacesLeft({
-            data: response.data,
-          })
-        );
-      }
-    }
-  );
+            dispatch(errorLeavingSpaces(payload, meta));
+            reject(payload);
+          } else {
+            dispatch(spacesLeft({ data: response.data }, meta));
+            resolve();
+          }
+        }
+      );
+    });
+
+  thunkFunction.type = ActionType.COMMAND;
+
+  return thunkFunction;
 };

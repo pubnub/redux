@@ -61,27 +61,21 @@ const errorFetchingSpaces = <T>(
 });
 // end::RDX-033[]
 
-export const createSpaceListReducer = <T extends Identifiable = Space>(
-  label: string = 'all'
-) => (
+export const createSpaceListReducer = <T extends Identifiable = Space>() => (
   state: SpaceListState<T> = createInitialState(),
   action:
     | SpacesRetrievedAction<T>
     | FetchingSpacesAction
     | ErrorFetchingSpacesAction<T>
 ): SpaceListState<T> => {
-  if (action.payload !== undefined && action.payload.label === label) {
-    switch (action.type) {
-      case ActionType.FETCHING_SPACES:
-        return fetchingSpaces(state);
-      case ActionType.SPACES_RETRIEVED:
-        return spacesRetrieved(action.payload);
-      case ActionType.ERROR_FETCHING_SPACES:
-        return errorFetchingSpaces(state, action.payload);
-      default:
-        return state;
-    }
-  } else {
-    return state;
+  switch (action.type) {
+    case ActionType.FETCHING_SPACES:
+      return fetchingSpaces(state);
+    case ActionType.SPACES_RETRIEVED:
+      return spacesRetrieved(action.payload);
+    case ActionType.ERROR_FETCHING_SPACES:
+      return errorFetchingSpaces(state, action.payload);
+    default:
+      return state;
   }
 };

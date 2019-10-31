@@ -9,6 +9,7 @@ import {
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
+  Meta,
 } from '../../../api/PubNubApi';
 import {
   MembershipList,
@@ -16,55 +17,71 @@ import {
   MembershipOptions,
 } from '../../../api/Membership';
 
-const fetchingMemberships = (payload: string): FetchingMembershipsAction => ({
+export const fetchingMemberships = (
+  payload: string,
+  meta?: Meta
+): FetchingMembershipsAction => ({
   type: ActionType.FETCHING_MEMBERSHIPS,
   payload,
+  meta,
 });
 
-const membershipsRetrieved = (
-  payload: PubNubObjectApiSuccess<MembershipResult>
+export const membershipsRetrieved = (
+  payload: PubNubObjectApiSuccess<MembershipResult>,
+  meta?: Meta
 ): MembershipsRetrievedAction => ({
   type: ActionType.MEMBERSHIPS_RETRIEVED,
   payload,
+  meta,
 });
 
-const errorFetchingMemberships = <T>(
-  payload: PubNubObjectApiError<T>
+export const errorFetchingMemberships = <T>(
+  payload: PubNubObjectApiError<T>,
+  meta?: Meta
 ): ErrorFetchingMembershipsAction<T> => ({
   type: ActionType.ERROR_FETCHING_MEMBERSHIPS,
   payload,
+  meta,
 });
 
 export const fetchMemberships = (
   pubnub: any,
   userId: string,
   options: MembershipOptions = {}
-) => (dispatch: Dispatch) => {
-  dispatch(fetchingMemberships(userId));
+) => {
+  const thunkFunction = (dispatch: Dispatch, meta?: Meta) =>
+    new Promise<void>((resolve, reject) => {
+      dispatch(fetchingMemberships(userId, meta));
 
-  pubnub.getMemberships(
-    {
-      userId,
-      ...options,
-    },
-    (status: PubNubApiStatus, response: { data: MembershipList }) => {
-      if (status.error) {
-        let errorData = { id: userId };
+      pubnub.getMemberships(
+        {
+          userId,
+          ...options,
+        },
+        (status: PubNubApiStatus, response: { data: MembershipList }) => {
+          if (status.error) {
+            let errorData = { id: userId };
+            let payload = {
+              code: status.category,
+              message: status.errorData,
+              data: errorData,
+            };
 
-        dispatch(
-          errorFetchingMemberships({
-            code: status.category,
-            message: status.errorData,
-            data: errorData,
-          })
-        );
-      } else {
-        let result = {
-          id: userId,
-          spaces: response.data,
-        };
-        dispatch(membershipsRetrieved({ data: result }));
-      }
-    }
-  );
+            dispatch(errorFetchingMemberships(payload, meta));
+            reject(payload);
+          } else {
+            let result = {
+              id: userId,
+              spaces: response.data,
+            };
+            dispatch(membershipsRetrieved({ data: result }, meta));
+            resolve();
+          }
+        }
+      );
+    });
+
+  thunkFunction.type = ActionType.COMMAND;
+
+  return thunkFunction;
 };

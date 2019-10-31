@@ -6,6 +6,7 @@ import {
   PubNubObjectApiError,
   Identifiable,
   ItemMap,
+  Meta,
 } from '../api/PubNubApi';
 import { MembershipResult } from '../api/Membership';
 import { ActionType } from '../actions/ActionType.enum';
@@ -121,73 +122,82 @@ export interface UnknownAction {
 }
 // end::RDX-084[]
 
-// tag::RDX-085[]
-export interface UserUpdatedAction<T> {
-  type: typeof ActionType.USER_UPDATED;
-  payload: PubNubObjectApiSuccess<T>;
-}
-// end::RDX-085[]
-
 // tag::RDX-086[]
 export interface UpdatingUserAction<T> {
   type: typeof ActionType.UPDATING_USER;
   payload: T;
+  meta?: Meta;
 }
 // end::RDX-086[]
+
+// tag::RDX-085[]
+export interface UserUpdatedAction<T> {
+  type: typeof ActionType.USER_UPDATED;
+  payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
+}
+// end::RDX-085[]
 
 // tag::RDX-087[]
 export interface ErrorUpdatingUserAction<T> {
   type: typeof ActionType.ERROR_UPDATING_USER;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-087[]
-
-// tag::RDX-088[]
-export interface UserDeletedAction<T> {
-  type: typeof ActionType.USER_DELETED;
-  payload: PubNubObjectApiSuccess<T>;
-}
-// end::RDX-088[]
 
 // tag::RDX-089[]
 export interface DeletingUserAction {
   type: typeof ActionType.DELETING_USER;
   payload: string;
+  meta?: Meta;
 }
 // end::RDX-089[]
+
+// tag::RDX-088[]
+export interface UserDeletedAction<T> {
+  type: typeof ActionType.USER_DELETED;
+  payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
+}
+// end::RDX-088[]
 
 // tag::RDX-090[]
 export interface ErrorDeletingUserAction<T> {
   type: typeof ActionType.ERROR_DELETING_USER;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-090[]
-
-// tag::RDX-091[]
-export interface UserCreatedAction<T> {
-  type: typeof ActionType.USER_CREATED;
-  payload: PubNubObjectApiSuccess<T>;
-}
-// end::RDX-091[]
 
 // tag::RDX-092[]
 export interface CreatingUserAction<T> {
   type: typeof ActionType.CREATING_USER;
   payload: T;
+  meta?: Meta;
 }
 // end::RDX-092[]
+
+// tag::RDX-091[]
+export interface UserCreatedAction<T> {
+  type: typeof ActionType.USER_CREATED;
+  payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
+}
+// end::RDX-091[]
 
 // tag::RDX-093[]
 export interface ErrorCreatingUserAction<T> {
   type: typeof ActionType.ERROR_CREATING_USER;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-093[]
 
 // tag::RDX-094[]
 export interface FetchingUsersAction {
   type: typeof ActionType.FETCHING_USERS;
-  payload: { label: string };
+  meta?: Meta;
 }
 // end::RDX-094[]
 
@@ -195,6 +205,7 @@ export interface FetchingUsersAction {
 export interface UsersRetrievedAction<T> {
   type: typeof ActionType.USERS_RETRIEVED;
   payload: PubNubObjectApiSuccess<ItemMap<T>>;
+  meta?: Meta;
 }
 // end::RDX-095[]
 
@@ -202,6 +213,7 @@ export interface UsersRetrievedAction<T> {
 export interface ErrorFetchingUsersAction<T> {
   type: typeof ActionType.ERROR_FETCHING_USERS;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-096[]
 
@@ -209,6 +221,7 @@ export interface ErrorFetchingUsersAction<T> {
 export interface FetchingUserByIdAction {
   type: typeof ActionType.FETCHING_USER_BY_ID;
   payload: string;
+  meta?: Meta;
 }
 // end::RDX-098[]
 
@@ -216,6 +229,7 @@ export interface FetchingUserByIdAction {
 export interface UserRetrievedAction<T> {
   type: typeof ActionType.USER_RETRIEVED;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-099[]
 
@@ -223,13 +237,14 @@ export interface UserRetrievedAction<T> {
 export interface ErrorFetchingUserByIdAction<T> {
   type: typeof ActionType.ERROR_FETCHING_USER_BY_ID;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-097[]
 
 // tag::RDX-101[]
 export interface FetchingSpacesAction {
   type: typeof ActionType.FETCHING_SPACES;
-  payload: { label: string };
+  meta?: Meta;
 }
 // end::RDX-101[]
 
@@ -237,6 +252,7 @@ export interface FetchingSpacesAction {
 export interface SpacesRetrievedAction<T> {
   type: typeof ActionType.SPACES_RETRIEVED;
   payload: PubNubObjectApiSuccess<ItemMap<T>>;
+  meta?: Meta;
 }
 // end::RDX-100[]
 
@@ -244,6 +260,7 @@ export interface SpacesRetrievedAction<T> {
 export interface ErrorFetchingSpacesAction<T> {
   type: typeof ActionType.ERROR_FETCHING_SPACES;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-102[]
 
@@ -251,6 +268,7 @@ export interface ErrorFetchingSpacesAction<T> {
 export interface CreatingSpaceAction<T> {
   type: typeof ActionType.CREATING_SPACE;
   payload: T;
+  meta?: Meta;
 }
 // end::RDX-104[]
 
@@ -258,6 +276,7 @@ export interface CreatingSpaceAction<T> {
 export interface SpaceCreatedAction<T> {
   type: typeof ActionType.SPACE_CREATED;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-103[]
 
@@ -265,6 +284,7 @@ export interface SpaceCreatedAction<T> {
 export interface ErrorCreatingSpaceAction<T> {
   type: typeof ActionType.ERROR_CREATING_SPACE;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-105[]
 
@@ -272,6 +292,7 @@ export interface ErrorCreatingSpaceAction<T> {
 export interface UpdatingSpaceAction<T> {
   type: typeof ActionType.UPDATING_SPACE;
   payload: T;
+  meta?: Meta;
 }
 // end::RDX-107[]
 
@@ -279,6 +300,7 @@ export interface UpdatingSpaceAction<T> {
 export interface SpaceUpdatedAction<T> {
   type: typeof ActionType.SPACE_UPDATED;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-106[]
 
@@ -286,6 +308,7 @@ export interface SpaceUpdatedAction<T> {
 export interface ErrorUpdatingSpaceAction<T> {
   type: typeof ActionType.ERROR_UPDATING_SPACE;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-108[]
 
@@ -293,6 +316,7 @@ export interface ErrorUpdatingSpaceAction<T> {
 export interface DeletingSpaceAction {
   type: typeof ActionType.DELETING_SPACE;
   payload: string;
+  meta?: Meta;
 }
 // end::RDX-110[]
 
@@ -300,6 +324,7 @@ export interface DeletingSpaceAction {
 export interface SpaceDeletedAction<T> {
   type: typeof ActionType.SPACE_DELETED;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-109[]
 
@@ -307,6 +332,7 @@ export interface SpaceDeletedAction<T> {
 export interface ErrorDeletingSpaceAction<T> {
   type: typeof ActionType.ERROR_DELETING_SPACE;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-111[]
 
@@ -314,6 +340,7 @@ export interface ErrorDeletingSpaceAction<T> {
 export interface FetchingSpaceByIdAction {
   type: typeof ActionType.FETCHING_SPACE_BY_ID;
   payload: string;
+  meta?: Meta;
 }
 // end::RDX-113[]
 
@@ -321,6 +348,7 @@ export interface FetchingSpaceByIdAction {
 export interface SpaceRetrievedAction<T> {
   type: typeof ActionType.SPACE_RETRIEVED;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-112[]
 
@@ -328,6 +356,7 @@ export interface SpaceRetrievedAction<T> {
 export interface ErrorFetchingSpaceByIdAction<T> {
   type: typeof ActionType.ERROR_FETCHING_SPACE_BY_ID;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-114[]
 
@@ -335,6 +364,7 @@ export interface ErrorFetchingSpaceByIdAction<T> {
 export interface UserAddedToSpaceAction<T extends Identifiable> {
   type: typeof ActionType.USER_ADDED_TO_SPACE;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-115[]
 
@@ -342,6 +372,7 @@ export interface UserAddedToSpaceAction<T extends Identifiable> {
 export interface UserRemovedFromSpaceAction<T extends Identifiable> {
   type: typeof ActionType.USER_REMOVED_FROM_SPACE;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-116[]
 
@@ -349,6 +380,7 @@ export interface UserRemovedFromSpaceAction<T extends Identifiable> {
 export interface UserMembershipUpdatedOnSpaceAction<T extends Identifiable> {
   type: typeof ActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-117[]
 
@@ -356,6 +388,7 @@ export interface UserMembershipUpdatedOnSpaceAction<T extends Identifiable> {
 export interface FetchingMembersAction {
   type: typeof ActionType.FETCHING_MEMBERS;
   payload: string;
+  meta?: Meta;
 }
 // end::RDX-118[]
 
@@ -363,6 +396,7 @@ export interface FetchingMembersAction {
 export interface MembersRetrievedAction {
   type: typeof ActionType.MEMBERS_RETRIEVED;
   payload: PubNubObjectApiSuccess<MembersResult>;
+  meta?: Meta;
 }
 // end::RDX-119[]
 
@@ -370,6 +404,7 @@ export interface MembersRetrievedAction {
 export interface ErrorFetchingMembersAction<T> {
   type: typeof ActionType.ERROR_FETCHING_MEMBERS;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-120[]
 
@@ -377,6 +412,7 @@ export interface ErrorFetchingMembersAction<T> {
 export interface UpdatingMembersAction {
   type: typeof ActionType.UPDATING_MEMBERS;
   payload: string;
+  meta?: Meta;
 }
 // end::RDX-122[]
 
@@ -384,6 +420,7 @@ export interface UpdatingMembersAction {
 export interface MembersUpdatedAction<T> {
   type: typeof ActionType.MEMBERS_UPDATED;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-121[]
 
@@ -391,6 +428,7 @@ export interface MembersUpdatedAction<T> {
 export interface ErrorUpdatingMembersAction<T> {
   type: typeof ActionType.ERROR_UPDATING_MEMBERS;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-123[]
 
@@ -398,6 +436,7 @@ export interface ErrorUpdatingMembersAction<T> {
 export interface AddingMembersAction<T> {
   type: typeof ActionType.ADDING_MEMBERS;
   payload: T;
+  meta?: Meta;
 }
 // end::RDX-125[]
 
@@ -405,6 +444,7 @@ export interface AddingMembersAction<T> {
 export interface MembersAddedAction<T> {
   type: typeof ActionType.MEMBERS_ADDED;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-124[]
 
@@ -412,6 +452,7 @@ export interface MembersAddedAction<T> {
 export interface ErrorAddingMembersAction<T> {
   type: typeof ActionType.ERROR_ADDING_MEMBERS;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-126[]
 
@@ -419,6 +460,7 @@ export interface ErrorAddingMembersAction<T> {
 export interface RemovingMembersAction<T> {
   type: typeof ActionType.REMOVING_MEMBERS;
   payload: T;
+  meta?: Meta;
 }
 // end::RDX-128[]
 
@@ -426,6 +468,7 @@ export interface RemovingMembersAction<T> {
 export interface MembersRemovedAction<T> {
   type: typeof ActionType.MEMBERS_REMOVED;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-127[]
 
@@ -433,6 +476,7 @@ export interface MembersRemovedAction<T> {
 export interface ErrorRemovingMembersAction<T> {
   type: typeof ActionType.ERROR_REMOVING_MEMBERS;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-129[]
 
@@ -440,6 +484,7 @@ export interface ErrorRemovingMembersAction<T> {
 export interface FetchingMembershipsAction {
   type: typeof ActionType.FETCHING_MEMBERSHIPS;
   payload: string;
+  meta?: Meta;
 }
 // end::RDX-131[]
 
@@ -447,6 +492,7 @@ export interface FetchingMembershipsAction {
 export interface MembershipsRetrievedAction {
   type: typeof ActionType.MEMBERSHIPS_RETRIEVED;
   payload: PubNubObjectApiSuccess<MembershipResult>;
+  meta?: Meta;
 }
 // end::RDX-132[]
 
@@ -454,6 +500,7 @@ export interface MembershipsRetrievedAction {
 export interface ErrorFetchingMembershipsAction<T> {
   type: typeof ActionType.ERROR_FETCHING_MEMBERSHIPS;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-133[]
 
@@ -461,6 +508,7 @@ export interface ErrorFetchingMembershipsAction<T> {
 export interface UpdatingMembershipAction {
   type: typeof ActionType.UPDATING_MEMBERSHIP;
   payload: string;
+  meta?: Meta;
 }
 // end::RDX-135[]
 
@@ -468,6 +516,7 @@ export interface UpdatingMembershipAction {
 export interface MembershipUpdatedAction<T> {
   type: typeof ActionType.MEMBERSHIP_UPDATED;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-134[]
 
@@ -475,6 +524,7 @@ export interface MembershipUpdatedAction<T> {
 export interface ErrorUpdatingMembershipAction<T> {
   type: typeof ActionType.ERROR_UPDATING_MEMBERSHIP;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-136[]
 
@@ -482,6 +532,7 @@ export interface ErrorUpdatingMembershipAction<T> {
 export interface JoiningSpacesAction<T> {
   type: typeof ActionType.JOINING_SPACES;
   payload: T;
+  meta?: Meta;
 }
 // end::RDX-138[]
 
@@ -489,6 +540,7 @@ export interface JoiningSpacesAction<T> {
 export interface SpacesJoinedAction<T> {
   type: typeof ActionType.SPACES_JOINED;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-137[]
 
@@ -496,6 +548,7 @@ export interface SpacesJoinedAction<T> {
 export interface ErrorJoiningSpacesAction<T> {
   type: typeof ActionType.ERROR_JOINING_SPACES;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-139[]
 
@@ -503,6 +556,7 @@ export interface ErrorJoiningSpacesAction<T> {
 export interface LeavingSpacesAction<T> {
   type: typeof ActionType.LEAVING_SPACES;
   payload: T;
+  meta?: Meta;
 }
 // end::RDX-141[]
 
@@ -510,6 +564,7 @@ export interface LeavingSpacesAction<T> {
 export interface SpacesLeftAction<T> {
   type: typeof ActionType.SPACES_LEFT;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-140[]
 
@@ -517,6 +572,7 @@ export interface SpacesLeftAction<T> {
 export interface ErrorLeavingSpacesAction<T> {
   type: typeof ActionType.ERROR_LEAVING_SPACES;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-142[]
 
@@ -524,6 +580,7 @@ export interface ErrorLeavingSpacesAction<T> {
 export interface MessageReceivedAction<T extends { channel: string }> {
   type: typeof ActionType.MESSAGE_RECEIVED;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-143[]
 
@@ -531,6 +588,7 @@ export interface MessageReceivedAction<T extends { channel: string }> {
 export interface SendingMessageAction<T extends { channel: string }> {
   type: typeof ActionType.SENDING_MESSAGE;
   payload: T;
+  meta?: Meta;
 }
 // end::RDX-144[]
 
@@ -538,6 +596,7 @@ export interface SendingMessageAction<T extends { channel: string }> {
 export interface MessageSentAction<T extends { channel: string }> {
   type: typeof ActionType.MESSAGE_SENT;
   payload: PubNubObjectApiSuccess<T>;
+  meta?: Meta;
 }
 // end::RDX-145[]
 
@@ -545,6 +604,7 @@ export interface MessageSentAction<T extends { channel: string }> {
 export interface ErrorSendingMessageAction<T extends { channel: string }> {
   type: typeof ActionType.ERROR_SENDING_MESSAGE;
   payload: PubNubObjectApiError<T>;
+  meta?: Meta;
 }
 // end::RDX-146[]
 
@@ -552,6 +612,7 @@ export interface ErrorSendingMessageAction<T extends { channel: string }> {
 export interface SignalAction {
   type: typeof ActionType.SIGNAL;
   payload: SignalActionPayload;
+  meta?: Meta;
 }
 // end::RDX-147[]
 

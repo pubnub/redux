@@ -10,52 +10,63 @@ import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
+  Meta,
 } from '../../../api/PubNubApi';
 
-const deletingSpace = (payload: string): DeletingSpaceAction => ({
+export const deletingSpace = (
+  payload: string,
+  meta?: Meta
+): DeletingSpaceAction => ({
   type: ActionType.DELETING_SPACE,
   payload,
+  meta,
 });
 
-const spaceDeleted = <T>(
-  payload: PubNubObjectApiSuccess<T>
+export const spaceDeleted = <T>(
+  payload: PubNubObjectApiSuccess<T>,
+  meta?: Meta
 ): SpaceDeletedAction<T> => ({
   type: ActionType.SPACE_DELETED,
   payload,
+  meta,
 });
 
-const errorDeletingSpace = <T>(
-  payload: PubNubObjectApiError<T>
+export const errorDeletingSpace = <T>(
+  payload: PubNubObjectApiError<T>,
+  meta?: Meta
 ): ErrorDeletingSpaceAction<T> => ({
   type: ActionType.ERROR_DELETING_SPACE,
   payload,
+  meta,
 });
 
-export const deleteSpace = (pubnub: any, id: string) => (
-  dispatch: Dispatch
-) => {
-  dispatch(deletingSpace(id));
+export const deleteSpace = (pubnub: any, id: string, meta?: Meta) => {
+  const thunkFunction = (dispatch: Dispatch) =>
+    new Promise<void>((resolve, reject) => {
+      dispatch(deletingSpace(id, meta));
 
-  pubnub.deleteSpace(
-    id,
-    (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
-      if (status.error) {
-        let errorData = { id: id };
+      pubnub.deleteSpace(
+        id,
+        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+          if (status.error) {
+            let errorData = { id: id };
+            let payload = {
+              code: status.category,
+              message: status.errorData,
+              data: errorData,
+            };
 
-        dispatch(
-          errorDeletingSpace({
-            code: status.category,
-            message: status.errorData,
-            data: errorData,
-          })
-        );
-      } else {
-        dispatch(
-          spaceDeleted({
-            data: response.data,
-          })
-        );
-      }
-    }
-  );
+            dispatch(errorDeletingSpace(payload, meta));
+            reject(payload);
+          } else {
+            dispatch(spaceDeleted({ data: response.data }, meta));
+            resolve();
+          }
+        }
+      );
+    });
+
+  thunkFunction.type = ActionType.COMMAND;
+
+  return thunkFunction;
 };

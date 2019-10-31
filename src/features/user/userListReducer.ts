@@ -61,27 +61,21 @@ const errorFetchingUsers = <T>(
 });
 // end::RDX-053[]
 
-export const createUserListReducer = <T extends Identifiable = User>(
-  label: string = 'all'
-) => (
+export const createUserListReducer = <T extends Identifiable = User>() => (
   state: UserListState<T> = createInitialState(),
   action:
     | UsersRetrievedAction<User>
     | FetchingUsersAction
     | ErrorFetchingUsersAction<T>
 ): UserListState<T> => {
-  if (action.payload !== undefined && action.payload.label === label) {
-    switch (action.type) {
-      case ActionType.FETCHING_USERS:
-        return fetchingUsers(state);
-      case ActionType.USERS_RETRIEVED:
-        return usersRetrieved(action.payload);
-      case ActionType.ERROR_FETCHING_USERS:
-        return errorFetchingUsers(state, action.payload);
-      default:
-        return state;
-    }
-  } else {
-    return state;
+  switch (action.type) {
+    case ActionType.FETCHING_USERS:
+      return fetchingUsers(state);
+    case ActionType.USERS_RETRIEVED:
+      return usersRetrieved(action.payload);
+    case ActionType.ERROR_FETCHING_USERS:
+      return errorFetchingUsers(state, action.payload);
+    default:
+      return state;
   }
 };

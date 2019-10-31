@@ -12,62 +12,76 @@ import {
   PubNubObjectApiError,
   PubNubApiStatus,
   ItemMap,
+  Meta,
 } from '../../../api/PubNubApi';
 
-const fetchingUsers = (payload: { label: string }): FetchingUsersAction => ({
+export const fetchingUsers = (meta?: Meta): FetchingUsersAction => ({
   type: ActionType.FETCHING_USERS,
-  payload,
+  meta,
 });
 
-const usersRetrieved = <T>(
-  payload: PubNubObjectApiSuccess<ItemMap<T>>
+export const usersRetrieved = <T>(
+  payload: PubNubObjectApiSuccess<ItemMap<T>>,
+  meta?: Meta
 ): UsersRetrievedAction<T> => ({
   type: ActionType.USERS_RETRIEVED,
   payload,
+  meta,
 });
 
-const errorFetchingUsers = <T>(
-  payload: PubNubObjectApiError<T>
+export const errorFetchingUsers = <T>(
+  payload: PubNubObjectApiError<T>,
+  meta?: Meta
 ): ErrorFetchingUsersAction<T> => ({
   type: ActionType.ERROR_FETCHING_USERS,
   payload,
+  meta,
 });
 
 export const fetchUsers = (
   pubnub: any,
   options: ObjectsListInput = {},
-  label: string = 'all'
-) => (dispatch: Dispatch) => {
-  dispatch(fetchingUsers({ label: label }));
+  meta?: Meta
+) => {
+  const thunkFunction = (dispatch: Dispatch) =>
+    new Promise<void>((resolve, reject) => {
+      dispatch(fetchingUsers(meta));
 
-  pubnub.getUsers(
-    { ...options },
-    (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
-      if (status.error) {
-        let errorData = { id: '' };
+      pubnub.getUsers(
+        { ...options },
+        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+          if (status.error) {
+            let errorData = { id: '' };
+            let payload = {
+              code: status.category,
+              message: status.errorData,
+              data: errorData,
+            };
 
-        dispatch(
-          errorFetchingUsers({
-            code: status.category,
-            message: status.errorData,
-            data: errorData,
-            label: label,
-          })
-        );
-      } else {
-        dispatch(
-          usersRetrieved({
-            label: label,
-            data: (response.data as User[]).reduce(
-              (result: { [key: string]: User }, value) => {
-                result[value.id] = value;
-                return result;
-              },
-              {}
-            ),
-          })
-        );
-      }
-    }
-  );
+            dispatch(errorFetchingUsers(payload, meta));
+            reject(payload);
+          } else {
+            dispatch(
+              usersRetrieved(
+                {
+                  data: (response.data as User[]).reduce(
+                    (result: { [key: string]: User }, value) => {
+                      result[value.id] = value;
+                      return result;
+                    },
+                    {}
+                  ),
+                },
+                meta
+              )
+            );
+            resolve();
+          }
+        }
+      );
+    });
+
+  thunkFunction.type = ActionType.COMMAND;
+
+  return thunkFunction;
 };

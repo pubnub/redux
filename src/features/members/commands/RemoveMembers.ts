@@ -11,55 +11,66 @@ import {
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
+  Meta,
 } from '../../../api/PubNubApi';
 
-const removingMembers = <T>(payload: T): RemovingMembersAction<T> => ({
+export const removingMembers = <T>(
+  payload: T,
+  meta?: Meta
+): RemovingMembersAction<T> => ({
   type: ActionType.REMOVING_MEMBERS,
   payload,
+  meta,
 });
 
-const membersRemoved = <T>(
-  payload: PubNubObjectApiSuccess<T>
+export const membersRemoved = <T>(
+  payload: PubNubObjectApiSuccess<T>,
+  meta?: Meta
 ): MembersRemovedAction<T> => ({
   type: ActionType.MEMBERS_REMOVED,
   payload,
+  meta,
 });
 
-const errorRemovingMembers = <T>(
-  payload: PubNubObjectApiError<T>
+export const errorRemovingMembers = <T>(
+  payload: PubNubObjectApiError<T>,
+  meta?: Meta
 ): ErrorRemovingMembersAction<T> => ({
   type: ActionType.ERROR_REMOVING_MEMBERS,
   payload,
+  meta,
 });
 
-export const removeMembers = (pubnub: any, members: Members) => (
-  dispatch: Dispatch
-) => {
-  dispatch(removingMembers(members));
+export const removeMembers = (pubnub: any, members: Members, meta?: Meta) => {
+  const thunkFunction = (dispatch: Dispatch) =>
+    new Promise<void>((resolve, reject) => {
+      dispatch(removingMembers(members, meta));
 
-  pubnub.removeMembers(
-    {
-      spaceId: members.spaceId,
-      users: members.users.map((user) => user.id),
-    },
-    (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
-      if (status.error) {
-        let errorData = { id: members.spaceId, value: { ...members } };
+      pubnub.removeMembers(
+        {
+          spaceId: members.spaceId,
+          users: members.users.map((user) => user.id),
+        },
+        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+          if (status.error) {
+            let errorData = { id: members.spaceId, value: { ...members } };
+            let payload = {
+              code: status.category,
+              message: status.errorData,
+              data: errorData,
+            };
 
-        dispatch(
-          errorRemovingMembers({
-            code: status.category,
-            message: status.errorData,
-            data: errorData,
-          })
-        );
-      } else {
-        dispatch(
-          membersRemoved({
-            data: response.data,
-          })
-        );
-      }
-    }
-  );
+            dispatch(errorRemovingMembers(payload, meta));
+            reject(payload);
+          } else {
+            dispatch(membersRemoved({ data: response.data }, meta));
+            resolve();
+          }
+        }
+      );
+    });
+
+  thunkFunction.type = ActionType.COMMAND;
+
+  return thunkFunction;
 };

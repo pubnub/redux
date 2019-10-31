@@ -11,52 +11,65 @@ import {
   PubNubObjectApiSuccess,
   PubNubObjectApiError,
   PubNubApiStatus,
+  Meta,
 } from '../../../api/PubNubApi';
 
-const creatingUser = <T>(payload: T): CreatingUserAction<T> => ({
+export const creatingUser = <T>(
+  payload: T,
+  meta?: Meta
+): CreatingUserAction<T> => ({
   type: ActionType.CREATING_USER,
   payload,
+  meta,
 });
 
-const userCreated = <T>(
-  payload: PubNubObjectApiSuccess<T>
+export const userCreated = <T>(
+  payload: PubNubObjectApiSuccess<T>,
+  meta?: Meta
 ): UserCreatedAction<T> => ({
   type: ActionType.USER_CREATED,
   payload,
+  meta,
 });
 
-const errorCreatingUser = <T>(
-  payload: PubNubObjectApiError<T>
+export const errorCreatingUser = <T>(
+  payload: PubNubObjectApiError<T>,
+  meta?: Meta
 ): ErrorCreatingUserAction<T> => ({
   type: ActionType.ERROR_CREATING_USER,
   payload,
+  meta,
 });
 
-export const createUser = (pubnub: any, user: User) => (dispatch: Dispatch) => {
-  dispatch(creatingUser(user));
+export const createUser = (pubnub: any, user: User, meta?: Meta) => {
+  const thunkFunction = (dispatch: Dispatch) =>
+    new Promise<void>((resolve, reject) => {
+      dispatch(creatingUser(user, meta));
 
-  pubnub.createUser(
-    {
-      ...user,
-    },
-    (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
-      if (status.error) {
-        let errorData = { id: user.id, value: user };
+      pubnub.createUser(
+        {
+          ...user,
+        },
+        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+          if (status.error) {
+            let errorData = { id: user.id, value: user };
+            let payload = {
+              code: status.category,
+              message: status.errorData,
+              data: errorData,
+            };
 
-        dispatch(
-          errorCreatingUser({
-            code: status.category,
-            message: status.errorData,
-            data: errorData,
-          })
-        );
-      } else {
-        dispatch(
-          userCreated({
-            data: response.data,
-          })
-        );
-      }
-    }
-  );
+            dispatch(errorCreatingUser(payload, meta));
+            reject(payload);
+          } else {
+            dispatch(userCreated({ data: response.data }, meta));
+            resolve();
+          }
+        }
+      );
+    });
+
+  thunkFunction.type = ActionType.COMMAND;
+
+  return thunkFunction;
 };

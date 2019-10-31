@@ -10,55 +10,66 @@ import {
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
+  Meta,
 } from '../../../api/PubNubApi';
 import { Members } from '../../../api/Member';
 
-const addingMembers = <T>(payload: T): AddingMembersAction<T> => ({
+export const addingMembers = <T>(
+  payload: T,
+  meta?: Meta
+): AddingMembersAction<T> => ({
   type: ActionType.ADDING_MEMBERS,
   payload,
+  meta,
 });
 
-const membersAdded = <T>(
-  payload: PubNubObjectApiSuccess<T>
+export const membersAdded = <T>(
+  payload: PubNubObjectApiSuccess<T>,
+  meta?: Meta
 ): MembersAddedAction<T> => ({
   type: ActionType.MEMBERS_ADDED,
   payload,
+  meta,
 });
 
-const errorAddingMembers = <T>(
-  payload: PubNubObjectApiError<T>
+export const errorAddingMembers = <T>(
+  payload: PubNubObjectApiError<T>,
+  meta?: Meta
 ): ErrorAddingMembersAction<T> => ({
   type: ActionType.ERROR_ADDING_MEMBERS,
   payload,
+  meta,
 });
 
-export const addMembers = (pubnub: any, members: Members) => (
-  dispatch: Dispatch
-) => {
-  dispatch(addingMembers(members));
+export const addMembers = (pubnub: any, members: Members, meta?: Meta) => {
+  const thunkFunction = (dispatch: Dispatch) =>
+    new Promise<void>((resolve, reject) => {
+      dispatch(addingMembers(members, meta));
 
-  pubnub.addMembers(
-    {
-      ...members,
-    },
-    (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
-      if (status.error) {
-        let errorData = { id: members.spaceId, value: { ...members } };
+      pubnub.addMembers(
+        {
+          ...members,
+        },
+        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+          if (status.error) {
+            let errorData = { id: members.spaceId, value: { ...members } };
+            let payload = {
+              code: status.category,
+              message: status.errorData,
+              data: errorData,
+            };
 
-        dispatch(
-          errorAddingMembers({
-            code: status.category,
-            message: status.errorData,
-            data: errorData,
-          })
-        );
-      } else {
-        dispatch(
-          membersAdded({
-            data: response.data,
-          })
-        );
-      }
-    }
-  );
+            dispatch(errorAddingMembers(payload, meta));
+            reject(payload);
+          } else {
+            dispatch(membersAdded({ data: response.data }, meta));
+            resolve();
+          }
+        }
+      );
+    });
+
+  thunkFunction.type = ActionType.COMMAND;
+
+  return thunkFunction;
 };

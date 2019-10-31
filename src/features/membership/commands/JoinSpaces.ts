@@ -10,55 +10,70 @@ import {
   PubNubObjectApiError,
   PubNubApiStatus,
   PubNubObjectApiSuccess,
+  Meta,
 } from '../../../api/PubNubApi';
 import { Membership } from '../../../api/Membership';
 
-const joiningSpaces = <T>(payload: T): JoiningSpacesAction<T> => ({
+export const joiningSpaces = <T>(
+  payload: T,
+  meta?: Meta
+): JoiningSpacesAction<T> => ({
   type: ActionType.JOINING_SPACES,
   payload,
+  meta,
 });
 
-const spacesJoined = <T>(
-  payload: PubNubObjectApiSuccess<T>
+export const spacesJoined = <T>(
+  payload: PubNubObjectApiSuccess<T>,
+  meta?: Meta
 ): SpacesJoinedAction<T> => ({
   type: ActionType.SPACES_JOINED,
   payload,
+  meta,
 });
 
-const errorJoiningSpaces = <T>(
-  payload: PubNubObjectApiError<T>
+export const errorJoiningSpaces = <T>(
+  payload: PubNubObjectApiError<T>,
+  meta?: Meta
 ): ErrorJoiningSpacesAction<T> => ({
   type: ActionType.ERROR_JOINING_SPACES,
   payload,
+  meta,
 });
 
-export const joinSpaces = (pubnub: any, membership: Membership) => (
-  dispatch: Dispatch
+export const joinSpaces = (
+  pubnub: any,
+  membership: Membership,
+  meta?: Meta
 ) => {
-  dispatch(joiningSpaces(membership));
+  const thunkFunction = (dispatch: Dispatch) =>
+    new Promise<void>((resolve, reject) => {
+      dispatch(joiningSpaces(membership, meta));
 
-  pubnub.joinSpaces(
-    {
-      ...membership,
-    },
-    (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
-      if (status.error) {
-        let errorData = { id: membership.userId, value: { ...membership } };
+      pubnub.joinSpaces(
+        {
+          ...membership,
+        },
+        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+          if (status.error) {
+            let errorData = { id: membership.userId, value: { ...membership } };
+            let payload = {
+              code: status.category,
+              message: status.errorData,
+              data: errorData,
+            };
 
-        dispatch(
-          errorJoiningSpaces({
-            code: status.category,
-            message: status.errorData,
-            data: errorData,
-          })
-        );
-      } else {
-        dispatch(
-          spacesJoined({
-            data: response.data,
-          })
-        );
-      }
-    }
-  );
+            dispatch(errorJoiningSpaces(payload, meta));
+            reject(payload);
+          } else {
+            dispatch(spacesJoined({ data: response.data }, meta));
+            resolve();
+          }
+        }
+      );
+    });
+
+  thunkFunction.type = ActionType.COMMAND;
+
+  return thunkFunction;
 };

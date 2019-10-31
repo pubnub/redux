@@ -12,66 +12,80 @@ import {
   PubNubObjectApiError,
   PubNubApiStatus,
   ItemMap,
+  Meta,
 } from '../../../api/PubNubApi';
 
-const fetchingSpaces = (payload: { label: string }): FetchingSpacesAction => ({
+export const fetchingSpaces = (meta?: Meta): FetchingSpacesAction => ({
   type: ActionType.FETCHING_SPACES,
-  payload,
+  meta,
 });
 
-const spacesRetrieved = <T>(
-  payload: PubNubObjectApiSuccess<ItemMap<T>>
+export const spacesRetrieved = <T>(
+  payload: PubNubObjectApiSuccess<ItemMap<T>>,
+  meta?: Meta
 ): SpacesRetrievedAction<T> => ({
   type: ActionType.SPACES_RETRIEVED,
   payload,
+  meta,
 });
 
-const errorFetchingSpaces = <T>(
-  payload: PubNubObjectApiError<T>
+export const errorFetchingSpaces = <T>(
+  payload: PubNubObjectApiError<T>,
+  meta?: Meta
 ): ErrorFetchingSpacesAction<T> => ({
   type: ActionType.ERROR_FETCHING_SPACES,
   payload,
+  meta,
 });
 
 export const fetchSpaces = (
   pubnub: any,
   options: ObjectsListInput = {},
-  label: string = 'all'
-) => (dispatch: Dispatch) => {
-  dispatch(fetchingSpaces({ label: label }));
+  meta?: Meta
+) => {
+  const thunkFunction = (dispatch: Dispatch) =>
+    new Promise<void>((resolve, reject) => {
+      dispatch(fetchingSpaces(meta));
 
-  pubnub.getSpaces(
-    { ...options },
-    (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
-      if (status.error) {
-        let errorData = { id: '' };
+      pubnub.getSpaces(
+        { ...options },
+        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+          if (status.error) {
+            let errorData = { id: '' };
+            let payload = {
+              code: status.category,
+              message: status.errorData,
+              data: errorData,
+            };
 
-        dispatch(
-          errorFetchingSpaces({
-            code: status.category,
-            message: status.errorData,
-            data: errorData,
-            label: label,
-          })
-        );
-      } else {
-        dispatch(
-          spacesRetrieved({
-            label: label,
-            data: (response.data as Space[]).reduce(
-              (result: { [key: string]: Space }, value) => {
-                if (value.description === null) {
-                  value.description = ''; // TODO: reference app cannot handle missing description
-                }
+            dispatch(errorFetchingSpaces(payload, meta));
+            reject(payload);
+          } else {
+            dispatch(
+              spacesRetrieved(
+                {
+                  data: (response.data as Space[]).reduce(
+                    (result: { [key: string]: Space }, value) => {
+                      if (value.description === null) {
+                        value.description = ''; // TODO: reference app cannot handle missing description
+                      }
 
-                result[value.id] = value;
-                return result;
-              },
-              {}
-            ),
-          })
-        );
-      }
-    }
-  );
+                      result[value.id] = value;
+                      return result;
+                    },
+                    {}
+                  ),
+                },
+                meta
+              )
+            );
+            resolve();
+          }
+        }
+      );
+    });
+
+  thunkFunction.type = ActionType.COMMAND;
+
+  return thunkFunction;
 };

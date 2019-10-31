@@ -77,4 +77,5 @@ export enum ActionType {
   LEAVING_SPACES = 'pubnub/LEAVING_SPACES',
   SPACES_LEFT = 'pubnub/SPACES_LEFT',
   ERROR_LEAVING_SPACES = 'pubnub/ERROR_LEAVING_SPACES',
+  COMMAND = 'pubnub/COMMAND',
 }

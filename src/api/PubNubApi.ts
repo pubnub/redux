@@ -33,7 +33,6 @@ export interface PubNubObjectApiError<T> {
   code: string;
   message: string;
   data: { id: string; value?: T };
-  label?: string;
 }
 // end::RDX-021[]
 
@@ -48,3 +47,5 @@ export interface ItemMap<T> {
   [key: string]: T;
 }
 // end::RDX-023[]
+
+export type Meta = { [key: string]: any };
