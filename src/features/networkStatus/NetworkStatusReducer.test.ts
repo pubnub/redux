@@ -1,13 +1,13 @@
-import { createNetworkStatusReducer } from '../../features/networkStatus/NetworkStatusReducer';
-import { NetworkUpAction, NetworkDownAction } from '../../actions/Actions';
-import { ActionType } from '../../actions/ActionType.enum';
+import { createNetworkStatusReducer } from './NetworkStatusReducer';
+import { NetworkUpEventAction, NetworkDownEventAction } from './NetworkStatusActions';
+import { NetworkStatusActionType } from './NetworkStatusActionType.enum';
 
-const networkUp = (): NetworkUpAction => ({
-  type: ActionType.NETWORK_UP,
+const networkUp = (): NetworkUpEventAction => ({
+  type: NetworkStatusActionType.NETWORK_UP_EVENT,
 });
 
-const networkDown = (): NetworkDownAction => ({
-  type: ActionType.NETWORK_DOWN,
+const networkDown = (): NetworkDownEventAction => ({
+  type: NetworkStatusActionType.NETWORK_DOWN_EVENT,
 });
 
 describe('createNetworkStatusReducer', () => {

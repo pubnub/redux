@@ -1,91 +1,81 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload, ObjectsListInput } from '../../../api/Objects';
 import {
   ErrorFetchingSpacesAction,
   SpacesRetrievedAction,
   FetchingSpacesAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import { Space } from '../../../api/Space';
-import {
-  PubNubObjectApiSuccess,
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  ItemMap,
-  Meta,
-} from '../../../api/PubNubApi';
+  FetchSpacesRequest,
+  FetchSpacesResponse,
+  FetchSpacesError,
+  Space,
+  FetchSpacesSuccess,
+} from '../SpaceActions';
+import { SpaceActionType } from '../SpaceActionType.enum';
+import { ActionMeta } from 'common/ActionMeta';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
 
-export const fetchingSpaces = (meta?: Meta): FetchingSpacesAction => ({
-  type: ActionType.FETCHING_SPACES,
-  meta,
-});
-
-export const spacesRetrieved = <T>(
-  payload: PubNubObjectApiSuccess<ItemMap<T>>,
-  meta?: Meta
-): SpacesRetrievedAction<T> => ({
-  type: ActionType.SPACES_RETRIEVED,
+export const fetchingSpaces = <MetaType>(
+  payload: FetchSpacesRequest,
+  meta?: ActionMeta<MetaType>,
+): FetchingSpacesAction<MetaType> => ({
+  type: SpaceActionType.FETCHING_SPACES,
   payload,
   meta,
 });
 
-export const errorFetchingSpaces = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorFetchingSpacesAction<T> => ({
-  type: ActionType.ERROR_FETCHING_SPACES,
+export const spacesRetrieved = <SpaceType extends Space, CustomType, MetaType>(
+  payload: FetchSpacesSuccess<SpaceType, CustomType>,
+  meta?: ActionMeta<MetaType>
+): SpacesRetrievedAction<SpaceType, CustomType, MetaType> => ({
+  type: SpaceActionType.SPACES_RETRIEVED,
   payload,
   meta,
 });
 
-export const fetchSpaces = (
+export const errorFetchingSpaces = <MetaType>(
+  payload: FetchSpacesError,
+  meta?: ActionMeta<MetaType>
+): ErrorFetchingSpacesAction<MetaType> => ({
+  type: SpaceActionType.ERROR_FETCHING_SPACES,
+  payload,
+  meta,
+  error: true,
+});
+
+export const fetchSpaces = <SpaceType extends Space, CustomType, MetaType>(
   pubnub: any,
-  options: ObjectsListInput = {},
-  meta?: Meta
+  request: FetchSpacesRequest = {},
+  meta?: ActionMeta<MetaType>
 ) => {
   const thunkFunction = (dispatch: Dispatch) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(fetchingSpaces(meta));
+      dispatch(fetchingSpaces<MetaType>(request, meta));
 
       pubnub.getSpaces(
-        { ...options },
-        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+        { ...request },
+        (status: PubNubApiStatus, response: FetchSpacesResponse<SpaceType, CustomType>) => {
           if (status.error) {
-            let errorData = { id: '' };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: FetchSpacesError = {
+              request,
+              status,
             };
 
-            dispatch(errorFetchingSpaces(payload, meta));
+            dispatch(errorFetchingSpaces<MetaType>(payload, meta));
             reject(payload);
           } else {
-            dispatch(
-              spacesRetrieved(
-                {
-                  data: (response.data as Space[]).reduce(
-                    (result: { [key: string]: Space }, value) => {
-                      if (value.description === null) {
-                        value.description = ''; // TODO: reference app cannot handle missing description
-                      }
+            let payload: FetchSpacesSuccess<SpaceType, CustomType> = {
+              request,
+              response,
+              status,
+            };
 
-                      result[value.id] = value;
-                      return result;
-                    },
-                    {}
-                  ),
-                },
-                meta
-              )
-            );
+            dispatch(spacesRetrieved<SpaceType, CustomType, MetaType>(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = SpaceActionType.FETCH_SPACES_COMMAND;
 
   return thunkFunction;
 };

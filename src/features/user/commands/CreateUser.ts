@@ -1,75 +1,80 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
   ErrorCreatingUserAction,
   UserCreatedAction,
   CreatingUserAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import { User } from '../../../api/User';
-import {
-  PubNubObjectApiSuccess,
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  Meta,
-} from '../../../api/PubNubApi';
+  UserRequest,
+  UserResponse,
+  UserSuccess,
+  UserError,
+  User,
+} from '../UserActions';
+import { UserActionType } from '../UserActionType.enum';
+import { ActionMeta } from '../../../common/ActionMeta';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
 
-export const creatingUser = <T>(
-  payload: T,
-  meta?: Meta
-): CreatingUserAction<T> => ({
-  type: ActionType.CREATING_USER,
+
+export const creatingUser = <UserType extends User, CustomType, MetaType>(
+  payload: UserRequest<UserType, CustomType>,
+  meta?: ActionMeta<MetaType>
+): CreatingUserAction<UserType, CustomType, MetaType> => ({
+  type: UserActionType.CREATING_USER,
   payload,
   meta,
 });
 
-export const userCreated = <T>(
-  payload: PubNubObjectApiSuccess<T>,
-  meta?: Meta
-): UserCreatedAction<T> => ({
-  type: ActionType.USER_CREATED,
+export const userCreated = <UserType extends User, CustomType, MetaType>(
+  payload: UserSuccess<UserType, CustomType>,
+  meta?: ActionMeta<MetaType>
+): UserCreatedAction<UserType, CustomType, MetaType> => ({
+  type: UserActionType.USER_CREATED,
   payload,
   meta,
 });
 
-export const errorCreatingUser = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorCreatingUserAction<T> => ({
-  type: ActionType.ERROR_CREATING_USER,
+export const errorCreatingUser = <UserType extends User, CustomType, MetaType>(
+  payload: UserError<UserType, CustomType>,
+  meta?: ActionMeta<MetaType>
+): ErrorCreatingUserAction<UserType, CustomType, MetaType> => ({
+  type: UserActionType.ERROR_CREATING_USER,
   payload,
   meta,
+  error: true,
 });
 
-export const createUser = (pubnub: any, user: User, meta?: Meta) => {
-  const thunkFunction = (dispatch: Dispatch) =>
+export const createUser = <UserType extends User, CustomType, MetaType>(request: UserRequest<UserType, CustomType>, meta?: ActionMeta<MetaType>) => {
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(creatingUser(user, meta));
+      dispatch(creatingUser<UserType, CustomType, MetaType>(request, meta));
 
       pubnub.createUser(
         {
-          ...user,
+          ...request,
         },
-        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+        (status: PubNubApiStatus, response: UserResponse<UserType, CustomType>) => {
           if (status.error) {
-            let errorData = { id: user.id, value: user };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: UserError<UserType, CustomType> = {
+              request,
+              status,
             };
 
-            dispatch(errorCreatingUser(payload, meta));
+            dispatch(errorCreatingUser<UserType, CustomType, MetaType>(payload, meta));
             reject(payload);
           } else {
-            dispatch(userCreated({ data: response.data }, meta));
+            let payload = {
+              request,
+              response,
+              status,
+            };
+
+            dispatch(userCreated<UserType, CustomType, MetaType>(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = UserActionType.CREATE_USER_COMMAND;
 
   return thunkFunction;
 };

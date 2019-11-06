@@ -1,13 +1,18 @@
-import { NetworkStatusListenerActions } from '../../actions/Actions';
-import { ActionType } from '../../actions/ActionType.enum';
-import { NetworkStatus } from '../../api/NetworkStatus';
+import { NetworkStatusListenerActions } from './NetworkStatusListener';
+import { NetworkStatusActionType } from './NetworkStatusActionType.enum';
+
+// tag::RDX-009[]
+export interface NetworkStatusState {
+  isConnected: boolean;
+}
+// end::RDX-009[]
 
 type NetworkStatusInitializerFunction = () => boolean;
 
 export const createNetworkStatusReducer = (
   initializer: NetworkStatusInitializerFunction | boolean
 ) => {
-  let initialState: NetworkStatus;
+  let initialState: NetworkStatusState;
 
   if (typeof initializer === 'boolean') {
     initialState = { isConnected: initializer };
@@ -27,16 +32,14 @@ export const createNetworkStatusReducer = (
   return function networkStatusReducer(
     state = initialState,
     action: NetworkStatusListenerActions
-  ): NetworkStatus {
+  ): NetworkStatusState {
     switch (action.type) {
-      case ActionType.NETWORK_UP:
+      case NetworkStatusActionType.NETWORK_UP_EVENT:
         return {
-          ...state,
           isConnected: true,
         };
-      case ActionType.NETWORK_DOWN:
+      case NetworkStatusActionType.NETWORK_DOWN_EVENT:
         return {
-          ...state,
           isConnected: false,
         };
       default:

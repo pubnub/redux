@@ -1,72 +1,76 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
   UserDeletedAction,
   DeletingUserAction,
   ErrorDeletingUserAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import {
-  PubNubObjectApiSuccess,
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  Meta,
-} from '../../../api/PubNubApi';
+  DeleteUserRequest,
+  DeleteUserResponse,
+  DeleteUserError,
+  DeleteUserSuccess
+} from '../UserActions';
+import { UserActionType } from '../UserActionType.enum';
+import { ActionMeta } from 'common/ActionMeta';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
 
-export const deletingUser = (
-  payload: string,
-  meta?: Meta
-): DeletingUserAction => ({
-  type: ActionType.DELETING_USER,
+export const deletingUser = <MetaType>(
+  payload: DeleteUserRequest,
+  meta?: ActionMeta<MetaType>
+): DeletingUserAction<MetaType> => ({
+  type: UserActionType.DELETING_USER,
   payload,
   meta,
 });
 
-export const userDeleted = <T>(
-  payload: PubNubObjectApiSuccess<T>,
-  meta?: Meta
-): UserDeletedAction<T> => ({
-  type: ActionType.USER_DELETED,
+export const userDeleted = <MetaType>(
+  payload: DeleteUserSuccess,
+  meta?: ActionMeta<MetaType>,
+): UserDeletedAction<MetaType> => ({
+  type: UserActionType.USER_DELETED,
   payload,
   meta,
 });
 
-export const errorDeletingUser = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorDeletingUserAction<T> => ({
-  type: ActionType.ERROR_DELETING_USER,
+export const errorDeletingUser = <MetaType>(
+  payload: DeleteUserError,
+  meta?: ActionMeta<MetaType>,
+): ErrorDeletingUserAction<MetaType> => ({
+  type: UserActionType.ERROR_DELETING_USER,
   payload,
   meta,
+  error: true,
 });
 
-export const deleteUser = (pubnub: any, id: string, meta?: Meta) => {
-  const thunkFunction = (dispatch: Dispatch) =>
+export const deleteUser = <MetaType>(request: DeleteUserRequest, meta?: ActionMeta<MetaType>) => {
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(deletingUser(id, meta));
+      dispatch(deletingUser<MetaType>(request, meta));
 
       pubnub.deleteUser(
-        id,
-        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+        request.userId,
+        (status: PubNubApiStatus , response: DeleteUserResponse) => {
           if (status.error) {
-            let errorData = { id: id };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: DeleteUserError = {
+              request,
+              status,
             };
 
-            dispatch(errorDeletingUser(payload, meta));
+            dispatch(errorDeletingUser<MetaType>(payload, meta));
             reject(payload);
           } else {
-            dispatch(userDeleted({ data: response.data }, meta));
+            let payload: DeleteUserSuccess = {
+              request,
+              response,
+              status,
+            };
+
+            dispatch(userDeleted<MetaType>(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = UserActionType.DELETE_USER_COMMAND;
 
   return thunkFunction;
 };

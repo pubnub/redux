@@ -1,80 +1,84 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from '../../../api/Objects';
+import { SpaceActionType } from '../SpaceActionType.enum';
 import {
   ErrorFetchingSpaceByIdAction,
   SpaceRetrievedAction,
   FetchingSpaceByIdAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import {
-  PubNubObjectApiSuccess,
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  Meta,
-} from '../../../api/PubNubApi';
+  FetchSpaceByIdRequest,
+  FetchSpaceByIdError,
+  SpaceResponse,
+  Space,
+  FetchSpaceByIdSuccess,
+} from '../SpaceActions';
+import { ActionMeta } from '../../../common/ActionMeta';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
 
-export const fetchingSpaceById = (
-  payload: string,
-  meta?: Meta
-): FetchingSpaceByIdAction => ({
-  type: ActionType.FETCHING_SPACE_BY_ID,
+export const fetchingSpaceById = <MetaType>(
+  payload: FetchSpaceByIdRequest,
+  meta?: ActionMeta<MetaType>,
+): FetchingSpaceByIdAction<MetaType> => ({
+  type: SpaceActionType.FETCHING_SPACE_BY_ID,
   payload,
   meta,
 });
 
-export const spaceRetrieved = <T>(
-  payload: PubNubObjectApiSuccess<T>,
-  meta?: Meta
-): SpaceRetrievedAction<T> => ({
-  type: ActionType.SPACE_RETRIEVED,
+export const spaceRetrieved = <SpaceType extends Space, CustomType, MetaType>(
+  payload: FetchSpaceByIdSuccess<SpaceType, CustomType>,
+  meta?: ActionMeta<MetaType>
+): SpaceRetrievedAction<SpaceType, CustomType, MetaType> => ({
+  type: SpaceActionType.SPACE_RETRIEVED,
   payload,
   meta,
 });
 
-export const errorFetchingSpaceById = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorFetchingSpaceByIdAction<T> => ({
-  type: ActionType.ERROR_FETCHING_SPACE_BY_ID,
+export const errorFetchingSpaceById = <MetaType>(
+  payload: FetchSpaceByIdError,
+  meta?: ActionMeta<MetaType>
+): ErrorFetchingSpaceByIdAction<MetaType> => ({
+  type: SpaceActionType.ERROR_FETCHING_SPACE_BY_ID,
   payload,
   meta,
+  error: true,
 });
 
-export const fetchSpaceById = (
-  pubnub: any,
-  spaceId: string,
-  include?: object,
-  meta?: Meta
+export const fetchSpaceById = <SpaceType extends Space, CustomType, MetaType>(
+  request: FetchSpaceByIdRequest,
+  meta?: ActionMeta<MetaType>
 ) => {
-  const thunkFunction = (dispatch: Dispatch) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(fetchingSpaceById(spaceId, meta));
+      dispatch(fetchingSpaceById<MetaType>({
+        ...request,
+      }, meta));
 
       pubnub.getSpace(
         {
-          spaceId,
-          ...include,
+          ...request,
         },
-        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+        (status: PubNubApiStatus, response: SpaceResponse<SpaceType, CustomType>) => {
           if (status.error) {
-            let errorData = { id: spaceId };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: FetchSpaceByIdError = {
+              request,
+              status,
             };
 
-            dispatch(errorFetchingSpaceById(payload, meta));
-            reject();
+            dispatch(errorFetchingSpaceById<MetaType>(payload, meta));
+            reject(payload);
           } else {
-            dispatch(spaceRetrieved({ data: response.data }, meta));
+            let payload: FetchSpaceByIdSuccess<SpaceType, CustomType> = {
+              request,
+              response,
+              status,
+            };
+
+            dispatch(spaceRetrieved<SpaceType, CustomType, MetaType>(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = SpaceActionType.FETCH_SPACE_BY_ID_COMMAND;
 
   return thunkFunction;
 };

@@ -1,74 +1,78 @@
 import { Dispatch } from 'redux';
 import {
-  MessageSentAction,
+  SendMessageRequest,
   SendingMessageAction,
+  MessageRequestOptions,
+  MessageSentAction,
+  SendMessageSuccess,
   ErrorSendingMessageAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import { Message } from '../../../api/Message';
-import {
-  PubNubApiStatus,
-  PubNubObjectApiError,
-  PubNubObjectApiSuccess,
-  Meta,
-} from '../../../api/PubNubApi';
+  SendMessageError,
+  SendMessageResponse,
+} from '../MessageActions';
+import { ActionMeta } from 'common/ActionMeta';
+import { MessageActionType } from '../MessageActionType.enum';
+import { PubNubApiStatus } from 'common/PubNubApi';
 
-export const sendingMessage = <T extends { channel: string }>(
-  payload: T,
-  meta?: Meta
-): SendingMessageAction<T> => ({
-  type: ActionType.SENDING_MESSAGE,
+export const sendingMessage = <MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType, MetaType>(
+  payload: SendMessageRequest<MessageRequestType, MessageContentType, MessageMetaType>,
+  meta?: ActionMeta<MetaType>,
+): SendingMessageAction<MessageRequestType, MessageContentType, MessageMetaType, MetaType> => ({
+  type: MessageActionType.SENDING_MESSAGE,
   payload,
   meta,
 });
 
-export const messageSent = <T extends { channel: string }>(
-  payload: PubNubObjectApiSuccess<T>,
-  meta?: Meta
-): MessageSentAction<T> => ({
-  type: ActionType.MESSAGE_SENT,
+export const messageSent = <MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType, MetaType>(
+  payload: SendMessageSuccess<MessageRequestType, MessageContentType, MessageMetaType>,
+  meta?: ActionMeta<MetaType>,
+): MessageSentAction<MessageRequestType, MessageContentType, MessageMetaType, MetaType> => ({
+  type: MessageActionType.MESSAGE_SENT,
   payload,
   meta,
 });
 
-export const errorSendingmessage = <T extends { channel: string }>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorSendingMessageAction<T> => ({
-  type: ActionType.ERROR_SENDING_MESSAGE,
+export const errorSendingmessage = <MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType, MetaType>(
+  payload: SendMessageError<MessageRequestType, MessageContentType, MessageMetaType>,
+  meta?: ActionMeta<MetaType>,
+): ErrorSendingMessageAction<MessageRequestType, MessageContentType, MessageMetaType, MetaType> => ({
+  type: MessageActionType.ERROR_SENDING_MESSAGE,
   payload,
   meta,
 });
 
-export const sendMessage = (pubnub: any, message: Message, meta?: Meta) => {
-  const thunkFunction = (dispatch: Dispatch) =>
+export const sendMessage = <MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType, MetaType>(request: SendMessageRequest<MessageRequestType, MessageContentType, MessageMetaType>, meta?: MetaType) => {
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(sendingMessage(message, meta));
+      dispatch(sendingMessage(request, meta));
 
       pubnub.publish(
         {
-          ...message,
+          ...request,
         },
-        (status: PubNubApiStatus) => {
+        (status: PubNubApiStatus, response: SendMessageResponse) => {
           if (status.error) {
-            let errorData = { id: message.channel, value: { ...message } };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: SendMessageError<MessageRequestType, MessageContentType, MessageMetaType> = {
+              request,
+              status,
             };
 
             dispatch(errorSendingmessage(payload, meta));
             reject(payload);
           } else {
-            dispatch(messageSent({ data: { ...message } }, meta));
+            let payload: SendMessageSuccess<MessageRequestType, MessageContentType, MessageMetaType> = {
+              request,
+              response,
+              status,
+            };
+
+            dispatch(messageSent(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = MessageActionType.SEND_MESSAGE_COMMAND;
 
   return thunkFunction;
 };

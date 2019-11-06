@@ -1,80 +1,75 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from '../../../api/Objects';
-import {
-  LeavingSpacesAction,
-  SpacesLeftAction,
-  ErrorLeavingSpacesAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import {
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  PubNubObjectApiSuccess,
-  Meta,
-} from '../../../api/PubNubApi';
-import { Membership } from '../../../api/Membership';
+import { Membership } from '../Membership';
+import { LeavingSpacesAction, MembershipRequest, SpacesLeftAction, MembershipSuccess, ErrorLeavingSpacesAction, MembershipError, MembershipResponse } from '../MembershipActions';
+import { ActionMeta } from 'common/ActionMeta';
+import { MembershipActionType } from '../MembershipActionType.enum';
+import { Space } from 'features/space/SpaceActions';
+import { PubNubApiStatus } from 'common/PubNubApi';
 
-export const leavingSpaces = <T>(
-  payload: T,
-  meta?: Meta
-): LeavingSpacesAction<T> => ({
-  type: ActionType.LEAVING_SPACES,
+export const leavingSpaces = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
+  payload: MembershipRequest<MembershipType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): LeavingSpacesAction<MembershipType, CustomType, MetaType> => ({
+  type: MembershipActionType.LEAVING_SPACES,
   payload,
   meta,
 });
 
-export const spacesLeft = <T>(
-  payload: PubNubObjectApiSuccess<T>,
-  meta?: Meta
-): SpacesLeftAction<T> => ({
-  type: ActionType.SPACES_LEFT,
+export const spacesLeft = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
+  payload: MembershipSuccess<SpaceType, MembershipType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): SpacesLeftAction<SpaceType, MembershipType, CustomType, MetaType> => ({
+  type: MembershipActionType.SPACES_LEFT,
   payload,
   meta,
 });
 
-export const errorLeavingSpaces = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorLeavingSpacesAction<T> => ({
-  type: ActionType.ERROR_LEAVING_SPACES,
+export const errorLeavingSpaces = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
+  payload: MembershipError<MembershipType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): ErrorLeavingSpacesAction<MembershipType, CustomType, MetaType> => ({
+  type: MembershipActionType.ERROR_LEAVING_SPACES,
   payload,
   meta,
+  error: true,
 });
 
-export const leaveSpaces = (
-  pubnub: any,
-  membership: Membership,
-  meta?: Meta
+export const leaveSpaces = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
+  request: MembershipRequest<MembershipType, CustomType>,
+  meta?: ActionMeta<MetaType>,
 ) => {
-  const thunkFunction = (dispatch: Dispatch) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(leavingSpaces(membership, meta));
+      dispatch(leavingSpaces<MembershipType, CustomType, MetaType>(request, meta));
 
       pubnub.leaveSpaces(
         {
-          userId: membership.userId,
-          spaces: membership.spaces.map((space) => space.id),
+          ...request
         },
-        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+        (status: PubNubApiStatus, response: MembershipResponse<SpaceType, CustomType>) => {
           if (status.error) {
-            let errorData = { id: membership.userId, value: { ...membership } };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: MembershipError <MembershipType, CustomType> = {
+              request,
+              status,
             };
 
             dispatch(errorLeavingSpaces(payload, meta));
             reject(payload);
           } else {
-            dispatch(spacesLeft({ data: response.data }, meta));
+            let payload: MembershipSuccess<SpaceType, MembershipType, CustomType> = {
+              request,
+              response,
+              status,
+            };
+
+            dispatch(spacesLeft<SpaceType, MembershipType, CustomType, MetaType>(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = MembershipActionType.LEAVE_SPACES_COMMAND;
 
   return thunkFunction;
 };

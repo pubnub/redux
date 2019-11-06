@@ -1,12 +1,9 @@
-import { Dispatch } from 'redux';
-import { SignalActionPayload } from '../../api/Signal';
-import { SignalAction } from '../../actions/Actions';
-import { ActionType } from '../../actions/ActionType.enum';
+import { SignalActionType } from './SignalActionType.enum';
+import { SignalActionPayload } from './Signal';
 
-export const createSignalListener = (dispatch: Dispatch<SignalAction>) => ({
-  signal: (payload: SignalActionPayload): SignalAction =>
-    dispatch({
-      type: ActionType.SIGNAL,
-      payload,
-    }),
-});
+// tag::RDX-147[]
+export interface SignalAction {
+  type: typeof SignalActionType.SIGNAL;
+  payload: SignalActionPayload;
+}
+// end::RDX-147[]

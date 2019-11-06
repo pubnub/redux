@@ -1,87 +1,82 @@
 import { Dispatch } from 'redux';
 import {
-  MembershipsRetrievedAction,
   FetchingMembershipsAction,
+  FetchMembershipRequest,
+  MembershipsRetrievedAction,
+  FetchMembershipSuccess,
   ErrorFetchingMembershipsAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import {
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  PubNubObjectApiSuccess,
-  Meta,
-} from '../../../api/PubNubApi';
-import {
-  MembershipList,
-  MembershipResult,
-  MembershipOptions,
-} from '../../../api/Membership';
+  FetchMembershipError,
+  FetchMembershipResponse,
+} from '../MembershipActions';
+import { MembershipActionType } from '../MembershipActionType.enum';
+import { Space } from '../../../features/space/SpaceActions';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
+import { ActionMeta } from '../../../common/ActionMeta';
 
-export const fetchingMemberships = (
-  payload: string,
-  meta?: Meta
-): FetchingMembershipsAction => ({
-  type: ActionType.FETCHING_MEMBERSHIPS,
+export const fetchingMemberships = <MetaType>(
+  payload: FetchMembershipRequest,
+  meta?: ActionMeta<MetaType>,
+): FetchingMembershipsAction<MetaType> => ({
+  type: MembershipActionType.FETCHING_MEMBERSHIP,
   payload,
   meta,
 });
 
-export const membershipsRetrieved = (
-  payload: PubNubObjectApiSuccess<MembershipResult>,
-  meta?: Meta
-): MembershipsRetrievedAction => ({
-  type: ActionType.MEMBERSHIPS_RETRIEVED,
+export const membershipsRetrieved = <SpaceType extends Space, CustomType, MetaType>(
+  payload: FetchMembershipSuccess<SpaceType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): MembershipsRetrievedAction<SpaceType, CustomType, MetaType> => ({
+  type: MembershipActionType.MEMBERSHIP_RETRIEVED,
   payload,
   meta,
 });
 
-export const errorFetchingMemberships = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorFetchingMembershipsAction<T> => ({
-  type: ActionType.ERROR_FETCHING_MEMBERSHIPS,
+export const errorFetchingMemberships = <MetaType>(
+  payload: FetchMembershipError,
+  meta?: ActionMeta<MetaType>,
+): ErrorFetchingMembershipsAction<MetaType> => ({
+  type: MembershipActionType.ERROR_FETCHING_MEMBERSHIP,
   payload,
   meta,
+  error: true,
 });
 
-export const fetchMemberships = (
-  pubnub: any,
-  userId: string,
-  options: MembershipOptions = {}
+export const fetchMemberships = <SpaceType extends Space, CustomType, MetaType>(
+  request: FetchMembershipRequest,
+  meta?: ActionMeta<MetaType>,
 ) => {
-  const thunkFunction = (dispatch: Dispatch, meta?: Meta) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(fetchingMemberships(userId, meta));
+      dispatch(fetchingMemberships<MetaType>(request, meta));
 
       pubnub.getMemberships(
         {
-          userId,
-          ...options,
+          ...request
         },
-        (status: PubNubApiStatus, response: { data: MembershipList }) => {
+        (status: PubNubApiStatus, response: FetchMembershipResponse<SpaceType, CustomType>) => {
           if (status.error) {
-            let errorData = { id: userId };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: FetchMembershipError = {
+              request,
+              status,
             };
 
-            dispatch(errorFetchingMemberships(payload, meta));
+            dispatch(errorFetchingMemberships<MetaType>(payload, meta));
             reject(payload);
           } else {
-            let result = {
-              id: userId,
-              spaces: response.data,
+            let payload: FetchMembershipSuccess<SpaceType, CustomType> = {
+              request,
+              response,
+              status,
             };
-            dispatch(membershipsRetrieved({ data: result }, meta));
+
+            dispatch(membershipsRetrieved<SpaceType, CustomType, MetaType>(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = MembershipActionType.FETCH_MEMBERSHIP_COMMAND;
 
   return thunkFunction;
 };

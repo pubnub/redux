@@ -1,45 +1,26 @@
-import { Dispatch } from 'redux';
-import {
-  NetworkStatusListenerActions,
-  NetworkUpAction,
-  NetworkDownAction,
-} from '../../actions/Actions';
-import { ActionType } from '../../actions/ActionType.enum';
-import { StatusActionPayload } from '../../api/Status';
+import { NetworkStatusActionType } from './NetworkStatusActionType.enum';
+import { NetworkStatusCategory } from './NetworkStatusCategory.enum';
 
-const networkUp = (): NetworkUpAction => ({
-  type: ActionType.NETWORK_UP,
-});
+// tag::RDX-026[]
+export interface NetworkStatusResponse {
+  affectedChannelGroups: string[];
+  affectedChannels: string[];
+  category: NetworkStatusCategory;
+  operation: string;
+  lastTimetoken: number;
+  currentTimetoken: string;
+  subscribedChannels: string[];
+}
+// end::RDX-026[]
 
-const networkDown = (): NetworkDownAction => ({
-  type: ActionType.NETWORK_DOWN,
-});
+// tag::RDX-073[]
+export interface NetworkUpEventAction {
+  type: typeof NetworkStatusActionType.NETWORK_UP_EVENT;
+}
+// end::RDX-073[]
 
-export const createNetworkStatusListener = (
-  dispatch: Dispatch<NetworkStatusListenerActions>
-) => ({
-  status: (payload: StatusActionPayload) => {
-    switch (payload.category) {
-      case 'PNNetworkUpCategory':
-        dispatch(networkUp());
-        break;
-      case 'PNNetworkDownCategory':
-        dispatch(networkDown());
-        break;
-      case 'PNNetworkIssuesCategory':
-        dispatch(networkDown());
-        break;
-      case 'PNReconnectedCategory':
-        dispatch(networkUp());
-        break;
-      case 'PNConnectedCategory':
-        dispatch(networkUp());
-        break;
-      case 'PNTimeoutCategory':
-        dispatch(networkDown());
-        break;
-      default:
-        break;
-    }
-  },
-});
+// tag::RDX-074[]
+export interface NetworkDownEventAction {
+  type: typeof NetworkStatusActionType.NETWORK_DOWN_EVENT;
+}
+// end::RDX-074[]

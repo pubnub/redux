@@ -1,52 +1,47 @@
 import { Dispatch } from 'redux';
-import { ObjectsActionPayload } from '../../api/Objects';
 import {
-  UserMembershipUpdatedOnSpaceAction,
-  UserAddedToSpaceAction,
-  UserRemovedFromSpaceAction,
   MembershipListenerActions,
-} from '../../actions/Actions';
-import { ActionType } from '../../actions/ActionType.enum';
-import { PubNubObjectApiSuccess, ListenerEventData } from '../../api/PubNubApi';
+  UserMembershipUpdatedOnSpaceEventAction,
+  MembershipEventMessage,
+  UserAddedToSpaceEventAction,
+  UserRemovedFromSpaceEventAction,
+} from './MembershipActions';
+import { MembershipActionType } from './MembershipActionType.enum';
 
-const userMembershipUpdatedOnSpace = <T extends ListenerEventData>(
-  payload: PubNubObjectApiSuccess<T>
-): UserMembershipUpdatedOnSpaceAction<T> => ({
-  type: ActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE,
+const userMembershipUpdatedOnSpace = <CustomType>(
+  payload: MembershipEventMessage<CustomType>,
+): UserMembershipUpdatedOnSpaceEventAction<CustomType> => ({
+  type: MembershipActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE_EVENT,
   payload,
 });
 
-const userAddedToSpace = <T extends ListenerEventData>(
-  payload: PubNubObjectApiSuccess<T>
-): UserAddedToSpaceAction<T> => ({
-  type: ActionType.USER_ADDED_TO_SPACE,
+const userAddedToSpace = <CustomType>(
+  payload: MembershipEventMessage<CustomType>,
+): UserAddedToSpaceEventAction<CustomType> => ({
+  type: MembershipActionType.USER_ADDED_TO_SPACE_EVENT,
   payload,
 });
 
-const userRemovedFromSpace = <T extends ListenerEventData>(
-  payload: PubNubObjectApiSuccess<T>
-): UserRemovedFromSpaceAction<T> => ({
-  type: ActionType.USER_REMOVED_FROM_SPACE,
+const userRemovedFromSpace = <CustomType>(
+  payload: MembershipEventMessage<CustomType>,
+): UserRemovedFromSpaceEventAction<CustomType> => ({
+  type: MembershipActionType.USER_REMOVED_FROM_SPACE_EVENT,
   payload,
 });
 
-export const createMembershipListener = <T extends ListenerEventData>(
-  dispatch: Dispatch<MembershipListenerActions<T>>
+export const createMembershipListener = <CustomType>(
+  dispatch: Dispatch<MembershipListenerActions<CustomType>>
 ) => ({
-  membership: (payload: ObjectsActionPayload<T>) => {
-    let result = {
-      id: payload.message.data.userId + '_' + payload.message.data.spaceId,
-      data: payload.message.data,
-    };
-    switch (payload.message.event) {
+  membership: (payload: MembershipEventMessage<CustomType>) => {
+    switch (payload.event) {
       case 'create':
-        dispatch(userAddedToSpace(result));
+        dispatch(userAddedToSpace(payload));
         break;
       case 'update':
-        dispatch(userMembershipUpdatedOnSpace(result));
+        dispatch(userMembershipUpdatedOnSpace(payload));
         break;
       case 'delete':
-        dispatch(userRemovedFromSpace(result));
+        dispatch(userRemovedFromSpace(payload));
         break;
       default:
         break;

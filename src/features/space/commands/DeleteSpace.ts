@@ -1,72 +1,76 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
   SpaceDeletedAction,
   DeletingSpaceAction,
   ErrorDeletingSpaceAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import {
-  PubNubObjectApiSuccess,
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  Meta,
-} from '../../../api/PubNubApi';
+  DeleteSpaceRequest,
+  DeleteSpaceResponse,
+  DeleteSpaceError,
+  DeleteSpaceSuccess
+} from '../SpaceActions';
+import { SpaceActionType } from '../SpaceActionType.enum';
+import { ActionMeta } from 'common/ActionMeta';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
 
-export const deletingSpace = (
-  payload: string,
-  meta?: Meta
-): DeletingSpaceAction => ({
-  type: ActionType.DELETING_SPACE,
+export const deletingSpace = <MetaType>(
+  payload: DeleteSpaceRequest,
+  meta?: ActionMeta<MetaType>
+): DeletingSpaceAction<MetaType> => ({
+  type: SpaceActionType.DELETING_SPACE,
   payload,
   meta,
 });
 
-export const spaceDeleted = <T>(
-  payload: PubNubObjectApiSuccess<T>,
-  meta?: Meta
-): SpaceDeletedAction<T> => ({
-  type: ActionType.SPACE_DELETED,
+export const spaceDeleted = <MetaType>(
+  payload: DeleteSpaceSuccess,
+  meta?: ActionMeta<MetaType>,
+): SpaceDeletedAction<MetaType> => ({
+  type: SpaceActionType.SPACE_DELETED,
   payload,
   meta,
 });
 
-export const errorDeletingSpace = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorDeletingSpaceAction<T> => ({
-  type: ActionType.ERROR_DELETING_SPACE,
+export const errorDeletingSpace = <MetaType>(
+  payload: DeleteSpaceError,
+  meta?: ActionMeta<MetaType>,
+): ErrorDeletingSpaceAction<MetaType> => ({
+  type: SpaceActionType.ERROR_DELETING_SPACE,
   payload,
   meta,
+  error: true,
 });
 
-export const deleteSpace = (pubnub: any, id: string, meta?: Meta) => {
-  const thunkFunction = (dispatch: Dispatch) =>
+export const deleteSpace = <MetaType>(request: DeleteSpaceRequest, meta?: ActionMeta<MetaType>) => {
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(deletingSpace(id, meta));
+      dispatch(deletingSpace<MetaType>(request, meta));
 
       pubnub.deleteSpace(
-        id,
-        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+        request.spaceId,
+        (status: PubNubApiStatus , response: DeleteSpaceResponse) => {
           if (status.error) {
-            let errorData = { id: id };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: DeleteSpaceError = {
+              request,
+              status,
             };
 
-            dispatch(errorDeletingSpace(payload, meta));
+            dispatch(errorDeletingSpace<MetaType>(payload, meta));
             reject(payload);
           } else {
-            dispatch(spaceDeleted({ data: response.data }, meta));
+            let payload: DeleteSpaceSuccess = {
+              request,
+              response,
+              status,
+            };
+
+            dispatch(spaceDeleted<MetaType>(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = SpaceActionType.DELETE_SPACE_COMMAND;
 
   return thunkFunction;
 };

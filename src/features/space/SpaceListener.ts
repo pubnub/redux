@@ -1,41 +1,37 @@
 import { Dispatch } from 'redux';
-import { SpaceDeletedAction, SpaceUpdatedAction } from '../../actions/Actions';
-import { ObjectsActionPayload } from '../../api/Objects';
-import { ActionType } from '../../actions/ActionType.enum';
-import { PubNubObjectApiSuccess, Identifiable } from '../../api/PubNubApi';
+import {
+  SpaceUpdatedEventAction,
+  SpaceDeletedEventAction,
+  SpaceEventMessage,
+  SpaceListenerActions,
+  Space,
+} from './SpaceActions';
+import { SpaceActionType } from './SpaceActionType.enum';
 
-const spaceUpdated = <T>(
-  payload: PubNubObjectApiSuccess<T>
-): SpaceUpdatedAction<T> => ({
-  type: ActionType.SPACE_UPDATED,
+export const spaceUpdated = <SpaceType extends Space, CustomType>(
+  payload: SpaceEventMessage<SpaceType, CustomType>
+): SpaceUpdatedEventAction<SpaceType, CustomType> => ({
+  type: SpaceActionType.SPACE_UPDATED_EVENT,
   payload,
 });
 
-const spaceDeleted = <T>(
-  payload: PubNubObjectApiSuccess<T>
-): SpaceDeletedAction<T> => ({
-  type: ActionType.SPACE_DELETED,
+export const spaceDeleted = <SpaceType extends Space, CustomType>(
+  payload: SpaceEventMessage<SpaceType, CustomType>
+): SpaceDeletedEventAction<SpaceType, CustomType> => ({
+  type: SpaceActionType.SPACE_DELETED_EVENT,
   payload,
 });
 
-export const createSpaceListener = <T extends Identifiable>(
-  dispatch: Dispatch<SpaceUpdatedAction<T> | SpaceDeletedAction<T>>
+export const createSpaceListener = <SpaceType extends Space, CustomType>(
+  dispatch: Dispatch<SpaceListenerActions<SpaceType, CustomType>>
 ) => ({
-  space: (payload: ObjectsActionPayload<T>) => {
-    switch (payload.message.event) {
+  space: (payload: SpaceEventMessage<SpaceType, CustomType>) => {
+    switch (payload.event) {
       case 'update':
-        dispatch(
-          spaceUpdated({
-            data: payload.message.data,
-          })
-        );
+        dispatch(spaceUpdated<SpaceType, CustomType>(payload));
         break;
       case 'delete':
-        dispatch(
-          spaceDeleted({
-            data: payload.message.data,
-          })
-        );
+        dispatch(spaceDeleted<SpaceType, CustomType>(payload));
         break;
       default:
         break;

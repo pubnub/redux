@@ -1,75 +1,79 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
-  UserUpdatedAction,
   UpdatingUserAction,
+  UserUpdatedAction,
   ErrorUpdatingUserAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import { User } from '../../../api/User';
-import {
-  PubNubObjectApiSuccess,
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  Meta,
-} from '../../../api/PubNubApi';
+  UserRequest,
+  UserResponse,
+  UserError,
+  User,
+  UserSuccess,
+} from '../UserActions';
+import { UserActionType } from '../UserActionType.enum';
+import { ActionMeta } from '../../../common/ActionMeta';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
 
-export const updatingUser = <T>(
-  payload: T,
-  meta?: Meta
-): UpdatingUserAction<T> => ({
-  type: ActionType.UPDATING_USER,
+export const updatingUser = <UserType extends User, CustomType, MetaType>(
+  payload: UserRequest<UserType, CustomType>,
+  meta?: ActionMeta<MetaType>
+): UpdatingUserAction<UserType, CustomType, MetaType> => ({
+  type: UserActionType.UPDATING_USER,
   payload,
   meta,
 });
 
-export const userUpdated = <T>(
-  payload: PubNubObjectApiSuccess<T>,
-  meta?: Meta
-): UserUpdatedAction<T> => ({
-  type: ActionType.USER_UPDATED,
+export const userUpdated = <UserType extends User, CustomType, MetaType>(
+  payload: UserSuccess<UserType, CustomType>,
+  meta?: ActionMeta<MetaType>
+): UserUpdatedAction<UserType, CustomType, MetaType> => ({
+  type: UserActionType.USER_UPDATED,
   payload,
   meta,
 });
 
-export const errorUpdatingUser = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorUpdatingUserAction<T> => ({
-  type: ActionType.ERROR_UPDATING_USER,
+export const errorUpdatingUser = <UserType extends User, CustomType, MetaType>(
+  payload: UserError<UserType, CustomType>,
+  meta?: ActionMeta<MetaType>
+): ErrorUpdatingUserAction<UserType, CustomType, MetaType> => ({
+  type: UserActionType.ERROR_UPDATING_USER,
   payload,
   meta,
+  error: true,
 });
 
-export const updateUser = (pubnub: any, user: User, meta?: Meta) => {
-  const thunkFunction = (dispatch: Dispatch) =>
+export const updateUser = <UserType extends User, CustomType, MetaType>(request: UserRequest<UserType, CustomType>, meta?: ActionMeta<MetaType>) => {
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(updatingUser(user, meta));
+      dispatch(updatingUser<UserType, CustomType, MetaType>(request, meta));
 
       pubnub.updateUser(
         {
-          ...user,
+          ...request,
         },
-        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+        (status: PubNubApiStatus, response: UserResponse<UserType, CustomType>) => {
           if (status.error) {
-            let errorData = { id: user.id, value: user };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: UserError<UserType, CustomType> = {
+              request,
+              status
             };
 
-            dispatch(errorUpdatingUser(payload, meta));
+            dispatch(errorUpdatingUser<UserType, CustomType, MetaType>(payload, meta));
             reject(payload);
           } else {
-            dispatch(userUpdated({ data: response.data }, meta));
+            let payload: UserSuccess<UserType, CustomType> = {
+              request,
+              response,
+              status
+            };
+
+            dispatch(userUpdated<UserType, CustomType, MetaType>(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = UserActionType.UPDATE_USER_COMMAND;
 
   return thunkFunction;
 };

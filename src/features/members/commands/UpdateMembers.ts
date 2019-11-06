@@ -1,75 +1,80 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
   UpdatingMembersAction,
-  ErrorUpdatingMembersAction,
+  MembersRequest,
+  Member,
   MembersUpdatedAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import {
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  PubNubObjectApiSuccess,
-  Meta,
-} from '../../../api/PubNubApi';
-import { Members } from '../../../api/Member';
+  ErrorUpdatingMembersAction,
+  MembersResponse,
+  MembersError,
+  MembersSuccess
+} from '../MembersActions';
+import { ActionMeta } from 'common/ActionMeta';
+import { MembersActionType } from '../MembersActionType.enum';
+import { User } from 'features/user/UserActions';
+import { PubNubApiStatus } from 'common/PubNubApi';
 
-export const updatingMembers = (
-  payload: string,
-  meta?: Meta
-): UpdatingMembersAction => ({
-  type: ActionType.UPDATING_MEMBERS,
+export const updatingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
+  payload: MembersRequest<MemberType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): UpdatingMembersAction<MemberType, CustomType, MetaType> => ({
+  type: MembersActionType.UPDATING_MEMBERS,
   payload,
   meta,
 });
 
-export const membersUpdated = <T>(
-  payload: PubNubObjectApiSuccess<T>,
-  meta?: Meta
-): MembersUpdatedAction<T> => ({
-  type: ActionType.MEMBERS_UPDATED,
+export const membersUpdated = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>(
+  payload: MembersSuccess<UserType, MemberType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): MembersUpdatedAction<UserType, MemberType, CustomType, MetaType> => ({
+  type: MembersActionType.MEMBERS_UPDATED,
   payload,
   meta,
 });
 
-export const errorUpdatingMembers = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorUpdatingMembersAction<T> => ({
-  type: ActionType.ERROR_UPDATING_MEMBERS,
+export const errorUpdatingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
+  payload: MembersError<MemberType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): ErrorUpdatingMembersAction<MemberType, CustomType, MetaType> => ({
+  type: MembersActionType.ERROR_UPDATING_MEMBERS,
   payload,
   meta,
+  error: true,
 });
 
-export const updateMembers = (pubnub: any, members: Members, meta?: Meta) => {
-  const thunkFunction = (dispatch: Dispatch) =>
+export const updateMembers = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>(request: MembersRequest<MemberType, CustomType>, meta?: MetaType) => {
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(updatingMembers(members.spaceId, meta));
+      dispatch(updatingMembers<MemberType, CustomType, MetaType>(request, meta));
 
       pubnub.updateMembers(
         {
-          ...members,
+          ...request,
         },
-        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+        (status: PubNubApiStatus, response: MembersResponse<UserType, CustomType>) => {
           if (status.error) {
-            let errorData = { id: members.spaceId, value: { ...members } };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: MembersError<MemberType, CustomType> = {
+              request,
+              status,
             };
 
-            dispatch(errorUpdatingMembers(payload, meta));
+            dispatch(errorUpdatingMembers<MemberType, CustomType, MetaType>(payload, meta));
             reject(payload);
           } else {
-            dispatch(membersUpdated({ data: response.data }, meta));
+            let payload: MembersSuccess<UserType, MemberType, CustomType> = {
+              request,
+              response,
+              status,
+            };
+
+            dispatch(membersUpdated<UserType, MemberType, CustomType, MetaType>(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = MembersActionType.UPDATE_MEMBERS_COMMAND;
 
   return thunkFunction;
 };

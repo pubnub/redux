@@ -1,183 +1,104 @@
 import {
-  MembershipListenerActions,
   MembersActions,
-} from '../../actions/actions';
-import { ActionType } from '../../actions/ActionType.enum';
-import {
-  PubNubObjectApiSuccess,
-  PubNubObjectApiState,
-  ListenerEventData,
-} from '../../api/PubNubApi';
-import { MembersList, MembersResult, Members } from '../../api/Member';
-import { successObjectById } from '../../utilities/reducerUtil';
+  Member,
+  FetchMembersSuccess,
+  MembersSuccess,
+} from './MembersActions';
+import { MembersActionType } from './MembersActionType.enum';
+import { MembershipListenerActions, MembershipEventMessage } from '../../features/membership/MembershipActions';
+import { MembershipActionType } from '../../features/membership/MembershipActionType.enum';
+import { User } from '../../features/user/UserActions';
 
-let createInitialState = <T extends MembersList>(): PubNubObjectApiState<
-  T
-> => ({
+export type MembersBySpaceIdState<CustomType> = {
+  byId: {
+    [spaceId: string]: Member<CustomType>[]
+  },
+};
+
+const createInitialState = <CustomType>(): MembersBySpaceIdState<CustomType> => ({
   byId: {},
 });
 
-const userAddedToSpace = <T extends MembersList>(
-  state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiSuccess<ListenerEventData>
+const userAddedToSpace = <CustomType>(
+  state: MembersBySpaceIdState<CustomType>,
+  payload: MembershipEventMessage<CustomType>,
 ) => {
-  let newState = {
-    byId: { ...state.byId },
-  };
+  if (state.byId[payload.data.spaceId].filter((member) => member.userId === payload.data.userId).length === 0) {
+    let newState = {
+      byId: { ...state.byId },
+    };
+    
+    newState.byId[payload.data.spaceId] = [
+      ...newState.byId[payload.data.spaceId],
+      {
+        userId: payload.data.userId,
+        custom: payload.data.custom,
+      }
+    ];
 
-  Object.keys(newState.byId).forEach((key) => {
-    newState.byId[key] = ([...newState.byId[key]] as unknown) as T;
-  });
-
-  let currentValue = newState.byId[payload.data.userId];
-
-  if (currentValue === undefined) {
-    newState.byId[payload.data.userId] = ([
-      { id: payload.data.spaceId },
-    ] as unknown) as T;
-  } else if (
-    currentValue.filter((item) => item.id === payload.data.spaceId).length === 0
-  ) {
-    currentValue.push({ id: payload.data.spaceId });
+    return newState;
   }
 
-  return newState;
+  return state;
 };
 
-const userRemovedFromSpace = <T extends MembersList>(
-  state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiSuccess<ListenerEventData>
+const userRemovedFromSpace = <CustomType>(
+  state: MembersBySpaceIdState<CustomType>,
+  payload: MembershipEventMessage<CustomType>,
 ) => {
-  let newState = {
-    byId: { ...state.byId },
-  };
-
-  Object.keys(newState.byId).forEach((key) => {
-    newState.byId[key] = ([...state.byId[key]] as unknown) as T;
-  });
-
-  let currentValue = newState.byId[payload.data.userId];
-
-  if (currentValue !== undefined) {
-    newState.byId[payload.data.userId] = (newState.byId[
-      payload.data.userId
-    ].filter((item) => item.id !== payload.data.spaceId) as unknown) as T;
-  }
-  return newState;
-};
-
-const userMembersUpdatedOnSpace = <T extends MembersList>(
-  state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiSuccess<ListenerEventData>
-) => {
-  let newState = {
-    byId: { ...state.byId },
-  };
-
-  Object.keys(newState.byId).forEach((key) => {
-    newState.byId[key] = ([...state.byId[key]] as unknown) as T;
-  });
-
-  let currentValue = newState.byId[payload.data.userId];
-
-  if (currentValue !== undefined) {
-    let existing = newState.byId[payload.data.userId].filter(
-      (item) => item.id === payload.data.spaceId
+  if (state.byId[payload.data.spaceId].filter((member) => member.userId === payload.data.userId).length === 0) {
+    let newState = {
+      byId: { ...state.byId },
+    };
+    
+    newState.byId[payload.data.spaceId] = newState.byId[payload.data.spaceId].filter(
+      (member) => member.userId !== payload.data.userId
     );
 
-    if (existing.length > 0) {
-      // existing[0];
-      // update the custom properties on existing
-    }
+    return newState;
   }
 
-  return newState;
+  return state;
 };
 
-const membersRetrieved = <T extends MembersList>(
-  state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiSuccess<MembersResult>
+const userMembersUpdatedOnSpace = <CustomType>(
+  state: MembersBySpaceIdState<CustomType>,
+  payload: MembershipEventMessage<CustomType>,
+) => {
+  console.log(payload)
+  // TODO: need to update the custom object
+  return state;
+};
+
+const membersResult = <UserType extends User, MemberType extends Member<CustomType>, CustomType>(
+  state: MembersBySpaceIdState<CustomType>,
+  payload: FetchMembersSuccess<UserType, CustomType> | MembersSuccess<UserType, MemberType, CustomType>
 ) => {
   let newState = {
-    byId: { ...state.byId },
+    byId: { ...state.byId }
   };
 
-  Object.keys(newState.byId).forEach((key) => {
-    newState.byId[key] = ([...state.byId[key]] as unknown) as T;
-  });
-
-  let id = payload.data.id;
-
-  // set response payload
-  newState.byId[id] = ([...payload.data.users] as unknown) as T;
+  newState.byId[payload.request.spaceId] = payload.response.data.map((user) => ({ userId: user.id }));
 
   return newState;
 };
 
-const membersUpdated = <T extends MembersList>(
-  state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiSuccess<Members>
-) =>
-  successObjectById<T>(
-    state,
-    {
-      data: payload.data.users as T,
-    },
-    payload.data.spaceId
-  );
-
-const membersAdded = <T extends MembersList>(
-  state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiSuccess<Members>
-) =>
-  successObjectById<T>(
-    state,
-    {
-      data: payload.data.users as T,
-    },
-    payload.data.spaceId
-  );
-
-const membersRemoved = <T extends MembersList>(
-  state: PubNubObjectApiState<T>,
-  payload: PubNubObjectApiSuccess<Members>
-) =>
-  successObjectById<T>(
-    state,
-    {
-      data: payload.data.users as T,
-    },
-    payload.data.spaceId
-  );
-
-export const createMembersReducer = <T extends MembersList = MembersList>() => (
-  state = createInitialState<T>(),
-  action: MembersActions<T> | MembershipListenerActions<ListenerEventData>
-): PubNubObjectApiState<T> => {
+export const createMembersReducer = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>() => (
+  state = createInitialState<CustomType>(),
+  action: MembersActions<UserType, MemberType, CustomType, MetaType>| MembershipListenerActions<CustomType>
+): MembersBySpaceIdState<CustomType> => {
   switch (action.type) {
-    case ActionType.USER_ADDED_TO_SPACE:
-      return userAddedToSpace<T>(state, action.payload);
-    case ActionType.USER_REMOVED_FROM_SPACE:
-      return userRemovedFromSpace<T>(state, action.payload);
-    case ActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE:
-      return userMembersUpdatedOnSpace<T>(state, action.payload);
-    case ActionType.MEMBERS_RETRIEVED:
-      return membersRetrieved<T>(state, action.payload);
-    case ActionType.MEMBERS_UPDATED:
-      return membersUpdated(
-        state,
-        (action.payload as unknown) as PubNubObjectApiSuccess<Members>
-      );
-    case ActionType.MEMBERS_ADDED:
-      return membersAdded(
-        state,
-        (action.payload as unknown) as PubNubObjectApiSuccess<Members>
-      );
-    case ActionType.MEMBERS_REMOVED:
-      return membersRemoved(
-        state,
-        (action.payload as unknown) as PubNubObjectApiSuccess<Members>
-      );
+    case MembersActionType.MEMBERS_RETRIEVED:
+    case MembersActionType.MEMBERS_UPDATED:
+    case MembersActionType.MEMBERS_ADDED:
+    case MembersActionType.MEMBERS_REMOVED:
+      return membersResult<UserType, MemberType, CustomType>(state, action.payload);
+    case MembershipActionType.USER_ADDED_TO_SPACE_EVENT:
+      return userAddedToSpace<CustomType>(state, action.payload);
+    case MembershipActionType.USER_REMOVED_FROM_SPACE_EVENT:
+      return userRemovedFromSpace<CustomType>(state, action.payload);
+    case MembershipActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE_EVENT:
+      return userMembersUpdatedOnSpace<CustomType>(state, action.payload);
     default:
       return state;
   }

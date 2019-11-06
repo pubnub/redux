@@ -1,31 +1,64 @@
 import { Dispatch } from 'redux';
-import { createPresenceListener } from '../../features/presence/PresenceActions';
-import { createNetworkStatusListener } from '../../features/networkStatus/NetworkStatusActions';
-import { createSubscribeStatusListener } from '../../features/status/SubscribeStatusActions';
-import { createErrorStatusListener } from '../../features/status/ErrorStatusActions';
-import { createMessageListener } from '../../features/message/MessageListener';
-import { createSignalListener } from '../../features/signal/SignalActions';
-import { createUserListener } from '../../features/user/UserListener';
-import { createSpaceListener } from '../../features/space/SpaceListener';
-import { createMembershipListener } from '../../features/membership/MembershipListener';
-import { ListenerEventData } from '../../api/PubNubApi';
-import { ListenerActions } from '../../actions/Actions';
+import { createPresenceListener } from '../presence/PresenceListener';
+import { createNetworkStatusListener, NetworkStatusListenerActions } from '../networkStatus/NetworkStatusListener';
+import { createSubscriptionStatusListener, SubscriptionStatusListenerActions } from '../subscriptionStatus/SubscriptionStatusListener';
+import { createErrorStatusListener, ErrorStatusListenerActions } from '../errorStatus/ErrorStatusListener';
+import { createMessageListener } from '../message/MessageListener';
+import { createSignalListener } from '../signal/SignalListener';
+import { createUserListener } from '../user/UserListener';
+import { createSpaceListener } from '../space/SpaceListener';
+import { createMembershipListener } from '../membership/MembershipListener';
+import { Message, MessageReceivedAction } from 'features/message/MessageActions';
+import { User, UserListenerActions } from 'features/user/UserActions';
+import { Space, SpaceListenerActions } from 'features/space/SpaceActions';
+import { PresenceListenerActions } from 'features/presence/PresenceActions';
+import { SignalAction } from 'features/signal/SignalActions';
+import { MembershipListenerActions } from 'features/membership/MembershipActions';
+
+export type ListenerActions<
+  MessageType extends Message,
+  UserType extends User,
+  UserCustomtype,
+  SpaceType extends Space,
+  SpaceCustomType,
+  MembershipCustomType,
+  > = 
+  | MessageReceivedAction<MessageType>
+  | PresenceListenerActions
+  | SignalAction
+  | UserListenerActions<UserType, UserCustomtype>
+  | SpaceListenerActions<SpaceType, SpaceCustomType>
+  | MembershipListenerActions<MembershipCustomType>
+  | NetworkStatusListenerActions
+  | SubscriptionStatusListenerActions
+  | ErrorStatusListenerActions
 
 export const createPubNubListener = <
-  T extends ListenerEventData,
-  TT extends { channel: string }
+  MessageType extends Message,
+  UserType extends User,
+  UserCustomtype,
+  SpaceType extends Space,
+  SpaceCustomType,
+  MembershipCustomType,
 >(
-  dispatch: Dispatch<ListenerActions<T, TT>>
+  dispatch: Dispatch<ListenerActions<
+    MessageType,
+    UserType,
+    UserCustomtype,
+    SpaceType,
+    SpaceCustomType,
+    MembershipCustomType
+  >>
 ) =>
   combineListeners(
-    createMessageListener<TT>(dispatch),
+    createMessageListener<MessageType>(dispatch),
     createPresenceListener(dispatch),
     createSignalListener(dispatch),
-    createUserListener<T>(dispatch),
-    createSpaceListener<T>(dispatch),
-    createMembershipListener<T>(dispatch),
+    createUserListener<UserType, UserCustomtype>(dispatch),
+    createSpaceListener<SpaceType, SpaceCustomType>(dispatch),
+    createMembershipListener<MembershipCustomType>(dispatch),
     createNetworkStatusListener(dispatch),
-    createSubscribeStatusListener(dispatch),
+    createSubscriptionStatusListener(dispatch),
     createErrorStatusListener(dispatch)
   );
 

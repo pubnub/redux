@@ -1,55 +1,36 @@
-import { Dispatch } from 'redux';
-import { PresenceActionPayload } from '../../api/Presence';
-import {
-  JoinAction,
-  LeaveAction,
-  TimeoutAction,
-  StateChangeAction,
-  PresenceListenerActions,
-} from '../../actions/Actions';
-import { ActionType } from '../../actions/ActionType.enum';
+import { PresenceActionType } from './PresenceActionType.enum';
+import { PresenceActionPayload } from './Presence';
 
-const userJoin = (payload: PresenceActionPayload): JoinAction => ({
-  type: ActionType.JOIN,
-  payload,
-});
+// tag::RDX-069[]
+export interface JoinAction {
+  type: typeof PresenceActionType.JOIN;
+  payload: PresenceActionPayload;
+}
+// end::RDX-069[]
 
-const userLeave = (payload: PresenceActionPayload): LeaveAction => ({
-  type: ActionType.LEAVE,
-  payload,
-});
+// tag::RDX-070[]
+export interface LeaveAction {
+  type: typeof PresenceActionType.LEAVE;
+  payload: PresenceActionPayload;
+}
+// end::RDX-070[]
 
-const userTimeout = (payload: PresenceActionPayload): TimeoutAction => ({
-  type: ActionType.TIMEOUT,
-  payload,
-});
+// tag::RDX-071[]
+export interface TimeoutAction {
+  type: typeof PresenceActionType.TIMEOUT;
+  payload: PresenceActionPayload;
+}
+// end::RDX-071[]
 
-const userStateChange = (
-  payload: PresenceActionPayload
-): StateChangeAction => ({
-  type: ActionType.STATE_CHANGE,
-  payload,
-});
+// tag::RDX-072[]
+export interface StateChangeAction {
+  type: typeof PresenceActionType.STATE_CHANGE;
+  payload: PresenceActionPayload;
+}
+// end::RDX-072[]
 
-export const createPresenceListener = (
-  dispatch: Dispatch<PresenceListenerActions>
-) => ({
-  presence: (payload: PresenceActionPayload) => {
-    switch (payload.action) {
-      case 'join':
-        dispatch(userJoin(payload));
-        break;
-      case 'leave':
-        dispatch(userLeave(payload));
-        break;
-      case 'timeout':
-        dispatch(userTimeout(payload));
-        break;
-      case 'state-change':
-        dispatch(userStateChange(payload));
-        break;
-      default:
-        break;
-    }
-  },
-});
+export type PresenceListenerActions =
+  | JoinAction
+  | LeaveAction
+  | TimeoutAction
+  | StateChangeAction;

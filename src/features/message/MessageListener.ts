@@ -1,18 +1,17 @@
 import { Dispatch } from 'redux';
-import { MessageReceivedAction } from '../../actions/Actions';
-import { ActionType } from '../../actions/ActionType.enum';
-import { PubNubObjectApiSuccess } from '../../api/PubNubApi';
+import { MessageReceivedAction, Message } from './MessageActions';
+import { MessageActionType } from './MessageActionType.enum';
 
-const messageRecieved = <T extends { channel: string }>(
-  payload: PubNubObjectApiSuccess<T>
-): MessageReceivedAction<T> => ({
-  type: ActionType.MESSAGE_RECEIVED,
+export const messageRecieved = <MessageType extends Message>(
+  payload: MessageType,
+): MessageReceivedAction<MessageType> => ({
+  type: MessageActionType.MESSAGE_RECEIVED,
   payload,
 });
 
-export const createMessageListener = <T extends { channel: string }>(
-  dispatch: Dispatch<MessageReceivedAction<T>>
+export const createMessageListener = <MessageType extends Message>(
+  dispatch: Dispatch<MessageReceivedAction<MessageType>>
 ) => ({
-  message: (payload: T): MessageReceivedAction<T> =>
-    dispatch(messageRecieved<T>({ data: payload })),
+  message: (payload: MessageType) =>
+    dispatch(messageRecieved<MessageType>(payload)),
 });

@@ -1,79 +1,74 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from '../../../api/Objects';
-import {
-  JoiningSpacesAction,
-  SpacesJoinedAction,
-  ErrorJoiningSpacesAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import {
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  PubNubObjectApiSuccess,
-  Meta,
-} from '../../../api/PubNubApi';
-import { Membership } from '../../../api/Membership';
+import { ActionMeta } from 'common/ActionMeta';
+import { JoiningSpacesAction, MembershipRequest, Membership, SpacesJoinedAction, MembershipSuccess, ErrorJoiningSpacesAction, MembershipError, MembershipResponse } from '../MembershipActions';
+import { MembershipActionType } from '../MembershipActionType.enum';
+import { Space } from 'features/space/SpaceActions';
+import { PubNubApiStatus } from 'common/PubNubApi';
 
-export const joiningSpaces = <T>(
-  payload: T,
-  meta?: Meta
-): JoiningSpacesAction<T> => ({
-  type: ActionType.JOINING_SPACES,
+export const joiningSpaces = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
+  payload: MembershipRequest<MembershipType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): JoiningSpacesAction<MembershipType, CustomType, MetaType> => ({
+  type: MembershipActionType.JOINING_SPACES,
   payload,
   meta,
 });
 
-export const spacesJoined = <T>(
-  payload: PubNubObjectApiSuccess<T>,
-  meta?: Meta
-): SpacesJoinedAction<T> => ({
-  type: ActionType.SPACES_JOINED,
+export const spacesJoined = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
+  payload: MembershipSuccess<SpaceType, MembershipType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): SpacesJoinedAction<SpaceType, MembershipType, CustomType, MetaType> => ({
+  type: MembershipActionType.SPACES_JOINED,
   payload,
   meta,
 });
 
-export const errorJoiningSpaces = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorJoiningSpacesAction<T> => ({
-  type: ActionType.ERROR_JOINING_SPACES,
+export const errorJoiningSpaces = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
+  payload: MembershipError<MembershipType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): ErrorJoiningSpacesAction<MembershipType, CustomType, MetaType> => ({
+  type: MembershipActionType.ERROR_JOINING_SPACES,
   payload,
   meta,
+  error: true,
 });
 
-export const joinSpaces = (
-  pubnub: any,
-  membership: Membership,
-  meta?: Meta
+export const joinSpaces = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
+  request: MembershipRequest<MembershipType, CustomType>,
+  meta?: ActionMeta<MetaType>,
 ) => {
-  const thunkFunction = (dispatch: Dispatch) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(joiningSpaces(membership, meta));
+      dispatch(joiningSpaces<MembershipType, CustomType, MetaType>(request, meta));
 
       pubnub.joinSpaces(
         {
-          ...membership,
+          ...request,
         },
-        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+        (status: PubNubApiStatus, response: MembershipResponse<SpaceType, CustomType>) => {
           if (status.error) {
-            let errorData = { id: membership.userId, value: { ...membership } };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: MembershipError<MembershipType, CustomType> = {
+              request,
+              status,
             };
 
-            dispatch(errorJoiningSpaces(payload, meta));
+            dispatch(errorJoiningSpaces<MembershipType, CustomType, MetaType>(payload, meta));
             reject(payload);
           } else {
-            dispatch(spacesJoined({ data: response.data }, meta));
+            let payload: MembershipSuccess<SpaceType, MembershipType, CustomType> = {
+              request,
+              response,
+              status,
+            };
+
+            dispatch(spacesJoined<SpaceType, MembershipType, CustomType, MetaType>(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = MembershipActionType.JOIN_SPACES_COMMAND;
 
   return thunkFunction;
 };

@@ -1,75 +1,80 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
   ErrorCreatingSpaceAction,
   SpaceCreatedAction,
   CreatingSpaceAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import { Space } from '../../../api/Space';
-import {
-  PubNubObjectApiSuccess,
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  Meta,
-} from '../../../api/PubNubApi';
+  SpaceRequest,
+  SpaceResponse,
+  SpaceError,
+  Space,
+  SpaceSuccess,
+} from '../SpaceActions';
+import { SpaceActionType } from '../SpaceActionType.enum';
+import { ActionMeta } from '../../../common/ActionMeta';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
 
-export const creatingSpace = <T>(
-  payload: T,
-  meta?: Meta
-): CreatingSpaceAction<T> => ({
-  type: ActionType.CREATING_SPACE,
+
+export const creatingSpace = <SpaceType extends Space, CustomType, MetaType>(
+  payload: SpaceType | SpaceRequest<SpaceType, CustomType>,
+  meta?: ActionMeta<MetaType>
+): CreatingSpaceAction<SpaceType, CustomType, MetaType> => ({
+  type: SpaceActionType.CREATING_SPACE,
   payload,
   meta,
 });
 
-export const spaceCreated = <T>(
-  payload: PubNubObjectApiSuccess<T>,
-  meta?: Meta
-): SpaceCreatedAction<T> => ({
-  type: ActionType.SPACE_CREATED,
+export const spaceCreated = <SpaceType extends Space, CustomType, MetaType>(
+  payload: SpaceSuccess<SpaceType, CustomType>,
+  meta?: ActionMeta<MetaType>
+): SpaceCreatedAction<SpaceType, CustomType, MetaType> => ({
+  type: SpaceActionType.SPACE_CREATED,
   payload,
   meta,
 });
 
-export const errorCreatingSpace = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorCreatingSpaceAction<T> => ({
-  type: ActionType.ERROR_CREATING_SPACE,
+export const errorCreatingSpace = <SpaceType extends Space, CustomType, MetaType>(
+  payload: SpaceError<SpaceType, CustomType>,
+  meta?: ActionMeta<MetaType>
+): ErrorCreatingSpaceAction<SpaceType, CustomType, MetaType> => ({
+  type: SpaceActionType.ERROR_CREATING_SPACE,
   payload,
   meta,
+  error: true,
 });
 
-export const createSpace = (pubnub: any, space: Space, meta?: Meta) => {
-  const thunkFunction = (dispatch: Dispatch) =>
+export const createSpace = <SpaceType extends Space, CustomType, MetaType>(request: SpaceRequest<SpaceType, CustomType>, meta?: ActionMeta<MetaType>) => {
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(creatingSpace(space, meta));
+      dispatch(creatingSpace<SpaceType, CustomType, MetaType>(request, meta));
 
       pubnub.createSpace(
         {
-          ...space,
+          ...request,
         },
-        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+        (status: PubNubApiStatus, response: SpaceResponse<SpaceType, CustomType>) => {
           if (status.error) {
-            let errorData = { id: space.id, value: space };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: SpaceError<SpaceType, CustomType> = {
+              request,
+              status,
             };
 
-            dispatch(errorCreatingSpace(payload, meta));
+            dispatch(errorCreatingSpace<SpaceType, CustomType, MetaType>(payload, meta));
             reject(payload);
           } else {
-            dispatch(spaceCreated({ data: response.data }, meta));
+            let payload: SpaceSuccess<SpaceType, CustomType> = {
+              request,
+              response,
+              status,
+            };
+
+            dispatch(spaceCreated<SpaceType, CustomType, MetaType>(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = SpaceActionType.CREATE_SPACE_COMMAND;
 
   return thunkFunction;
 };

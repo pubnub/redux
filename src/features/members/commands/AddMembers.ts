@@ -1,75 +1,80 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from '../../../api/Objects';
 import {
-  ErrorAddingMembersAction,
-  MembersAddedAction,
   AddingMembersAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import {
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  PubNubObjectApiSuccess,
-  Meta,
-} from '../../../api/PubNubApi';
-import { Members } from '../../../api/Member';
+  MembersRequest,
+  Member,
+  MembersAddedAction,
+  MembersResponse,
+  ErrorAddingMembersAction,
+  MembersError,
+  MembersSuccess,
+} from '../MembersActions';
+import { MembersActionType } from '../MembersActionType.enum';
+import { User } from '../../../features/user/UserActions';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
+import { ActionMeta } from '../../../common/ActionMeta';
 
-export const addingMembers = <T>(
-  payload: T,
-  meta?: Meta
-): AddingMembersAction<T> => ({
-  type: ActionType.ADDING_MEMBERS,
+export const addingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
+  payload: MembersRequest<MemberType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): AddingMembersAction<MemberType, CustomType, MetaType> => ({
+  type: MembersActionType.ADDING_MEMBERS,
   payload,
   meta,
 });
 
-export const membersAdded = <T>(
-  payload: PubNubObjectApiSuccess<T>,
-  meta?: Meta
-): MembersAddedAction<T> => ({
-  type: ActionType.MEMBERS_ADDED,
+export const membersAdded = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>(
+  payload: MembersSuccess<UserType, MemberType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): MembersAddedAction<UserType, MemberType, CustomType, MetaType> => ({
+  type: MembersActionType.MEMBERS_ADDED,
   payload,
   meta,
 });
 
-export const errorAddingMembers = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorAddingMembersAction<T> => ({
-  type: ActionType.ERROR_ADDING_MEMBERS,
+export const errorAddingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
+  payload: MembersError<MemberType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): ErrorAddingMembersAction<MemberType, CustomType, MetaType> => ({
+  type: MembersActionType.ERROR_ADDING_MEMBERS,
   payload,
   meta,
+  error: true
 });
 
-export const addMembers = (pubnub: any, members: Members, meta?: Meta) => {
-  const thunkFunction = (dispatch: Dispatch) =>
+export const addMembers = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>(request: MembersRequest<MemberType, CustomType>, meta?: MetaType) => {
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(addingMembers(members, meta));
+      dispatch(addingMembers<MemberType, CustomType, MetaType>(request, meta));
 
       pubnub.addMembers(
         {
-          ...members,
+          ...request,
         },
-        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+        (status: PubNubApiStatus, response: MembersResponse<UserType, CustomType>) => {
           if (status.error) {
-            let errorData = { id: members.spaceId, value: { ...members } };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: MembersError<MemberType, CustomType> = {
+              request,
+              status,
             };
 
-            dispatch(errorAddingMembers(payload, meta));
+            dispatch(errorAddingMembers<MemberType, CustomType, MetaType>(payload, meta));
             reject(payload);
           } else {
-            dispatch(membersAdded({ data: response.data }, meta));
+            let payload: MembersSuccess<UserType, MemberType, CustomType> = {
+              request,
+              response,
+              status,
+            };
+
+            dispatch(membersAdded<UserType, MemberType, CustomType, MetaType>(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = MembersActionType.ADD_MEMBERS_COMMAND;
 
   return thunkFunction;
 };

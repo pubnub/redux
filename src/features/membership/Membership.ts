@@ -1,4 +1,4 @@
-import { Space } from './Space';
+import { Space } from '../space/SpaceActions';
 
 // tag::RDX-004[]
 export interface MembershipOptions {
@@ -12,10 +12,9 @@ export interface MembershipOptions {
 // end::RDX-004[]
 
 // tag::RDX-005[]
-export interface Membership {
-  userId: string;
-  spaces: MembershipList;
-  custom?: object;
+export interface Membership<CustomType> {
+  spaceId: string;
+  custom?: CustomType;
 }
 // end::RDX-005[]
 

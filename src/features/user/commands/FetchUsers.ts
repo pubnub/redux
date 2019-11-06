@@ -1,79 +1,75 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload, ObjectsListInput } from '../../../api/Objects';
 import {
   ErrorFetchingUsersAction,
   UsersRetrievedAction,
   FetchingUsersAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import { User } from '../../../api/User';
-import {
-  PubNubObjectApiSuccess,
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  ItemMap,
-  Meta,
-} from '../../../api/PubNubApi';
+  FetchUsersRequest,
+  FetchUsersResponse,
+  FetchUsersError,
+  User,
+  FetchUsersSuccess,
+} from '../UserActions';
+import { UserActionType } from '../UserActionType.enum';
+import { ActionMeta } from 'common/ActionMeta';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
 
-export const fetchingUsers = (meta?: Meta): FetchingUsersAction => ({
-  type: ActionType.FETCHING_USERS,
-  meta,
-});
-
-export const usersRetrieved = <T>(
-  payload: PubNubObjectApiSuccess<ItemMap<T>>,
-  meta?: Meta
-): UsersRetrievedAction<T> => ({
-  type: ActionType.USERS_RETRIEVED,
+export const fetchingUsers = <MetaType>(
+  payload: FetchUsersRequest,
+  meta?: ActionMeta<MetaType>,
+): FetchingUsersAction<MetaType> => ({
+  type: UserActionType.FETCHING_USERS,
   payload,
   meta,
 });
 
-export const errorFetchingUsers = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorFetchingUsersAction<T> => ({
-  type: ActionType.ERROR_FETCHING_USERS,
+export const usersRetrieved = <UserType extends User, CustomType, MetaType>(
+  payload: FetchUsersSuccess<UserType, CustomType>,
+  meta?: ActionMeta<MetaType>
+): UsersRetrievedAction<UserType, CustomType, MetaType> => ({
+  type: UserActionType.USERS_RETRIEVED,
   payload,
   meta,
 });
 
-export const fetchUsers = (
+export const errorFetchingUsers = <MetaType>(
+  payload: FetchUsersError,
+  meta?: ActionMeta<MetaType>
+): ErrorFetchingUsersAction<MetaType> => ({
+  type: UserActionType.ERROR_FETCHING_USERS,
+  payload,
+  meta,
+  error: true,
+});
+
+export const fetchUsers = <UserType extends User, CustomType, MetaType>(
   pubnub: any,
-  options: ObjectsListInput = {},
-  meta?: Meta
+  request: FetchUsersRequest = {},
+  meta?: ActionMeta<MetaType>
 ) => {
   const thunkFunction = (dispatch: Dispatch) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(fetchingUsers(meta));
+      dispatch(fetchingUsers<MetaType>(request, meta));
 
       pubnub.getUsers(
-        { ...options },
-        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+        { ...request },
+        (status: PubNubApiStatus, response: FetchUsersResponse<UserType, CustomType>) => {
           if (status.error) {
-            let errorData = { id: '' };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: FetchUsersError = {
+              request,
+              status,
             };
 
-            dispatch(errorFetchingUsers(payload, meta));
+            dispatch(errorFetchingUsers<MetaType>(payload, meta));
             reject(payload);
           } else {
+            let payload: FetchUsersSuccess<UserType, CustomType> = {
+              request,
+              response,
+              status,
+            };
+
             dispatch(
-              usersRetrieved(
-                {
-                  data: (response.data as User[]).reduce(
-                    (result: { [key: string]: User }, value) => {
-                      result[value.id] = value;
-                      return result;
-                    },
-                    {}
-                  ),
-                },
-                meta
-              )
+              usersRetrieved<UserType, CustomType, MetaType>(payload, meta)
             );
             resolve();
           }
@@ -81,7 +77,7 @@ export const fetchUsers = (
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = UserActionType.FETCH_USERS_COMMAND;
 
   return thunkFunction;
 };

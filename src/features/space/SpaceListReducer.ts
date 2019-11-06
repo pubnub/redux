@@ -1,80 +1,38 @@
 import {
-  ErrorFetchingSpacesAction,
-  FetchingSpacesAction,
   SpacesRetrievedAction,
-} from '../../actions/Actions';
-import { ActionType } from '../../actions/ActionType.enum';
-import { Space } from '../../api/Space';
+  Space,
+  FetchSpacesSuccess,
+} from './SpaceActions';
 import {
-  PubNubObjectApiSuccess,
-  PubNubObjectApiError,
-  ItemMap,
-  Identifiable,
-} from '../../api/PubNubApi';
+  SpaceActionType
+} from './SpaceActionType.enum';
 
-// tag::RDX-029[]
-interface SpaceListState<T> {
-  data: string[];
-  loading: boolean;
-  error?: PubNubObjectApiError<T>;
+// tag::RDX-049[]
+interface SpaceListState {
+  spaceIds: string[];
 }
-// end::RDX-029[]
+// end::RDX-049[]
 
-// tag::RDX-030[]
-const createInitialState = <T>(): SpaceListState<T> => ({
-  data: [],
-  loading: false,
-  error: undefined,
+// tag::RDX-050[]
+const createInitialState = (): SpaceListState => ({
+  spaceIds: []
 });
-// end::RDX-030[]
+// end::RDX-050[]
 
-// tag::RDX-031[]
-const fetchingSpaces = <T>(state: SpaceListState<T>) => ({
-  data: [...state.data],
-  loading: true,
-  error: undefined,
-});
-// end::RDX-031[]
+// tag::RDX-052[]
+const spacesRetrieved = <SpaceType extends Space, CustomType>(
+  payload: FetchSpacesSuccess<SpaceType, CustomType>,
+) => ({ spaceIds: payload.response.data.map((space) => space.id) });
+// end::RDX-052[]
 
-// tag::RDX-032[]
-const spacesRetrieved = <T extends Identifiable>(
-  payload: PubNubObjectApiSuccess<ItemMap<T>>
-) => {
-  let data = Object.keys(payload.data).map((key) => payload.data[key].id);
-
-  return {
-    data,
-    loading: false,
-    error: undefined,
-  };
-};
-// end::RDX-032[]
-
-// tag::RDX-033[]
-const errorFetchingSpaces = <T>(
-  state: SpaceListState<T>,
-  payload: PubNubObjectApiError<T>
-) => ({
-  data: [...state.data],
-  loading: false,
-  error: payload,
-});
-// end::RDX-033[]
-
-export const createSpaceListReducer = <T extends Identifiable = Space>() => (
-  state: SpaceListState<T> = createInitialState(),
+export const createSpaceListReducer = <SpaceType extends Space, CustomType, MetaType>() => (
+  state: SpaceListState = createInitialState(),
   action:
-    | SpacesRetrievedAction<T>
-    | FetchingSpacesAction
-    | ErrorFetchingSpacesAction<T>
-): SpaceListState<T> => {
+    | SpacesRetrievedAction<SpaceType, CustomType, MetaType>
+): SpaceListState => {
   switch (action.type) {
-    case ActionType.FETCHING_SPACES:
-      return fetchingSpaces(state);
-    case ActionType.SPACES_RETRIEVED:
-      return spacesRetrieved(action.payload);
-    case ActionType.ERROR_FETCHING_SPACES:
-      return errorFetchingSpaces(state, action.payload);
+    case SpaceActionType.SPACES_RETRIEVED:
+      return spacesRetrieved<SpaceType, CustomType>(action.payload);
     default:
       return state;
   }

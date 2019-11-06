@@ -1,79 +1,75 @@
 import { Dispatch } from 'redux';
-import { ObjectsResponsePayload } from '../../../api/Objects';
-import {
-  UpdatingMembershipAction,
-  ErrorUpdatingMembershipAction,
-  MembershipUpdatedAction,
-} from '../../../actions/Actions';
-import { ActionType } from '../../../actions/ActionType.enum';
-import {
-  PubNubObjectApiError,
-  PubNubApiStatus,
-  PubNubObjectApiSuccess,
-  Meta,
-} from '../../../api/PubNubApi';
-import { Membership } from '../../../api/Membership';
+import { Membership } from '../Membership';
+import { UpdatingMembershipAction, MembershipRequest, MembershipUpdatedAction, MembershipSuccess, ErrorUpdatingMembershipAction, MembershipError, MembershipResponse } from '../MembershipActions';
+import { ActionMeta } from 'common/ActionMeta';
+import { MembershipActionType } from '../MembershipActionType.enum';
+import { Space } from 'features/space/SpaceActions';
+import { PubNubApiStatus } from 'common/PubNubApi';
 
-export const updatingMemberships = (
-  payload: string,
-  meta?: Meta
-): UpdatingMembershipAction => ({
-  type: ActionType.UPDATING_MEMBERSHIP,
+export const updatingMemberships = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
+  payload: MembershipRequest<MembershipType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): UpdatingMembershipAction<MembershipType, CustomType, MetaType> => ({
+  type: MembershipActionType.UPDATING_MEMBERSHIP,
   payload,
   meta,
 });
 
-export const membershipUpdated = <T>(
-  payload: PubNubObjectApiSuccess<T>,
-  meta?: Meta
-): MembershipUpdatedAction<T> => ({
-  type: ActionType.MEMBERSHIP_UPDATED,
+export const membershipUpdated = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
+  payload: MembershipSuccess<SpaceType, MembershipType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): MembershipUpdatedAction<SpaceType, MembershipType, CustomType, MetaType> => ({
+  type: MembershipActionType.MEMBERSHIP_UPDATED,
   payload,
   meta,
 });
 
-export const errorUpdatingMembership = <T>(
-  payload: PubNubObjectApiError<T>,
-  meta?: Meta
-): ErrorUpdatingMembershipAction<T> => ({
-  type: ActionType.ERROR_UPDATING_MEMBERSHIP,
+export const errorUpdatingMembership = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
+  payload: MembershipError<MembershipType, CustomType>,
+  meta?: ActionMeta<MetaType>,
+): ErrorUpdatingMembershipAction<MembershipType, CustomType, MetaType> => ({
+  type: MembershipActionType.ERROR_UPDATING_MEMBERSHIP,
   payload,
   meta,
+  error: true,
 });
 
-export const updateMembership = (
-  pubnub: any,
-  membership: Membership,
-  meta?: Meta
+export const updateMembership = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
+  request: MembershipRequest<MembershipType, CustomType>,
+  meta?: ActionMeta<MetaType>,
 ) => {
-  const thunkFunction = (dispatch: Dispatch) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(updatingMemberships(membership.userId, meta));
+      dispatch(updatingMemberships<MembershipType, CustomType, MetaType>(request, meta));
 
       pubnub.updateMembership(
         {
-          ...membership,
+          ...request,
         },
-        (status: PubNubApiStatus, response: ObjectsResponsePayload) => {
+        (status: PubNubApiStatus, response: MembershipResponse<SpaceType, CustomType>) => {
           if (status.error) {
-            let errorData = { id: membership.userId, value: { ...membership } };
-            let payload = {
-              code: status.category,
-              message: status.errorData,
-              data: errorData,
+            let payload: MembershipError<MembershipType, CustomType> = {
+              request,
+              status,
             };
 
-            dispatch(errorUpdatingMembership(payload, meta));
+            dispatch(errorUpdatingMembership<MembershipType, CustomType, MetaType>(payload, meta));
             reject(payload);
           } else {
-            dispatch(membershipUpdated({ data: response.data }, meta));
+            let payload: MembershipSuccess<SpaceType, MembershipType, CustomType> = {
+              request,
+              response,
+              status,
+            };
+
+            dispatch(membershipUpdated<SpaceType, MembershipType, CustomType, MetaType>(payload, meta));
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = ActionType.COMMAND;
+  thunkFunction.type = MembershipActionType.UPDATE_MEMBERSHIP_COMMAND;
 
   return thunkFunction;
 };

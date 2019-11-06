@@ -1,41 +1,37 @@
 import { Dispatch } from 'redux';
-import { ObjectsActionPayload } from '../../api/Objects';
-import { UserDeletedAction, UserUpdatedAction } from '../../actions/Actions';
-import { ActionType } from '../../actions/ActionType.enum';
-import { PubNubObjectApiSuccess, Identifiable } from '../../api/PubNubApi';
+import {
+  UserUpdatedEventAction,
+  UserDeletedEventAction,
+  UserEventMessage,
+  UserListenerActions,
+  User,
+} from './UserActions';
+import { UserActionType } from './UserActionType.enum';
 
-const userUpdated = <T extends Identifiable>(
-  payload: PubNubObjectApiSuccess<T>
-): UserUpdatedAction<T> => ({
-  type: ActionType.USER_UPDATED,
+export const userUpdated = <UserType extends User, CustomType>(
+  payload: UserEventMessage<UserType, CustomType>
+): UserUpdatedEventAction<UserType, CustomType> => ({
+  type: UserActionType.USER_UPDATED_EVENT,
   payload,
 });
 
-const userDeleted = <T extends Identifiable>(
-  payload: PubNubObjectApiSuccess<T>
-): UserDeletedAction<T> => ({
-  type: ActionType.USER_DELETED,
+export const userDeleted = <UserType extends User, CustomType>(
+  payload: UserEventMessage<UserType, CustomType>
+): UserDeletedEventAction<UserType, CustomType> => ({
+  type: UserActionType.USER_DELETED_EVENT,
   payload,
 });
 
-export const createUserListener = <T extends Identifiable>(
-  dispatch: Dispatch<UserUpdatedAction<T> | UserDeletedAction<T>>
+export const createUserListener = <UserType extends User, CustomType>(
+  dispatch: Dispatch<UserListenerActions<UserType, CustomType>>
 ) => ({
-  user: (payload: ObjectsActionPayload<T>) => {
-    switch (payload.message.event) {
+  user: (payload: UserEventMessage<UserType, CustomType>) => {
+    switch (payload.event) {
       case 'update':
-        dispatch(
-          userUpdated({
-            data: payload.message.data,
-          })
-        );
+        dispatch(userUpdated<UserType, CustomType>(payload));
         break;
       case 'delete':
-        dispatch(
-          userDeleted({
-            data: payload.message.data,
-          })
-        );
+        dispatch(userDeleted<UserType, CustomType>(payload));
         break;
       default:
         break;
