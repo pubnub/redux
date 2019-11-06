@@ -1,10 +1,10 @@
-import { Dispatch } from 'redux';
 import { Membership } from '../Membership';
 import { LeavingSpacesAction, MembershipRequest, SpacesLeftAction, MembershipSuccess, ErrorLeavingSpacesAction, MembershipError, MembershipResponse } from '../MembershipActions';
 import { ActionMeta } from 'common/ActionMeta';
 import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from 'features/space/SpaceActions';
 import { PubNubApiStatus } from 'common/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const leavingSpaces = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
   payload: MembershipRequest<MembershipType, CustomType>,
@@ -38,11 +38,11 @@ export const leaveSpaces = <SpaceType extends Space, MembershipType extends Memb
   request: MembershipRequest<MembershipType, CustomType>,
   meta?: ActionMeta<MetaType>,
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(leavingSpaces<MembershipType, CustomType, MetaType>(request, meta));
 
-      pubnub.leaveSpaces(
+      pubnub.api.leaveSpaces(
         {
           ...request
         },

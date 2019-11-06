@@ -1,9 +1,9 @@
-import { Dispatch } from 'redux';
 import { RemovingMembersAction, MembersRemovedAction, MembersRequest, Member, MembersResponse, ErrorRemovingMembersAction, MembersError, MembersSuccess } from '../MembersActions';
 import { ActionMeta } from '../../../common/ActionMeta';
 import { MembersActionType } from '../MembersActionType.enum';
 import { User } from '../../../features/user/UserActions';
 import { PubNubApiStatus } from 'common/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const removingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
   payload: MembersRequest<MemberType, CustomType>,
@@ -37,11 +37,11 @@ export const removeMembers = <UserType extends User, MemberType extends Member<C
   request: MembersRequest<MemberType, CustomType>,
   meta?: MetaType,
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(removingMembers<MemberType, CustomType, MetaType>(request, meta));
 
-      pubnub.removeMembers(
+      pubnub.api.removeMembers(
         {
           ...request
         },

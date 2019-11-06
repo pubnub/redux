@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import {
   ErrorCreatingSpaceAction,
   SpaceCreatedAction,
@@ -12,7 +11,7 @@ import {
 import { SpaceActionType } from '../SpaceActionType.enum';
 import { ActionMeta } from '../../../common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
-
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const creatingSpace = <SpaceType extends Space, CustomType, MetaType>(
   payload: SpaceType | SpaceRequest<SpaceType, CustomType>,
@@ -43,11 +42,11 @@ export const errorCreatingSpace = <SpaceType extends Space, CustomType, MetaType
 });
 
 export const createSpace = <SpaceType extends Space, CustomType, MetaType>(request: SpaceRequest<SpaceType, CustomType>, meta?: ActionMeta<MetaType>) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(creatingSpace<SpaceType, CustomType, MetaType>(request, meta));
 
-      pubnub.createSpace(
+      pubnub.api.createSpace(
         {
           ...request,
         },

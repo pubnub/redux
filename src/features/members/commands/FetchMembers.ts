@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import {
   MembersRetrievedAction,
   ErrorFetchingMembersAction,
@@ -12,6 +11,7 @@ import { MembersActionType } from '../MembersActionType.enum';
 import { User } from '../../../features/user/UserActions';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { ActionMeta } from '../../../common/ActionMeta';
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const fetchingMembers = <MetaType>(
   payload: FetchMembersRequest,
@@ -45,11 +45,11 @@ export const fetchMembers = <UserType extends User, CustomType, MetaType>(
   request: FetchMembersRequest,
   meta?: MetaType,
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(fetchingMembers<MetaType>(request, meta));
 
-      pubnub.getMembers(
+      pubnub.api.getMembers(
         {
           request,
         },

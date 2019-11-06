@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import {
   UpdatingMembersAction,
   MembersRequest,
@@ -13,6 +12,7 @@ import { ActionMeta } from 'common/ActionMeta';
 import { MembersActionType } from '../MembersActionType.enum';
 import { User } from 'features/user/UserActions';
 import { PubNubApiStatus } from 'common/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const updatingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
   payload: MembersRequest<MemberType, CustomType>,
@@ -43,11 +43,11 @@ export const errorUpdatingMembers = <MemberType extends Member<CustomType>, Cust
 });
 
 export const updateMembers = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>(request: MembersRequest<MemberType, CustomType>, meta?: MetaType) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(updatingMembers<MemberType, CustomType, MetaType>(request, meta));
 
-      pubnub.updateMembers(
+      pubnub.api.updateMembers(
         {
           ...request,
         },

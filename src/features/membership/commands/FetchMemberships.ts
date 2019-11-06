@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import {
   FetchingMembershipsAction,
   FetchMembershipRequest,
@@ -12,6 +11,7 @@ import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from '../../../features/space/SpaceActions';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { ActionMeta } from '../../../common/ActionMeta';
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const fetchingMemberships = <MetaType>(
   payload: FetchMembershipRequest,
@@ -45,11 +45,11 @@ export const fetchMemberships = <SpaceType extends Space, CustomType, MetaType>(
   request: FetchMembershipRequest,
   meta?: ActionMeta<MetaType>,
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(fetchingMemberships<MetaType>(request, meta));
 
-      pubnub.getMemberships(
+      pubnub.api.getMemberships(
         {
           ...request
         },

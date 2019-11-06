@@ -21,7 +21,8 @@ export interface MessageRequestOptions<MessageContentType, MessageMetaType> {
   ttl? : number;
 }
 
-export interface SendMessageRequest<MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType> {
+export interface SendMessageRequest<MessageRequestType extends 
+MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType> {
   message: MessageRequestType
 }
 

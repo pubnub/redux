@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import {
   SpaceDeletedAction,
   DeletingSpaceAction,
@@ -11,6 +10,7 @@ import {
 import { SpaceActionType } from '../SpaceActionType.enum';
 import { ActionMeta } from 'common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const deletingSpace = <MetaType>(
   payload: DeleteSpaceRequest,
@@ -41,11 +41,11 @@ export const errorDeletingSpace = <MetaType>(
 });
 
 export const deleteSpace = <MetaType>(request: DeleteSpaceRequest, meta?: ActionMeta<MetaType>) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(deletingSpace<MetaType>(request, meta));
 
-      pubnub.deleteSpace(
+      pubnub.api.deleteSpace(
         request.spaceId,
         (status: PubNubApiStatus , response: DeleteSpaceResponse) => {
           if (status.error) {

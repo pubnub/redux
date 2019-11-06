@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import {
   UpdatingUserAction,
   UserUpdatedAction,
@@ -12,6 +11,7 @@ import {
 import { UserActionType } from '../UserActionType.enum';
 import { ActionMeta } from '../../../common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const updatingUser = <UserType extends User, CustomType, MetaType>(
   payload: UserRequest<UserType, CustomType>,
@@ -42,11 +42,11 @@ export const errorUpdatingUser = <UserType extends User, CustomType, MetaType>(
 });
 
 export const updateUser = <UserType extends User, CustomType, MetaType>(request: UserRequest<UserType, CustomType>, meta?: ActionMeta<MetaType>) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(updatingUser<UserType, CustomType, MetaType>(request, meta));
 
-      pubnub.updateUser(
+      pubnub.api.updateUser(
         {
           ...request,
         },

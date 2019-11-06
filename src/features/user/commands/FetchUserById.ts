@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import { UserActionType } from '../UserActionType.enum';
 import {
   ErrorFetchingUserByIdAction,
@@ -12,6 +11,7 @@ import {
 } from '../UserActions';
 import { ActionMeta } from '../../../common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const fetchingUserById = <MetaType>(
   payload: FetchUserByIdRequest,
@@ -45,13 +45,13 @@ export const fetchUserById = <UserType extends User, CustomType, MetaType>(
   request: FetchUserByIdRequest,
   meta?: ActionMeta<MetaType>
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(fetchingUserById<MetaType>({
         ...request,
       }, meta));
 
-      pubnub.getUser(
+      pubnub.api.getUser(
         {
           ...request,
         },

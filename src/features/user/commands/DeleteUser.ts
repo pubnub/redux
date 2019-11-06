@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import {
   UserDeletedAction,
   DeletingUserAction,
@@ -11,6 +10,7 @@ import {
 import { UserActionType } from '../UserActionType.enum';
 import { ActionMeta } from 'common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const deletingUser = <MetaType>(
   payload: DeleteUserRequest,
@@ -41,11 +41,11 @@ export const errorDeletingUser = <MetaType>(
 });
 
 export const deleteUser = <MetaType>(request: DeleteUserRequest, meta?: ActionMeta<MetaType>) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(deletingUser<MetaType>(request, meta));
 
-      pubnub.deleteUser(
+      pubnub.api.deleteUser(
         request.userId,
         (status: PubNubApiStatus , response: DeleteUserResponse) => {
           if (status.error) {

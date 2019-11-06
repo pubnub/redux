@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import { SpaceActionType } from '../SpaceActionType.enum';
 import {
   ErrorFetchingSpaceByIdAction,
@@ -12,6 +11,7 @@ import {
 } from '../SpaceActions';
 import { ActionMeta } from '../../../common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const fetchingSpaceById = <MetaType>(
   payload: FetchSpaceByIdRequest,
@@ -45,13 +45,13 @@ export const fetchSpaceById = <SpaceType extends Space, CustomType, MetaType>(
   request: FetchSpaceByIdRequest,
   meta?: ActionMeta<MetaType>
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(fetchingSpaceById<MetaType>({
         ...request,
       }, meta));
 
-      pubnub.getSpace(
+      pubnub.api.getSpace(
         {
           ...request,
         },

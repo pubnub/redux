@@ -1,7 +1,3 @@
-export type ActionMeta<MetaType = ActionMetaDefault> = {
+export type ActionMeta<MetaType = {}> = {
   [KeyType in keyof MetaType]?: MetaType[KeyType];
-};
-
-export type ActionMetaDefault = {
-  [KeyType in string | number]?: string | number | boolean | ActionMetaDefault;
 };

@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import {
   SendMessageRequest,
   SendingMessageAction,
@@ -12,6 +11,7 @@ import {
 import { ActionMeta } from 'common/ActionMeta';
 import { MessageActionType } from '../MessageActionType.enum';
 import { PubNubApiStatus } from 'common/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const sendingMessage = <MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType, MetaType>(
   payload: SendMessageRequest<MessageRequestType, MessageContentType, MessageMetaType>,
@@ -40,12 +40,12 @@ export const errorSendingmessage = <MessageRequestType extends MessageRequestOpt
   meta,
 });
 
-export const sendMessage = <MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType, MetaType>(request: SendMessageRequest<MessageRequestType, MessageContentType, MessageMetaType>, meta?: MetaType) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+export const sendMessage = <MessageContentType, MessageMetaType, MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MetaType = {}>(request: SendMessageRequest<MessageRequestType, MessageContentType, MessageMetaType>, meta?: MetaType) => {
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(sendingMessage(request, meta));
 
-      pubnub.publish(
+      pubnub.api.publish(
         {
           ...request,
         },
@@ -56,7 +56,7 @@ export const sendMessage = <MessageRequestType extends MessageRequestOptions<Mes
               status,
             };
 
-            dispatch(errorSendingmessage(payload, meta));
+            dispatch(errorSendingmessage<MessageRequestType, MessageContentType, MessageMetaType, MetaType>(payload, meta));
             reject(payload);
           } else {
             let payload: SendMessageSuccess<MessageRequestType, MessageContentType, MessageMetaType> = {
@@ -65,7 +65,7 @@ export const sendMessage = <MessageRequestType extends MessageRequestOptions<Mes
               status,
             };
 
-            dispatch(messageSent(payload, meta));
+            dispatch(messageSent<MessageRequestType, MessageContentType, MessageMetaType, MetaType>(payload, meta));
             resolve();
           }
         }

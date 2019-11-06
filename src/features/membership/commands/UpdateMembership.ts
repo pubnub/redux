@@ -1,10 +1,10 @@
-import { Dispatch } from 'redux';
 import { Membership } from '../Membership';
 import { UpdatingMembershipAction, MembershipRequest, MembershipUpdatedAction, MembershipSuccess, ErrorUpdatingMembershipAction, MembershipError, MembershipResponse } from '../MembershipActions';
 import { ActionMeta } from 'common/ActionMeta';
 import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from 'features/space/SpaceActions';
 import { PubNubApiStatus } from 'common/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const updatingMemberships = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
   payload: MembershipRequest<MembershipType, CustomType>,
@@ -38,11 +38,11 @@ export const updateMembership = <SpaceType extends Space, MembershipType extends
   request: MembershipRequest<MembershipType, CustomType>,
   meta?: ActionMeta<MetaType>,
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(updatingMemberships<MembershipType, CustomType, MetaType>(request, meta));
 
-      pubnub.updateMembership(
+      pubnub.api.updateMembership(
         {
           ...request,
         },

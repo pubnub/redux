@@ -1,9 +1,9 @@
-import { Dispatch } from 'redux';
 import { ActionMeta } from 'common/ActionMeta';
 import { JoiningSpacesAction, MembershipRequest, Membership, SpacesJoinedAction, MembershipSuccess, ErrorJoiningSpacesAction, MembershipError, MembershipResponse } from '../MembershipActions';
 import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from 'features/space/SpaceActions';
 import { PubNubApiStatus } from 'common/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const joiningSpaces = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
   payload: MembershipRequest<MembershipType, CustomType>,
@@ -37,11 +37,11 @@ export const joinSpaces = <SpaceType extends Space, MembershipType extends Membe
   request: MembershipRequest<MembershipType, CustomType>,
   meta?: ActionMeta<MetaType>,
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: { pubnub: any }) =>
+  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(joiningSpaces<MembershipType, CustomType, MetaType>(request, meta));
 
-      pubnub.joinSpaces(
+      pubnub.api.joinSpaces(
         {
           ...request,
         },
