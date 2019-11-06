@@ -153,7 +153,9 @@ import { createSpaceListReducer } from './features/space/SpaceListReducer';
 import { createMembershipReducer } from './features/membership/MembershipReducer';
 import { createMembersReducer } from './features/members/MembersReducer';
 // Types
-
+import { User } from './features/user/UserActions';
+import { Space } from './features/space/SpaceActions';
+import { Message, MessageRequestOptions } from './features/message/MessageActions';
 // Response Types
 import { ErrorStatusResponse } from './features/errorStatus/ErrorStatusActions';
 import { NetworkStatusResponse } from './features/networkStatus/NetworkStatusActions';
@@ -348,8 +350,10 @@ export {
   // ErrorSendingMessageAction,
   // SignalAction,
   // MessageResponse,
-  // Space,
-  // User,
+  Space,
+  User,
+  Message,
+  MessageRequestOptions,
   ErrorStatusResponse,
   NetworkStatusResponse,
   SubscriptionStatusResponse,

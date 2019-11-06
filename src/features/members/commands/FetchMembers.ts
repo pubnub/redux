@@ -51,7 +51,7 @@ export const fetchMembers = <UserType extends User, CustomType, MetaType>(
 
       pubnub.api.getMembers(
         {
-          request,
+          ...request,
         },
         (status: PubNubApiStatus, response: FetchMembersResponse<UserType, CustomType>) => {
           if (status.error) {
