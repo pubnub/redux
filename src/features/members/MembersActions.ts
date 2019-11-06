@@ -15,8 +15,8 @@ export interface MemberPage {
 
 // tag::RDX-000[]
 export interface MembersFetchRequestOptions {
-  limit: number,
-  page: MemberPage,
+  limit?: number,
+  page?: MemberPage,
   include?: {
     customFields?: boolean;
     userFields: boolean;

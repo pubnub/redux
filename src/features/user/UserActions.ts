@@ -27,8 +27,8 @@ export interface UserPage {
 }
 
 export interface UserFetchRequestOptions {
-  limit: number,
-  page: UserPage,
+  limit?: number,
+  page?: UserPage,
   include?: {
     customFields?: boolean;
   };

@@ -1,5 +1,4 @@
-import { Membership } from '../Membership';
-import { LeavingSpacesAction, MembershipRequest, SpacesLeftAction, MembershipSuccess, ErrorLeavingSpacesAction, MembershipError, MembershipResponse } from '../MembershipActions';
+import { LeavingSpacesAction, MembershipRequest, SpacesLeftAction, MembershipSuccess, ErrorLeavingSpacesAction, MembershipError, MembershipResponse, Membership } from '../MembershipActions';
 import { ActionMeta } from 'common/ActionMeta';
 import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from 'features/space/SpaceActions';

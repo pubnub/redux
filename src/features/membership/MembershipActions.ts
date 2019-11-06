@@ -14,8 +14,8 @@ export interface MembershipPage {
 }
 
 export interface MembershipFetchRequestOptions {
-  limit: number,
-  page: MembershipPage,
+  limit?: number,
+  page?: MembershipPage,
   include?: {
     customFields?: boolean;
     userFields: boolean;

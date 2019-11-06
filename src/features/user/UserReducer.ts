@@ -11,8 +11,7 @@ import {
 } from './UserActions';
 import { UserActionType } from './UserActionType.enum';
 import { MembersActions, Member } from '../../features/members/MembersActions';
-import { MembershipActions } from '../../features/membership/MembershipActions';
-import { Membership } from 'features/membership/Membership';
+import { MembershipActions, Membership } from '../../features/membership/MembershipActions';
 import { Space } from 'features/space/SpaceActions';
 
 export type UsersByIdState<UserType extends User, CustomType> = {

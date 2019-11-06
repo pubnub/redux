@@ -1,10 +1,10 @@
-import { Membership } from './Membership';
 import {
   MembershipEventMessage,
   FetchMembershipSuccess,
   MembershipSuccess,
   MembershipListenerActions,
-  MembershipActions
+  MembershipActions,
+  Membership
 } from './MembershipActions';
 import { Space } from 'features/space/SpaceActions';
 import { MembershipActionType } from './MembershipActionType.enum';

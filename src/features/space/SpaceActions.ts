@@ -25,8 +25,8 @@ export interface SpacePage {
 }
 
 export interface SpaceFetchRequestOptions {
-  limit: number,
-  page: SpacePage,
+  limit?: number,
+  page?: SpacePage,
   include?: {
     customFields?: boolean;
   };
