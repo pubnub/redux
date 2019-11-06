@@ -41,7 +41,7 @@ export const errorSendingmessage = <MessageRequestType extends MessageRequestOpt
 });
 
 export const sendMessage = <MessageContentType, MessageMetaType, MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MetaType = {}>(request: SendMessageRequest<MessageRequestType, MessageContentType, MessageMetaType>, meta?: MetaType) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(sendingMessage(request, meta));
 

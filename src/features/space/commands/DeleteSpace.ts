@@ -41,7 +41,7 @@ export const errorDeletingSpace = <MetaType>(
 });
 
 export const deleteSpace = <MetaType>(request: DeleteSpaceRequest, meta?: ActionMeta<MetaType>) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(deletingSpace<MetaType>(request, meta));
 

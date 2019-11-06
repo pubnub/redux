@@ -43,7 +43,7 @@ export const errorAddingMembers = <MemberType extends Member<CustomType>, Custom
 });
 
 export const addMembers = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>(request: MembersRequest<MemberType, CustomType>, meta?: MetaType) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(addingMembers<MemberType, CustomType, MetaType>(request, meta));
 

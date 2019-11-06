@@ -37,7 +37,7 @@ export const updateMembership = <SpaceType extends Space, MembershipType extends
   request: MembershipRequest<MembershipType, CustomType>,
   meta?: ActionMeta<MetaType>,
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(updatingMemberships<MembershipType, CustomType, MetaType>(request, meta));
 

@@ -37,7 +37,7 @@ export const joinSpaces = <SpaceType extends Space, MembershipType extends Membe
   request: MembershipRequest<MembershipType, CustomType>,
   meta?: ActionMeta<MetaType>,
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(joiningSpaces<MembershipType, CustomType, MetaType>(request, meta));
 

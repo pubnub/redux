@@ -37,7 +37,7 @@ export const leaveSpaces = <SpaceType extends Space, MembershipType extends Memb
   request: MembershipRequest<MembershipType, CustomType>,
   meta?: ActionMeta<MetaType>,
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(leavingSpaces<MembershipType, CustomType, MetaType>(request, meta));
 

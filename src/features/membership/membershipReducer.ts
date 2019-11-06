@@ -84,7 +84,7 @@ const membershipResult = <SpaceType extends Space, MembershipType extends Member
   return newState;
 };
 
-export const createMembershipReducer = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>() => (
+export const createMembershipReducer = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType = {}>() => (
   state = createInitialState<CustomType>(),
   action: MembershipActions<SpaceType, MembershipType, CustomType, MetaType>| MembershipListenerActions<CustomType>
 ): MembershipByUserIdState<CustomType> => {

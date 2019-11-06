@@ -42,7 +42,7 @@ export const errorCreatingSpace = <SpaceType extends Space, CustomType, MetaType
 });
 
 export const createSpace = <SpaceType extends Space, CustomType, MetaType>(request: SpaceRequest<SpaceType, CustomType>, meta?: ActionMeta<MetaType>) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(creatingSpace<SpaceType, CustomType, MetaType>(request, meta));
 

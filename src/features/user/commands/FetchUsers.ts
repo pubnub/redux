@@ -45,7 +45,7 @@ export const fetchUsers = <UserType extends User, CustomType, MetaType>(
   request: FetchUsersRequest = {},
   meta?: ActionMeta<MetaType>
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(fetchingUsers<MetaType>(request, meta));
 

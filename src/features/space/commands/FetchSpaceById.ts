@@ -45,7 +45,7 @@ export const fetchSpaceById = <SpaceType extends Space, CustomType, MetaType>(
   request: FetchSpaceByIdRequest,
   meta?: ActionMeta<MetaType>
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(fetchingSpaceById<MetaType>({
         ...request,

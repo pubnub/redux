@@ -43,7 +43,7 @@ export const errorCreatingUser = <UserType extends User, CustomType, MetaType>(
 });
 
 export const createUser = <UserType extends User, CustomType, MetaType>(request: UserRequest<UserType, CustomType>, meta?: ActionMeta<MetaType>) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(creatingUser<UserType, CustomType, MetaType>(request, meta));
 

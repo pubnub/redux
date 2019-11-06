@@ -83,7 +83,7 @@ const membersResult = <UserType extends User, MemberType extends Member<CustomTy
   return newState;
 };
 
-export const createMembersReducer = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>() => (
+export const createMembersReducer = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType = {}>() => (
   state = createInitialState<CustomType>(),
   action: MembersActions<UserType, MemberType, CustomType, MetaType>| MembershipListenerActions<CustomType>
 ): MembersBySpaceIdState<CustomType> => {

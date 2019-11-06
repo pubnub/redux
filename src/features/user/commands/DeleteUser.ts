@@ -41,7 +41,7 @@ export const errorDeletingUser = <MetaType>(
 });
 
 export const deleteUser = <MetaType>(request: DeleteUserRequest, meta?: ActionMeta<MetaType>) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(deletingUser<MetaType>(request, meta));
 

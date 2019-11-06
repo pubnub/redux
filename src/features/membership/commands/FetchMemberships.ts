@@ -45,7 +45,7 @@ export const fetchMemberships = <SpaceType extends Space, CustomType, MetaType>(
   request: FetchMembershipRequest,
   meta?: ActionMeta<MetaType>,
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(fetchingMemberships<MetaType>(request, meta));
 

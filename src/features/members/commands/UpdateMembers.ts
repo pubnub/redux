@@ -43,7 +43,7 @@ export const errorUpdatingMembers = <MemberType extends Member<CustomType>, Cust
 });
 
 export const updateMembers = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>(request: MembersRequest<MemberType, CustomType>, meta?: MetaType) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(updatingMembers<MemberType, CustomType, MetaType>(request, meta));
 

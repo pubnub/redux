@@ -37,7 +37,7 @@ export const removeMembers = <UserType extends User, MemberType extends Member<C
   request: MembersRequest<MemberType, CustomType>,
   meta?: MetaType,
 ) => {
-  const thunkFunction = (dispatch: Dispatch, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(removingMembers<MemberType, CustomType, MetaType>(request, meta));
 
