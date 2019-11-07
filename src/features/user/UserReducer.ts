@@ -15,19 +15,18 @@ import { MembershipActions, Membership } from '../../features/membership/Members
 import { Space } from '../../features/space/SpaceActions';
 import { MembersActionType } from '../../features/members/MembersActionType.enum';
 
+// tag::RDX-059[]
 export type UsersByIdState<UserType extends User, CustomType> = {
   byId: {
     [userId: string]: UserResponseItem<UserType, CustomType>
   },
 };
+// end::RDX-059[]
 
-// tag::RDX-054[]
 const createInitialState = <UserType extends User, CustomType>(): UsersByIdState<UserType, CustomType> => ({
   byId: {},
 });
-// end::RDX-054[]
 
-// tag::RDX-056[]
 const userCreated = <UserType extends User, CustomType>(
   state: UsersByIdState<UserType, CustomType>,
   payload: UserSuccess<UserType, CustomType>,
@@ -40,9 +39,7 @@ const userCreated = <UserType extends User, CustomType>(
 
   return newState;
 };
-// end::RDX-056[]
 
-// tag::RDX-059[]
 const userUpdated = <UserType extends User, CustomType>(
   state: UsersByIdState<UserType, CustomType>,
   payload: UserSuccess<UserType, CustomType>,
@@ -55,9 +52,7 @@ const userUpdated = <UserType extends User, CustomType>(
 
   return newState;
 };
-// end::RDX-059[]
 
-// tag::RDX-062[]
 const userDeleted = <UserType extends User, CustomType>(
   state: UsersByIdState<UserType, CustomType>,
   payload: DeleteUserSuccess
@@ -70,9 +65,7 @@ const userDeleted = <UserType extends User, CustomType>(
 
   return newState;
 };
-// end::RDX-062[]
 
-// tag::RDX-064[]
 const usersRetrieved = <UserType extends User, CustomType>(
   state: UsersByIdState<UserType, CustomType>,
   payload: FetchUsersSuccess<UserType, CustomType>,
@@ -87,9 +80,7 @@ const usersRetrieved = <UserType extends User, CustomType>(
 
   return newState;
 };
-// end::RDX-064[]
 
-// tag::RDX-066[]
 const userRetrieved = <UserType extends User, CustomType>(
   state: UsersByIdState<UserType, CustomType>,
   payload: FetchUserByIdSuccess<UserType, CustomType>,
@@ -102,7 +93,6 @@ const userRetrieved = <UserType extends User, CustomType>(
 
   return newState;
 };
-// end::RDX-066[]
 
 const userUpdatedEventReceived = <UserType extends User, CustomType>(
   state: UsersByIdState<UserType, CustomType>,
@@ -130,7 +120,6 @@ const userDeletedEventReceived = <UserType extends User, CustomType>(
   return newState;
 }
 
-// tag::RDX-068[]
 const membersRetrieved = <UserType extends User, CustomType>(
   state: UsersByIdState<UserType, CustomType>,
   payload: FetchMembersSuccess<UserType, CustomType>,
@@ -153,7 +142,6 @@ const membersRetrieved = <UserType extends User, CustomType>(
 
   return newState;
 };
-// end::RDX-068[]
 
 export const createUserReducer = <UserType extends User, SpaceType extends Space, MemberType extends Member<CustomType>, MembershipType extends Membership<CustomType>, CustomType, MetaType>() => (
   state: UsersByIdState<UserType, CustomType> = createInitialState<UserType, CustomType>(),

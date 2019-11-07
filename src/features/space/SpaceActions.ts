@@ -1,14 +1,15 @@
 import { SpaceActionType } from './SpaceActionType.enum';
 import { PubNubApiStatus } from '../../common/PubNubApi';
 
-// tag::RDX-027[]
+// tag::RDX-025[]
 export interface Space {
   id: string;
   name: string;
   description?: string;
 }
-// end::RDX-027[]
+// end::RDX-025[]
 
+// tag::RDX-062[]
 export type SpaceResponseItem<SpaceType extends Space, CustomType> = {
   [KeyType in keyof SpaceType]: SpaceType[KeyType];
 } & {
@@ -17,12 +18,16 @@ export type SpaceResponseItem<SpaceType extends Space, CustomType> = {
   updated: string,
   eTag: string,
 };
+// end::RDX-062[]
 
+// tag::RDX-064[]
 export interface SpacePage {
   next?: string;
   prev?: string;
 }
+// end::RDX-064[]
 
+// tag::RDX-066[]
 export interface SpaceFetchRequestOptions {
   limit?: number,
   page?: SpacePage,
@@ -30,220 +35,255 @@ export interface SpaceFetchRequestOptions {
     customFields?: boolean;
   };
 }
+// end::RDX-066[]
 
+// tag::RDX-178[]
 export type SpaceRequestOptions<SpaceType extends Space, CustomType> = {
   [KeyType in keyof SpaceType]: SpaceType[KeyType];
 } & {
   custom?: CustomType;
 };
+// end::RDX-178[]
 
+// tag::RDX-178[]
 export interface SpaceEventMessage<SpaceType extends Space, CustomType> {
   data: SpaceResponseItem<SpaceType, CustomType>;
   event: string;
   type: string;
 }
+// end::RDX-178[]
 
+// tag::RDX-179[]
 export interface FetchSpacesRequest {
   include?: {
     totalCount?: boolean;
     customFields?: boolean;
   };
 }
+// end::RDX-179[]
 
+// tag::RDX-180[]
 export interface FetchSpacesResponse<SpaceType extends Space, CustomType> {
   status: string,
   data: SpaceResponseItem<SpaceType, CustomType>[];
 }
+// end::RDX-180[]
 // export interface FetchSpacesResponse<SpaceType extends Space, CustomType> extends ObjectListResponse<SpaceType, CustomType> {}
 
+// tag::RDX-181[]
 export interface FetchSpacesError {
   request: FetchSpacesRequest;
   status: PubNubApiStatus;
 }
+// end::RDX-181[]
 
+// tag::RDX-182[]
 export interface FetchSpacesSuccess<SpaceType extends Space, CustomType> {
   request: FetchSpacesRequest;
   response: FetchSpacesResponse<SpaceType, CustomType>;
   status: PubNubApiStatus;
 }
+// end::RDX-182[]
 
+// tag::RDX-183[]
 export type SpaceRequest<SpaceType extends Space, CustomType> =  SpaceRequestOptions<SpaceType, CustomType>;
+// end::RDX-183[]
 
+// tag::RDX-184[]
 export interface SpaceSuccess<SpaceType extends Space, CustomType> {
   request: SpaceRequest<SpaceType, CustomType>;
   response: SpaceResponse<SpaceType, CustomType>;
   status: PubNubApiStatus;
 }
+// end::RDX-184[]
 
+// tag::RDX-185[]
 export interface SpaceResponse<SpaceType extends Space, CustomType> {
   status: string;
   data: SpaceResponseItem<SpaceType, CustomType>
 }
+// end::RDX-185[]
 
+// tag::RDX-186[]
 export interface SpaceError<SpaceType extends Space, CustomType> {
   request: SpaceRequest<SpaceType, CustomType>;
   status: PubNubApiStatus;
 }
+// end::RDX-186[]
 
+// tag::RDX-187[]
 export interface FetchSpaceByIdRequest extends SpaceFetchRequestOptions {
   spaceId: string;
 }
+// end::RDX-187[]
 
+// tag::RDX-188[]
 export interface FetchSpaceByIdSuccess<SpaceType extends Space, CustomType> {
   request: FetchSpaceByIdRequest;
   response: SpaceResponse<SpaceType, CustomType>;
   status: PubNubApiStatus;
 }
+// end::RDX-188[]
 
+// tag::RDX-189[]
 export interface FetchSpaceByIdError {
   request: FetchSpaceByIdRequest;
   status: PubNubApiStatus;
 }
+// end::RDX-189[]
 
+// tag::RDX-190[]
 export interface DeleteSpaceRequest {
   spaceId: string;
 }
+// end::RDX-190[]
 
+// tag::RDX-191[]
 export interface DeleteSpaceResponse {
   status: number,
   request: DeleteSpaceRequest,
 }
+// end::RDX-191[]
 
+// tag::RDX-192[]
 export interface DeleteSpaceSuccess {
   request: DeleteSpaceRequest;
   response: DeleteSpaceResponse;
   status: PubNubApiStatus;
 }
+// end::RDX-192[]
 
+// tag::RDX-193[]
 export interface DeleteSpaceError {
   request: DeleteSpaceRequest,
   status: PubNubApiStatus;
 }
+// end::RDX-193[]
 
-// tag::RDX-094[]
+// tag::RDX-101[]
 export interface FetchingSpacesAction<MetaType> {
   type: typeof SpaceActionType.FETCHING_SPACES;
   payload: FetchSpacesRequest
   meta?: MetaType;
 }
-// end::RDX-094[]
+// end::RDX-101[]
 
-// tag::RDX-095[]
+// tag::RDX-100[]
 export interface SpacesRetrievedAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.SPACES_RETRIEVED;
   payload: FetchSpacesSuccess<SpaceType, CustomType>;
   meta?: MetaType;
 }
-// end::RDX-095[]
+// end::RDX-100[]
 
-// tag::RDX-096[]
+// tag::RDX-102[]
 export interface ErrorFetchingSpacesAction<MetaType> {
   type: typeof SpaceActionType.ERROR_FETCHING_SPACES;
   payload: FetchSpacesError;
   meta?: MetaType;
   error: true;
 }
-// end::RDX-096[]
+// end::RDX-102[]
 
-// tag::RDX-098[]
+// tag::RDX-113[]
 export interface FetchingSpaceByIdAction<MetaType> {
   type: typeof SpaceActionType.FETCHING_SPACE_BY_ID;
   payload: FetchSpaceByIdRequest;
   meta?: MetaType;
 }
-// end::RDX-098[]
+// end::RDX-113[]
 
-// tag::RDX-099[]
+// tag::RDX-112[]
 export interface SpaceRetrievedAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.SPACE_RETRIEVED;
   payload: FetchSpaceByIdSuccess<SpaceType, CustomType>;
   meta?: MetaType;
 }
-// end::RDX-099[]
+// end::RDX-112[]
 
-// tag::RDX-097[]
+// tag::RDX-114[]
 export interface ErrorFetchingSpaceByIdAction<MetaType> {
   type: typeof SpaceActionType.ERROR_FETCHING_SPACE_BY_ID;
   payload: FetchSpaceByIdError;
   meta?: MetaType;
   error: true;
 }
-// end::RDX-097[]
+// end::RDX-114[]
 
-// tag::RDX-092[]
+// tag::RDX-104[]
 export interface CreatingSpaceAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.CREATING_SPACE;
   payload: SpaceRequest<SpaceType, CustomType>
   meta?: MetaType;
 }
-// end::RDX-092[]
+// end::RDX-104[]
 
-// tag::RDX-091[]
+// tag::RDX-103[]
 export interface SpaceCreatedAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.SPACE_CREATED;
   payload: SpaceSuccess<SpaceType, CustomType>;
   meta?: MetaType;
 }
-// end::RDX-091[]
+// end::RDX-103[]
 
-// tag::RDX-093[]
+// tag::RDX-105[]
 export interface ErrorCreatingSpaceAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.ERROR_CREATING_SPACE;
   payload: SpaceError<SpaceType, CustomType>;
   meta?: MetaType;
   error: true,
 }
-// end::RDX-093[]
+// end::RDX-105[]
 
-// tag::RDX-086[]
+// tag::RDX-107[]
 export interface UpdatingSpaceAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.UPDATING_SPACE;
   payload: SpaceRequest<SpaceType, CustomType>
   meta?: MetaType;
 }
-// end::RDX-086[]
+// end::RDX-107[]
 
-// tag::RDX-085[]
+// tag::RDX-106[]
 export interface SpaceUpdatedAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.SPACE_UPDATED;
   payload: SpaceSuccess<SpaceType, CustomType>;
   meta?: MetaType;
 }
-// end::RDX-085[]
+// end::RDX-106[]
 
-// tag::RDX-087[]
+// tag::RDX-108[]
 export interface ErrorUpdatingSpaceAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.ERROR_UPDATING_SPACE;
   payload: SpaceError<SpaceType, CustomType>;
   meta?: MetaType;
   error: true;
 }
-// end::RDX-087[]
+// end::RDX-108[]
 
-// tag::RDX-089[]
+// tag::RDX-110[]
 export interface DeletingSpaceAction<MetaType> {
   type: typeof SpaceActionType.DELETING_SPACE;
   payload: DeleteSpaceRequest;
   meta?: MetaType;
 }
-// end::RDX-089[]
+// end::RDX-110[]
 
-// tag::RDX-088[]
+// tag::RDX-109[]
 export interface SpaceDeletedAction<MetaType> {
   type: typeof SpaceActionType.SPACE_DELETED;
   payload: DeleteSpaceSuccess;
   meta?: MetaType;
 }
-// end::RDX-088[]
+// end::RDX-109[]
 
-// tag::RDX-090[]
+// tag::RDX-111[]
 export interface ErrorDeletingSpaceAction<MetaType> {
   type: typeof SpaceActionType.ERROR_DELETING_SPACE;
   payload: DeleteSpaceError;
   meta?: MetaType;
   error: true;
 }
-// end::RDX-090[]
+// end::RDX-111[]
 
 export interface SpaceUpdatedEventAction<SpaceType extends Space, CustomType> {
   type: typeof SpaceActionType.SPACE_UPDATED_EVENT;

@@ -15,19 +15,18 @@ import { MembershipActions, Membership, FetchMembershipSuccess } from '../member
 import { User } from '../../features/user/UserActions';
 import { MembershipActionType } from '../../features/membership/MembershipActionType.enum';
 
+// tag::RDX-025[]
 export type SpacesByIdState<SpaceType extends Space, CustomType> = {
   byId: {
     [spaceId: string]: SpaceResponseItem<SpaceType, CustomType>
   },
 };
+// end::RDX-025[]
 
-// tag::RDX-054[]
 const createInitialState = <SpaceType extends Space, CustomType>(): SpacesByIdState<SpaceType, CustomType> => ({
   byId: {},
 });
-// end::RDX-054[]
 
-// tag::RDX-056[]
 const spaceCreated = <SpaceType extends Space, CustomType>(
   state: SpacesByIdState<SpaceType, CustomType>,
   payload: SpaceSuccess<SpaceType, CustomType>,
@@ -40,9 +39,7 @@ const spaceCreated = <SpaceType extends Space, CustomType>(
 
   return newState;
 };
-// end::RDX-056[]
 
-// tag::RDX-059[]
 const spaceUpdated = <SpaceType extends Space, CustomType>(
   state: SpacesByIdState<SpaceType, CustomType>,
   payload: SpaceSuccess<SpaceType, CustomType>,
@@ -55,9 +52,7 @@ const spaceUpdated = <SpaceType extends Space, CustomType>(
 
   return newState;
 };
-// end::RDX-059[]
 
-// tag::RDX-062[]
 const spaceDeleted = <SpaceType extends Space, CustomType>(
   state: SpacesByIdState<SpaceType, CustomType>,
   payload: DeleteSpaceSuccess
@@ -70,9 +65,7 @@ const spaceDeleted = <SpaceType extends Space, CustomType>(
 
   return newState;
 };
-// end::RDX-062[]
 
-// tag::RDX-064[]
 const spacesRetrieved = <SpaceType extends Space, CustomType>(
   state: SpacesByIdState<SpaceType, CustomType>,
   payload: FetchSpacesSuccess<SpaceType, CustomType>,
@@ -87,9 +80,7 @@ const spacesRetrieved = <SpaceType extends Space, CustomType>(
 
   return newState;
 };
-// end::RDX-064[]
 
-// tag::RDX-066[]
 const spaceRetrieved = <SpaceType extends Space, CustomType>(
   state: SpacesByIdState<SpaceType, CustomType>,
   payload: FetchSpaceByIdSuccess<SpaceType, CustomType>,
@@ -102,7 +93,6 @@ const spaceRetrieved = <SpaceType extends Space, CustomType>(
 
   return newState;
 };
-// end::RDX-066[]
 
 const spaceUpdatedEventReceived = <SpaceType extends Space, CustomType>(
   state: SpacesByIdState<SpaceType, CustomType>,
@@ -130,7 +120,6 @@ const spaceDeletedEventReceived = <SpaceType extends Space, CustomType>(
   return newState;
 }
 
-// tag::RDX-068[]
 const membershipRetrieved = <SpaceType extends Space, CustomType>(
   state: SpacesByIdState<SpaceType, CustomType>,
   payload: FetchMembershipSuccess<SpaceType, CustomType>,
@@ -153,7 +142,6 @@ const membershipRetrieved = <SpaceType extends Space, CustomType>(
 
   return newState;
 };
-// end::RDX-068[]
 
 export const createSpaceReducer = <UserType extends User, SpaceType extends Space, MemberType extends Member<CustomType>, MembershipType extends Membership<CustomType>, CustomType, MetaType>() => (
   state: SpacesByIdState<SpaceType, CustomType> = createInitialState<SpaceType, CustomType>(),
