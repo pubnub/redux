@@ -8,10 +8,10 @@ import {
   MembersError,
   MembersSuccess
 } from '../MembersActions';
-import { ActionMeta } from 'common/ActionMeta';
+import { ActionMeta } from '../../../common/ActionMeta';
 import { MembersActionType } from '../MembersActionType.enum';
-import { User } from 'features/user/UserActions';
-import { PubNubApiStatus } from 'common/PubNubApi';
+import { User } from '../../../features/user/UserActions';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const updatingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(

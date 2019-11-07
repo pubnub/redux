@@ -1,6 +1,6 @@
 import { MessageActionType } from './MessageActionType.enum';
-import { PubNubApiStatus } from 'common/PubNubApi';
-import { ActionMeta } from 'common/ActionMeta';
+import { PubNubApiStatus } from '../../common/PubNubApi';
+import { ActionMeta } from '../../common/ActionMeta';
 
 // tag::RDX-008[]
 export interface Message {

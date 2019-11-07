@@ -2,7 +2,7 @@ import { RemovingMembersAction, MembersRemovedAction, MembersRequest, Member, Me
 import { ActionMeta } from '../../../common/ActionMeta';
 import { MembersActionType } from '../MembersActionType.enum';
 import { User } from '../../../features/user/UserActions';
-import { PubNubApiStatus } from 'common/PubNubApi';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const removingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(

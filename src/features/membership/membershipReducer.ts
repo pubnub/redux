@@ -6,7 +6,7 @@ import {
   MembershipActions,
   Membership
 } from './MembershipActions';
-import { Space } from 'features/space/SpaceActions';
+import { Space } from '../../features/space/SpaceActions';
 import { MembershipActionType } from './MembershipActionType.enum';
 
 export type MembershipByUserIdState<CustomType> = {

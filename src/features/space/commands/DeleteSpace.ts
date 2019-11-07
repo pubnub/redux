@@ -8,7 +8,7 @@ import {
   DeleteSpaceSuccess
 } from '../SpaceActions';
 import { SpaceActionType } from '../SpaceActionType.enum';
-import { ActionMeta } from 'common/ActionMeta';
+import { ActionMeta } from '../../../common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 

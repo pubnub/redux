@@ -8,9 +8,9 @@ import {
   SendMessageError,
   SendMessageResponse,
 } from '../MessageActions';
-import { ActionMeta } from 'common/ActionMeta';
+import { ActionMeta } from '../../../common/ActionMeta';
 import { MessageActionType } from '../MessageActionType.enum';
-import { PubNubApiStatus } from 'common/PubNubApi';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const sendingMessage = <MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType, MetaType>(

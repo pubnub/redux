@@ -12,8 +12,8 @@ import {
 import { SpaceActionType } from './SpaceActionType.enum';
 import { MembersActions, Member } from '../members/MembersActions';
 import { MembershipActions, Membership, FetchMembershipSuccess } from '../membership/MembershipActions';
-import { User } from 'features/user/UserActions';
-import { MembershipActionType } from 'features/membership/MembershipActionType.enum';
+import { User } from '../../features/user/UserActions';
+import { MembershipActionType } from '../../features/membership/MembershipActionType.enum';
 
 export type SpacesByIdState<SpaceType extends Space, CustomType> = {
   byId: {

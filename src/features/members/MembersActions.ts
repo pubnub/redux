@@ -1,7 +1,7 @@
 import { MembersActionType } from './MembersActionType.enum';
 import { ActionMeta } from '../../common/ActionMeta';
 import { User, UserResponseItem } from '../../features/user/UserActions';
-import { PubNubApiStatus } from 'common/PubNubApi';
+import { PubNubApiStatus } from '../../common/PubNubApi';
 
 export interface Member<CustomType> {
   userId: string;

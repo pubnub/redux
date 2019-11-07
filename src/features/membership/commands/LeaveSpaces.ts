@@ -1,8 +1,8 @@
 import { LeavingSpacesAction, MembershipRequest, SpacesLeftAction, MembershipSuccess, ErrorLeavingSpacesAction, MembershipError, MembershipResponse, Membership } from '../MembershipActions';
-import { ActionMeta } from 'common/ActionMeta';
+import { ActionMeta } from '../../../common/ActionMeta';
 import { MembershipActionType } from '../MembershipActionType.enum';
-import { Space } from 'features/space/SpaceActions';
-import { PubNubApiStatus } from 'common/PubNubApi';
+import { Space } from '../../../features/space/SpaceActions';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const leavingSpaces = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(

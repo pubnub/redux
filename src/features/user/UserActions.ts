@@ -1,6 +1,6 @@
 import { UserActionType } from './UserActionType.enum';
 import { ActionMeta } from '../../common/ActionMeta';
-import { PubNubApiStatus } from 'common/PubNubApi';
+import { PubNubApiStatus } from '../../common/PubNubApi';
 
 // tag::RDX-027[]
 export interface User {

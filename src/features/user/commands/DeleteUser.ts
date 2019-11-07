@@ -8,7 +8,7 @@ import {
   DeleteUserSuccess
 } from '../UserActions';
 import { UserActionType } from '../UserActionType.enum';
-import { ActionMeta } from 'common/ActionMeta';
+import { ActionMeta } from '../../../common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 

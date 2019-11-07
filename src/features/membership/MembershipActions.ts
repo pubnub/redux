@@ -1,6 +1,6 @@
-import { Space, SpaceResponseItem } from 'features/space/SpaceActions';
-import { PubNubApiStatus } from 'common/PubNubApi';
-import { ActionMeta } from 'common/ActionMeta';
+import { Space, SpaceResponseItem } from '../../features/space/SpaceActions';
+import { PubNubApiStatus } from '../../common/PubNubApi';
+import { ActionMeta } from '../../common/ActionMeta';
 import { MembershipActionType } from './MembershipActionType.enum';
 
 export interface Membership<CustomType> {

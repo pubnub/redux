@@ -1,8 +1,8 @@
-import { ActionMeta } from 'common/ActionMeta';
+import { ActionMeta } from '../../../common/ActionMeta';
 import { JoiningSpacesAction, MembershipRequest, Membership, SpacesJoinedAction, MembershipSuccess, ErrorJoiningSpacesAction, MembershipError, MembershipResponse } from '../MembershipActions';
 import { MembershipActionType } from '../MembershipActionType.enum';
-import { Space } from 'features/space/SpaceActions';
-import { PubNubApiStatus } from 'common/PubNubApi';
+import { Space } from '../../../features/space/SpaceActions';
+import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const joiningSpaces = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(

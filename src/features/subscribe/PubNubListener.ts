@@ -8,12 +8,12 @@ import { createSignalListener } from '../signal/SignalListener';
 import { createUserListener } from '../user/UserListener';
 import { createSpaceListener } from '../space/SpaceListener';
 import { createMembershipListener } from '../membership/MembershipListener';
-import { Message, MessageReceivedAction } from 'features/message/MessageActions';
-import { User, UserListenerActions } from 'features/user/UserActions';
-import { Space, SpaceListenerActions } from 'features/space/SpaceActions';
-import { PresenceListenerActions } from 'features/presence/PresenceActions';
-import { SignalAction } from 'features/signal/SignalActions';
-import { MembershipListenerActions } from 'features/membership/MembershipActions';
+import { Message, MessageReceivedAction } from '../../features/message/MessageActions';
+import { User, UserListenerActions } from '../../features/user/UserActions';
+import { Space, SpaceListenerActions } from '../../features/space/SpaceActions';
+import { PresenceListenerActions } from '../../features/presence/PresenceActions';
+import { SignalAction } from '../../features/signal/SignalActions';
+import { MembershipListenerActions } from '../../features/membership/MembershipActions';
 
 export type ListenerActions<
   MessageType extends Message,
