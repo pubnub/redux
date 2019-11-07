@@ -8,8 +8,8 @@ import {
   SendMessageResponse,
 } from '../MessageActions';
 import { MessageActionType } from '../MessageActionType.enum';
-import { PubNubApiStatus } from '../../../common/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
+import { PubNubApiStatus } from '../../../foundations/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
 
 export const sendingMessage = <MessageContentType, MessageMetaType, MetaType>(
   payload: SendMessageRequest<MessageContentType, MessageMetaType>,

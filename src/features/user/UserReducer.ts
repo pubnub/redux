@@ -14,22 +14,23 @@ import { MembersActions, Member, FetchMembersSuccess } from '../../features/memb
 import { MembershipActions, Membership } from '../../features/membership/MembershipActions';
 import { Space } from '../../features/space/SpaceActions';
 import { MembersActionType } from '../../features/members/MembersActionType.enum';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 // tag::RDX-059[]
-export type UsersByIdState<UserType extends User, CustomType> = {
+export interface UsersByIdState<ReceivedUser extends User<ObjectsCustom>> {
   byId: {
-    [userId: string]: UserResponseItem<UserType, CustomType>
+    [userId: string]: ReceivedUser
   },
 };
 // end::RDX-059[]
 
-const createInitialState = <UserType extends User, CustomType>(): UsersByIdState<UserType, CustomType> => ({
+const createInitialState = <ReceivedUser extends User<ObjectsCustom>>(): UsersByIdState<ReceivedUser> => ({
   byId: {},
 });
 
-const userCreated = <UserType extends User, CustomType>(
-  state: UsersByIdState<UserType, CustomType>,
-  payload: UserSuccess<UserType, CustomType>,
+const userCreated = <ReceivedUser extends User<ObjectsCustom>>(
+  state: UsersByIdState<ReceivedUser>,
+  payload: UserSuccess<ReceivedUser>,
 ) => {
   let newState = {
     byId: { ...state.byId }

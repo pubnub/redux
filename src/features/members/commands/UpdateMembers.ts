@@ -10,8 +10,8 @@ import {
 } from '../MembersActions';
 import { MembersActionType } from '../MembersActionType.enum';
 import { User } from '../../../features/user/UserActions';
-import { PubNubApiStatus } from '../../../common/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
+import { PubNubApiStatus } from '../../../foundations/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
 
 export const updatingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
   payload: MembersRequest<MemberType, CustomType>,

@@ -8,6 +8,7 @@ import {
 } from './MembershipActions';
 import { Space } from '../../features/space/SpaceActions';
 import { MembershipActionType } from './MembershipActionType.enum';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 export type MembershipByUserIdState<CustomType> = {
   byId: {
@@ -71,9 +72,9 @@ const userMembershipUpdatedOnSpace = <CustomType>(
 };
 
 
-const membershipResult = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType>(
-  state: MembershipByUserIdState<CustomType>,
-  payload: FetchMembershipSuccess<SpaceType, CustomType> | MembershipSuccess<SpaceType, MembershipType, CustomType>
+const membershipResult = <ReceivedSpace extends Space<CustomSpaceFields>, MembershipType extends Membership<CustomMembershipFields>, CustomMembershipFields extends ObjectsCustom, CustomSpaceFields extends ObjectsCustom>(
+  state: MembershipByUserIdState<CustomMembershipFields>,
+  payload: FetchMembershipSuccess<ReceivedSpace, CustomMembershipFields, CustomSpaceFields> | MembershipSuccess<ReceivedSpace, MembershipType, CustomMembershipFields, CustomSpaceFields>
 ) => {
   let newState = {
     byId: { ...state.byId }
@@ -84,22 +85,22 @@ const membershipResult = <SpaceType extends Space, MembershipType extends Member
   return newState;
 };
 
-export const createMembershipReducer = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType = {}>() => (
-  state = createInitialState<CustomType>(),
-  action: MembershipActions<SpaceType, MembershipType, CustomType, MetaType>| MembershipListenerActions<CustomType>
-): MembershipByUserIdState<CustomType> => {
+export const createMembershipReducer = <ReceivedSpace extends Space<CustomSpaceFields>, MembershipType extends Membership<CustomMembershipFields>, CustomMembershipFields extends ObjectsCustom, CustomSpaceFields extends ObjectsCustom, Meta = {}>() => (
+  state = createInitialState<CustomMembershipFields>(),
+  action: MembershipActions<ReceivedSpace, MembershipType, CustomMembershipFields, CustomSpaceFields, Meta>| MembershipListenerActions<CustomMembershipFields>
+): MembershipByUserIdState<CustomMembershipFields> => {
   switch (action.type) {
     case MembershipActionType.MEMBERSHIP_RETRIEVED:
     case MembershipActionType.MEMBERSHIP_UPDATED:
     case MembershipActionType.SPACES_JOINED:
     case MembershipActionType.SPACES_LEFT:
-      return membershipResult<SpaceType, MembershipType, CustomType>(state, action.payload);
+      return membershipResult<ReceivedSpace, MembershipType, CustomMembershipFields, CustomSpaceFields>(state, action.payload);
     case MembershipActionType.USER_ADDED_TO_SPACE_EVENT:
-      return userAddedToSpace<CustomType>(state, action.payload);
+      return userAddedToSpace<CustomMembershipFields>(state, action.payload);
     case MembershipActionType.USER_REMOVED_FROM_SPACE_EVENT:
-      return userRemovedFromSpace<CustomType>(state, action.payload);
+      return userRemovedFromSpace<CustomMembershipFields>(state, action.payload);
     case MembershipActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE_EVENT:
-      return userMembershipUpdatedOnSpace<CustomType>(state, action.payload);
+      return userMembershipUpdatedOnSpace<CustomMembershipFields>(state, action.payload);
     default:
       return state;
   }

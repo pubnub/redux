@@ -8,7 +8,7 @@ import { createSubscriptionStatusListener } from '../subscriptionStatus/Subscrip
 import { createMembershipListener } from '../membership/MembershipListener';
 import { createSpaceListener } from '../space/SpaceListener';
 import { createUserListener } from '../user/UserListener';
-import { combineListeners } from '../../common/Combinelisteners';
+import { combineListeners } from '../../foundations/Combinelisteners';
 
 export const createPubNubListener = (
   dispatch: Dispatch

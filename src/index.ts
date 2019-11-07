@@ -117,11 +117,11 @@ import {
 import { createUserListener } from './features/user/UserListener';
 import { createSpaceListener } from './features/space/SpaceListener';
 import { createMembershipListener } from './features/membership/MembershipListener';
-import { createPubNubListener } from './features/quickStart/PubNubListener';
+import { createPubNubListener } from './features/helpers/PubNubListener';
 import { createMessageListener } from './features/message/MessageListener';
 import { createPresenceListener } from './features/presence/PresenceListener';
 import { createSignalListener } from './features/signal/SignalListener';
-import { combineListeners } from './common/Combinelisteners';
+import { combineListeners } from './foundations/Combinelisteners';
 import {
   networkIssues,
   accessDenied,

@@ -1,35 +1,42 @@
+import { AnyAction } from 'redux';
 import {
   SpaceActions,
   SpaceListenerActions,
-  SpaceResponseItem,
   Space,
   SpaceEventMessage,
   SpaceSuccess,
   DeleteSpaceSuccess,
   FetchSpacesSuccess,
   FetchSpaceByIdSuccess,
+  AnySpace,
 } from './SpaceActions';
 import { SpaceActionType } from './SpaceActionType.enum';
-import { MembersActions, Member } from '../members/MembersActions';
-import { MembershipActions, Membership, FetchMembershipSuccess } from '../membership/MembershipActions';
-import { User } from '../../features/user/UserActions';
+import {
+  MembershipActions,
+  FetchMembershipSuccess,
+  MembershipRetrievedAction,
+  AnyMembership,
+  Membership
+} from '../membership/MembershipActions';
 import { MembershipActionType } from '../../features/membership/MembershipActionType.enum';
+import { AnyMeta } from 'foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 // tag::RDX-025[]
-export type SpacesByIdState<SpaceType extends Space, CustomType> = {
+export type SpacesByIdState<ReceivedSpace extends Space<ObjectsCustom>> = {
   byId: {
-    [spaceId: string]: SpaceResponseItem<SpaceType, CustomType>
+    [spaceId: string]: ReceivedSpace
   },
 };
 // end::RDX-025[]
 
-const createInitialState = <SpaceType extends Space, CustomType>(): SpacesByIdState<SpaceType, CustomType> => ({
+const createInitialState = () => ({
   byId: {},
 });
 
-const spaceCreated = <SpaceType extends Space, CustomType>(
-  state: SpacesByIdState<SpaceType, CustomType>,
-  payload: SpaceSuccess<SpaceType, CustomType>,
+const spaceCreated = <ReceivedSpace extends Space<ObjectsCustom>>(
+  state: SpacesByIdState<ReceivedSpace>,
+  payload: SpaceSuccess<ReceivedSpace>,
 ) => {
   let newState = {
     byId: { ...state.byId }
@@ -40,9 +47,9 @@ const spaceCreated = <SpaceType extends Space, CustomType>(
   return newState;
 };
 
-const spaceUpdated = <SpaceType extends Space, CustomType>(
-  state: SpacesByIdState<SpaceType, CustomType>,
-  payload: SpaceSuccess<SpaceType, CustomType>,
+const spaceUpdated = <ReceivedSpace extends Space<ObjectsCustom>>(
+  state: SpacesByIdState<ReceivedSpace>,
+  payload: SpaceSuccess<ReceivedSpace>,
 ) => {
   let newState = {
     byId: { ...state.byId }
@@ -53,8 +60,8 @@ const spaceUpdated = <SpaceType extends Space, CustomType>(
   return newState;
 };
 
-const spaceDeleted = <SpaceType extends Space, CustomType>(
-  state: SpacesByIdState<SpaceType, CustomType>,
+const spaceDeleted = <ReceivedSpace extends Space<ObjectsCustom>>(
+  state: SpacesByIdState<ReceivedSpace>,
   payload: DeleteSpaceSuccess
 ) => {
   let newState = {
@@ -66,9 +73,9 @@ const spaceDeleted = <SpaceType extends Space, CustomType>(
   return newState;
 };
 
-const spacesRetrieved = <SpaceType extends Space, CustomType>(
-  state: SpacesByIdState<SpaceType, CustomType>,
-  payload: FetchSpacesSuccess<SpaceType, CustomType>,
+const spacesRetrieved = <ReceivedSpace extends Space<ObjectsCustom>>(
+  state: SpacesByIdState<ReceivedSpace>,
+  payload: FetchSpacesSuccess<ReceivedSpace>,
 ) => {
   let newState = {
     byId: { ...state.byId }
@@ -81,9 +88,9 @@ const spacesRetrieved = <SpaceType extends Space, CustomType>(
   return newState;
 };
 
-const spaceRetrieved = <SpaceType extends Space, CustomType>(
-  state: SpacesByIdState<SpaceType, CustomType>,
-  payload: FetchSpaceByIdSuccess<SpaceType, CustomType>,
+const spaceRetrieved = <ReceivedSpace extends Space<ObjectsCustom>>(
+  state: SpacesByIdState<ReceivedSpace>,
+  payload: FetchSpaceByIdSuccess<ReceivedSpace>,
 ) => {
   let newState = {
     byId: { ...state.byId }
@@ -94,9 +101,9 @@ const spaceRetrieved = <SpaceType extends Space, CustomType>(
   return newState;
 };
 
-const spaceUpdatedEventReceived = <SpaceType extends Space, CustomType>(
-  state: SpacesByIdState<SpaceType, CustomType>,
-  payload: SpaceEventMessage<SpaceType, CustomType>,
+const spaceUpdatedEventReceived = <ReceivedSpace extends Space<ObjectsCustom>>(
+  state: SpacesByIdState<ReceivedSpace>,
+  payload: SpaceEventMessage<ReceivedSpace>,
 ) => {
   let newState = {
     byId: { ...state.byId }
@@ -107,9 +114,9 @@ const spaceUpdatedEventReceived = <SpaceType extends Space, CustomType>(
   return newState;
 };
 
-const spaceDeletedEventReceived = <SpaceType extends Space, CustomType>(
-  state: SpacesByIdState<SpaceType, CustomType>,
-  payload: SpaceEventMessage<SpaceType, CustomType>,
+const spaceDeletedEventReceived = <ReceivedSpace extends Space<ObjectsCustom>>(
+  state: SpacesByIdState<ReceivedSpace>,
+  payload: SpaceEventMessage<ReceivedSpace>,
 ) => {
   let newState = {
     byId: { ...state.byId }
@@ -120,9 +127,9 @@ const spaceDeletedEventReceived = <SpaceType extends Space, CustomType>(
   return newState;
 }
 
-const membershipRetrieved = <SpaceType extends Space, CustomType>(
-  state: SpacesByIdState<SpaceType, CustomType>,
-  payload: FetchMembershipSuccess<SpaceType, CustomType>,
+const membershipRetrieved = <ReceivedSpace extends Space<ObjectsCustom>>(
+  state: SpacesByIdState<ReceivedSpace>,
+  payload: FetchMembershipSuccess<Membership<ObjectsCustom, ReceivedSpace>, ReceivedSpace>,
 ) => {
   let newState = state;
 
@@ -136,37 +143,49 @@ const membershipRetrieved = <SpaceType extends Space, CustomType>(
     for (let i = 0; i < payload.response.data.length; i++) {
       let currentMembership = payload.response.data[i];
       
-      newState.byId[currentMembership.id] = currentMembership.space;
+      if (currentMembership.space) {
+        newState.byId[currentMembership.id] = currentMembership.space;
+      }
     }
   }
 
   return newState;
 };
 
-export const createSpaceReducer = <UserType extends User, SpaceType extends Space, MemberType extends Member<CustomType>, MembershipType extends Membership<CustomType>, CustomType, MetaType>() => (
-  state: SpacesByIdState<SpaceType, CustomType> = createInitialState<SpaceType, CustomType>(),
-  action: SpaceActions<SpaceType, CustomType, MetaType> 
-    | SpaceListenerActions<SpaceType, CustomType> 
-    | MembersActions<UserType, MemberType, CustomType, MetaType>
-    | MembershipActions<SpaceType, MembershipType, CustomType, MetaType>
-): SpacesByIdState<SpaceType, CustomType> => {
+type SpaceReducerActions<StoredSpace extends Space<ObjectsCustom>> =
+  | SpaceActions<StoredSpace, AnyMeta>
+  | SpaceListenerActions<StoredSpace> 
+  | MembershipRetrievedAction<AnyMembership, StoredSpace, AnyMeta>
+  | MembershipActions<Membership<ObjectsCustom, StoredSpace>, StoredSpace, AnyMeta>
+
+export type SpaceReducer<StoredSpace extends Space<ObjectsCustom>, SpaceAction extends AnyAction> = 
+  (state: SpacesByIdState<StoredSpace>, action: SpaceAction)
+   => SpacesByIdState<StoredSpace>;
+
+export const createSpaceReducer = <
+  StoredSpace extends Space<ObjectsCustom> = AnySpace,
+  SpaceAction extends AnyAction = SpaceReducerActions<StoredSpace>,
+>(): SpaceReducer<StoredSpace, SpaceAction> => (
+  state: SpacesByIdState<StoredSpace> = createInitialState(),
+  action: SpaceAction
+): SpacesByIdState<StoredSpace> => {
   switch (action.type) {
     case SpaceActionType.SPACE_CREATED:
-      return spaceCreated<SpaceType, CustomType>(state, action.payload);
+      return spaceCreated<StoredSpace>(state, action.payload);
     case SpaceActionType.SPACE_UPDATED:
-      return spaceUpdated<SpaceType, CustomType>(state, action.payload);
+      return spaceUpdated<StoredSpace>(state, action.payload);
     case SpaceActionType.SPACE_DELETED:
-      return spaceDeleted<SpaceType, CustomType>(state, action.payload);
+      return spaceDeleted<StoredSpace>(state, action.payload);
     case SpaceActionType.SPACES_RETRIEVED:
-      return spacesRetrieved<SpaceType, CustomType>(state, action.payload);
+      return spacesRetrieved<StoredSpace>(state, action.payload);
     case SpaceActionType.SPACE_RETRIEVED:
-      return spaceRetrieved<SpaceType, CustomType>(state, action.payload);
+      return spaceRetrieved<StoredSpace>(state, action.payload);
     case SpaceActionType.SPACE_UPDATED_EVENT:
-      return spaceUpdatedEventReceived<SpaceType, CustomType>(state, action.payload);
+      return spaceUpdatedEventReceived<StoredSpace>(state, action.payload);
     case SpaceActionType.SPACE_DELETED_EVENT:
-      return spaceDeletedEventReceived<SpaceType, CustomType>(state, action.payload);
+      return spaceDeletedEventReceived<StoredSpace>(state, action.payload);
     case MembershipActionType.MEMBERSHIP_RETRIEVED:
-      return membershipRetrieved<SpaceType, CustomType>(state, action.payload);
+      return membershipRetrieved<StoredSpace>(state, action.payload);
     default:
       return state;
   }

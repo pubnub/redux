@@ -8,8 +8,8 @@ import {
   DeleteSpaceSuccess
 } from '../SpaceActions';
 import { SpaceActionType } from '../SpaceActionType.enum';
-import { PubNubApiStatus } from '../../../common/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
+import { PubNubApiStatus } from '../../../foundations/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
 
 export const deletingSpace = <MetaType>(
   payload: DeleteSpaceRequest,

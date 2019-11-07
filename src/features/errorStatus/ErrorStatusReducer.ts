@@ -13,23 +13,22 @@ export interface ErrorState {
   unknown: ErrorStatusResponse[];
 }
 
-type ErrorInitializerFunction = () => boolean;
+const createInitialState = (): ErrorState => {
+  return {
+    networkIssues: [],
+    accessDenied: [],
+    malformedResponse: [],
+    badRequest: [],
+    requestMessageCountExceeded: [],
+    decryptionError: [],
+    timeoutConnection: [],
+    unknown: [],
+  };
+};
 
-export const createErrorStatusReducer = (
-  initializer: ErrorInitializerFunction | boolean
-) => {
-
-  return function networkStatusReducer(
-    state = {
-      networkIssues: [],
-      accessDenied: [],
-      malformedResponse: [],
-      badRequest: [],
-      requestMessageCountExceeded: [],
-      decryptionError: [],
-      timeoutConnection: [],
-      unknown: [],
-    },
+export const createErrorStatusReducer = () => {
+  return function errorStatusReducer(
+    state = createInitialState(),
     action: ErrorStatusListenerActions
   ): ErrorState {
     let newState = { ...state };

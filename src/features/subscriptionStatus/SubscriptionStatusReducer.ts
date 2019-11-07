@@ -5,9 +5,13 @@ export interface SubscriptionState {
   channels: string[];
 }
 
+const createInitialState = (): SubscriptionState => {
+  return { channels: [] };
+};
+
 export const createSubscriptionStatusReducer = () => {
   return (
-    state = { channels: [] },
+    state = createInitialState(),
     action: SubscriptionStatusListenerActions
   ): SubscriptionState => {
     switch (action.type) {

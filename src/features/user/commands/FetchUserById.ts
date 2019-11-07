@@ -9,8 +9,8 @@ import {
   User,
   FetchUserByIdSuccess,
 } from '../UserActions';
-import { PubNubApiStatus } from '../../../common/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
+import { PubNubApiStatus } from '../../../foundations/PubNubApi';
+import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
 
 export const fetchingUserById = <MetaType>(
   payload: FetchUserByIdRequest,

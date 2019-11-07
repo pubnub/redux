@@ -1,11 +1,19 @@
-import { Space, SpaceResponseItem } from '../../features/space/SpaceActions';
-import { PubNubApiStatus } from '../../common/PubNubApi';
+import { Space, AnySpace } from '../../features/space/SpaceActions';
+import { PubNubApiStatus } from '../../foundations/PubNubApi';
 import { MembershipActionType } from './MembershipActionType.enum';
+import { ObjectsCustom, AnyCustom } from 'foundations/ObjectsCustom';
+import { ActionMeta } from 'foundations/ActionMeta';
 
-export interface Membership<CustomType> {
-  spaceId: string;
-  custom?: CustomType;
+export interface Membership<CustomMembershipFields extends ObjectsCustom, ReceivedSpace extends Space<ObjectsCustom>> {
+  id: string;
+  custom?: CustomMembershipFields;
+  space?: ReceivedSpace;
+  created?: string;
+  updated?: string;
+  eTag?: string;
 }
+
+export interface AnyMembership extends Membership<AnyCustom, AnySpace> {}
 
 export interface MembershipPage {
   next?: string;
@@ -23,14 +31,14 @@ export interface MembershipFetchRequestOptions {
   };
 }
 
-export interface FetchMembershipResponse<SpaceType extends Space, CustomType> {
+export interface FetchMembershipResponse<ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>> {
   status: string;
-  data: MembershipResponseItem<SpaceType, CustomType>[];
+  data: ReceivedMembership[];
 }
 
-export interface FetchMembershipSuccess<SpaceType extends Space, CustomType> {
+export interface FetchMembershipSuccess<ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>, ReceivedSpace extends Space<ObjectsCustom>> {
   request: FetchMembershipRequest;
-  response: FetchMembershipResponse<SpaceType, CustomType>;
+  response: FetchMembershipResponse<ReceivedMembership>;
   status: PubNubApiStatus;
 }
 
@@ -43,35 +51,24 @@ export interface FetchMembershipError {
   status: PubNubApiStatus;
 }
 
-export type MembershipRequestOptions<MembershipType extends Membership<CustomType>, CustomType> = {
+export type MembershipRequest<MembershipType> = {
   userId: string;
   spaces: MembershipType[]
 };
 
-export type MembershipResponseItem<SpaceType extends Space, CustomType> = {
-  id: string,
-  space: SpaceResponseItem<SpaceType, CustomType>,
-  custom?: CustomType;
-  created: string,
-  updated: string,
-  eTag: string,
-};
-
-export type MembershipRequest<MembershipType extends Membership<CustomType>, CustomType> =  MembershipRequestOptions<MembershipType, CustomType>;
-
-export interface MembershipResponse<SpaceType extends Space, CustomType> {
+export interface MembershipResponse<ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>, ReceivedSpace extends Space<ObjectsCustom>> {
   status: string;
-  data: MembershipResponseItem<SpaceType, CustomType>[];
+  data: Membership<ReceivedMembership, ReceivedSpace>[];
 }
 
-export interface MembershipSuccess<SpaceType extends Space, MemberType extends Membership<CustomType>, CustomType> {
-  request: MembershipRequest<MemberType, CustomType>;
-  response: MembershipResponse<SpaceType, CustomType>;
+export interface MembershipSuccess<ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>, ReceivedSpace extends Space<ObjectsCustom>> {
+  request: MembershipRequest<ReceivedMembership>;
+  response: MembershipResponse<ReceivedMembership, ReceivedSpace>;
   status: PubNubApiStatus;
 }
 
-export interface MembershipError<MembershipType extends Membership<CustomType>, CustomType> {
-  request: MembershipRequest<MembershipType, CustomType>;
+export interface MembershipError<MembershipType> {
+  request: MembershipRequest<MembershipType>;
   status: PubNubApiStatus;
 }
 
@@ -88,101 +85,102 @@ export interface MembershipEventMessage<CustomType> {
 }
 
 // tag::RDX-131[]
-export interface FetchingMembershipAction<MetaType> {
+export interface FetchingMembershipAction<Meta> {
   type: typeof MembershipActionType.FETCHING_MEMBERSHIP;
   payload: FetchMembershipRequest;
-  meta?: MetaType;
+  meta?: Meta;
 }
 // end::RDX-131[]
 
 // tag::RDX-132[]
-export interface MembershipRetrievedAction<SpaceType extends Space, CustomType, MetaType> {
+export interface MembershipRetrievedAction<ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom
+>>, ReceivedSpace extends Space<ObjectsCustom>, Meta extends ActionMeta> {
   type: typeof MembershipActionType.MEMBERSHIP_RETRIEVED;
-  payload: FetchMembershipSuccess<SpaceType, CustomType>;
-  meta?: MetaType;
+  payload: FetchMembershipSuccess<ReceivedMembership, ReceivedSpace>;
+  meta?: Meta;
 }
 // end::RDX-132[]
 
 // tag::RDX-133[]
-export interface ErrorFetchingMembershipAction<MetaType> {
+export interface ErrorFetchingMembershipAction<Meta> {
   type: typeof MembershipActionType.ERROR_FETCHING_MEMBERSHIP;
   payload: FetchMembershipError;
-  meta?: MetaType;
+  meta?: Meta;
   error: true;
 }
 // end::RDX-133[]
 
 // tag::RDX-135[]
-export interface UpdatingMembershipAction<MembershipType extends Membership<CustomType>, CustomType, MetaType> {
+export interface UpdatingMembershipAction<CustomType, Meta> {
   type: typeof MembershipActionType.UPDATING_MEMBERSHIP;
-  payload: MembershipRequest<MembershipType, CustomType>
-  meta?: MetaType;
+  payload: MembershipRequest<CustomType>
+  meta?: Meta;
 }
 // end::RDX-135[]
 
 // tag::RDX-134[]
-export interface MembershipUpdatedAction<SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType> {
+export interface MembershipUpdatedAction<ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>, ReceivedSpace extends Space<ObjectsCustom>, Meta extends ActionMeta> {
   type: typeof MembershipActionType.MEMBERSHIP_UPDATED;
-  payload: MembershipSuccess<SpaceType, MembershipType, CustomType>;
-  meta?: MetaType;
+  payload: MembershipSuccess<ReceivedMembership, ReceivedSpace>;
+  meta?: Meta;
 }
 // end::RDX-134[]
 
 // tag::RDX-136[]
-export interface ErrorUpdatingMembershipAction<MembershipType extends Membership<CustomType>, CustomType, MetaType> {
+export interface ErrorUpdatingMembershipAction<CustomType, Meta> {
   type: typeof MembershipActionType.ERROR_UPDATING_MEMBERSHIP;
-  payload: MembershipError<MembershipType, CustomType>;
-  meta?: MetaType;
+  payload: MembershipError<CustomType>;
+  meta?: Meta;
   error: true;
 }
 // end::RDX-136[]
 
 // tag::RDX-138[]
-export interface JoiningSpacesAction<MembershipType extends Membership<CustomType>, CustomType, MetaType> {
+export interface JoiningSpacesAction<CustomType, Meta> {
   type: typeof MembershipActionType.JOINING_SPACES;
-  payload: MembershipRequest<MembershipType, CustomType>
-  meta?: MetaType;
+  payload: MembershipRequest<CustomType>
+  meta?: Meta;
 }
 // end::RDX-138[]
 
 // tag::RDX-137[]
-export interface SpacesJoinedAction<SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType> {
+export interface SpacesJoinedAction<ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>, ReceivedSpace extends Space<ObjectsCustom>, Meta extends ActionMeta> {
   type: typeof MembershipActionType.SPACES_JOINED;
-  payload: MembershipSuccess<SpaceType, MembershipType, CustomType>
-  meta?: MetaType;
+  payload: MembershipSuccess<ReceivedMembership, ReceivedSpace>
+  meta?: Meta;
 }
 // end::RDX-137[]
 
 // tag::RDX-139[]
-export interface ErrorJoiningSpacesAction<MembershipType extends Membership<CustomType>, CustomType, MetaType> {
+export interface ErrorJoiningSpacesAction<CustomType, Meta> {
   type: typeof MembershipActionType.ERROR_JOINING_SPACES;
-  payload: MembershipError<MembershipType, CustomType>;
-  meta?: MetaType;
+  payload: MembershipError<CustomType>;
+  meta?: Meta;
   error: true;
 }
 // end::RDX-139[]
 
 // tag::RDX-141[]
-export interface LeavingSpacesAction<MembershipType extends Membership<CustomType>, CustomType, MetaType> {
+export interface LeavingSpacesAction<CustomType, Meta> {
   type: typeof MembershipActionType.LEAVING_SPACES;
-  payload: MembershipRequest<MembershipType, CustomType>
-  meta?: MetaType;
+  payload: MembershipRequest<CustomType>
+  meta?: Meta;
 }
 // end::RDX-141[]
 
 // tag::RDX-140[]
-export interface SpacesLeftAction<SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType> {
+export interface SpacesLeftAction<ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>, ReceivedSpace extends Space<ObjectsCustom>, Meta extends ActionMeta> {
   type: typeof MembershipActionType.SPACES_LEFT;
-  payload: MembershipSuccess<SpaceType, MembershipType, CustomType>
-  meta?: MetaType;
+  payload: MembershipSuccess<ReceivedMembership, ReceivedSpace>
+  meta?: Meta;
 }
 // end::RDX-140[]
 
 // tag::RDX-142[]
-export interface ErrorLeavingSpacesAction<MembershipType extends Membership<CustomType>, CustomType, MetaType> {
+export interface ErrorLeavingSpacesAction<CustomType, Meta> {
   type: typeof MembershipActionType.ERROR_LEAVING_SPACES;
-  payload: MembershipError<MembershipType, CustomType>;
-  meta?: MetaType;
+  payload: MembershipError<CustomType>;
+  meta?: Meta;
   error: true;
 }
 // end::RDX-142[]
@@ -208,19 +206,19 @@ export interface UserMembershipUpdatedOnSpaceEventAction<CustomType> {
 }
 // end::RDX-117[]
 
-export type MembershipActions<SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType> =
-| FetchingMembershipAction<MetaType>
-| MembershipRetrievedAction<SpaceType, CustomType, MetaType>
-| ErrorFetchingMembershipAction<MetaType>
-| UpdatingMembershipAction<MembershipType, CustomType, MetaType>
-| MembershipUpdatedAction<SpaceType, MembershipType, CustomType, MetaType>
-| ErrorUpdatingMembershipAction<MembershipType, CustomType, MetaType>
-| JoiningSpacesAction<MembershipType, CustomType, MetaType>
-| SpacesJoinedAction<SpaceType, MembershipType, CustomType, MetaType>
-| ErrorJoiningSpacesAction<MembershipType, CustomType, MetaType>
-| LeavingSpacesAction<MembershipType, CustomType, MetaType>
-| SpacesLeftAction<SpaceType, MembershipType, CustomType, MetaType>
-| ErrorLeavingSpacesAction<MembershipType, CustomType, MetaType>;
+export type MembershipActions<ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>, ReceivedSpace extends Space<ObjectsCustom>, Meta extends ActionMeta> =
+| FetchingMembershipAction<Meta>
+| MembershipRetrievedAction<ReceivedMembership, ReceivedSpace, Meta>
+| ErrorFetchingMembershipAction<Meta>
+| UpdatingMembershipAction<ReceivedMembership, Meta>
+| MembershipUpdatedAction<ReceivedMembership, ReceivedSpace, Meta>
+| ErrorUpdatingMembershipAction<ReceivedMembership, Meta>
+| JoiningSpacesAction<ReceivedMembership, Meta>
+| SpacesJoinedAction<ReceivedMembership, ReceivedSpace, Meta>
+| ErrorJoiningSpacesAction<ReceivedMembership, Meta>
+| LeavingSpacesAction<ReceivedMembership, Meta>
+| SpacesLeftAction<ReceivedMembership, ReceivedSpace, Meta>
+| ErrorLeavingSpacesAction<ReceivedMembership, Meta>;
 
 export type MembershipListenerActions<CustomType> =
   | UserAddedToSpaceEventAction<CustomType>

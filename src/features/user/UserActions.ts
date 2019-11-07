@@ -1,24 +1,22 @@
 import { UserActionType } from './UserActionType.enum';
-import { PubNubApiStatus } from '../../common/PubNubApi';
+import { PubNubApiStatus } from '../../foundations/PubNubApi';
+import { ObjectsCustom, AnyCustom } from 'foundations/ObjectsCustom';
 
 // tag::RDX-027[]
-export interface User {
+export interface User<CustomSpaceFields extends ObjectsCustom> {
   id: string;
   name: string;
   externalId?: string;
   profileUrl?: string;
   email?: string;
-}
-// end::RDX-027[]
-
-export type UserResponseItem<UserType extends User, CustomType> = {
-  [KeyType in keyof UserType]: UserType[KeyType];
-} & {
-  custom?: CustomType;
+  custom?: CustomSpaceFields;
   created: string,
   updated: string,
   eTag: string,
-};
+}
+// end::RDX-027[]
+
+export interface AnyUser extends User<AnyCustom> {}
 
 export interface UserPage {
   next?: string;
@@ -29,27 +27,17 @@ export interface UserFetchRequestOptions {
   limit?: number,
   page?: UserPage,
   include?: {
+    totalCount?: boolean;
     customFields?: boolean;
   };
 }
 
-export type UserRequestOptions<UserType extends User, CustomType> = {
-  [KeyType in keyof UserType]: UserType[KeyType];
-} & {
-  custom?: CustomType;
-};
+export interface UserRequestOptions extends User<ObjectsCustom>, UserFetchRequestOptions {};
 
 export interface UserEventMessage<UserType extends User, CustomType> {
   data: UserResponseItem<UserType, CustomType>;
   event: string;
   type: string;
-}
-
-export interface FetchUsersRequest {
-  include?: {
-    totalCount?: boolean;
-    customFields?: boolean;
-  };
 }
 
 export interface FetchUsersResponse<UserType extends User, CustomType> {
@@ -68,11 +56,11 @@ export interface FetchUsersSuccess<UserType extends User, CustomType> {
   status: PubNubApiStatus;
 }
 
-export type UserRequest<UserType extends User, CustomType> =  UserRequestOptions<UserType, CustomType>;
+export type UserRequest<ReceivedUser extends User<ObjectsCustom>> =  UserRequestOptions<Rece>;
 
-export interface UserSuccess<UserType extends User, CustomType> {
-  request: UserRequest<UserType, CustomType>;
-  response: UserResponse<UserType, CustomType>;
+export interface UserSuccess<ReceivedUser extends User<ObjectsCustom>> {
+  request: UserRequest<ReceivedUser>;
+  response: UserResponse<ReceivedUser>;
   status: PubNubApiStatus;
 }
 
