@@ -1,4 +1,4 @@
-import { Message, MessageActions, MessageRequestOptions } from './MessageActions';
+import { Message, MessageActions } from './MessageActions';
 import { MessageActionType } from './MessageActionType.enum';
 
 
@@ -31,9 +31,9 @@ const messageReceived = <MessageType extends Message>(
   return newState;
 };
 
-export const createMessageReducer = <MessageType extends Message, MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType, MetaType>() => (
+export const createMessageReducer = <MessageType extends Message, MessageContentType, MessageMetaType, MetaType>() => (
   state: MessageState<MessageType> = createInitialState<MessageType>(),
-  action: MessageActions<MessageType, MessageRequestType, MessageContentType, MessageMetaType, MetaType>
+  action: MessageActions<MessageType, MessageContentType, MessageMetaType, MetaType>
 ): MessageState<MessageType> => {
   switch (action.type) {
     case MessageActionType.MESSAGE_RECEIVED:

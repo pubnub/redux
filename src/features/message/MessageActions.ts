@@ -21,22 +21,20 @@ export interface MessageRequestOptions<MessageContentType, MessageMetaType> {
   ttl? : number;
 }
 
-export interface SendMessageRequest<MessageRequestType extends 
-MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType> {
-  message: MessageRequestType
-}
+export interface SendMessageRequest<MessageContentType, MessageMetaType>
+extends MessageRequestOptions<MessageContentType, MessageMetaType> {}
 
 export interface SendMessageResponse {
   timetoken: number;
 }
 
-export interface SendMessageError<MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType> {
-  request: SendMessageRequest<MessageRequestType, MessageContentType, MessageMetaType>;
+export interface SendMessageError<MessageContentType, MessageMetaType> {
+  request: SendMessageRequest<MessageContentType, MessageMetaType>;
   status: PubNubApiStatus;
 }
 
-export interface SendMessageSuccess<MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType> {
-  request: SendMessageRequest<MessageRequestType, MessageContentType, MessageMetaType>;
+export interface SendMessageSuccess<MessageContentType, MessageMetaType> {
+  request: SendMessageRequest<MessageContentType, MessageMetaType>;
   response: SendMessageResponse;
   status: PubNubApiStatus;
 }
@@ -46,25 +44,25 @@ export interface MessageReceivedAction<MessageType extends Message> {
   payload: MessageType;
 }
 
-export interface SendingMessageAction<MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType, MetaType> {
+export interface SendingMessageAction<MessageContentType, MessageMetaType, MetaType> {
   type: typeof MessageActionType.SENDING_MESSAGE;
-  payload: SendMessageRequest<MessageRequestType, MessageContentType, MessageMetaType>;
+  payload: SendMessageRequest<MessageContentType, MessageMetaType>;
   meta?: ActionMeta<MetaType>;
 }
-export interface MessageSentAction<MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType, MetaType> {
+export interface MessageSentAction<MessageContentType, MessageMetaType, MetaType> {
   type: typeof MessageActionType.MESSAGE_SENT;
-  payload: SendMessageSuccess<MessageRequestType, MessageContentType, MessageMetaType>;
+  payload: SendMessageSuccess<MessageContentType, MessageMetaType>;
   meta?: ActionMeta<MetaType>;
 }
 
-export interface ErrorSendingMessageAction<MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType, MetaType> {
+export interface ErrorSendingMessageAction<MessageContentType, MessageMetaType, MetaType> {
   type: typeof MessageActionType.ERROR_SENDING_MESSAGE;
-  payload: SendMessageError<MessageRequestType, MessageContentType, MessageMetaType>;
+  payload: SendMessageError<MessageContentType, MessageMetaType>;
   meta?: ActionMeta<MetaType>;
 }
 
-export type MessageActions<MessageType extends Message, MessageRequestType extends MessageRequestOptions<MessageContentType, MessageMetaType>, MessageContentType, MessageMetaType, MetaType> =
+export type MessageActions<MessageType extends Message, MessageContentType, MessageMetaType, MetaType> =
 | MessageReceivedAction<MessageType>
-| MessageSentAction<MessageRequestType, MessageContentType, MessageMetaType, MetaType>
-| SendingMessageAction<MessageRequestType, MessageContentType, MessageMetaType, MetaType>
-| ErrorSendingMessageAction<MessageRequestType, MessageContentType, MessageMetaType, MetaType>;
+| MessageSentAction<MessageContentType, MessageMetaType, MetaType>
+| SendingMessageAction<MessageContentType, MessageMetaType, MetaType>
+| ErrorSendingMessageAction<MessageContentType, MessageMetaType, MetaType>;
