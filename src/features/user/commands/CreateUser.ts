@@ -9,14 +9,13 @@ import {
   User,
 } from '../UserActions';
 import { UserActionType } from '../UserActionType.enum';
-import { ActionMeta } from '../../../common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 
 export const creatingUser = <UserType extends User, CustomType, MetaType>(
   payload: UserRequest<UserType, CustomType>,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): CreatingUserAction<UserType, CustomType, MetaType> => ({
   type: UserActionType.CREATING_USER,
   payload,
@@ -25,7 +24,7 @@ export const creatingUser = <UserType extends User, CustomType, MetaType>(
 
 export const userCreated = <UserType extends User, CustomType, MetaType>(
   payload: UserSuccess<UserType, CustomType>,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): UserCreatedAction<UserType, CustomType, MetaType> => ({
   type: UserActionType.USER_CREATED,
   payload,
@@ -34,7 +33,7 @@ export const userCreated = <UserType extends User, CustomType, MetaType>(
 
 export const errorCreatingUser = <UserType extends User, CustomType, MetaType>(
   payload: UserError<UserType, CustomType>,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): ErrorCreatingUserAction<UserType, CustomType, MetaType> => ({
   type: UserActionType.ERROR_CREATING_USER,
   payload,
@@ -42,7 +41,7 @@ export const errorCreatingUser = <UserType extends User, CustomType, MetaType>(
   error: true,
 });
 
-export const createUser = <UserType extends User, CustomType, MetaType>(request: UserRequest<UserType, CustomType>, meta?: ActionMeta<MetaType>) => {
+export const createUser = <UserType extends User, CustomType, MetaType>(request: UserRequest<UserType, CustomType>, meta?: MetaType) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(creatingUser<UserType, CustomType, MetaType>(request, meta));

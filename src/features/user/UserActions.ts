@@ -1,5 +1,4 @@
 import { UserActionType } from './UserActionType.enum';
-import { ActionMeta } from '../../common/ActionMeta';
 import { PubNubApiStatus } from '../../common/PubNubApi';
 
 // tag::RDX-027[]
@@ -126,7 +125,7 @@ export interface DeleteUserError {
 export interface FetchingUsersAction<MetaType> {
   type: typeof UserActionType.FETCHING_USERS;
   payload: FetchUsersRequest
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-094[]
   
@@ -134,7 +133,7 @@ export interface FetchingUsersAction<MetaType> {
 export interface UsersRetrievedAction<UserType extends User, CustomType, MetaType> {
   type: typeof UserActionType.USERS_RETRIEVED;
   payload: FetchUsersSuccess<UserType, CustomType>,
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-095[]
 
@@ -142,7 +141,7 @@ export interface UsersRetrievedAction<UserType extends User, CustomType, MetaTyp
 export interface ErrorFetchingUsersAction<MetaType> {
   type: typeof UserActionType.ERROR_FETCHING_USERS;
   payload: FetchUsersError;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true;
 }
 // end::RDX-096[]
@@ -151,7 +150,7 @@ export interface ErrorFetchingUsersAction<MetaType> {
 export interface FetchingUserByIdAction<MetaType> {
   type: typeof UserActionType.FETCHING_USER_BY_ID;
   payload: FetchUserByIdRequest;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-098[]
 
@@ -159,7 +158,7 @@ export interface FetchingUserByIdAction<MetaType> {
 export interface UserRetrievedAction<UserType extends User, CustomType, MetaType> {
   type: typeof UserActionType.USER_RETRIEVED;
   payload: FetchUserByIdSuccess<UserType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-099[]
 
@@ -167,7 +166,7 @@ export interface UserRetrievedAction<UserType extends User, CustomType, MetaType
 export interface ErrorFetchingUserByIdAction<MetaType> {
   type: typeof UserActionType.ERROR_FETCHING_USER_BY_ID;
   payload: FetchUserByIdError;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true;
 }
 // end::RDX-097[]
@@ -176,7 +175,7 @@ export interface ErrorFetchingUserByIdAction<MetaType> {
 export interface CreatingUserAction<UserType extends User, CustomType, MetaType> {
   type: typeof UserActionType.CREATING_USER;
   payload: UserRequest<UserType, CustomType>
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-092[]
 
@@ -184,7 +183,7 @@ export interface CreatingUserAction<UserType extends User, CustomType, MetaType>
 export interface UserCreatedAction<UserType extends User, CustomType, MetaType> {
   type: typeof UserActionType.USER_CREATED;
   payload: UserSuccess<UserType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-091[]
 
@@ -192,7 +191,7 @@ export interface UserCreatedAction<UserType extends User, CustomType, MetaType> 
 export interface ErrorCreatingUserAction<UserType extends User, CustomType, MetaType> {
   type: typeof UserActionType.ERROR_CREATING_USER;
   payload: UserError<UserType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true,
 }
 // end::RDX-093[]
@@ -201,7 +200,7 @@ export interface ErrorCreatingUserAction<UserType extends User, CustomType, Meta
 export interface UpdatingUserAction<UserType extends User, CustomType, MetaType> {
   type: typeof UserActionType.UPDATING_USER;
   payload: UserRequest<UserType, CustomType>
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-086[]
 
@@ -209,7 +208,7 @@ export interface UpdatingUserAction<UserType extends User, CustomType, MetaType>
 export interface UserUpdatedAction<UserType extends User, CustomType, MetaType> {
   type: typeof UserActionType.USER_UPDATED;
   payload: UserSuccess<UserType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-085[]
 
@@ -217,7 +216,7 @@ export interface UserUpdatedAction<UserType extends User, CustomType, MetaType> 
 export interface ErrorUpdatingUserAction<UserType extends User, CustomType, MetaType> {
   type: typeof UserActionType.ERROR_UPDATING_USER;
   payload: UserError<UserType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true;
 }
 // end::RDX-087[]
@@ -226,7 +225,7 @@ export interface ErrorUpdatingUserAction<UserType extends User, CustomType, Meta
 export interface DeletingUserAction<MetaType> {
   type: typeof UserActionType.DELETING_USER;
   payload: DeleteUserRequest;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-089[]
 
@@ -234,7 +233,7 @@ export interface DeletingUserAction<MetaType> {
 export interface UserDeletedAction<MetaType> {
   type: typeof UserActionType.USER_DELETED;
   payload: DeleteUserSuccess;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-088[]
 
@@ -242,7 +241,7 @@ export interface UserDeletedAction<MetaType> {
 export interface ErrorDeletingUserAction<MetaType> {
   type: typeof UserActionType.ERROR_DELETING_USER;
   payload: DeleteUserError;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true;
 }
 // end::RDX-090[]
@@ -270,8 +269,8 @@ export type UserActions<UserType extends User, CustomType, MetaType> =
   | UpdatingUserAction<UserType, CustomType, MetaType>
   | UserUpdatedAction<UserType, CustomType, MetaType>
   | ErrorUpdatingUserAction<UserType, CustomType, MetaType>
-  | DeletingUserAction<ActionMeta>
-  | UserDeletedAction<ActionMeta>
+  | DeletingUserAction<MetaType>
+  | UserDeletedAction<MetaType>
   | ErrorDeletingUserAction<MetaType>;
 
 export type UserListenerActions<UserType extends User, CustomType> =

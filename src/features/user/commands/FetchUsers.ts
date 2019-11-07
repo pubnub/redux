@@ -9,13 +9,12 @@ import {
   FetchUsersSuccess,
 } from '../UserActions';
 import { UserActionType } from '../UserActionType.enum';
-import { ActionMeta } from '../../../common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const fetchingUsers = <MetaType>(
   payload: FetchUsersRequest,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): FetchingUsersAction<MetaType> => ({
   type: UserActionType.FETCHING_USERS,
   payload,
@@ -24,7 +23,7 @@ export const fetchingUsers = <MetaType>(
 
 export const usersRetrieved = <UserType extends User, CustomType, MetaType>(
   payload: FetchUsersSuccess<UserType, CustomType>,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): UsersRetrievedAction<UserType, CustomType, MetaType> => ({
   type: UserActionType.USERS_RETRIEVED,
   payload,
@@ -33,7 +32,7 @@ export const usersRetrieved = <UserType extends User, CustomType, MetaType>(
 
 export const errorFetchingUsers = <MetaType>(
   payload: FetchUsersError,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): ErrorFetchingUsersAction<MetaType> => ({
   type: UserActionType.ERROR_FETCHING_USERS,
   payload,
@@ -43,7 +42,7 @@ export const errorFetchingUsers = <MetaType>(
 
 export const fetchUsers = <UserType extends User, CustomType, MetaType>(
   request: FetchUsersRequest = {},
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {

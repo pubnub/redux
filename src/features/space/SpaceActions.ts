@@ -1,5 +1,4 @@
 import { SpaceActionType } from './SpaceActionType.enum';
-import { ActionMeta } from '../../common/ActionMeta';
 import { PubNubApiStatus } from '../../common/PubNubApi';
 
 // tag::RDX-027[]
@@ -125,7 +124,7 @@ export interface DeleteSpaceError {
 export interface FetchingSpacesAction<MetaType> {
   type: typeof SpaceActionType.FETCHING_SPACES;
   payload: FetchSpacesRequest
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-094[]
 
@@ -133,7 +132,7 @@ export interface FetchingSpacesAction<MetaType> {
 export interface SpacesRetrievedAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.SPACES_RETRIEVED;
   payload: FetchSpacesSuccess<SpaceType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-095[]
 
@@ -141,7 +140,7 @@ export interface SpacesRetrievedAction<SpaceType extends Space, CustomType, Meta
 export interface ErrorFetchingSpacesAction<MetaType> {
   type: typeof SpaceActionType.ERROR_FETCHING_SPACES;
   payload: FetchSpacesError;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true;
 }
 // end::RDX-096[]
@@ -150,7 +149,7 @@ export interface ErrorFetchingSpacesAction<MetaType> {
 export interface FetchingSpaceByIdAction<MetaType> {
   type: typeof SpaceActionType.FETCHING_SPACE_BY_ID;
   payload: FetchSpaceByIdRequest;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-098[]
 
@@ -158,7 +157,7 @@ export interface FetchingSpaceByIdAction<MetaType> {
 export interface SpaceRetrievedAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.SPACE_RETRIEVED;
   payload: FetchSpaceByIdSuccess<SpaceType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-099[]
 
@@ -166,7 +165,7 @@ export interface SpaceRetrievedAction<SpaceType extends Space, CustomType, MetaT
 export interface ErrorFetchingSpaceByIdAction<MetaType> {
   type: typeof SpaceActionType.ERROR_FETCHING_SPACE_BY_ID;
   payload: FetchSpaceByIdError;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true;
 }
 // end::RDX-097[]
@@ -175,7 +174,7 @@ export interface ErrorFetchingSpaceByIdAction<MetaType> {
 export interface CreatingSpaceAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.CREATING_SPACE;
   payload: SpaceRequest<SpaceType, CustomType>
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-092[]
 
@@ -183,7 +182,7 @@ export interface CreatingSpaceAction<SpaceType extends Space, CustomType, MetaTy
 export interface SpaceCreatedAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.SPACE_CREATED;
   payload: SpaceSuccess<SpaceType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-091[]
 
@@ -191,7 +190,7 @@ export interface SpaceCreatedAction<SpaceType extends Space, CustomType, MetaTyp
 export interface ErrorCreatingSpaceAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.ERROR_CREATING_SPACE;
   payload: SpaceError<SpaceType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true,
 }
 // end::RDX-093[]
@@ -200,7 +199,7 @@ export interface ErrorCreatingSpaceAction<SpaceType extends Space, CustomType, M
 export interface UpdatingSpaceAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.UPDATING_SPACE;
   payload: SpaceRequest<SpaceType, CustomType>
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-086[]
 
@@ -208,7 +207,7 @@ export interface UpdatingSpaceAction<SpaceType extends Space, CustomType, MetaTy
 export interface SpaceUpdatedAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.SPACE_UPDATED;
   payload: SpaceSuccess<SpaceType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-085[]
 
@@ -216,7 +215,7 @@ export interface SpaceUpdatedAction<SpaceType extends Space, CustomType, MetaTyp
 export interface ErrorUpdatingSpaceAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof SpaceActionType.ERROR_UPDATING_SPACE;
   payload: SpaceError<SpaceType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true;
 }
 // end::RDX-087[]
@@ -225,7 +224,7 @@ export interface ErrorUpdatingSpaceAction<SpaceType extends Space, CustomType, M
 export interface DeletingSpaceAction<MetaType> {
   type: typeof SpaceActionType.DELETING_SPACE;
   payload: DeleteSpaceRequest;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-089[]
 
@@ -233,7 +232,7 @@ export interface DeletingSpaceAction<MetaType> {
 export interface SpaceDeletedAction<MetaType> {
   type: typeof SpaceActionType.SPACE_DELETED;
   payload: DeleteSpaceSuccess;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-088[]
 
@@ -241,7 +240,7 @@ export interface SpaceDeletedAction<MetaType> {
 export interface ErrorDeletingSpaceAction<MetaType> {
   type: typeof SpaceActionType.ERROR_DELETING_SPACE;
   payload: DeleteSpaceError;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true;
 }
 // end::RDX-090[]
@@ -269,8 +268,8 @@ export type SpaceActions<SpaceType extends Space, CustomType, MetaType> =
   | UpdatingSpaceAction<SpaceType, CustomType, MetaType>
   | SpaceUpdatedAction<SpaceType, CustomType, MetaType>
   | ErrorUpdatingSpaceAction<SpaceType, CustomType, MetaType>
-  | DeletingSpaceAction<ActionMeta>
-  | SpaceDeletedAction<ActionMeta>
+  | DeletingSpaceAction<MetaType>
+  | SpaceDeletedAction<MetaType>
   | ErrorDeletingSpaceAction<MetaType>;
 
 export type SpaceListenerActions<SpaceType extends Space, CustomType> =

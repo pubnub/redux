@@ -1,6 +1,5 @@
 import { MessageActionType } from './MessageActionType.enum';
 import { PubNubApiStatus } from '../../common/PubNubApi';
-import { ActionMeta } from '../../common/ActionMeta';
 
 // tag::RDX-008[]
 export interface Message {
@@ -47,18 +46,18 @@ export interface MessageReceivedAction<MessageType extends Message> {
 export interface SendingMessageAction<MessageContentType, MessageMetaType, MetaType> {
   type: typeof MessageActionType.SENDING_MESSAGE;
   payload: SendMessageRequest<MessageContentType, MessageMetaType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 export interface MessageSentAction<MessageContentType, MessageMetaType, MetaType> {
   type: typeof MessageActionType.MESSAGE_SENT;
   payload: SendMessageSuccess<MessageContentType, MessageMetaType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 
 export interface ErrorSendingMessageAction<MessageContentType, MessageMetaType, MetaType> {
   type: typeof MessageActionType.ERROR_SENDING_MESSAGE;
   payload: SendMessageError<MessageContentType, MessageMetaType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 
 export type MessageActions<MessageType extends Message, MessageContentType, MessageMetaType, MetaType> =

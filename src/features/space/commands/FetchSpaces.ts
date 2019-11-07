@@ -9,13 +9,12 @@ import {
   FetchSpacesSuccess,
 } from '../SpaceActions';
 import { SpaceActionType } from '../SpaceActionType.enum';
-import { ActionMeta } from '../../../common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const fetchingSpaces = <MetaType>(
   payload: FetchSpacesRequest,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): FetchingSpacesAction<MetaType> => ({
   type: SpaceActionType.FETCHING_SPACES,
   payload,
@@ -24,7 +23,7 @@ export const fetchingSpaces = <MetaType>(
 
 export const spacesRetrieved = <SpaceType extends Space, CustomType, MetaType>(
   payload: FetchSpacesSuccess<SpaceType, CustomType>,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): SpacesRetrievedAction<SpaceType, CustomType, MetaType> => ({
   type: SpaceActionType.SPACES_RETRIEVED,
   payload,
@@ -33,7 +32,7 @@ export const spacesRetrieved = <SpaceType extends Space, CustomType, MetaType>(
 
 export const errorFetchingSpaces = <MetaType>(
   payload: FetchSpacesError,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): ErrorFetchingSpacesAction<MetaType> => ({
   type: SpaceActionType.ERROR_FETCHING_SPACES,
   payload,
@@ -43,7 +42,7 @@ export const errorFetchingSpaces = <MetaType>(
 
 export const fetchSpaces = <SpaceType extends Space, CustomType, MetaType>(
   request: FetchSpacesRequest = {},
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {

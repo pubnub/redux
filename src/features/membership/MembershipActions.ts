@@ -1,6 +1,5 @@
 import { Space, SpaceResponseItem } from '../../features/space/SpaceActions';
 import { PubNubApiStatus } from '../../common/PubNubApi';
-import { ActionMeta } from '../../common/ActionMeta';
 import { MembershipActionType } from './MembershipActionType.enum';
 
 export interface Membership<CustomType> {
@@ -92,7 +91,7 @@ export interface MembershipEventMessage<CustomType> {
 export interface FetchingMembershipAction<MetaType> {
   type: typeof MembershipActionType.FETCHING_MEMBERSHIP;
   payload: FetchMembershipRequest;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-131[]
 
@@ -100,7 +99,7 @@ export interface FetchingMembershipAction<MetaType> {
 export interface MembershipRetrievedAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof MembershipActionType.MEMBERSHIP_RETRIEVED;
   payload: FetchMembershipSuccess<SpaceType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-132[]
 
@@ -108,7 +107,7 @@ export interface MembershipRetrievedAction<SpaceType extends Space, CustomType, 
 export interface ErrorFetchingMembershipAction<MetaType> {
   type: typeof MembershipActionType.ERROR_FETCHING_MEMBERSHIP;
   payload: FetchMembershipError;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true;
 }
 // end::RDX-133[]
@@ -117,7 +116,7 @@ export interface ErrorFetchingMembershipAction<MetaType> {
 export interface UpdatingMembershipAction<MembershipType extends Membership<CustomType>, CustomType, MetaType> {
   type: typeof MembershipActionType.UPDATING_MEMBERSHIP;
   payload: MembershipRequest<MembershipType, CustomType>
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-135[]
 
@@ -125,7 +124,7 @@ export interface UpdatingMembershipAction<MembershipType extends Membership<Cust
 export interface MembershipUpdatedAction<SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType> {
   type: typeof MembershipActionType.MEMBERSHIP_UPDATED;
   payload: MembershipSuccess<SpaceType, MembershipType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-134[]
 
@@ -133,7 +132,7 @@ export interface MembershipUpdatedAction<SpaceType extends Space, MembershipType
 export interface ErrorUpdatingMembershipAction<MembershipType extends Membership<CustomType>, CustomType, MetaType> {
   type: typeof MembershipActionType.ERROR_UPDATING_MEMBERSHIP;
   payload: MembershipError<MembershipType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true;
 }
 // end::RDX-136[]
@@ -142,7 +141,7 @@ export interface ErrorUpdatingMembershipAction<MembershipType extends Membership
 export interface JoiningSpacesAction<MembershipType extends Membership<CustomType>, CustomType, MetaType> {
   type: typeof MembershipActionType.JOINING_SPACES;
   payload: MembershipRequest<MembershipType, CustomType>
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-138[]
 
@@ -150,7 +149,7 @@ export interface JoiningSpacesAction<MembershipType extends Membership<CustomTyp
 export interface SpacesJoinedAction<SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType> {
   type: typeof MembershipActionType.SPACES_JOINED;
   payload: MembershipSuccess<SpaceType, MembershipType, CustomType>
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-137[]
 
@@ -158,7 +157,7 @@ export interface SpacesJoinedAction<SpaceType extends Space, MembershipType exte
 export interface ErrorJoiningSpacesAction<MembershipType extends Membership<CustomType>, CustomType, MetaType> {
   type: typeof MembershipActionType.ERROR_JOINING_SPACES;
   payload: MembershipError<MembershipType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true;
 }
 // end::RDX-139[]
@@ -167,7 +166,7 @@ export interface ErrorJoiningSpacesAction<MembershipType extends Membership<Cust
 export interface LeavingSpacesAction<MembershipType extends Membership<CustomType>, CustomType, MetaType> {
   type: typeof MembershipActionType.LEAVING_SPACES;
   payload: MembershipRequest<MembershipType, CustomType>
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-141[]
 
@@ -175,7 +174,7 @@ export interface LeavingSpacesAction<MembershipType extends Membership<CustomTyp
 export interface SpacesLeftAction<SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType> {
   type: typeof MembershipActionType.SPACES_LEFT;
   payload: MembershipSuccess<SpaceType, MembershipType, CustomType>
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-140[]
 
@@ -183,7 +182,7 @@ export interface SpacesLeftAction<SpaceType extends Space, MembershipType extend
 export interface ErrorLeavingSpacesAction<MembershipType extends Membership<CustomType>, CustomType, MetaType> {
   type: typeof MembershipActionType.ERROR_LEAVING_SPACES;
   payload: MembershipError<MembershipType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
   error: true;
 }
 // end::RDX-142[]

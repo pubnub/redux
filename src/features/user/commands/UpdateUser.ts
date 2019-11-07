@@ -9,13 +9,12 @@ import {
   UserSuccess,
 } from '../UserActions';
 import { UserActionType } from '../UserActionType.enum';
-import { ActionMeta } from '../../../common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const updatingUser = <UserType extends User, CustomType, MetaType>(
   payload: UserRequest<UserType, CustomType>,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): UpdatingUserAction<UserType, CustomType, MetaType> => ({
   type: UserActionType.UPDATING_USER,
   payload,
@@ -24,7 +23,7 @@ export const updatingUser = <UserType extends User, CustomType, MetaType>(
 
 export const userUpdated = <UserType extends User, CustomType, MetaType>(
   payload: UserSuccess<UserType, CustomType>,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): UserUpdatedAction<UserType, CustomType, MetaType> => ({
   type: UserActionType.USER_UPDATED,
   payload,
@@ -33,7 +32,7 @@ export const userUpdated = <UserType extends User, CustomType, MetaType>(
 
 export const errorUpdatingUser = <UserType extends User, CustomType, MetaType>(
   payload: UserError<UserType, CustomType>,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): ErrorUpdatingUserAction<UserType, CustomType, MetaType> => ({
   type: UserActionType.ERROR_UPDATING_USER,
   payload,
@@ -41,7 +40,7 @@ export const errorUpdatingUser = <UserType extends User, CustomType, MetaType>(
   error: true,
 });
 
-export const updateUser = <UserType extends User, CustomType, MetaType>(request: UserRequest<UserType, CustomType>, meta?: ActionMeta<MetaType>) => {
+export const updateUser = <UserType extends User, CustomType, MetaType>(request: UserRequest<UserType, CustomType>, meta?: MetaType) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(updatingUser<UserType, CustomType, MetaType>(request, meta));

@@ -8,7 +8,6 @@ import {
   MembersError,
   MembersSuccess
 } from '../MembersActions';
-import { ActionMeta } from '../../../common/ActionMeta';
 import { MembersActionType } from '../MembersActionType.enum';
 import { User } from '../../../features/user/UserActions';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
@@ -16,7 +15,7 @@ import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const updatingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
   payload: MembersRequest<MemberType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): UpdatingMembersAction<MemberType, CustomType, MetaType> => ({
   type: MembersActionType.UPDATING_MEMBERS,
   payload,
@@ -25,7 +24,7 @@ export const updatingMembers = <MemberType extends Member<CustomType>, CustomTyp
 
 export const membersUpdated = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>(
   payload: MembersSuccess<UserType, MemberType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): MembersUpdatedAction<UserType, MemberType, CustomType, MetaType> => ({
   type: MembersActionType.MEMBERS_UPDATED,
   payload,
@@ -34,7 +33,7 @@ export const membersUpdated = <UserType extends User, MemberType extends Member<
 
 export const errorUpdatingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
   payload: MembersError<MemberType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): ErrorUpdatingMembersAction<MemberType, CustomType, MetaType> => ({
   type: MembersActionType.ERROR_UPDATING_MEMBERS,
   payload,

@@ -7,14 +7,13 @@ import {
   SendMessageError,
   SendMessageResponse,
 } from '../MessageActions';
-import { ActionMeta } from '../../../common/ActionMeta';
 import { MessageActionType } from '../MessageActionType.enum';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const sendingMessage = <MessageContentType, MessageMetaType, MetaType>(
   payload: SendMessageRequest<MessageContentType, MessageMetaType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): SendingMessageAction<MessageContentType, MessageMetaType, MetaType> => ({
   type: MessageActionType.SENDING_MESSAGE,
   payload,
@@ -23,7 +22,7 @@ export const sendingMessage = <MessageContentType, MessageMetaType, MetaType>(
 
 export const messageSent = <MessageContentType, MessageMetaType, MetaType>(
   payload: SendMessageSuccess<MessageContentType, MessageMetaType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): MessageSentAction<MessageContentType, MessageMetaType, MetaType> => ({
   type: MessageActionType.MESSAGE_SENT,
   payload,
@@ -32,7 +31,7 @@ export const messageSent = <MessageContentType, MessageMetaType, MetaType>(
 
 export const errorSendingmessage = <MessageContentType, MessageMetaType, MetaType>(
   payload: SendMessageError<MessageContentType, MessageMetaType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): ErrorSendingMessageAction<MessageContentType, MessageMetaType, MetaType> => ({
   type: MessageActionType.ERROR_SENDING_MESSAGE,
   payload,

@@ -10,12 +10,11 @@ import {
 import { MembersActionType } from '../MembersActionType.enum';
 import { User } from '../../../features/user/UserActions';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
-import { ActionMeta } from '../../../common/ActionMeta';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const fetchingMembers = <MetaType>(
   payload: FetchMembersRequest,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): FetchingMembersAction<MetaType> => ({
   type: MembersActionType.FETCHING_MEMBERS,
   payload,
@@ -24,7 +23,7 @@ export const fetchingMembers = <MetaType>(
 
 export const membersRetrieved = <UserType extends User, CustomType, MetaType>(
   payload: FetchMembersSuccess<UserType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): MembersRetrievedAction<UserType, CustomType, MetaType> => ({
   type: MembersActionType.MEMBERS_RETRIEVED,
   payload,
@@ -33,7 +32,7 @@ export const membersRetrieved = <UserType extends User, CustomType, MetaType>(
 
 export const errorFetchingMembers = <MetaType>(
   payload:FetchMembersError,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): ErrorFetchingMembersAction<MetaType> => ({
   type: MembersActionType.ERROR_FETCHING_MEMBERS,
   payload,

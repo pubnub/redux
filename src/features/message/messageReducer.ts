@@ -1,7 +1,6 @@
 import { Message, MessageActions } from './MessageActions';
 import { MessageActionType } from './MessageActionType.enum';
 
-
 export type MessageState<MessageType extends Message> = {
   byId: {
     [channel: string]: MessageType[]

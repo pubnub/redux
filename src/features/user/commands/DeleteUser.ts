@@ -8,13 +8,12 @@ import {
   DeleteUserSuccess
 } from '../UserActions';
 import { UserActionType } from '../UserActionType.enum';
-import { ActionMeta } from '../../../common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const deletingUser = <MetaType>(
   payload: DeleteUserRequest,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): DeletingUserAction<MetaType> => ({
   type: UserActionType.DELETING_USER,
   payload,
@@ -23,7 +22,7 @@ export const deletingUser = <MetaType>(
 
 export const userDeleted = <MetaType>(
   payload: DeleteUserSuccess,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): UserDeletedAction<MetaType> => ({
   type: UserActionType.USER_DELETED,
   payload,
@@ -32,7 +31,7 @@ export const userDeleted = <MetaType>(
 
 export const errorDeletingUser = <MetaType>(
   payload: DeleteUserError,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): ErrorDeletingUserAction<MetaType> => ({
   type: UserActionType.ERROR_DELETING_USER,
   payload,
@@ -40,7 +39,7 @@ export const errorDeletingUser = <MetaType>(
   error: true,
 });
 
-export const deleteUser = <MetaType>(request: DeleteUserRequest, meta?: ActionMeta<MetaType>) => {
+export const deleteUser = <MetaType>(request: DeleteUserRequest, meta?: MetaType) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(deletingUser<MetaType>(request, meta));

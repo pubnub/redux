@@ -9,13 +9,12 @@ import {
   SpaceSuccess,
 } from '../SpaceActions';
 import { SpaceActionType } from '../SpaceActionType.enum';
-import { ActionMeta } from '../../../common/ActionMeta';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const updatingSpace = <SpaceType extends Space, CustomType, MetaType>(
   payload: SpaceType | SpaceRequest<SpaceType, CustomType>,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): UpdatingSpaceAction<SpaceType, CustomType, MetaType> => ({
   type: SpaceActionType.UPDATING_SPACE,
   payload,
@@ -24,7 +23,7 @@ export const updatingSpace = <SpaceType extends Space, CustomType, MetaType>(
 
 export const spaceUpdated = <SpaceType extends Space, CustomType, MetaType>(
   payload: SpaceSuccess<SpaceType, CustomType>,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): SpaceUpdatedAction<SpaceType, CustomType, MetaType> => ({
   type: SpaceActionType.SPACE_UPDATED,
   payload,
@@ -33,7 +32,7 @@ export const spaceUpdated = <SpaceType extends Space, CustomType, MetaType>(
 
 export const errorUpdatingSpace = <SpaceType extends Space, CustomType, MetaType>(
   payload: SpaceError<SpaceType, CustomType>,
-  meta?: ActionMeta<MetaType>
+  meta?: MetaType
 ): ErrorUpdatingSpaceAction<SpaceType, CustomType, MetaType> => ({
   type: SpaceActionType.ERROR_UPDATING_SPACE,
   payload,
@@ -41,7 +40,7 @@ export const errorUpdatingSpace = <SpaceType extends Space, CustomType, MetaType
   error: true,
 });
 
-export const updateSpace = <SpaceType extends Space, CustomType, MetaType>(request: SpaceRequest<SpaceType, CustomType>, meta?: ActionMeta<MetaType>) => {
+export const updateSpace = <SpaceType extends Space, CustomType, MetaType>(request: SpaceRequest<SpaceType, CustomType>, meta?: MetaType) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(updatingSpace<SpaceType, CustomType, MetaType>(request, meta));

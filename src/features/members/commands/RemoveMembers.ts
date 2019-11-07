@@ -1,5 +1,4 @@
 import { RemovingMembersAction, MembersRemovedAction, MembersRequest, Member, MembersResponse, ErrorRemovingMembersAction, MembersError, MembersSuccess } from '../MembersActions';
-import { ActionMeta } from '../../../common/ActionMeta';
 import { MembersActionType } from '../MembersActionType.enum';
 import { User } from '../../../features/user/UserActions';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
@@ -7,7 +6,7 @@ import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const removingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
   payload: MembersRequest<MemberType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): RemovingMembersAction<MemberType, CustomType, MetaType> => ({
   type: MembersActionType.REMOVING_MEMBERS,
   payload,
@@ -16,7 +15,7 @@ export const removingMembers = <MemberType extends Member<CustomType>, CustomTyp
 
 export const membersRemoved = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>(
   payload: MembersSuccess<UserType, MemberType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): MembersRemovedAction<UserType, MemberType, CustomType, MetaType> => ({
   type: MembersActionType.MEMBERS_REMOVED,
   payload,
@@ -25,7 +24,7 @@ export const membersRemoved = <UserType extends User, MemberType extends Member<
 
 export const errorRemovingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
   payload: MembersError<MemberType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): ErrorRemovingMembersAction<MemberType, CustomType, MetaType> => ({
   type: MembersActionType.ERROR_REMOVING_MEMBERS,
   payload,

@@ -10,12 +10,11 @@ import {
 import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from '../../../features/space/SpaceActions';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
-import { ActionMeta } from '../../../common/ActionMeta';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const fetchingMembership = <MetaType>(
   payload: FetchMembershipRequest,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): FetchingMembershipAction<MetaType> => ({
   type: MembershipActionType.FETCHING_MEMBERSHIP,
   payload,
@@ -24,7 +23,7 @@ export const fetchingMembership = <MetaType>(
 
 export const membershipRetrieved = <SpaceType extends Space, CustomType, MetaType>(
   payload: FetchMembershipSuccess<SpaceType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): MembershipRetrievedAction<SpaceType, CustomType, MetaType> => ({
   type: MembershipActionType.MEMBERSHIP_RETRIEVED,
   payload,
@@ -33,7 +32,7 @@ export const membershipRetrieved = <SpaceType extends Space, CustomType, MetaTyp
 
 export const errorFetchingMembership = <MetaType>(
   payload: FetchMembershipError,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): ErrorFetchingMembershipAction<MetaType> => ({
   type: MembershipActionType.ERROR_FETCHING_MEMBERSHIP,
   payload,
@@ -43,7 +42,7 @@ export const errorFetchingMembership = <MetaType>(
 
 export const fetchMemberships = <SpaceType extends Space, CustomType, MetaType>(
   request: FetchMembershipRequest,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {

@@ -1,5 +1,4 @@
 import { MembersActionType } from './MembersActionType.enum';
-import { ActionMeta } from '../../common/ActionMeta';
 import { User, UserResponseItem } from '../../features/user/UserActions';
 import { PubNubApiStatus } from '../../common/PubNubApi';
 
@@ -84,7 +83,7 @@ export interface MembersError<MemberType extends Member<CustomType>, CustomType>
 export interface FetchingMembersAction<MetaType> {
   type: typeof MembersActionType.FETCHING_MEMBERS;
   payload: FetchMembersRequest;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-118[]
 
@@ -92,7 +91,7 @@ export interface FetchingMembersAction<MetaType> {
 export interface MembersRetrievedAction<UserType extends User, CustomType, MetaType> {
   type: typeof MembersActionType.MEMBERS_RETRIEVED;
   payload: FetchMembersSuccess<UserType, CustomType>;
-  meta?: ActionMeta<MetaType>;
+  meta?: MetaType;
 }
 // end::RDX-119[]
   
@@ -100,7 +99,7 @@ export interface MembersRetrievedAction<UserType extends User, CustomType, MetaT
   export interface ErrorFetchingMembersAction<MetaType> {
     type: typeof MembersActionType.ERROR_FETCHING_MEMBERS;
     payload: FetchMembersError;
-    meta?: ActionMeta<MetaType>;
+    meta?: MetaType;
     error: true;
   }
   // end::RDX-120[]
@@ -109,7 +108,7 @@ export interface MembersRetrievedAction<UserType extends User, CustomType, MetaT
   export interface UpdatingMembersAction<MemberType extends Member<CustomType>, CustomType, MetaType> {
     type: typeof MembersActionType.UPDATING_MEMBERS;
     payload: MembersRequest<MemberType, CustomType>;
-    meta?: ActionMeta<MetaType>;
+    meta?: MetaType;
   }
   // end::RDX-122[]
   
@@ -117,7 +116,7 @@ export interface MembersRetrievedAction<UserType extends User, CustomType, MetaT
   export interface MembersUpdatedAction<UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType> {
     type: typeof MembersActionType.MEMBERS_UPDATED;
     payload: MembersSuccess<UserType, MemberType, CustomType>;
-    meta?: ActionMeta<MetaType>;
+    meta?: MetaType;
   }
   // end::RDX-121[]
   
@@ -125,7 +124,7 @@ export interface MembersRetrievedAction<UserType extends User, CustomType, MetaT
   export interface ErrorUpdatingMembersAction<MemberType extends Member<CustomType>, CustomType, MetaType> {
     type: typeof MembersActionType.ERROR_UPDATING_MEMBERS;
     payload: MembersError<MemberType, CustomType>;
-    meta?: ActionMeta<MetaType>;
+    meta?: MetaType;
     error: true;
   }
   // end::RDX-123[]
@@ -134,7 +133,7 @@ export interface MembersRetrievedAction<UserType extends User, CustomType, MetaT
   export interface AddingMembersAction<MemberType extends Member<CustomType>, CustomType, MetaType> {
     type: typeof MembersActionType.ADDING_MEMBERS;
     payload: MembersRequest<MemberType, CustomType>;
-    meta?: ActionMeta<MetaType>;
+    meta?: MetaType;
   }
   // end::RDX-125[]
   
@@ -142,7 +141,7 @@ export interface MembersRetrievedAction<UserType extends User, CustomType, MetaT
   export interface MembersAddedAction<UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType> {
     type: typeof MembersActionType.MEMBERS_ADDED;
     payload: MembersSuccess<UserType, MemberType, CustomType>;
-    meta?: ActionMeta<MetaType>;
+    meta?: MetaType;
   }
   // end::RDX-124[]
   
@@ -150,7 +149,7 @@ export interface MembersRetrievedAction<UserType extends User, CustomType, MetaT
   export interface ErrorAddingMembersAction<MemberType extends Member<CustomType>, CustomType, MetaType> {
     type: typeof MembersActionType.ERROR_ADDING_MEMBERS;
     payload: MembersError<MemberType, CustomType>;
-    meta?: ActionMeta<MetaType>;
+    meta?: MetaType;
     error: true;
   }
   // end::RDX-126[]
@@ -159,7 +158,7 @@ export interface MembersRetrievedAction<UserType extends User, CustomType, MetaT
   export interface RemovingMembersAction<MemberType extends Member<CustomType>, CustomType, MetaType> {
     type: typeof MembersActionType.REMOVING_MEMBERS;
     payload: MembersRequest<MemberType, CustomType>;
-    meta?: ActionMeta<MetaType>;
+    meta?: MetaType;
   }
   // end::RDX-128[]
   
@@ -167,7 +166,7 @@ export interface MembersRetrievedAction<UserType extends User, CustomType, MetaT
   export interface MembersRemovedAction<UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType> {
     type: typeof MembersActionType.MEMBERS_REMOVED;
     payload: MembersSuccess<UserType, MemberType, CustomType>;
-    meta?: ActionMeta<MetaType>;
+    meta?: MetaType;
   }
   // end::RDX-127[]
   
@@ -175,7 +174,7 @@ export interface MembersRetrievedAction<UserType extends User, CustomType, MetaT
   export interface ErrorRemovingMembersAction<MemberType extends Member<CustomType>, CustomType, MetaType> {
     type: typeof MembersActionType.ERROR_REMOVING_MEMBERS;
     payload: MembersError<MemberType, CustomType>;
-    meta?: ActionMeta<MetaType>;
+    meta?: MetaType;
     error: true;
   }
   // end::RDX-129[]

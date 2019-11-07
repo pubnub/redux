@@ -1,5 +1,4 @@
 import { UpdatingMembershipAction, MembershipRequest, MembershipUpdatedAction, MembershipSuccess, ErrorUpdatingMembershipAction, MembershipError, MembershipResponse, Membership } from '../MembershipActions';
-import { ActionMeta } from '../../../common/ActionMeta';
 import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from '../../../features/space/SpaceActions';
 import { PubNubApiStatus } from '../../../common/PubNubApi';
@@ -7,7 +6,7 @@ import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const updatingMemberships = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
   payload: MembershipRequest<MembershipType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): UpdatingMembershipAction<MembershipType, CustomType, MetaType> => ({
   type: MembershipActionType.UPDATING_MEMBERSHIP,
   payload,
@@ -16,7 +15,7 @@ export const updatingMemberships = <MembershipType extends Membership<CustomType
 
 export const membershipUpdated = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
   payload: MembershipSuccess<SpaceType, MembershipType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): MembershipUpdatedAction<SpaceType, MembershipType, CustomType, MetaType> => ({
   type: MembershipActionType.MEMBERSHIP_UPDATED,
   payload,
@@ -25,7 +24,7 @@ export const membershipUpdated = <SpaceType extends Space, MembershipType extend
 
 export const errorUpdatingMembership = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
   payload: MembershipError<MembershipType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): ErrorUpdatingMembershipAction<MembershipType, CustomType, MetaType> => ({
   type: MembershipActionType.ERROR_UPDATING_MEMBERSHIP,
   payload,
@@ -35,7 +34,7 @@ export const errorUpdatingMembership = <MembershipType extends Membership<Custom
 
 export const updateMembership = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
   request: MembershipRequest<MembershipType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {

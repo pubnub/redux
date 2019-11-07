@@ -1,4 +1,3 @@
-import { ActionMeta } from '../../../common/ActionMeta';
 import { JoiningSpacesAction, MembershipRequest, Membership, SpacesJoinedAction, MembershipSuccess, ErrorJoiningSpacesAction, MembershipError, MembershipResponse } from '../MembershipActions';
 import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from '../../../features/space/SpaceActions';
@@ -7,7 +6,7 @@ import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
 export const joiningSpaces = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
   payload: MembershipRequest<MembershipType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): JoiningSpacesAction<MembershipType, CustomType, MetaType> => ({
   type: MembershipActionType.JOINING_SPACES,
   payload,
@@ -16,7 +15,7 @@ export const joiningSpaces = <MembershipType extends Membership<CustomType>, Cus
 
 export const spacesJoined = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
   payload: MembershipSuccess<SpaceType, MembershipType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): SpacesJoinedAction<SpaceType, MembershipType, CustomType, MetaType> => ({
   type: MembershipActionType.SPACES_JOINED,
   payload,
@@ -25,7 +24,7 @@ export const spacesJoined = <SpaceType extends Space, MembershipType extends Mem
 
 export const errorJoiningSpaces = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
   payload: MembershipError<MembershipType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ): ErrorJoiningSpacesAction<MembershipType, CustomType, MetaType> => ({
   type: MembershipActionType.ERROR_JOINING_SPACES,
   payload,
@@ -35,7 +34,7 @@ export const errorJoiningSpaces = <MembershipType extends Membership<CustomType>
 
 export const joinSpaces = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
   request: MembershipRequest<MembershipType, CustomType>,
-  meta?: ActionMeta<MetaType>,
+  meta?: MetaType,
 ) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
