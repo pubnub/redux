@@ -11,8 +11,9 @@ import {
 } from './SpaceActions';
 import { SpaceActionType } from './SpaceActionType.enum';
 import { MembersActions, Member } from '../members/MembersActions';
-import { MembershipActions, Membership } from '../membership/MembershipActions';
+import { MembershipActions, Membership, FetchMembershipSuccess } from '../membership/MembershipActions';
 import { User } from 'features/user/UserActions';
+import { MembershipActionType } from 'features/membership/MembershipActionType.enum';
 
 export type SpacesByIdState<SpaceType extends Space, CustomType> = {
   byId: {
@@ -129,45 +130,37 @@ const spaceDeletedEventReceived = <SpaceType extends Space, CustomType>(
   return newState;
 }
 
-// // tag::RDX-068[]
-// const membershipsRetrieved = <SpaceType extends Space, CustomType>(
-//   state: SpacesByIdState<SpaceType, CustomType>,
-//   payload: PubNubObjectApiSuccess<MembersResult>
-// ) => {
-//   let newState = state;
+// tag::RDX-068[]
+const membershipRetrieved = <SpaceType extends Space, CustomType>(
+  state: SpacesByIdState<SpaceType, CustomType>,
+  payload: FetchMembershipSuccess<SpaceType, CustomType>,
+) => {
+  let newState = state;
 
-//   if (payload.data.spaces.length > 0) {
-//     for (let i = 0; i < payload.data.spaces.length; i++) {
-//       let currentSpace = payload.data.spaces[i].space;
+  if (payload.response.data.length > 0) {
+    newState = {
+      byId: {
+        ...state.byId
+      }
+    };
 
-//       if (currentSpace !== undefined) {
-//         newState = successObjectById<T>(
-//           newState,
-//           {
-//             data: (currentSpace as unknown) as T,
-//           },
-//           currentSpace.id
-//         );
-//       }
-//     }
-//   }
+    for (let i = 0; i < payload.response.data.length; i++) {
+      let currentMembership = payload.response.data[i];
+      
+      newState.byId[currentMembership.id] = currentMembership.space;
+    }
+  }
 
-//   return newState;
-// };
-// // end::RDX-068[]
-
-// const membersAddedToSpace = <SpaceType extends Space, CustomType>(
-//   state: SpacesByIdState<SpaceType, CustomType>,
-//   payload: PubNubObjectApiSuccess<MembersResult>
-// ) => ({
-// }):
+  return newState;
+};
+// end::RDX-068[]
 
 export const createSpaceReducer = <UserType extends User, SpaceType extends Space, MemberType extends Member<CustomType>, MembershipType extends Membership<CustomType>, CustomType, MetaType>() => (
   state: SpacesByIdState<SpaceType, CustomType> = createInitialState<SpaceType, CustomType>(),
   action: SpaceActions<SpaceType, CustomType, MetaType> 
     | SpaceListenerActions<SpaceType, CustomType> 
     | MembersActions<UserType, MemberType, CustomType, MetaType>
-    | MembershipActions<UserType, MembershipType, CustomType, MetaType>
+    | MembershipActions<SpaceType, MembershipType, CustomType, MetaType>
 ): SpacesByIdState<SpaceType, CustomType> => {
   switch (action.type) {
     case SpaceActionType.SPACE_CREATED:
@@ -184,10 +177,8 @@ export const createSpaceReducer = <UserType extends User, SpaceType extends Spac
       return spaceUpdatedEventReceived<SpaceType, CustomType>(state, action.payload);
     case SpaceActionType.SPACE_DELETED_EVENT:
       return spaceDeletedEventReceived<SpaceType, CustomType>(state, action.payload);
-    // case MembershipActionType.MEMBERSHIP_RETRIEVED:
-    //   return membersRetrieved<SpaceType, CustomType>(state, action.payload);
-    // case MembershipActionType.SPACE_ADDED_TO_SPACE:
-    //     return membersAddedToSpace<SpaceType, CustomType>(state, action.payload);
+    case MembershipActionType.MEMBERSHIP_RETRIEVED:
+      return membershipRetrieved<SpaceType, CustomType>(state, action.payload);
     default:
       return state;
   }

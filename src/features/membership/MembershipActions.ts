@@ -26,7 +26,7 @@ export interface MembershipFetchRequestOptions {
 
 export interface FetchMembershipResponse<SpaceType extends Space, CustomType> {
   status: string;
-  data: SpaceResponseItem<SpaceType, CustomType>[];
+  data: MembershipResponseItem<SpaceType, CustomType>[];
 }
 
 export interface FetchMembershipSuccess<SpaceType extends Space, CustomType> {
@@ -49,9 +49,16 @@ export type MembershipRequestOptions<MembershipType extends Membership<CustomTyp
   spaces: MembershipType[]
 };
 
-export type MembershipRequest<MembershipType extends Membership<CustomType>, CustomType> =  MembershipRequestOptions<MembershipType, CustomType>;
+export type MembershipResponseItem<SpaceType extends Space, CustomType> = {
+  id: string,
+  space: SpaceResponseItem<SpaceType, CustomType>,
+  custom?: CustomType;
+  created: string,
+  updated: string,
+  eTag: string,
+};
 
-export type MembershipResponseItem<SpaceType extends Space, CustomType> = SpaceResponseItem<SpaceType, CustomType>;
+export type MembershipRequest<MembershipType extends Membership<CustomType>, CustomType> =  MembershipRequestOptions<MembershipType, CustomType>;
 
 export interface MembershipResponse<SpaceType extends Space, CustomType> {
   status: string;
@@ -82,7 +89,7 @@ export interface MembershipEventMessage<CustomType> {
 }
 
 // tag::RDX-131[]
-export interface FetchingMembershipsAction<MetaType> {
+export interface FetchingMembershipAction<MetaType> {
   type: typeof MembershipActionType.FETCHING_MEMBERSHIP;
   payload: FetchMembershipRequest;
   meta?: ActionMeta<MetaType>;
@@ -90,7 +97,7 @@ export interface FetchingMembershipsAction<MetaType> {
 // end::RDX-131[]
 
 // tag::RDX-132[]
-export interface MembershipsRetrievedAction<SpaceType extends Space, CustomType, MetaType> {
+export interface MembershipRetrievedAction<SpaceType extends Space, CustomType, MetaType> {
   type: typeof MembershipActionType.MEMBERSHIP_RETRIEVED;
   payload: FetchMembershipSuccess<SpaceType, CustomType>;
   meta?: ActionMeta<MetaType>;
@@ -98,7 +105,7 @@ export interface MembershipsRetrievedAction<SpaceType extends Space, CustomType,
 // end::RDX-132[]
 
 // tag::RDX-133[]
-export interface ErrorFetchingMembershipsAction<MetaType> {
+export interface ErrorFetchingMembershipAction<MetaType> {
   type: typeof MembershipActionType.ERROR_FETCHING_MEMBERSHIP;
   payload: FetchMembershipError;
   meta?: ActionMeta<MetaType>;
@@ -203,9 +210,9 @@ export interface UserMembershipUpdatedOnSpaceEventAction<CustomType> {
 // end::RDX-117[]
 
 export type MembershipActions<SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType> =
-| FetchingMembershipsAction<MetaType>
-| MembershipsRetrievedAction<SpaceType, CustomType, MetaType>
-| ErrorFetchingMembershipsAction<MetaType>
+| FetchingMembershipAction<MetaType>
+| MembershipRetrievedAction<SpaceType, CustomType, MetaType>
+| ErrorFetchingMembershipAction<MetaType>
 | UpdatingMembershipAction<MembershipType, CustomType, MetaType>
 | MembershipUpdatedAction<SpaceType, MembershipType, CustomType, MetaType>
 | ErrorUpdatingMembershipAction<MembershipType, CustomType, MetaType>

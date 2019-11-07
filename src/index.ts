@@ -13,9 +13,9 @@ import {
 } from './features/membership/commands/LeaveSpaces';
 import {
   fetchMemberships,
-  fetchingMemberships,
-  membershipsRetrieved,
-  errorFetchingMemberships,
+  fetchingMembership,
+  membershipRetrieved,
+  errorFetchingMembership,
 } from './features/membership/commands/FetchMemberships';
 import {
   updateMembership,
@@ -172,9 +172,9 @@ export {
   spacesLeft,
   errorLeavingSpaces,
   fetchMemberships,
-  fetchingMemberships,
-  membershipsRetrieved,
-  errorFetchingMemberships,
+  fetchingMembership,
+  membershipRetrieved,
+  errorFetchingMembership,
   updateMembership,
   updatingMemberships,
   membershipUpdated,

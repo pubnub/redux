@@ -1,9 +1,9 @@
 import {
-  FetchingMembershipsAction,
+  FetchingMembershipAction,
   FetchMembershipRequest,
-  MembershipsRetrievedAction,
+  MembershipRetrievedAction,
   FetchMembershipSuccess,
-  ErrorFetchingMembershipsAction,
+  ErrorFetchingMembershipAction,
   FetchMembershipError,
   FetchMembershipResponse,
 } from '../MembershipActions';
@@ -13,28 +13,28 @@ import { PubNubApiStatus } from '../../../common/PubNubApi';
 import { ActionMeta } from '../../../common/ActionMeta';
 import { Dispatch, PubnubThunkContext } from '../../../common/ThunkTypes';
 
-export const fetchingMemberships = <MetaType>(
+export const fetchingMembership = <MetaType>(
   payload: FetchMembershipRequest,
   meta?: ActionMeta<MetaType>,
-): FetchingMembershipsAction<MetaType> => ({
+): FetchingMembershipAction<MetaType> => ({
   type: MembershipActionType.FETCHING_MEMBERSHIP,
   payload,
   meta,
 });
 
-export const membershipsRetrieved = <SpaceType extends Space, CustomType, MetaType>(
+export const membershipRetrieved = <SpaceType extends Space, CustomType, MetaType>(
   payload: FetchMembershipSuccess<SpaceType, CustomType>,
   meta?: ActionMeta<MetaType>,
-): MembershipsRetrievedAction<SpaceType, CustomType, MetaType> => ({
+): MembershipRetrievedAction<SpaceType, CustomType, MetaType> => ({
   type: MembershipActionType.MEMBERSHIP_RETRIEVED,
   payload,
   meta,
 });
 
-export const errorFetchingMemberships = <MetaType>(
+export const errorFetchingMembership = <MetaType>(
   payload: FetchMembershipError,
   meta?: ActionMeta<MetaType>,
-): ErrorFetchingMembershipsAction<MetaType> => ({
+): ErrorFetchingMembershipAction<MetaType> => ({
   type: MembershipActionType.ERROR_FETCHING_MEMBERSHIP,
   payload,
   meta,
@@ -47,7 +47,7 @@ export const fetchMemberships = <SpaceType extends Space, CustomType, MetaType>(
 ) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(fetchingMemberships<MetaType>(request, meta));
+      dispatch(fetchingMembership<MetaType>(request, meta));
 
       pubnub.api.getMemberships(
         {
@@ -60,7 +60,7 @@ export const fetchMemberships = <SpaceType extends Space, CustomType, MetaType>(
               status,
             };
 
-            dispatch(errorFetchingMemberships<MetaType>(payload, meta));
+            dispatch(errorFetchingMembership<MetaType>(payload, meta));
             reject(payload);
           } else {
             let payload: FetchMembershipSuccess<SpaceType, CustomType> = {
@@ -69,7 +69,7 @@ export const fetchMemberships = <SpaceType extends Space, CustomType, MetaType>(
               status,
             };
 
-            dispatch(membershipsRetrieved<SpaceType, CustomType, MetaType>(payload, meta));
+            dispatch(membershipRetrieved<SpaceType, CustomType, MetaType>(payload, meta));
             resolve();
           }
         }

@@ -10,9 +10,10 @@ import {
   FetchUserByIdSuccess,
 } from './UserActions';
 import { UserActionType } from './UserActionType.enum';
-import { MembersActions, Member } from '../../features/members/MembersActions';
+import { MembersActions, Member, FetchMembersSuccess } from '../../features/members/MembersActions';
 import { MembershipActions, Membership } from '../../features/membership/MembershipActions';
-import { Space } from 'features/space/SpaceActions';
+import { Space } from '../../features/space/SpaceActions';
+import { MembersActionType } from '../../features/members/MembersActionType.enum';
 
 export type UsersByIdState<UserType extends User, CustomType> = {
   byId: {
@@ -129,38 +130,30 @@ const userDeletedEventReceived = <UserType extends User, CustomType>(
   return newState;
 }
 
-// // tag::RDX-068[]
-// const membersRetrieved = <UserType extends User, CustomType>(
-//   state: UsersByIdState<UserType, CustomType>,
-//   payload: PubNubObjectApiSuccess<MembersResult>
-// ) => {
-//   let newState = state;
+// tag::RDX-068[]
+const membersRetrieved = <UserType extends User, CustomType>(
+  state: UsersByIdState<UserType, CustomType>,
+  payload: FetchMembersSuccess<UserType, CustomType>,
+) => {
+  let newState = state;
 
-//   if (payload.data.users.length > 0) {
-//     for (let i = 0; i < payload.data.users.length; i++) {
-//       let currentUser = payload.data.users[i].user;
+  if (payload.response.data.length > 0) {
+    newState = {
+      byId: {
+        ...state.byId
+      }
+    };
 
-//       if (currentUser !== undefined) {
-//         newState = successObjectById<T>(
-//           newState,
-//           {
-//             data: (currentUser as unknown) as T,
-//           },
-//           currentUser.id
-//         );
-//       }
-//     }
-//   }
+    for (let i = 0; i < payload.response.data.length; i++) {
+      let currentMember = payload.response.data[i];
+      
+      newState.byId[currentMember.id] = currentMember.user;
+    }
+  }
 
-//   return newState;
-// };
-// // end::RDX-068[]
-
-// const membersAddedToSpace = <UserType extends User, CustomType>(
-//   state: UsersByIdState<UserType, CustomType>,
-//   payload: PubNubObjectApiSuccess<MembersResult>
-// ) => ({
-// }):
+  return newState;
+};
+// end::RDX-068[]
 
 export const createUserReducer = <UserType extends User, SpaceType extends Space, MemberType extends Member<CustomType>, MembershipType extends Membership<CustomType>, CustomType, MetaType>() => (
   state: UsersByIdState<UserType, CustomType> = createInitialState<UserType, CustomType>(),
@@ -184,10 +177,8 @@ export const createUserReducer = <UserType extends User, SpaceType extends Space
       return userUpdatedEventReceived<UserType, CustomType>(state, action.payload);
     case UserActionType.USER_DELETED_EVENT:
       return userDeletedEventReceived<UserType, CustomType>(state, action.payload);
-    // case MembersActionType.MEMBERS_RETRIEVED:
-    //   return membersRetrieved<UserType, CustomType>(state, action.payload);
-    // case MembershipActionType.USER_ADDED_TO_SPACE:
-    //     return membersAddedToSpace<UserType, CustomType>(state, action.payload);
+    case MembersActionType.MEMBERS_RETRIEVED:
+      return membersRetrieved<UserType, CustomType>(state, action.payload);
     default:
       return state;
   }

@@ -35,7 +35,7 @@ export interface FetchMembersRequest extends MembersFetchRequestOptions {
 // // tag::RDX-002[]
 export interface FetchMembersResponse<UserType extends User, CustomType> {
   status: string;
-  data: UserResponseItem<UserType, CustomType>[];
+  data: MembersResponseItem<UserType, CustomType>[];
 }
 // // end::RDX-002[]
 
@@ -50,6 +50,15 @@ export interface FetchMembersError {
   status: PubNubApiStatus;
 }
 
+export type MembersResponseItem<UserType extends User, CustomType> = {
+  id: string,
+  user: UserResponseItem<UserType, CustomType>,
+  custom?: CustomType;
+  created: string,
+  updated: string,
+  eTag: string,
+};
+
 export type MembersRequest<MemberType extends Member<CustomType>, CustomType> =  {
   spaceId: string;
   users: MemberType[]
@@ -57,7 +66,7 @@ export type MembersRequest<MemberType extends Member<CustomType>, CustomType> = 
 
 export interface MembersResponse<UserType extends User, CustomType> {
   status: string;
-  data: UserResponseItem<UserType, CustomType>[];
+  data: MembersResponseItem<UserType, CustomType>[];
 }
 
 export interface MembersSuccess<UserType extends User, MemberType extends Member<CustomType>, CustomType> {
