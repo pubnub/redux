@@ -7,13 +7,17 @@ import {
 import { NetworkStatusActionType } from "./NetworkStatusActionType.enum";
 import { NetworkStatusCategory } from "./NetworkStatusCategory.enum";
 
+// tag::RDX-155[]
 export const networkUp = (): NetworkUpEventAction => ({
     type: NetworkStatusActionType.NETWORK_UP_EVENT,
 });
+// end::RDX-155[]
 
+// tag::RDX-156[]
 export const networkDown = (): NetworkDownEventAction => ({
     type: NetworkStatusActionType.NETWORK_DOWN_EVENT,
 });
+// end::RDX-156[]
 
 export type NetworkStatusListenerActions = NetworkUpEventAction | NetworkDownEventAction;
 
