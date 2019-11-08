@@ -92,7 +92,7 @@ type MembershipReducerActions<ReceivedMembership extends Membership<ObjectsCusto
 | MembershipListenerActions<ReceivedMembership>;
 
 export type MembershipReducer<StoredMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>, MembershipAction extends AnyAction> = 
-  (state: MembershipByUserIdState<StoredMembership>, action: MembershipAction)
+  (state: MembershipByUserIdState<StoredMembership> | undefined, action: MembershipAction)
    => MembershipByUserIdState<StoredMembership>;
 
 export const createMembershipReducer = <
@@ -101,7 +101,7 @@ export const createMembershipReducer = <
 >(): MembershipReducer<StoredMembership, MembershipAction> => (
   state = createInitialState(),
   action: MembershipAction
-) => {
+): MembershipByUserIdState<StoredMembership> => {
   switch (action.type) {
     case MembershipActionType.MEMBERSHIP_RETRIEVED:
     case MembershipActionType.MEMBERSHIP_UPDATED:

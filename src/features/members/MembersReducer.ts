@@ -92,7 +92,7 @@ type MembersReducerActions<ReceivedMembers extends Members<ObjectsCustom, Space<
 | MembershipListenerActions<AnyMembership>;
 
 export type MembersReducer<StoredMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>, MembersAction extends AnyAction> = 
-  (state: MembersBySpaceIdState<StoredMembers>, action: MembersAction)
+  (state: MembersBySpaceIdState<StoredMembers> | undefined, action: MembersAction)
    => MembersBySpaceIdState<StoredMembers>;
 
 export const createMembersReducer = <
@@ -101,7 +101,7 @@ export const createMembersReducer = <
 >(): MembersReducer<StoredMembers, MembersAction> => (
   state = createInitialState(),
   action: MembersAction
-) => {
+): MembersBySpaceIdState<StoredMembers> => {
   switch (action.type) {
     case MembersActionType.MEMBERS_RETRIEVED:
     case MembersActionType.MEMBERS_UPDATED:

@@ -159,7 +159,7 @@ type SpaceReducerActions<StoredSpace extends Space<ObjectsCustom>> =
   | MembershipActions<Membership<ObjectsCustom, StoredSpace>, AnyMeta>;
 
 export type SpaceReducer<StoredSpace extends Space<ObjectsCustom>, SpaceAction extends AnyAction> = 
-  (state: SpacesByIdState<StoredSpace>, action: SpaceAction)
+  (state: SpacesByIdState<StoredSpace> | undefined, action: SpaceAction)
    => SpacesByIdState<StoredSpace>;
 
 export const createSpaceReducer = <

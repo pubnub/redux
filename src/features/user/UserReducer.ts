@@ -155,7 +155,7 @@ type UserReducerActions<StoredUser extends User<ObjectsCustom>> =
 | MembershipActions<Membership<ObjectsCustom, AnySpace>, AnyMeta>;
 
 export type UserReducer<StoredUser extends User<ObjectsCustom>, UserAction extends AnyAction> = 
-  (state: UsersByIdState<StoredUser>, action: UserAction)
+  (state: UsersByIdState<StoredUser> | undefined, action: UserAction)
    => UsersByIdState<StoredUser>;
 
 export const createUserReducer = <
