@@ -14,6 +14,7 @@ import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 
+// tag::RDX-168[]
 export const fetchingSpaceById = <Meta extends ActionMeta>(
   payload: FetchSpaceByIdRequest,
   meta?: Meta,
@@ -22,7 +23,9 @@ export const fetchingSpaceById = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-168[]
 
+// tag::RDX-169[]
 export const spaceRetrieved = <SpaceType extends Space<ObjectsCustom>, Meta extends ActionMeta>(
   payload: FetchSpaceByIdSuccess<SpaceType>,
   meta?: Meta
@@ -31,7 +34,9 @@ export const spaceRetrieved = <SpaceType extends Space<ObjectsCustom>, Meta exte
   payload,
   meta,
 });
+// end::RDX-169[]
 
+// tag::RDX-170[]
 export const errorFetchingSpaceById = <Meta extends ActionMeta>(
   payload: FetchSpaceByIdError,
   meta?: Meta
@@ -41,6 +46,7 @@ export const errorFetchingSpaceById = <Meta extends ActionMeta>(
   meta,
   error: true,
 });
+// end::RDX-170[]
 
 export const fetchSpaceById = <SpaceType extends Space<ObjectsCustom>, Meta extends ActionMeta = never>(
   request: FetchSpaceByIdRequest,

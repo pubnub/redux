@@ -14,6 +14,7 @@ import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 
+// tag::RDX-174[]
 export const updatingSpace = <Meta extends ActionMeta>(
   payload: SpaceRequest,
   meta?: Meta
@@ -22,7 +23,9 @@ export const updatingSpace = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-174[]
 
+// tag::RDX-175[]
 export const spaceUpdated = <SpaceType extends Space<ObjectsCustom>, Meta extends ActionMeta>(
   payload: SpaceSuccess<SpaceType>,
   meta?: Meta
@@ -31,7 +34,9 @@ export const spaceUpdated = <SpaceType extends Space<ObjectsCustom>, Meta extend
   payload,
   meta,
 });
+// end::RDX-175[]
 
+// tag::RDX-176[]
 export const errorUpdatingSpace = <Meta extends ActionMeta>(
   payload: SpaceError,
   meta?: Meta
@@ -41,6 +46,7 @@ export const errorUpdatingSpace = <Meta extends ActionMeta>(
   meta,
   error: true,
 });
+// end::RDX-176[]
 
 export const updateSpace = <SpaceType extends Space<ObjectsCustom>, Meta extends ActionMeta = never>(request: SpaceRequest, meta?: Meta) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
