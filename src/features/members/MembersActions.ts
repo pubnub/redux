@@ -26,9 +26,9 @@ export interface MembersFetchRequestOptions {
   page?: MemberPage,
   include?: {
     customFields?: boolean;
-    userFields: boolean;
-    customUserFields: boolean;
-    totalCount: boolean;
+    userFields?: boolean;
+    customUserFields?: boolean;
+    totalCount?: boolean;
   };
 }
 // end::RDX-000[]

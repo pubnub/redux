@@ -25,9 +25,9 @@ export interface MembershipFetchRequestOptions {
   page?: MembershipPage,
   include?: {
     customFields?: boolean;
-    spaceFields: boolean;
-    customSpaceFields: boolean;
-    totalCount: boolean;
+    spaceFields?: boolean;
+    customSpaceFields?: boolean;
+    totalCount?: boolean;
   };
 }
 
