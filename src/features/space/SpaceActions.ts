@@ -273,15 +273,19 @@ export interface ErrorDeletingSpaceAction<Meta extends ActionMeta> {
 }
 // end::RDX-111[]
 
+// tag::RDX-177[]
 export interface SpaceUpdatedEventAction<ReceivedSpace extends Space<ObjectsCustom>> {
   type: typeof SpaceActionType.SPACE_UPDATED_EVENT;
   payload: SpaceEventMessage<ReceivedSpace>;
 }
+// end::RDX-177[]
 
+// tag::RDX-194[]
 export interface SpaceDeletedEventAction<ReceivedSpace extends Space<ObjectsCustom>> {
   type: typeof SpaceActionType.SPACE_DELETED_EVENT;
   payload: SpaceEventMessage<ReceivedSpace>;
 }
+// end::RDX-194[]
 
 export type SpaceActions<ReceivedSpace extends Space<ObjectsCustom>, Meta extends ActionMeta> =
   | FetchingSpacesAction<Meta>
