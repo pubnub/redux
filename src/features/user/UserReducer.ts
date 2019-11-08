@@ -1,20 +1,22 @@
+import { AnyAction } from 'redux';
 import {
   UserActions,
   UserListenerActions,
-  UserResponseItem,
   User,
   UserEventMessage,
   UserSuccess,
   DeleteUserSuccess,
   FetchUsersSuccess,
   FetchUserByIdSuccess,
+  AnyUser,
 } from './UserActions';
 import { UserActionType } from './UserActionType.enum';
-import { MembersActions, Member, FetchMembersSuccess } from '../../features/members/MembersActions';
+import { MembersActions, Members, FetchMembersSuccess } from '../../features/members/MembersActions';
 import { MembershipActions, Membership } from '../../features/membership/MembershipActions';
-import { Space } from '../../features/space/SpaceActions';
+import { AnySpace } from '../../features/space/SpaceActions';
 import { MembersActionType } from '../../features/members/MembersActionType.enum';
-import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ObjectsCustom } from '../../foundations/ObjectsCustom';
+import { AnyMeta } from '../../foundations/ActionMeta';
 
 // tag::RDX-059[]
 export interface UsersByIdState<ReceivedUser extends User<ObjectsCustom>> {
@@ -24,7 +26,7 @@ export interface UsersByIdState<ReceivedUser extends User<ObjectsCustom>> {
 };
 // end::RDX-059[]
 
-const createInitialState = <ReceivedUser extends User<ObjectsCustom>>(): UsersByIdState<ReceivedUser> => ({
+const createInitialState = () => ({
   byId: {},
 });
 
@@ -41,9 +43,9 @@ const userCreated = <ReceivedUser extends User<ObjectsCustom>>(
   return newState;
 };
 
-const userUpdated = <UserType extends User, CustomType>(
-  state: UsersByIdState<UserType, CustomType>,
-  payload: UserSuccess<UserType, CustomType>,
+const userUpdated = <ReceivedUser extends User<ObjectsCustom>>(
+  state: UsersByIdState<ReceivedUser>,
+  payload: UserSuccess<ReceivedUser>,
 ) => {
   let newState = {
     byId: { ...state.byId }
@@ -54,8 +56,8 @@ const userUpdated = <UserType extends User, CustomType>(
   return newState;
 };
 
-const userDeleted = <UserType extends User, CustomType>(
-  state: UsersByIdState<UserType, CustomType>,
+const userDeleted = <ReceivedUser extends User<ObjectsCustom>>(
+  state: UsersByIdState<ReceivedUser>,
   payload: DeleteUserSuccess
 ) => {
   let newState = {
@@ -67,9 +69,9 @@ const userDeleted = <UserType extends User, CustomType>(
   return newState;
 };
 
-const usersRetrieved = <UserType extends User, CustomType>(
-  state: UsersByIdState<UserType, CustomType>,
-  payload: FetchUsersSuccess<UserType, CustomType>,
+const usersRetrieved = <ReceivedUser extends User<ObjectsCustom>>(
+  state: UsersByIdState<ReceivedUser>,
+  payload: FetchUsersSuccess<ReceivedUser>,
 ) => {
   let newState = {
     byId: { ...state.byId }
@@ -82,9 +84,9 @@ const usersRetrieved = <UserType extends User, CustomType>(
   return newState;
 };
 
-const userRetrieved = <UserType extends User, CustomType>(
-  state: UsersByIdState<UserType, CustomType>,
-  payload: FetchUserByIdSuccess<UserType, CustomType>,
+const userRetrieved = <ReceivedUser extends User<ObjectsCustom>>(
+  state: UsersByIdState<ReceivedUser>,
+  payload: FetchUserByIdSuccess<ReceivedUser>,
 ) => {
   let newState = {
     byId: { ...state.byId }
@@ -95,9 +97,9 @@ const userRetrieved = <UserType extends User, CustomType>(
   return newState;
 };
 
-const userUpdatedEventReceived = <UserType extends User, CustomType>(
-  state: UsersByIdState<UserType, CustomType>,
-  payload: UserEventMessage<UserType, CustomType>,
+const userUpdatedEventReceived = <ReceivedUser extends User<ObjectsCustom>>(
+  state: UsersByIdState<ReceivedUser>,
+  payload: UserEventMessage<ReceivedUser>,
 ) => {
   let newState = {
     byId: { ...state.byId }
@@ -108,9 +110,9 @@ const userUpdatedEventReceived = <UserType extends User, CustomType>(
   return newState;
 };
 
-const userDeletedEventReceived = <UserType extends User, CustomType>(
-  state: UsersByIdState<UserType, CustomType>,
-  payload: UserEventMessage<UserType, CustomType>,
+const userDeletedEventReceived = <ReceivedUser extends User<ObjectsCustom>>(
+  state: UsersByIdState<ReceivedUser>,
+  payload: UserEventMessage<ReceivedUser>,
 ) => {
   let newState = {
     byId: { ...state.byId }
@@ -121,9 +123,9 @@ const userDeletedEventReceived = <UserType extends User, CustomType>(
   return newState;
 }
 
-const membersRetrieved = <UserType extends User, CustomType>(
-  state: UsersByIdState<UserType, CustomType>,
-  payload: FetchMembersSuccess<UserType, CustomType>,
+const membersRetrieved = <ReceivedUser extends User<ObjectsCustom>>(
+  state: UsersByIdState<ReceivedUser>,
+  payload: FetchMembersSuccess<Members<ObjectsCustom, ReceivedUser>>,
 ) => {
   let newState = state;
 
@@ -137,37 +139,49 @@ const membersRetrieved = <UserType extends User, CustomType>(
     for (let i = 0; i < payload.response.data.length; i++) {
       let currentMember = payload.response.data[i];
       
-      newState.byId[currentMember.id] = currentMember.user;
+      if (currentMember.user) {
+        newState.byId[currentMember.id] = currentMember.user;
+      }
     }
   }
 
   return newState;
 };
 
-export const createUserReducer = <UserType extends User, SpaceType extends Space, MemberType extends Member<CustomType>, MembershipType extends Membership<CustomType>, CustomType, MetaType>() => (
-  state: UsersByIdState<UserType, CustomType> = createInitialState<UserType, CustomType>(),
-  action: UserActions<UserType, CustomType, MetaType> 
-    | UserListenerActions<UserType, CustomType> 
-    | MembersActions<UserType, MemberType, CustomType, MetaType>
-    | MembershipActions<SpaceType, MembershipType, CustomType, MetaType>
-): UsersByIdState<UserType, CustomType> => {
+type UserReducerActions<StoredUser extends User<ObjectsCustom>> =
+| UserActions<StoredUser, AnyMeta>
+| UserListenerActions<StoredUser> 
+| MembersActions<Members<ObjectsCustom, AnySpace>, AnyMeta>
+| MembershipActions<Membership<ObjectsCustom, AnySpace>, AnyMeta>;
+
+export type UserReducer<StoredUser extends User<ObjectsCustom>, UserAction extends AnyAction> = 
+  (state: UsersByIdState<StoredUser>, action: UserAction)
+   => UsersByIdState<StoredUser>;
+
+export const createUserReducer = <
+  StoredUser extends User<ObjectsCustom> = AnyUser,
+  UserAction extends AnyAction = UserReducerActions<StoredUser>,
+>(): UserReducer<StoredUser, UserAction> => (
+  state: UsersByIdState<StoredUser> = createInitialState(),
+  action: UserAction
+): UsersByIdState<StoredUser> => {
   switch (action.type) {
     case UserActionType.USER_CREATED:
-      return userCreated<UserType, CustomType>(state, action.payload);
+      return userCreated<StoredUser>(state, action.payload);
     case UserActionType.USER_UPDATED:
-      return userUpdated<UserType, CustomType>(state, action.payload);
+      return userUpdated<StoredUser>(state, action.payload);
     case UserActionType.USER_DELETED:
-      return userDeleted<UserType, CustomType>(state, action.payload);
+      return userDeleted<StoredUser>(state, action.payload);
     case UserActionType.USERS_RETRIEVED:
-      return usersRetrieved<UserType, CustomType>(state, action.payload);
+      return usersRetrieved<StoredUser>(state, action.payload);
     case UserActionType.USER_RETRIEVED:
-      return userRetrieved<UserType, CustomType>(state, action.payload);
+      return userRetrieved<StoredUser>(state, action.payload);
     case UserActionType.USER_UPDATED_EVENT:
-      return userUpdatedEventReceived<UserType, CustomType>(state, action.payload);
+      return userUpdatedEventReceived<StoredUser>(state, action.payload);
     case UserActionType.USER_DELETED_EVENT:
-      return userDeletedEventReceived<UserType, CustomType>(state, action.payload);
+      return userDeletedEventReceived<StoredUser>(state, action.payload);
     case MembersActionType.MEMBERS_RETRIEVED:
-      return membersRetrieved<UserType, CustomType>(state, action.payload);
+      return membersRetrieved<StoredUser>(state, action.payload);
     default:
       return state;
   }

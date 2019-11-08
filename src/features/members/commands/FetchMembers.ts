@@ -5,70 +5,73 @@ import {
   FetchMembersRequest,
   FetchMembersResponse,
   FetchMembersError,
-  FetchMembersSuccess
+  FetchMembersSuccess,
+  Members
 } from '../MembersActions';
 import { MembersActionType } from '../MembersActionType.enum';
-import { User } from '../../../features/user/UserActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { ActionMeta } from 'foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { Space } from '../../space/SpaceActions';
 
-export const fetchingMembers = <MetaType>(
+export const fetchingMembers = <Meta extends ActionMeta>(
   payload: FetchMembersRequest,
-  meta?: MetaType,
-): FetchingMembersAction<MetaType> => ({
+  meta?: Meta,
+): FetchingMembersAction<Meta> => ({
   type: MembersActionType.FETCHING_MEMBERS,
   payload,
   meta,
 });
 
-export const membersRetrieved = <UserType extends User, CustomType, MetaType>(
-  payload: FetchMembersSuccess<UserType, CustomType>,
-  meta?: MetaType,
-): MembersRetrievedAction<UserType, CustomType, MetaType> => ({
+export const membersRetrieved = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+  payload: FetchMembersSuccess<MembersType>,
+  meta?: Meta,
+): MembersRetrievedAction<MembersType, Meta> => ({
   type: MembersActionType.MEMBERS_RETRIEVED,
   payload,
   meta,
 });
 
-export const errorFetchingMembers = <MetaType>(
+export const errorFetchingMembers = <Meta extends ActionMeta>(
   payload:FetchMembersError,
-  meta?: MetaType,
-): ErrorFetchingMembersAction<MetaType> => ({
+  meta?: Meta,
+): ErrorFetchingMembersAction<Meta> => ({
   type: MembersActionType.ERROR_FETCHING_MEMBERS,
   payload,
   meta,
   error: true,
 });
 
-export const fetchMembers = <UserType extends User, CustomType, MetaType>(
+export const fetchMembers = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta = never>(
   request: FetchMembersRequest,
-  meta?: MetaType,
+  meta?: Meta,
 ) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(fetchingMembers<MetaType>(request, meta));
+      dispatch(fetchingMembers<Meta>(request, meta));
 
       pubnub.api.getMembers(
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: FetchMembersResponse<UserType, CustomType>) => {
+        (status: PubNubApiStatus, response: FetchMembersResponse<MembersType>) => {
           if (status.error) {
             let payload: FetchMembersError = {
               request,
               status,
             };
 
-            dispatch(errorFetchingMembers<MetaType>(payload, meta));
+            dispatch(errorFetchingMembers<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: FetchMembersSuccess<UserType, CustomType> = {
+            let payload: FetchMembersSuccess<MembersType> = {
               request,
               response,
               status,
             };
 
-            dispatch(membersRetrieved<UserType, CustomType, MetaType>(payload, meta));
+            dispatch(membersRetrieved<MembersType, Meta>(payload, meta));
             resolve();
           }
         }

@@ -11,61 +11,63 @@ import {
 import { SpaceActionType } from '../SpaceActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ActionMeta } from 'foundations/ActionMeta';
 
-export const creatingSpace = <SpaceType extends Space, CustomType, MetaType>(
-  payload: SpaceType | SpaceRequest<SpaceType, CustomType>,
-  meta?: MetaType
-): CreatingSpaceAction<SpaceType, CustomType, MetaType> => ({
+export const creatingSpace = <Meta extends ActionMeta>(
+  payload: SpaceRequest,
+  meta?: Meta
+): CreatingSpaceAction<Meta> => ({
   type: SpaceActionType.CREATING_SPACE,
   payload,
   meta,
 });
 
-export const spaceCreated = <SpaceType extends Space, CustomType, MetaType>(
-  payload: SpaceSuccess<SpaceType, CustomType>,
-  meta?: MetaType
-): SpaceCreatedAction<SpaceType, CustomType, MetaType> => ({
+export const spaceCreated = <SpaceType extends Space<ObjectsCustom>, Meta extends ActionMeta>(
+  payload: SpaceSuccess<SpaceType>,
+  meta?: Meta
+): SpaceCreatedAction<SpaceType, Meta> => ({
   type: SpaceActionType.SPACE_CREATED,
   payload,
   meta,
 });
 
-export const errorCreatingSpace = <SpaceType extends Space, CustomType, MetaType>(
-  payload: SpaceError<SpaceType, CustomType>,
-  meta?: MetaType
-): ErrorCreatingSpaceAction<SpaceType, CustomType, MetaType> => ({
+export const errorCreatingSpace = <Meta extends ActionMeta>(
+  payload: SpaceError,
+  meta?: Meta
+): ErrorCreatingSpaceAction<Meta> => ({
   type: SpaceActionType.ERROR_CREATING_SPACE,
   payload,
   meta,
   error: true,
 });
 
-export const createSpace = <SpaceType extends Space, CustomType, MetaType>(request: SpaceRequest<SpaceType, CustomType>, meta?: MetaType) => {
+export const createSpace = <SpaceType extends Space<ObjectsCustom>, Meta extends ActionMeta = never>(request: SpaceRequest, meta?: Meta) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(creatingSpace<SpaceType, CustomType, MetaType>(request, meta));
+      dispatch(creatingSpace<Meta>(request, meta));
 
       pubnub.api.createSpace(
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: SpaceResponse<SpaceType, CustomType>) => {
+        (status: PubNubApiStatus, response: SpaceResponse<SpaceType>) => {
           if (status.error) {
-            let payload: SpaceError<SpaceType, CustomType> = {
+            let payload: SpaceError = {
               request,
               status,
             };
 
-            dispatch(errorCreatingSpace<SpaceType, CustomType, MetaType>(payload, meta));
+            dispatch(errorCreatingSpace<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: SpaceSuccess<SpaceType, CustomType> = {
+            let payload: SpaceSuccess<SpaceType> = {
               request,
               response,
               status,
             };
 
-            dispatch(spaceCreated<SpaceType, CustomType, MetaType>(payload, meta));
+            dispatch(spaceCreated<SpaceType, Meta>(payload, meta));
             resolve();
           }
         }

@@ -2,10 +2,13 @@ import {
   UsersRetrievedAction,
   User,
   FetchUsersSuccess,
+  AnyUser,
 } from './UserActions';
 import {
   UserActionType
 } from './UserActionType.enum';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ActionMeta } from 'foundations/ActionMeta';
 
 // tag::RDX-049[]
 interface UserListState {
@@ -20,15 +23,15 @@ const createInitialState = (): UserListState => ({
 // end::RDX-050[]
 
 // tag::RDX-052[]
-const usersRetrieved = (
-  payload: FetchUsersSuccess,
+const usersRetrieved = <UserType extends User<ObjectsCustom>>(
+  payload: FetchUsersSuccess<UserType>,
 ) => ({ userIds: payload.response.data.map((user) => user.id) });
 // end::RDX-052[]
 
-export const createUserListReducer = () => (
+export const createUserListReducer = <UserType extends User<ObjectsCustom> = AnyUser, Meta extends ActionMeta = never>() => (
   state: UserListState = createInitialState(),
   action:
-    | UsersRetrievedAction
+    | UsersRetrievedAction<UserType, Meta>
 ): UserListState => {
   switch (action.type) {
     case UserActionType.USERS_RETRIEVED:

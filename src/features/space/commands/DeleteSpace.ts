@@ -10,39 +10,40 @@ import {
 import { SpaceActionType } from '../SpaceActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { ActionMeta } from 'foundations/ActionMeta';
 
-export const deletingSpace = <MetaType>(
+export const deletingSpace = <Meta extends ActionMeta>(
   payload: DeleteSpaceRequest,
-  meta?: MetaType
-): DeletingSpaceAction<MetaType> => ({
+  meta?: Meta
+): DeletingSpaceAction<Meta> => ({
   type: SpaceActionType.DELETING_SPACE,
   payload,
   meta,
 });
 
-export const spaceDeleted = <MetaType>(
+export const spaceDeleted = <Meta extends ActionMeta>(
   payload: DeleteSpaceSuccess,
-  meta?: MetaType,
-): SpaceDeletedAction<MetaType> => ({
+  meta?: Meta,
+): SpaceDeletedAction<Meta> => ({
   type: SpaceActionType.SPACE_DELETED,
   payload,
   meta,
 });
 
-export const errorDeletingSpace = <MetaType>(
+export const errorDeletingSpace = <Meta extends ActionMeta>(
   payload: DeleteSpaceError,
-  meta?: MetaType,
-): ErrorDeletingSpaceAction<MetaType> => ({
+  meta?: Meta,
+): ErrorDeletingSpaceAction<Meta> => ({
   type: SpaceActionType.ERROR_DELETING_SPACE,
   payload,
   meta,
   error: true,
 });
 
-export const deleteSpace = <MetaType>(request: DeleteSpaceRequest, meta?: MetaType) => {
+export const deleteSpace = <Meta extends ActionMeta = never>(request: DeleteSpaceRequest, meta?: Meta) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(deletingSpace<MetaType>(request, meta));
+      dispatch(deletingSpace<Meta>(request, meta));
 
       pubnub.api.deleteSpace(
         request.spaceId,
@@ -53,7 +54,7 @@ export const deleteSpace = <MetaType>(request: DeleteSpaceRequest, meta?: MetaTy
               status,
             };
 
-            dispatch(errorDeletingSpace<MetaType>(payload, meta));
+            dispatch(errorDeletingSpace<Meta>(payload, meta));
             reject(payload);
           } else {
             let payload: DeleteSpaceSuccess = {
@@ -62,7 +63,7 @@ export const deleteSpace = <MetaType>(request: DeleteSpaceRequest, meta?: MetaTy
               status,
             };
 
-            dispatch(spaceDeleted<MetaType>(payload, meta));
+            dispatch(spaceDeleted<Meta>(payload, meta));
             resolve();
           }
         }

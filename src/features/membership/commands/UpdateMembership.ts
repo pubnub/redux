@@ -3,64 +3,66 @@ import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from '../../../features/space/SpaceActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ActionMeta } from 'foundations/ActionMeta';
 
-export const updatingMemberships = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
-  payload: MembershipRequest<MembershipType, CustomType>,
-  meta?: MetaType,
-): UpdatingMembershipAction<MembershipType, CustomType, MetaType> => ({
+export const updatingMemberships = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+  payload: MembershipRequest<MembershipType>,
+  meta?: Meta,
+): UpdatingMembershipAction<MembershipType, Meta> => ({
   type: MembershipActionType.UPDATING_MEMBERSHIP,
   payload,
   meta,
 });
 
-export const membershipUpdated = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
-  payload: MembershipSuccess<SpaceType, MembershipType, CustomType>,
-  meta?: MetaType,
-): MembershipUpdatedAction<SpaceType, MembershipType, CustomType, MetaType> => ({
+export const membershipUpdated = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+  payload: MembershipSuccess<MembershipType>,
+  meta?: Meta,
+): MembershipUpdatedAction<MembershipType, Meta> => ({
   type: MembershipActionType.MEMBERSHIP_UPDATED,
   payload,
   meta,
 });
 
-export const errorUpdatingMembership = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
-  payload: MembershipError<MembershipType, CustomType>,
-  meta?: MetaType,
-): ErrorUpdatingMembershipAction<MembershipType, CustomType, MetaType> => ({
+export const errorUpdatingMembership = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+  payload: MembershipError<MembershipType>,
+  meta?: Meta,
+): ErrorUpdatingMembershipAction<MembershipType, Meta> => ({
   type: MembershipActionType.ERROR_UPDATING_MEMBERSHIP,
   payload,
   meta,
   error: true,
 });
 
-export const updateMembership = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
-  request: MembershipRequest<MembershipType, CustomType>,
-  meta?: MetaType,
+export const updateMembership = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta = never>(
+  request: MembershipRequest<MembershipType>,
+  meta?: Meta,
 ) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(updatingMemberships<MembershipType, CustomType, MetaType>(request, meta));
+      dispatch(updatingMemberships<MembershipType, Meta>(request, meta));
 
       pubnub.api.updateMembership(
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: MembershipResponse<SpaceType, CustomType>) => {
+        (status: PubNubApiStatus, response: MembershipResponse<MembershipType>) => {
           if (status.error) {
-            let payload: MembershipError<MembershipType, CustomType> = {
+            let payload: MembershipError<MembershipType> = {
               request,
               status,
             };
 
-            dispatch(errorUpdatingMembership<MembershipType, CustomType, MetaType>(payload, meta));
+            dispatch(errorUpdatingMembership<MembershipType, Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: MembershipSuccess<SpaceType, MembershipType, CustomType> = {
+            let payload: MembershipSuccess<MembershipType> = {
               request,
               response,
               status,
             };
 
-            dispatch(membershipUpdated<SpaceType, MembershipType, CustomType, MetaType>(payload, meta));
+            dispatch(membershipUpdated<MembershipType, Meta>(payload, meta));
             resolve();
           }
         }

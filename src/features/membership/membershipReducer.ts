@@ -1,30 +1,33 @@
+import { AnyAction } from 'redux';
 import {
   MembershipEventMessage,
   FetchMembershipSuccess,
   MembershipSuccess,
   MembershipListenerActions,
   MembershipActions,
-  Membership
+  Membership,
+  AnyMembership
 } from './MembershipActions';
-import { Space } from '../../features/space/SpaceActions';
 import { MembershipActionType } from './MembershipActionType.enum';
-import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ObjectsCustom } from '../../foundations/ObjectsCustom';
+import { AnyMeta } from '../../foundations/ActionMeta';
+import { User } from '../user/UserActions';
 
-export type MembershipByUserIdState<CustomType> = {
+export type MembershipByUserIdState<ReceivedMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>> = {
   byId: {
-    [userId: string]: Membership<CustomType>[]
+    [userId: string]: ReceivedMembership[]
   },
 };
 
-const createInitialState = <CustomType>(): MembershipByUserIdState<CustomType> => ({
+const createInitialState =() => ({
   byId: {},
 });
 
-const userAddedToSpace = <CustomType>(
-  state: MembershipByUserIdState<CustomType>,
-  payload: MembershipEventMessage<CustomType>
+const userAddedToSpace = <ReceivedMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>>(
+  state: MembershipByUserIdState<ReceivedMembership>,
+  payload: MembershipEventMessage<ReceivedMembership>
 ) => {
-  if (state.byId[payload.data.userId].filter((membership) => membership.spaceId === payload.data.spaceId).length === 0) {
+  if (state.byId[payload.data.userId].filter((membership) => membership.id === payload.data.spaceId).length === 0) {
     let newState = {
       byId: { ...state.byId },
     };
@@ -32,9 +35,9 @@ const userAddedToSpace = <CustomType>(
     newState.byId[payload.data.userId] = [
       ...newState.byId[payload.data.userId],
       {
-        spaceId: payload.data.spaceId,
+        id: payload.data.spaceId,
         custom: payload.data.custom,
-      }
+      } as unknown as ReceivedMembership  // TODO: find out a better pattern here
     ];
 
     return newState;
@@ -43,17 +46,17 @@ const userAddedToSpace = <CustomType>(
   return state;
 };
 
-const userRemovedFromSpace = <CustomType>(
-  state: MembershipByUserIdState<CustomType>,
-  payload: MembershipEventMessage<CustomType>
+const userRemovedFromSpace = <ReceivedMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>>(
+  state: MembershipByUserIdState<ReceivedMembership>,
+  payload: MembershipEventMessage<ReceivedMembership>
 ) => {
-  if (state.byId[payload.data.userId].filter((membership) => membership.spaceId === payload.data.spaceId).length === 0) {
+  if (state.byId[payload.data.userId].filter((membership) => membership.id === payload.data.spaceId).length === 0) {
     let newState = {
       byId: { ...state.byId },
     };
     
     newState.byId[payload.data.userId] = newState.byId[payload.data.userId].filter(
-      (membership) => membership.spaceId !== payload.data.spaceId
+      (membership) => membership.id !== payload.data.spaceId
     );
 
     return newState;
@@ -62,45 +65,55 @@ const userRemovedFromSpace = <CustomType>(
   return state;
 };
 
-const userMembershipUpdatedOnSpace = <CustomType>(
-  state: MembershipByUserIdState<CustomType>,
-  payload: MembershipEventMessage<CustomType>,
+const userMembershipUpdatedOnSpace = <ReceivedMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>>(
+  state: MembershipByUserIdState<ReceivedMembership>,
+  payload: MembershipEventMessage<ReceivedMembership>,
 ) => {
   console.log(payload)
   // TODO: need to update the custom object
   return state;
 };
 
-
-const membershipResult = <ReceivedSpace extends Space<CustomSpaceFields>, MembershipType extends Membership<CustomMembershipFields>, CustomMembershipFields extends ObjectsCustom, CustomSpaceFields extends ObjectsCustom>(
-  state: MembershipByUserIdState<CustomMembershipFields>,
-  payload: FetchMembershipSuccess<ReceivedSpace, CustomMembershipFields, CustomSpaceFields> | MembershipSuccess<ReceivedSpace, MembershipType, CustomMembershipFields, CustomSpaceFields>
+const membershipResult = <ReceivedMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>>(
+  state: MembershipByUserIdState<ReceivedMembership>,
+  payload: FetchMembershipSuccess<ReceivedMembership> | MembershipSuccess<ReceivedMembership>
 ) => {
   let newState = {
     byId: { ...state.byId }
   };
 
-  newState.byId[payload.request.userId] = payload.response.data.map((space) => ({ spaceId: space.id }));
+  newState.byId[payload.request.userId] = payload.response.data;
 
   return newState;
 };
 
-export const createMembershipReducer = <ReceivedSpace extends Space<CustomSpaceFields>, MembershipType extends Membership<CustomMembershipFields>, CustomMembershipFields extends ObjectsCustom, CustomSpaceFields extends ObjectsCustom, Meta = {}>() => (
-  state = createInitialState<CustomMembershipFields>(),
-  action: MembershipActions<ReceivedSpace, MembershipType, CustomMembershipFields, CustomSpaceFields, Meta>| MembershipListenerActions<CustomMembershipFields>
-): MembershipByUserIdState<CustomMembershipFields> => {
+type MembershipReducerActions<ReceivedMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>> =
+| MembershipActions<ReceivedMembership, AnyMeta>
+| MembershipListenerActions<ReceivedMembership>;
+
+export type MembershipReducer<StoredMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>, MembershipAction extends AnyAction> = 
+  (state: MembershipByUserIdState<StoredMembership>, action: MembershipAction)
+   => MembershipByUserIdState<StoredMembership>;
+
+export const createMembershipReducer = <
+  StoredMembership extends Membership<ObjectsCustom, User<ObjectsCustom>> = AnyMembership,
+  MembershipAction extends AnyAction = MembershipReducerActions<StoredMembership>,
+>(): MembershipReducer<StoredMembership, MembershipAction> => (
+  state = createInitialState(),
+  action: MembershipAction
+) => {
   switch (action.type) {
     case MembershipActionType.MEMBERSHIP_RETRIEVED:
     case MembershipActionType.MEMBERSHIP_UPDATED:
     case MembershipActionType.SPACES_JOINED:
     case MembershipActionType.SPACES_LEFT:
-      return membershipResult<ReceivedSpace, MembershipType, CustomMembershipFields, CustomSpaceFields>(state, action.payload);
+      return membershipResult<StoredMembership>(state, action.payload);
     case MembershipActionType.USER_ADDED_TO_SPACE_EVENT:
-      return userAddedToSpace<CustomMembershipFields>(state, action.payload);
+      return userAddedToSpace<StoredMembership>(state, action.payload);
     case MembershipActionType.USER_REMOVED_FROM_SPACE_EVENT:
-      return userRemovedFromSpace<CustomMembershipFields>(state, action.payload);
+      return userRemovedFromSpace<StoredMembership>(state, action.payload);
     case MembershipActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE_EVENT:
-      return userMembershipUpdatedOnSpace<CustomMembershipFields>(state, action.payload);
+      return userMembershipUpdatedOnSpace<StoredMembership>(state, action.payload);
     default:
       return state;
   }

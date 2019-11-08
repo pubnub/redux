@@ -11,42 +11,44 @@ import {
 } from '../UserActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ActionMeta } from 'foundations/ActionMeta';
 
-export const fetchingUserById = <MetaType>(
+export const fetchingUserById = <Meta extends ActionMeta>(
   payload: FetchUserByIdRequest,
-  meta?: MetaType,
-): FetchingUserByIdAction<MetaType> => ({
+  meta?: Meta,
+): FetchingUserByIdAction<Meta> => ({
   type: UserActionType.FETCHING_USER_BY_ID,
   payload,
   meta,
 });
 
-export const userRetrieved = <UserType extends User, CustomType, MetaType>(
-  payload: FetchUserByIdSuccess<UserType, CustomType>,
-  meta?: MetaType
-): UserRetrievedAction<UserType, CustomType, MetaType> => ({
+export const userRetrieved = <UserType extends User<ObjectsCustom>, Meta extends ActionMeta>(
+  payload: FetchUserByIdSuccess<UserType>,
+  meta?: Meta
+): UserRetrievedAction<UserType, Meta> => ({
   type: UserActionType.USER_RETRIEVED,
   payload,
   meta,
 });
 
-export const errorFetchingUserById = <MetaType>(
+export const errorFetchingUserById = <Meta extends ActionMeta>(
   payload: FetchUserByIdError,
-  meta?: MetaType
-): ErrorFetchingUserByIdAction<MetaType> => ({
+  meta?: Meta
+): ErrorFetchingUserByIdAction<Meta> => ({
   type: UserActionType.ERROR_FETCHING_USER_BY_ID,
   payload,
   meta,
   error: true,
 });
 
-export const fetchUserById = <UserType extends User, CustomType, MetaType>(
+export const fetchUserById = <UserType extends User<ObjectsCustom>, Meta extends ActionMeta = never>(
   request: FetchUserByIdRequest,
-  meta?: MetaType
+  meta?: Meta
 ) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(fetchingUserById<MetaType>({
+      dispatch(fetchingUserById<Meta>({
         ...request,
       }, meta));
 
@@ -54,23 +56,23 @@ export const fetchUserById = <UserType extends User, CustomType, MetaType>(
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: UserResponse<UserType, CustomType>) => {
+        (status: PubNubApiStatus, response: UserResponse<UserType>) => {
           if (status.error) {
             let payload: FetchUserByIdError = {
               request,
               status,
             };
 
-            dispatch(errorFetchingUserById<MetaType>(payload, meta));
+            dispatch(errorFetchingUserById<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: FetchUserByIdSuccess<UserType, CustomType> = {
+            let payload: FetchUserByIdSuccess<UserType> = {
               request,
               response,
               status,
             };
 
-            dispatch(userRetrieved<UserType, CustomType, MetaType>(payload, meta));
+            dispatch(userRetrieved<UserType, Meta>(payload, meta));
             resolve();
           }
         }

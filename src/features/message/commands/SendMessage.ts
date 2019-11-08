@@ -10,35 +10,36 @@ import {
 import { MessageActionType } from '../MessageActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { ActionMeta } from 'foundations/ActionMeta';
 
-export const sendingMessage = <MessageContentType, MessageMetaType, MetaType>(
-  payload: SendMessageRequest<MessageContentType, MessageMetaType>,
-  meta?: MetaType,
-): SendingMessageAction<MessageContentType, MessageMetaType, MetaType> => ({
+export const sendingMessage = <MessageContentType extends object, MessageMeta extends object, Meta extends ActionMeta>(
+  payload: SendMessageRequest<MessageContentType, MessageMeta>,
+  meta?: Meta,
+): SendingMessageAction<MessageContentType, MessageMeta, Meta> => ({
   type: MessageActionType.SENDING_MESSAGE,
   payload,
   meta,
 });
 
-export const messageSent = <MessageContentType, MessageMetaType, MetaType>(
-  payload: SendMessageSuccess<MessageContentType, MessageMetaType>,
-  meta?: MetaType,
-): MessageSentAction<MessageContentType, MessageMetaType, MetaType> => ({
+export const messageSent = <MessageContentType extends object, MessageMeta extends object, Meta extends ActionMeta>(
+  payload: SendMessageSuccess<MessageContentType, MessageMeta>,
+  meta?: Meta,
+): MessageSentAction<MessageContentType, MessageMeta, Meta> => ({
   type: MessageActionType.MESSAGE_SENT,
   payload,
   meta,
 });
 
-export const errorSendingmessage = <MessageContentType, MessageMetaType, MetaType>(
-  payload: SendMessageError<MessageContentType, MessageMetaType>,
-  meta?: MetaType,
-): ErrorSendingMessageAction<MessageContentType, MessageMetaType, MetaType> => ({
+export const errorSendingmessage = <MessageContentType extends object, MessageMeta extends object, Meta extends ActionMeta>(
+  payload: SendMessageError<MessageContentType, MessageMeta>,
+  meta?: Meta,
+): ErrorSendingMessageAction<MessageContentType, MessageMeta, Meta> => ({
   type: MessageActionType.ERROR_SENDING_MESSAGE,
   payload,
   meta,
 });
 
-export const sendMessage = <MessageContentType, MessageMetaType, MetaType = {}>(request: SendMessageRequest<MessageContentType, MessageMetaType>, meta?: MetaType) => {
+export const sendMessage = <MessageContentType extends object = {}, MessageMeta extends object = {}, Meta extends ActionMeta = never>(request: SendMessageRequest<MessageContentType, MessageMeta>, meta?: Meta) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
       dispatch(sendingMessage(request, meta));
@@ -49,21 +50,21 @@ export const sendMessage = <MessageContentType, MessageMetaType, MetaType = {}>(
         },
         (status: PubNubApiStatus, response: SendMessageResponse) => {
           if (status.error) {
-            let payload: SendMessageError<MessageContentType, MessageMetaType> = {
+            let payload: SendMessageError<MessageContentType, MessageMeta> = {
               request,
               status,
             };
 
-            dispatch(errorSendingmessage<MessageContentType, MessageMetaType, MetaType>(payload, meta));
+            dispatch(errorSendingmessage<MessageContentType, MessageMeta, Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: SendMessageSuccess<MessageContentType, MessageMetaType> = {
+            let payload: SendMessageSuccess<MessageContentType, MessageMeta> = {
               request,
               response,
               status,
             };
 
-            dispatch(messageSent<MessageContentType, MessageMetaType, MetaType>(payload, meta));
+            dispatch(messageSent<MessageContentType, MessageMeta, Meta>(payload, meta));
             resolve();
           }
         }

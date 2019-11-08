@@ -10,39 +10,40 @@ import {
 import { UserActionType } from '../UserActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { ActionMeta } from 'foundations/ActionMeta';
 
-export const deletingUser = <MetaType>(
+export const deletingUser = <Meta extends ActionMeta>(
   payload: DeleteUserRequest,
-  meta?: MetaType
-): DeletingUserAction<MetaType> => ({
+  meta?: Meta
+): DeletingUserAction<Meta> => ({
   type: UserActionType.DELETING_USER,
   payload,
   meta,
 });
 
-export const userDeleted = <MetaType>(
+export const userDeleted = <Meta extends ActionMeta>(
   payload: DeleteUserSuccess,
-  meta?: MetaType,
-): UserDeletedAction<MetaType> => ({
+  meta?: Meta,
+): UserDeletedAction<Meta> => ({
   type: UserActionType.USER_DELETED,
   payload,
   meta,
 });
 
-export const errorDeletingUser = <MetaType>(
+export const errorDeletingUser = <Meta extends ActionMeta>(
   payload: DeleteUserError,
-  meta?: MetaType,
-): ErrorDeletingUserAction<MetaType> => ({
+  meta?: Meta,
+): ErrorDeletingUserAction<Meta> => ({
   type: UserActionType.ERROR_DELETING_USER,
   payload,
   meta,
   error: true,
 });
 
-export const deleteUser = <MetaType>(request: DeleteUserRequest, meta?: MetaType) => {
+export const deleteUser = <Meta extends ActionMeta = never>(request: DeleteUserRequest, meta?: Meta) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(deletingUser<MetaType>(request, meta));
+      dispatch(deletingUser<Meta>(request, meta));
 
       pubnub.api.deleteUser(
         request.userId,
@@ -53,7 +54,7 @@ export const deleteUser = <MetaType>(request: DeleteUserRequest, meta?: MetaType
               status,
             };
 
-            dispatch(errorDeletingUser<MetaType>(payload, meta));
+            dispatch(errorDeletingUser<Meta>(payload, meta));
             reject(payload);
           } else {
             let payload: DeleteUserSuccess = {
@@ -62,7 +63,7 @@ export const deleteUser = <MetaType>(request: DeleteUserRequest, meta?: MetaType
               status,
             };
 
-            dispatch(userDeleted<MetaType>(payload, meta));
+            dispatch(userDeleted<Meta>(payload, meta));
             resolve();
           }
         }

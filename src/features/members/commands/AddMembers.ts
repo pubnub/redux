@@ -1,7 +1,7 @@
 import {
   AddingMembersAction,
   MembersRequest,
-  Member,
+  Members,
   MembersAddedAction,
   MembersResponse,
   ErrorAddingMembersAction,
@@ -9,64 +9,66 @@ import {
   MembersSuccess,
 } from '../MembersActions';
 import { MembersActionType } from '../MembersActionType.enum';
-import { User } from '../../../features/user/UserActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ActionMeta } from 'foundations/ActionMeta';
+import { Space } from '../../space/SpaceActions';
 
-export const addingMembers = (
-  payload: MembersRequest,
-  meta?: MetaType,
-): AddingMembersAction<MemberType, CustomType, MetaType> => ({
+export const addingMembers = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+  payload: MembersRequest<MembersType>,
+  meta?: Meta,
+): AddingMembersAction<MembersType, Meta> => ({
   type: MembersActionType.ADDING_MEMBERS,
   payload,
   meta,
 });
 
-export const membersAdded = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>(
-  payload: MembersSuccess<UserType, MemberType, CustomType>,
-  meta?: MetaType,
-): MembersAddedAction<UserType, MemberType, CustomType, MetaType> => ({
+export const membersAdded = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+  payload: MembersSuccess<MembersType>,
+  meta?: Meta,
+): MembersAddedAction<MembersType, Meta> => ({
   type: MembersActionType.MEMBERS_ADDED,
   payload,
   meta,
 });
 
-export const errorAddingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
-  payload: MembersError<MemberType, CustomType>,
-  meta?: MetaType,
-): ErrorAddingMembersAction<MemberType, CustomType, MetaType> => ({
+export const errorAddingMembers = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+  payload: MembersError<MembersType>,
+  meta?: Meta,
+): ErrorAddingMembersAction<MembersType, Meta> => ({
   type: MembersActionType.ERROR_ADDING_MEMBERS,
   payload,
   meta,
   error: true
 });
 
-export const addMembers = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>(request: MembersRequest<MemberType, CustomType>, meta?: MetaType) => {
+export const addMembers = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta = never>(request: MembersRequest<MembersType>, meta?: Meta) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(addingMembers<MemberType, CustomType, MetaType>(request, meta));
+      dispatch(addingMembers<MembersType, Meta>(request, meta));
 
       pubnub.api.addMembers(
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: MembersResponse<UserType, CustomType>) => {
+        (status: PubNubApiStatus, response: MembersResponse<MembersType>) => {
           if (status.error) {
-            let payload: MembersError<MemberType, CustomType> = {
+            let payload: MembersError<MembersType> = {
               request,
               status,
             };
 
-            dispatch(errorAddingMembers<MemberType, CustomType, MetaType>(payload, meta));
+            dispatch(errorAddingMembers<MembersType, Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: MembersSuccess<UserType, MemberType, CustomType> = {
+            let payload: MembersSuccess<MembersType> = {
               request,
               response,
               status,
             };
 
-            dispatch(membersAdded<UserType, MemberType, CustomType, MetaType>(payload, meta));
+            dispatch(membersAdded<MembersType, Meta>(payload, meta));
             resolve();
           }
         }

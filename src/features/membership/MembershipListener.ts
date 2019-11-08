@@ -5,34 +5,38 @@ import {
   MembershipEventMessage,
   UserAddedToSpaceEventAction,
   UserRemovedFromSpaceEventAction,
+  Membership,
+  AnyMembership,
 } from './MembershipActions';
 import { MembershipActionType } from './MembershipActionType.enum';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { Space } from '../space/SpaceActions';
 
-const userMembershipUpdatedOnSpace = <CustomType>(
-  payload: MembershipEventMessage<CustomType>,
-): UserMembershipUpdatedOnSpaceEventAction<CustomType> => ({
+const userMembershipUpdatedOnSpace = <ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>>(
+  payload: MembershipEventMessage<ReceivedMembership>,
+): UserMembershipUpdatedOnSpaceEventAction<ReceivedMembership> => ({
   type: MembershipActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE_EVENT,
   payload,
 });
 
-const userAddedToSpace = <CustomType>(
-  payload: MembershipEventMessage<CustomType>,
-): UserAddedToSpaceEventAction<CustomType> => ({
+const userAddedToSpace = <ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>>(
+  payload: MembershipEventMessage<ReceivedMembership>,
+): UserAddedToSpaceEventAction<ReceivedMembership> => ({
   type: MembershipActionType.USER_ADDED_TO_SPACE_EVENT,
   payload,
 });
 
-const userRemovedFromSpace = <CustomType>(
-  payload: MembershipEventMessage<CustomType>,
-): UserRemovedFromSpaceEventAction<CustomType> => ({
+const userRemovedFromSpace = <ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>>(
+  payload: MembershipEventMessage<ReceivedMembership>,
+): UserRemovedFromSpaceEventAction<ReceivedMembership> => ({
   type: MembershipActionType.USER_REMOVED_FROM_SPACE_EVENT,
   payload,
 });
 
-export const createMembershipListener = <CustomType>(
-  dispatch: Dispatch<MembershipListenerActions<CustomType>>
+export const createMembershipListener = <ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>> = AnyMembership>(
+  dispatch: Dispatch<MembershipListenerActions<ReceivedMembership>>
 ) => ({
-  membership: (payload: MembershipEventMessage<CustomType>) => {
+  membership: (payload: MembershipEventMessage<ReceivedMembership>) => {
     switch (payload.event) {
       case 'create':
         dispatch(userAddedToSpace(payload));

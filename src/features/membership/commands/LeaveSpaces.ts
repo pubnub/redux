@@ -3,50 +3,52 @@ import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from '../../../features/space/SpaceActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { ActionMeta } from 'foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
-export const leavingSpaces = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
-  payload: MembershipRequest<MembershipType, CustomType>,
-  meta?: MetaType,
-): LeavingSpacesAction<MembershipType, CustomType, MetaType> => ({
+export const leavingSpaces = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+  payload: MembershipRequest<MembershipType>,
+  meta?: Meta,
+): LeavingSpacesAction<MembershipType, Meta> => ({
   type: MembershipActionType.LEAVING_SPACES,
   payload,
   meta,
 });
 
-export const spacesLeft = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
-  payload: MembershipSuccess<SpaceType, MembershipType, CustomType>,
-  meta?: MetaType,
-): SpacesLeftAction<SpaceType, MembershipType, CustomType, MetaType> => ({
+export const spacesLeft = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+  payload: MembershipSuccess<MembershipType>,
+  meta?: Meta,
+): SpacesLeftAction<MembershipType, Meta> => ({
   type: MembershipActionType.SPACES_LEFT,
   payload,
   meta,
 });
 
-export const errorLeavingSpaces = <MembershipType extends Membership<CustomType>, CustomType, MetaType>(
-  payload: MembershipError<MembershipType, CustomType>,
-  meta?: MetaType,
-): ErrorLeavingSpacesAction<MembershipType, CustomType, MetaType> => ({
+export const errorLeavingSpaces = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+  payload: MembershipError<MembershipType>,
+  meta?: Meta,
+): ErrorLeavingSpacesAction<MembershipType, Meta> => ({
   type: MembershipActionType.ERROR_LEAVING_SPACES,
   payload,
   meta,
   error: true,
 });
 
-export const leaveSpaces = <SpaceType extends Space, MembershipType extends Membership<CustomType>, CustomType, MetaType>(
-  request: MembershipRequest<MembershipType, CustomType>,
-  meta?: MetaType,
+export const leaveSpaces = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta = never>(
+  request: MembershipRequest<MembershipType>,
+  meta?: Meta,
 ) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(leavingSpaces<MembershipType, CustomType, MetaType>(request, meta));
+      dispatch(leavingSpaces<MembershipType, Meta>(request, meta));
 
       pubnub.api.leaveSpaces(
         {
           ...request
         },
-        (status: PubNubApiStatus, response: MembershipResponse<SpaceType, CustomType>) => {
+        (status: PubNubApiStatus, response: MembershipResponse<MembershipType>) => {
           if (status.error) {
-            let payload: MembershipError <MembershipType, CustomType> = {
+            let payload: MembershipError<MembershipType> = {
               request,
               status,
             };
@@ -54,13 +56,13 @@ export const leaveSpaces = <SpaceType extends Space, MembershipType extends Memb
             dispatch(errorLeavingSpaces(payload, meta));
             reject(payload);
           } else {
-            let payload: MembershipSuccess<SpaceType, MembershipType, CustomType> = {
+            let payload: MembershipSuccess<MembershipType> = {
               request,
               response,
               status,
             };
 
-            dispatch(spacesLeft<SpaceType, MembershipType, CustomType, MetaType>(payload, meta));
+            dispatch(spacesLeft<MembershipType, Meta>(payload, meta));
             resolve();
           }
         }

@@ -28,8 +28,8 @@ export interface SpacePage {
 
 // tag::RDX-066[]
 export interface SpaceRequestOptions {
-  limit?: number,
-  page?: SpacePage,
+  limit?: number;
+  page?: SpacePage;
   include?: {
     totalCount?: boolean;
     customFields?: boolean;
@@ -74,7 +74,7 @@ export interface FetchSpacesSuccess<ReceivedSpace extends Space<ObjectsCustom>> 
 // end::RDX-182[]
 
 // tag::RDX-183[]
-export type SpaceRequest = SpaceRequestOptions;
+export interface SpaceRequest extends Space<ObjectsCustom>, SpaceRequestOptions {}
 // end::RDX-183[]
 
 // tag::RDX-184[]
@@ -88,7 +88,7 @@ export interface SpaceSuccess<ReceivedSpace extends Space<ObjectsCustom>> {
 // tag::RDX-185[]
 export interface SpaceResponse<ReceivedSpace extends Space<ObjectsCustom>> {
   status: string;
-  data: ReceivedSpace
+  data: ReceivedSpace;
 }
 // end::RDX-185[]
 
@@ -128,8 +128,8 @@ export interface DeleteSpaceRequest {
 
 // tag::RDX-191[]
 export interface DeleteSpaceResponse {
-  status: number,
-  request: DeleteSpaceRequest,
+  status: number;
+  request: DeleteSpaceRequest;
 }
 // end::RDX-191[]
 
@@ -143,7 +143,7 @@ export interface DeleteSpaceSuccess {
 
 // tag::RDX-193[]
 export interface DeleteSpaceError {
-  request: DeleteSpaceRequest,
+  request: DeleteSpaceRequest;
   status: PubNubApiStatus;
 }
 // end::RDX-193[]
@@ -151,7 +151,7 @@ export interface DeleteSpaceError {
 // tag::RDX-101[]
 export interface FetchingSpacesAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.FETCHING_SPACES;
-  payload: FetchSpacesRequest
+  payload: FetchSpacesRequest;
   meta?: Meta;
 }
 // end::RDX-101[]
@@ -201,7 +201,7 @@ export interface ErrorFetchingSpaceByIdAction<Meta extends ActionMeta> {
 // tag::RDX-104[]
 export interface CreatingSpaceAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.CREATING_SPACE;
-  payload: SpaceRequest
+  payload: SpaceRequest;
   meta?: Meta;
 }
 // end::RDX-104[]
@@ -219,14 +219,14 @@ export interface ErrorCreatingSpaceAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.ERROR_CREATING_SPACE;
   payload: SpaceError;
   meta?: Meta;
-  error: true,
+  error: true;
 }
 // end::RDX-105[]
 
 // tag::RDX-107[]
 export interface UpdatingSpaceAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.UPDATING_SPACE;
-  payload: SpaceRequest
+  payload: SpaceRequest;
   meta?: Meta;
 }
 // end::RDX-107[]

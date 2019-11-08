@@ -11,53 +11,55 @@ import {
 import { UserActionType } from '../UserActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ActionMeta } from 'foundations/ActionMeta';
 
 
-export const creatingUser = <UserType extends User, CustomType, MetaType>(
-  payload: UserRequest<UserType, CustomType>,
-  meta?: MetaType
-): CreatingUserAction<UserType, CustomType, MetaType> => ({
+export const creatingUser = <Meta extends ActionMeta>(
+  payload: UserRequest,
+  meta?: Meta
+): CreatingUserAction<Meta> => ({
   type: UserActionType.CREATING_USER,
   payload,
   meta,
 });
 
-export const userCreated = <UserType extends User, CustomType, MetaType>(
-  payload: UserSuccess<UserType, CustomType>,
-  meta?: MetaType
-): UserCreatedAction<UserType, CustomType, MetaType> => ({
+export const userCreated = <UserType extends User<ObjectsCustom>, Meta extends ActionMeta>(
+  payload: UserSuccess<UserType>,
+  meta?: Meta
+): UserCreatedAction<UserType, Meta> => ({
   type: UserActionType.USER_CREATED,
   payload,
   meta,
 });
 
-export const errorCreatingUser = <UserType extends User, CustomType, MetaType>(
-  payload: UserError<UserType, CustomType>,
-  meta?: MetaType
-): ErrorCreatingUserAction<UserType, CustomType, MetaType> => ({
+export const errorCreatingUser = <Meta extends ActionMeta>(
+  payload: UserError,
+  meta?: Meta
+): ErrorCreatingUserAction<Meta> => ({
   type: UserActionType.ERROR_CREATING_USER,
   payload,
   meta,
   error: true,
 });
 
-export const createUser = <UserType extends User, CustomType, MetaType>(request: UserRequest<UserType, CustomType>, meta?: MetaType) => {
+export const createUser = <UserType extends User<ObjectsCustom>, Meta extends ActionMeta = never>(request: UserRequest, meta?: Meta) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(creatingUser<UserType, CustomType, MetaType>(request, meta));
+      dispatch(creatingUser<Meta>(request, meta));
 
       pubnub.api.createUser(
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: UserResponse<UserType, CustomType>) => {
+        (status: PubNubApiStatus, response: UserResponse<UserType>) => {
           if (status.error) {
-            let payload: UserError<UserType, CustomType> = {
+            let payload: UserError = {
               request,
               status,
             };
 
-            dispatch(errorCreatingUser<UserType, CustomType, MetaType>(payload, meta));
+            dispatch(errorCreatingUser<Meta>(payload, meta));
             reject(payload);
           } else {
             let payload = {
@@ -66,7 +68,7 @@ export const createUser = <UserType extends User, CustomType, MetaType>(request:
               status,
             };
 
-            dispatch(userCreated<UserType, CustomType, MetaType>(payload, meta));
+            dispatch(userCreated<UserType, Meta>(payload, meta));
             resolve();
           }
         }

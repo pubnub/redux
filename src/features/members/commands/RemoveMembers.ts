@@ -1,66 +1,68 @@
-import { RemovingMembersAction, MembersRemovedAction, MembersRequest, Member, MembersResponse, ErrorRemovingMembersAction, MembersError, MembersSuccess } from '../MembersActions';
+import { RemovingMembersAction, MembersRemovedAction, MembersRequest, Members, MembersResponse, ErrorRemovingMembersAction, MembersError, MembersSuccess } from '../MembersActions';
 import { MembersActionType } from '../MembersActionType.enum';
-import { User } from '../../../features/user/UserActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ActionMeta } from 'foundations/ActionMeta';
+import { Space } from '../../space/SpaceActions';
 
-export const removingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
-  payload: MembersRequest<MemberType, CustomType>,
-  meta?: MetaType,
-): RemovingMembersAction<MemberType, CustomType, MetaType> => ({
+export const removingMembers = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+  payload: MembersRequest<MembersType>,
+  meta?: Meta,
+): RemovingMembersAction<MembersType, Meta> => ({
   type: MembersActionType.REMOVING_MEMBERS,
   payload,
   meta,
 });
 
-export const membersRemoved = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>(
-  payload: MembersSuccess<UserType, MemberType, CustomType>,
-  meta?: MetaType,
-): MembersRemovedAction<UserType, MemberType, CustomType, MetaType> => ({
+export const membersRemoved = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+  payload: MembersSuccess<MembersType>,
+  meta?: Meta,
+): MembersRemovedAction<MembersType, Meta> => ({
   type: MembersActionType.MEMBERS_REMOVED,
   payload,
   meta,
 });
 
-export const errorRemovingMembers = <MemberType extends Member<CustomType>, CustomType, MetaType>(
-  payload: MembersError<MemberType, CustomType>,
-  meta?: MetaType,
-): ErrorRemovingMembersAction<MemberType, CustomType, MetaType> => ({
+export const errorRemovingMembers = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+  payload: MembersError<MembersType>,
+  meta?: Meta,
+): ErrorRemovingMembersAction<MembersType, Meta> => ({
   type: MembersActionType.ERROR_REMOVING_MEMBERS,
   payload,
   meta,
   error: true,
 });
 
-export const removeMembers = <UserType extends User, MemberType extends Member<CustomType>, CustomType, MetaType>(
-  request: MembersRequest<MemberType, CustomType>,
-  meta?: MetaType,
+export const removeMembers = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta = never>(
+  request: MembersRequest<MembersType>,
+  meta?: Meta,
 ) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(removingMembers<MemberType, CustomType, MetaType>(request, meta));
+      dispatch(removingMembers<MembersType, Meta>(request, meta));
 
       pubnub.api.removeMembers(
         {
           ...request
         },
-        (status: PubNubApiStatus, response: MembersResponse<UserType, CustomType>) => {
+        (status: PubNubApiStatus, response: MembersResponse<MembersType>) => {
           if (status.error) {
-            let payload: MembersError<MemberType, CustomType> = {
+            let payload: MembersError<MembersType> = {
               request,
               status,
             };
 
-            dispatch(errorRemovingMembers<MemberType, CustomType, MetaType>(payload, meta));
+            dispatch(errorRemovingMembers<MembersType, Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: MembersSuccess<UserType, MemberType, CustomType> = {
+            let payload: MembersSuccess<MembersType> = {
               request,
               response,
               status,
             };
 
-            dispatch(membersRemoved<UserType, MemberType, CustomType, MetaType>(payload, meta));
+            dispatch(membersRemoved<MembersType, Meta>(payload, meta));
             resolve();
           }
         }

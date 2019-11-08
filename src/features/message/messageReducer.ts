@@ -1,5 +1,6 @@
 import { Message, MessageActions } from './MessageActions';
 import { MessageActionType } from './MessageActionType.enum';
+import { ActionMeta, AnyMeta } from 'foundations/ActionMeta';
 
 export type MessageState<MessageType extends Message> = {
   byId: {
@@ -30,9 +31,9 @@ const messageReceived = <MessageType extends Message>(
   return newState;
 };
 
-export const createMessageReducer = <MessageType extends Message, MessageContentType, MessageMetaType, MetaType>() => (
+export const createMessageReducer = <MessageType extends Message = Message, MessageContentType extends object = {}, MessageMetaType extends object = {}, Meta extends ActionMeta = AnyMeta>() => (
   state: MessageState<MessageType> = createInitialState<MessageType>(),
-  action: MessageActions<MessageType, MessageContentType, MessageMetaType, MetaType>
+  action: MessageActions<MessageType, MessageContentType, MessageMetaType, Meta>
 ): MessageState<MessageType> => {
   switch (action.type) {
     case MessageActionType.MESSAGE_RECEIVED:

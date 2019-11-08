@@ -7,35 +7,36 @@ import {
   Space,
 } from './SpaceActions';
 import { SpaceActionType } from './SpaceActionType.enum';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 // tag::RDX-175[]
-export const spaceUpdated = <SpaceType extends Space, CustomType>(
-  payload: SpaceEventMessage<SpaceType, CustomType>
-): SpaceUpdatedEventAction<SpaceType, CustomType> => ({
+export const spaceUpdated = <ReceivedSpace extends Space<ObjectsCustom>>(
+  payload: SpaceEventMessage<ReceivedSpace>
+): SpaceUpdatedEventAction<ReceivedSpace> => ({
   type: SpaceActionType.SPACE_UPDATED_EVENT,
   payload,
 });
 // end::RDX-175[]
 
 // tag::RDX-166[]
-export const spaceDeleted = <SpaceType extends Space, CustomType>(
-  payload: SpaceEventMessage<SpaceType, CustomType>
-): SpaceDeletedEventAction<SpaceType, CustomType> => ({
+export const spaceDeleted = <ReceivedSpace extends Space<ObjectsCustom>>(
+  payload: SpaceEventMessage<ReceivedSpace>
+): SpaceDeletedEventAction<ReceivedSpace> => ({
   type: SpaceActionType.SPACE_DELETED_EVENT,
   payload,
 });
 // end::RDX-166[]
 
-export const createSpaceListener = <SpaceType extends Space, CustomType>(
-  dispatch: Dispatch<SpaceListenerActions<SpaceType, CustomType>>
+export const createSpaceListener = <ReceivedSpace extends Space<ObjectsCustom>>(
+  dispatch: Dispatch<SpaceListenerActions<ReceivedSpace>>
 ) => ({
-  space: (payload: SpaceEventMessage<SpaceType, CustomType>) => {
+  space: (payload: SpaceEventMessage<ReceivedSpace>) => {
     switch (payload.event) {
       case 'update':
-        dispatch(spaceUpdated<SpaceType, CustomType>(payload));
+        dispatch(spaceUpdated<ReceivedSpace>(payload));
         break;
       case 'delete':
-        dispatch(spaceDeleted<SpaceType, CustomType>(payload));
+        dispatch(spaceDeleted<ReceivedSpace>(payload));
         break;
       default:
         break;

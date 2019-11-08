@@ -19,13 +19,13 @@ import {
   Membership
 } from '../membership/MembershipActions';
 import { MembershipActionType } from '../../features/membership/MembershipActionType.enum';
-import { AnyMeta } from 'foundations/ActionMeta';
-import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { AnyMeta } from '../../foundations/ActionMeta';
+import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 
 // tag::RDX-025[]
 export type SpacesByIdState<ReceivedSpace extends Space<ObjectsCustom>> = {
   byId: {
-    [spaceId: string]: ReceivedSpace
+    [spaceId: string]: ReceivedSpace,
   },
 };
 // end::RDX-025[]
@@ -129,7 +129,7 @@ const spaceDeletedEventReceived = <ReceivedSpace extends Space<ObjectsCustom>>(
 
 const membershipRetrieved = <ReceivedSpace extends Space<ObjectsCustom>>(
   state: SpacesByIdState<ReceivedSpace>,
-  payload: FetchMembershipSuccess<Membership<ObjectsCustom, ReceivedSpace>, ReceivedSpace>,
+  payload: FetchMembershipSuccess<Membership<ObjectsCustom, ReceivedSpace>>,
 ) => {
   let newState = state;
 
@@ -155,8 +155,8 @@ const membershipRetrieved = <ReceivedSpace extends Space<ObjectsCustom>>(
 type SpaceReducerActions<StoredSpace extends Space<ObjectsCustom>> =
   | SpaceActions<StoredSpace, AnyMeta>
   | SpaceListenerActions<StoredSpace> 
-  | MembershipRetrievedAction<AnyMembership, StoredSpace, AnyMeta>
-  | MembershipActions<Membership<ObjectsCustom, StoredSpace>, StoredSpace, AnyMeta>
+  | MembershipRetrievedAction<AnyMembership, AnyMeta>
+  | MembershipActions<Membership<ObjectsCustom, StoredSpace>, AnyMeta>;
 
 export type SpaceReducer<StoredSpace extends Space<ObjectsCustom>, SpaceAction extends AnyAction> = 
   (state: SpacesByIdState<StoredSpace>, action: SpaceAction)
