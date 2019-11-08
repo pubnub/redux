@@ -9,7 +9,7 @@ import {
   AnyMembership,
 } from './MembershipActions';
 import { MembershipActionType } from './MembershipActionType.enum';
-import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 import { Space } from '../space/SpaceActions';
 
 const userMembershipUpdatedOnSpace = <ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>>(

@@ -10,7 +10,7 @@ import {
 import { SpaceActionType } from '../SpaceActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta } from 'foundations/ActionMeta';
+import { ActionMeta } from '../../../foundations/ActionMeta';
 
 export const deletingSpace = <Meta extends ActionMeta>(
   payload: DeleteSpaceRequest,

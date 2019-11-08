@@ -10,7 +10,7 @@ import { MembershipListenerActions, MembershipEventMessage, AnyMembership } from
 import { MembershipActionType } from '../../features/membership/MembershipActionType.enum';
 import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 import { Space } from '../space/SpaceActions';
-import { AnyMeta } from 'foundations/ActionMeta';
+import { AnyMeta } from '../../foundations/ActionMeta';
 import { AnyAction } from 'redux';
 
 export type MembersBySpaceIdState<ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>> = {

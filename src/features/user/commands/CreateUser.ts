@@ -11,8 +11,8 @@ import {
 import { UserActionType } from '../UserActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ObjectsCustom } from 'foundations/ObjectsCustom';
-import { ActionMeta } from 'foundations/ActionMeta';
+import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
+import { ActionMeta } from '../../../foundations/ActionMeta';
 
 
 export const creatingUser = <Meta extends ActionMeta>(

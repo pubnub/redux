@@ -1,6 +1,6 @@
 import { Message, MessageActions } from './MessageActions';
 import { MessageActionType } from './MessageActionType.enum';
-import { ActionMeta, AnyMeta } from 'foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../foundations/ActionMeta';
 
 export type MessageState<MessageType extends Message> = {
   byId: {

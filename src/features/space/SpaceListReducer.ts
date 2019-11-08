@@ -7,8 +7,8 @@ import {
 import {
   SpaceActionType
 } from './SpaceActionType.enum';
-import { ObjectsCustom } from 'foundations/ObjectsCustom';
-import { ActionMeta } from 'foundations/ActionMeta';
+import { ObjectsCustom } from '../../foundations/ObjectsCustom';
+import { ActionMeta } from '../../foundations/ActionMeta';
 
 interface SpaceListState {
   spaceIds: string[];

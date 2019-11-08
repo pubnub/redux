@@ -2,8 +2,8 @@ import { RemovingMembersAction, MembersRemovedAction, MembersRequest, Members, M
 import { MembersActionType } from '../MembersActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ObjectsCustom } from 'foundations/ObjectsCustom';
-import { ActionMeta } from 'foundations/ActionMeta';
+import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
+import { ActionMeta } from '../../../foundations/ActionMeta';
 import { Space } from '../../space/SpaceActions';
 
 export const removingMembers = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(

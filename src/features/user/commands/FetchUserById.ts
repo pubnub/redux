@@ -11,8 +11,8 @@ import {
 } from '../UserActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ObjectsCustom } from 'foundations/ObjectsCustom';
-import { ActionMeta } from 'foundations/ActionMeta';
+import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
+import { ActionMeta } from '../../../foundations/ActionMeta';
 
 export const fetchingUserById = <Meta extends ActionMeta>(
   payload: FetchUserByIdRequest,

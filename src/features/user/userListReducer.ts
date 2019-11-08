@@ -7,8 +7,8 @@ import {
 import {
   UserActionType
 } from './UserActionType.enum';
-import { ObjectsCustom } from 'foundations/ObjectsCustom';
-import { ActionMeta } from 'foundations/ActionMeta';
+import { ObjectsCustom } from '../../foundations/ObjectsCustom';
+import { ActionMeta } from '../../foundations/ActionMeta';
 
 // tag::RDX-049[]
 interface UserListState {

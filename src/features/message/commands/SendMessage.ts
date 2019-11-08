@@ -10,7 +10,7 @@ import {
 import { MessageActionType } from '../MessageActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta } from 'foundations/ActionMeta';
+import { ActionMeta } from '../../../foundations/ActionMeta';
 
 export const sendingMessage = <MessageContentType extends object, MessageMeta extends object, Meta extends ActionMeta>(
   payload: SendMessageRequest<MessageContentType, MessageMeta>,

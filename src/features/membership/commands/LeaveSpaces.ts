@@ -3,8 +3,8 @@ import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from '../../../features/space/SpaceActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta } from 'foundations/ActionMeta';
-import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 
 export const leavingSpaces = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
   payload: MembershipRequest<MembershipType>,

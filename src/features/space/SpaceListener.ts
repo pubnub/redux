@@ -7,7 +7,7 @@ import {
   Space,
 } from './SpaceActions';
 import { SpaceActionType } from './SpaceActionType.enum';
-import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 
 // tag::RDX-175[]
 export const spaceUpdated = <ReceivedSpace extends Space<ObjectsCustom>>(

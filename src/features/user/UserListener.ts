@@ -8,7 +8,7 @@ import {
   AnyUser,
 } from './UserActions';
 import { UserActionType } from './UserActionType.enum';
-import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 
 export const userUpdated = <UserType extends User<ObjectsCustom>>(
   payload: UserEventMessage<UserType>

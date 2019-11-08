@@ -11,8 +11,8 @@ import {
 } from '../SpaceActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta } from 'foundations/ActionMeta';
-import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 
 export const fetchingSpaceById = <Meta extends ActionMeta>(
   payload: FetchSpaceByIdRequest,
