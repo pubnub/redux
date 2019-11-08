@@ -12,6 +12,7 @@ import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 
+// tag::RDX-165[]
 export const deletingSpace = <Meta extends ActionMeta>(
   payload: DeleteSpaceRequest,
   meta?: Meta
@@ -20,7 +21,9 @@ export const deletingSpace = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-165[]
 
+// tag::RDX-166[]
 export const spaceDeleted = <Meta extends ActionMeta>(
   payload: DeleteSpaceSuccess,
   meta?: Meta,
@@ -29,7 +32,9 @@ export const spaceDeleted = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-166[]
 
+// tag::RDX-167[]
 export const errorDeletingSpace = <Meta extends ActionMeta>(
   payload: DeleteSpaceError,
   meta?: Meta,
@@ -39,6 +44,7 @@ export const errorDeletingSpace = <Meta extends ActionMeta>(
   meta,
   error: true,
 });
+// end::RDX-167[]
 
 export const deleteSpace = <Meta extends ActionMeta = never>(request: DeleteSpaceRequest, meta?: Meta) => {
   const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
