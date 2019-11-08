@@ -4,7 +4,7 @@ import { MembershipActionType } from './MembershipActionType.enum';
 import { ObjectsCustom, AnyCustom } from '../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../foundations/ActionMeta';
 
-export interface Membership<CustomMembershipFields extends ObjectsCustom, ReceivedSpace extends Space<ObjectsCustom>> {
+export interface Membership<CustomMembershipFields extends ObjectsCustom = AnyCustom, ReceivedSpace extends Space<ObjectsCustom> = AnySpace> {
   id: string;
   custom?: CustomMembershipFields;
   space?: ReceivedSpace;

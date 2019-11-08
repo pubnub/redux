@@ -2,9 +2,9 @@ import { MembersActionType } from './MembersActionType.enum';
 import { PubNubApiStatus } from '../../foundations/PubNubApi';
 import { ObjectsCustom, AnyCustom } from '../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../foundations/ActionMeta';
-import { User } from '../user/UserActions';
+import { User, AnyUser } from '../user/UserActions';
 
-export interface Members<CustomMemberFields extends ObjectsCustom, ReceivedUser extends User<ObjectsCustom>> {
+export interface Members<CustomMemberFields extends ObjectsCustom  = AnyCustom, ReceivedUser extends User<ObjectsCustom> = AnyUser> {
   id: string;
   custom?: CustomMemberFields;
   user?: ReceivedUser,

@@ -6,7 +6,7 @@ import { ActionMeta } from '../../foundations/ActionMeta';
 import { PubNubApiStatus } from '../../foundations/PubNubApi';
 
 // tag::RDX-025[]
-export interface Space<CustomSpaceFields extends ObjectsCustom> {
+export interface Space<CustomSpaceFields extends ObjectsCustom = AnyCustom> {
   id: string;
   name: string;
   description?: string;

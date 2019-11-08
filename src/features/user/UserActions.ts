@@ -4,7 +4,7 @@ import { ObjectsCustom, AnyCustom } from '../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../foundations/ActionMeta';
 
 // tag::RDX-027[]
-export interface User<CustomSpaceFields extends ObjectsCustom> {
+export interface User<CustomSpaceFields extends ObjectsCustom = AnyCustom> {
   id: string;
   name: string;
   externalId?: string;
