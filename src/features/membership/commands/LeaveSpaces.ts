@@ -44,7 +44,8 @@ export const leaveSpaces = <MembershipType extends Membership<ObjectsCustom, Spa
 
       pubnub.api.leaveSpaces(
         {
-          ...request
+          ...request,
+          spaces: request.spaces.map((space) => space.id)
         },
         (status: PubNubApiStatus, response: MembershipResponse<MembershipType>) => {
           if (status.error) {
