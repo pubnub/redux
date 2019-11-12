@@ -29,7 +29,6 @@
   },
   "peerDependencies": {
     "pubnub": "^4.26.1",
-    "@types/pubnub": "^4.0.7",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0"
   },
