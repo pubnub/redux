@@ -1,3 +1,4 @@
+import { Dispatch } from 'redux';
 import {
   FetchingMembershipAction,
   FetchMembershipRequest,
@@ -11,22 +12,25 @@ import {
 import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from '../../../features/space/SpaceActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 
 export const fetchingMembership = <Meta extends ActionMeta>(
   payload: FetchMembershipRequest,
-  meta?: Meta,
+  meta?: Meta
 ): FetchingMembershipAction<Meta> => ({
   type: MembershipActionType.FETCHING_MEMBERSHIP,
   payload,
   meta,
 });
 
-export const membershipRetrieved = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+export const membershipRetrieved = <
+  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta
+>(
   payload: FetchMembershipSuccess<MembershipType>,
-  meta?: Meta,
+  meta?: Meta
 ): MembershipRetrievedAction<MembershipType, Meta> => ({
   type: MembershipActionType.MEMBERSHIP_RETRIEVED,
   payload,
@@ -35,7 +39,7 @@ export const membershipRetrieved = <MembershipType extends Membership<ObjectsCus
 
 export const errorFetchingMembership = <Meta extends ActionMeta>(
   payload: FetchMembershipError,
-  meta?: Meta,
+  meta?: Meta
 ): ErrorFetchingMembershipAction<Meta> => ({
   type: MembershipActionType.ERROR_FETCHING_MEMBERSHIP,
   payload,
@@ -43,19 +47,29 @@ export const errorFetchingMembership = <Meta extends ActionMeta>(
   error: true,
 });
 
-export const fetchMemberships = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+export const fetchMemberships = <
+  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta
+>(
   request: FetchMembershipRequest,
-  meta?: Meta,
+  meta?: Meta
 ) => {
-  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (
+    dispatch: Dispatch,
+    _getState: any,
+    { pubnub }: PubnubThunkContext
+  ) =>
     new Promise<void>((resolve, reject) => {
       dispatch(fetchingMembership<Meta>(request, meta));
 
       pubnub.api.getMemberships(
         {
-          ...request
+          ...request,
         },
-        (status: PubNubApiStatus, response: FetchMembershipResponse<MembershipType>) => {
+        (
+          status: PubNubApiStatus,
+          response: FetchMembershipResponse<MembershipType>
+        ) => {
           if (status.error) {
             let payload: FetchMembershipError = {
               request,

@@ -1,3 +1,4 @@
+import { Dispatch } from 'redux';
 import {
   ErrorCreatingUserAction,
   UserCreatedAction,
@@ -10,10 +11,9 @@ import {
 } from '../UserActions';
 import { UserActionType } from '../UserActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../../foundations/ActionMeta';
-
 
 export const creatingUser = <Meta extends ActionMeta>(
   payload: UserRequest,
@@ -24,7 +24,10 @@ export const creatingUser = <Meta extends ActionMeta>(
   meta,
 });
 
-export const userCreated = <UserType extends User<ObjectsCustom>, Meta extends ActionMeta>(
+export const userCreated = <
+  UserType extends User<ObjectsCustom>,
+  Meta extends ActionMeta
+>(
   payload: UserSuccess<UserType>,
   meta?: Meta
 ): UserCreatedAction<UserType, Meta> => ({
@@ -43,8 +46,18 @@ export const errorCreatingUser = <Meta extends ActionMeta>(
   error: true,
 });
 
-export const createUser = <UserType extends User<ObjectsCustom>, Meta extends ActionMeta = never>(request: UserRequest, meta?: Meta) => {
-  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
+export const createUser = <
+  UserType extends User<ObjectsCustom>,
+  Meta extends ActionMeta = never
+>(
+  request: UserRequest,
+  meta?: Meta
+) => {
+  const thunkFunction = (
+    dispatch: Dispatch,
+    _getState: any,
+    { pubnub }: PubnubThunkContext
+  ) =>
     new Promise<void>((resolve, reject) => {
       dispatch(creatingUser<Meta>(request, meta));
 

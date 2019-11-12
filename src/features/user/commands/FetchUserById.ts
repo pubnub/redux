@@ -1,3 +1,4 @@
+import { Dispatch } from 'redux';
 import { UserActionType } from '../UserActionType.enum';
 import {
   ErrorFetchingUserByIdAction,
@@ -10,20 +11,23 @@ import {
   FetchUserByIdSuccess,
 } from '../UserActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 
 export const fetchingUserById = <Meta extends ActionMeta>(
   payload: FetchUserByIdRequest,
-  meta?: Meta,
+  meta?: Meta
 ): FetchingUserByIdAction<Meta> => ({
   type: UserActionType.FETCHING_USER_BY_ID,
   payload,
   meta,
 });
 
-export const userRetrieved = <UserType extends User<ObjectsCustom>, Meta extends ActionMeta>(
+export const userRetrieved = <
+  UserType extends User<ObjectsCustom>,
+  Meta extends ActionMeta
+>(
   payload: FetchUserByIdSuccess<UserType>,
   meta?: Meta
 ): UserRetrievedAction<UserType, Meta> => ({
@@ -42,15 +46,27 @@ export const errorFetchingUserById = <Meta extends ActionMeta>(
   error: true,
 });
 
-export const fetchUserById = <UserType extends User<ObjectsCustom>, Meta extends ActionMeta = never>(
+export const fetchUserById = <
+  UserType extends User<ObjectsCustom>,
+  Meta extends ActionMeta = never
+>(
   request: FetchUserByIdRequest,
   meta?: Meta
 ) => {
-  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (
+    dispatch: Dispatch,
+    _getState: any,
+    { pubnub }: PubnubThunkContext
+  ) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(fetchingUserById<Meta>({
-        ...request,
-      }, meta));
+      dispatch(
+        fetchingUserById<Meta>(
+          {
+            ...request,
+          },
+          meta
+        )
+      );
 
       pubnub.api.getUser(
         {

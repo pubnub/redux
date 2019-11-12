@@ -4,9 +4,7 @@ import {
   FetchUsersSuccess,
   AnyUser,
 } from './UserActions';
-import {
-  UserActionType
-} from './UserActionType.enum';
+import { UserActionType } from './UserActionType.enum';
 import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../foundations/ActionMeta';
 
@@ -18,20 +16,22 @@ interface UserListState {
 
 // tag::RDX-050[]
 const createInitialState = (): UserListState => ({
-  userIds: []
+  userIds: [],
 });
 // end::RDX-050[]
 
 // tag::RDX-052[]
 const usersRetrieved = <UserType extends User<ObjectsCustom>>(
-  payload: FetchUsersSuccess<UserType>,
+  payload: FetchUsersSuccess<UserType>
 ) => ({ userIds: payload.response.data.map((user) => user.id) });
 // end::RDX-052[]
 
-export const createUserListReducer = <UserType extends User<ObjectsCustom> = AnyUser, Meta extends ActionMeta = never>() => (
+export const createUserListReducer = <
+  UserType extends User<ObjectsCustom> = AnyUser,
+  Meta extends ActionMeta = never
+>() => (
   state: UserListState = createInitialState(),
-  action:
-    | UsersRetrievedAction<UserType, Meta>
+  action: UsersRetrievedAction<UserType, Meta>
 ): UserListState => {
   switch (action.type) {
     case UserActionType.USERS_RETRIEVED:

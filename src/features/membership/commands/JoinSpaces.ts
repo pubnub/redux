@@ -1,32 +1,51 @@
-import { JoiningSpacesAction, MembershipRequest, Membership, SpacesJoinedAction, MembershipSuccess, ErrorJoiningSpacesAction, MembershipError, MembershipResponse } from '../MembershipActions';
+import { Dispatch } from 'redux';
+import {
+  JoiningSpacesAction,
+  MembershipRequest,
+  Membership,
+  SpacesJoinedAction,
+  MembershipSuccess,
+  ErrorJoiningSpacesAction,
+  MembershipError,
+  MembershipResponse,
+} from '../MembershipActions';
 import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from '../../../features/space/SpaceActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 
-export const joiningSpaces = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+export const joiningSpaces = <
+  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta
+>(
   payload: MembershipRequest<MembershipType>,
-  meta?: Meta,
+  meta?: Meta
 ): JoiningSpacesAction<MembershipType, Meta> => ({
   type: MembershipActionType.JOINING_SPACES,
   payload,
   meta,
 });
 
-export const spacesJoined = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+export const spacesJoined = <
+  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta
+>(
   payload: MembershipSuccess<MembershipType>,
-  meta?: Meta,
+  meta?: Meta
 ): SpacesJoinedAction<MembershipType, Meta> => ({
   type: MembershipActionType.SPACES_JOINED,
   payload,
   meta,
 });
 
-export const errorJoiningSpaces = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+export const errorJoiningSpaces = <
+  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta
+>(
   payload: MembershipError<MembershipType>,
-  meta?: Meta,
+  meta?: Meta
 ): ErrorJoiningSpacesAction<MembershipType, Meta> => ({
   type: MembershipActionType.ERROR_JOINING_SPACES,
   payload,
@@ -34,11 +53,18 @@ export const errorJoiningSpaces = <MembershipType extends Membership<ObjectsCust
   error: true,
 });
 
-export const joinSpaces = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta = never>(
+export const joinSpaces = <
+  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta = never
+>(
   request: MembershipRequest<MembershipType>,
-  meta?: Meta,
+  meta?: Meta
 ) => {
-  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (
+    dispatch: Dispatch,
+    _getState: any,
+    { pubnub }: PubnubThunkContext
+  ) =>
     new Promise<void>((resolve, reject) => {
       dispatch(joiningSpaces<MembershipType, Meta>(request, meta));
 
@@ -46,7 +72,10 @@ export const joinSpaces = <MembershipType extends Membership<ObjectsCustom, Spac
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: MembershipResponse<MembershipType>) => {
+        (
+          status: PubNubApiStatus,
+          response: MembershipResponse<MembershipType>
+        ) => {
           if (status.error) {
             let payload: MembershipError<MembershipType> = {
               request,

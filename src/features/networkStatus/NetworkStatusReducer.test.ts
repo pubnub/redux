@@ -1,5 +1,8 @@
 import { createNetworkStatusReducer } from './NetworkStatusReducer';
-import { NetworkUpEventAction, NetworkDownEventAction } from './NetworkStatusActions';
+import {
+  NetworkUpEventAction,
+  NetworkDownEventAction,
+} from './NetworkStatusActions';
 import { NetworkStatusActionType } from './NetworkStatusActionType.enum';
 
 const networkUp = (): NetworkUpEventAction => ({

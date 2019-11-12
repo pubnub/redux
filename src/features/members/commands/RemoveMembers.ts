@@ -1,32 +1,51 @@
-import { RemovingMembersAction, MembersRemovedAction, MembersRequest, Members, MembersResponse, ErrorRemovingMembersAction, MembersError, MembersSuccess } from '../MembersActions';
+import { Dispatch } from 'redux';
+import {
+  RemovingMembersAction,
+  MembersRemovedAction,
+  MembersRequest,
+  Members,
+  MembersResponse,
+  ErrorRemovingMembersAction,
+  MembersError,
+  MembersSuccess,
+} from '../MembersActions';
 import { MembersActionType } from '../MembersActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 import { Space } from '../../space/SpaceActions';
 
-export const removingMembers = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+export const removingMembers = <
+  MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta
+>(
   payload: MembersRequest<MembersType>,
-  meta?: Meta,
+  meta?: Meta
 ): RemovingMembersAction<MembersType, Meta> => ({
   type: MembersActionType.REMOVING_MEMBERS,
   payload,
   meta,
 });
 
-export const membersRemoved = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+export const membersRemoved = <
+  MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta
+>(
   payload: MembersSuccess<MembersType>,
-  meta?: Meta,
+  meta?: Meta
 ): MembersRemovedAction<MembersType, Meta> => ({
   type: MembersActionType.MEMBERS_REMOVED,
   payload,
   meta,
 });
 
-export const errorRemovingMembers = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+export const errorRemovingMembers = <
+  MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta
+>(
   payload: MembersError<MembersType>,
-  meta?: Meta,
+  meta?: Meta
 ): ErrorRemovingMembersAction<MembersType, Meta> => ({
   type: MembersActionType.ERROR_REMOVING_MEMBERS,
   payload,
@@ -34,17 +53,24 @@ export const errorRemovingMembers = <MembersType extends Members<ObjectsCustom, 
   error: true,
 });
 
-export const removeMembers = <MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta = never>(
+export const removeMembers = <
+  MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta = never
+>(
   request: MembersRequest<MembersType>,
-  meta?: Meta,
+  meta?: Meta
 ) => {
-  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (
+    dispatch: Dispatch,
+    _getState: any,
+    { pubnub }: PubnubThunkContext
+  ) =>
     new Promise<void>((resolve, reject) => {
       dispatch(removingMembers<MembersType, Meta>(request, meta));
 
       pubnub.api.removeMembers(
         {
-          ...request
+          ...request,
         },
         (status: PubNubApiStatus, response: MembersResponse<MembersType>) => {
           if (status.error) {

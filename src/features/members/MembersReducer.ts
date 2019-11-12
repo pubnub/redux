@@ -1,3 +1,4 @@
+import { AnyAction } from 'redux';
 import {
   MembersActions,
   Members,
@@ -6,38 +7,49 @@ import {
   AnyMembers,
 } from './MembersActions';
 import { MembersActionType } from './MembersActionType.enum';
-import { MembershipListenerActions, MembershipEventMessage, AnyMembership } from '../../features/membership/MembershipActions';
+import {
+  MembershipListenerActions,
+  MembershipEventMessage,
+  AnyMembership,
+} from '../../features/membership/MembershipActions';
 import { MembershipActionType } from '../../features/membership/MembershipActionType.enum';
 import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 import { Space } from '../space/SpaceActions';
 import { AnyMeta } from '../../foundations/ActionMeta';
-import { AnyAction } from 'redux';
 
-export type MembersBySpaceIdState<ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>> = {
+export type MembersBySpaceIdState<
+  ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>
+> = {
   byId: {
-    [spaceId: string]: ReceivedMembers[]
-  },
+    [spaceId: string]: ReceivedMembers[];
+  };
 };
 
 const createInitialState = () => ({
   byId: {},
 });
 
-const userAddedToSpace = <ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>>(
+const userAddedToSpace = <
+  ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>
+>(
   state: MembersBySpaceIdState<ReceivedMembers>,
   payload: MembershipEventMessage<AnyMembership>
 ) => {
-  if (state.byId[payload.data.spaceId].filter((membership) => membership.id === payload.data.userId).length === 0) {
+  if (
+    state.byId[payload.data.spaceId].filter(
+      (membership) => membership.id === payload.data.userId
+    ).length === 0
+  ) {
     let newState = {
       byId: { ...state.byId },
     };
-    
+
     newState.byId[payload.data.spaceId] = [
       ...newState.byId[payload.data.spaceId],
-      {
+      ({
         id: payload.data.userId,
         custom: payload.data.custom,
-      } as unknown as ReceivedMembers  // TODO: find out a better pattern here
+      } as unknown) as ReceivedMembers, // TODO: find out a better pattern here
     ];
 
     return newState;
@@ -46,18 +58,24 @@ const userAddedToSpace = <ReceivedMembers extends Members<ObjectsCustom, Space<O
   return state;
 };
 
-const userRemovedFromSpace = <ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>>(
+const userRemovedFromSpace = <
+  ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>
+>(
   state: MembersBySpaceIdState<ReceivedMembers>,
   payload: MembershipEventMessage<AnyMembership>
 ) => {
-  if (state.byId[payload.data.spaceId].filter((membership) => membership.id === payload.data.userId).length === 0) {
+  if (
+    state.byId[payload.data.spaceId].filter(
+      (membership) => membership.id === payload.data.userId
+    ).length === 0
+  ) {
     let newState = {
       byId: { ...state.byId },
     };
-    
-    newState.byId[payload.data.userId] = newState.byId[payload.data.spaceId].filter(
-      (membership) => membership.id !== payload.data.userId
-    );
+
+    newState.byId[payload.data.userId] = newState.byId[
+      payload.data.spaceId
+    ].filter((membership) => membership.id !== payload.data.userId);
 
     return newState;
   }
@@ -65,21 +83,27 @@ const userRemovedFromSpace = <ReceivedMembers extends Members<ObjectsCustom, Spa
   return state;
 };
 
-const userMembershipUpdatedOnSpace = <ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>>(
+const userMembershipUpdatedOnSpace = <
+  ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>
+>(
   state: MembersBySpaceIdState<ReceivedMembers>,
-  payload: MembershipEventMessage<AnyMembership>,
+  payload: MembershipEventMessage<AnyMembership>
 ) => {
-  console.log(payload)
+  console.log(payload);
   // TODO: need to update the custom object
   return state;
 };
 
-const membersResult = <ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>>(
+const membersResult = <
+  ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>
+>(
   state: MembersBySpaceIdState<ReceivedMembers>,
-  payload: FetchMembersSuccess<ReceivedMembers> | MembersSuccess<ReceivedMembers>
+  payload:
+    | FetchMembersSuccess<ReceivedMembers>
+    | MembersSuccess<ReceivedMembers>
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   newState.byId[payload.request.spaceId] = payload.response.data;
@@ -87,17 +111,26 @@ const membersResult = <ReceivedMembers extends Members<ObjectsCustom, Space<Obje
   return newState;
 };
 
-type MembersReducerActions<ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>> =
-| MembersActions<ReceivedMembers, AnyMeta>
-| MembershipListenerActions<AnyMembership>;
+type MembersReducerActions<
+  ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>
+> =
+  | MembersActions<ReceivedMembers, AnyMeta>
+  | MembershipListenerActions<AnyMembership>;
 
-export type MembersReducer<StoredMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>, MembersAction extends AnyAction> = 
-  (state: MembersBySpaceIdState<StoredMembers> | undefined, action: MembersAction)
-   => MembersBySpaceIdState<StoredMembers>;
+export type MembersReducer<
+  StoredMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>,
+  MembersAction extends AnyAction
+> = (
+  state: MembersBySpaceIdState<StoredMembers> | undefined,
+  action: MembersAction
+) => MembersBySpaceIdState<StoredMembers>;
 
 export const createMembersReducer = <
-  StoredMembers extends Members<ObjectsCustom, Space<ObjectsCustom>> = AnyMembers,
-  MembersAction extends AnyAction = MembersReducerActions<StoredMembers>,
+  StoredMembers extends Members<
+    ObjectsCustom,
+    Space<ObjectsCustom>
+  > = AnyMembers,
+  MembersAction extends AnyAction = MembersReducerActions<StoredMembers>
 >(): MembersReducer<StoredMembers, MembersAction> => (
   state = createInitialState(),
   action: MembersAction

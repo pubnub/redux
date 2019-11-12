@@ -3,7 +3,7 @@ import { MessageReceivedAction, Message } from './MessageActions';
 import { MessageActionType } from './MessageActionType.enum';
 
 export const messageRecieved = <MessageType extends Message>(
-  payload: MessageType,
+  payload: MessageType
 ): MessageReceivedAction<MessageType> => ({
   type: MessageActionType.MESSAGE_RECEIVED,
   payload,

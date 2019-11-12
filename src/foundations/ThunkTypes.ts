@@ -1,6 +1,3 @@
-import { Dispatch as ReduxDispatch } from 'redux';
-
-export type Dispatch = ReduxDispatch;
 type PubNub = any;
 
 /**

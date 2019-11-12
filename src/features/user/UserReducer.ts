@@ -11,8 +11,15 @@ import {
   AnyUser,
 } from './UserActions';
 import { UserActionType } from './UserActionType.enum';
-import { MembersActions, Members, FetchMembersSuccess } from '../../features/members/MembersActions';
-import { MembershipActions, Membership } from '../../features/membership/MembershipActions';
+import {
+  MembersActions,
+  Members,
+  FetchMembersSuccess,
+} from '../../features/members/MembersActions';
+import {
+  MembershipActions,
+  Membership,
+} from '../../features/membership/MembershipActions';
 import { AnySpace } from '../../features/space/SpaceActions';
 import { MembersActionType } from '../../features/members/MembersActionType.enum';
 import { ObjectsCustom } from '../../foundations/ObjectsCustom';
@@ -21,9 +28,9 @@ import { AnyMeta } from '../../foundations/ActionMeta';
 // tag::RDX-059[]
 export interface UsersByIdState<ReceivedUser extends User<ObjectsCustom>> {
   byId: {
-    [userId: string]: ReceivedUser
-  },
-};
+    [userId: string]: ReceivedUser;
+  };
+}
 // end::RDX-059[]
 
 const createInitialState = () => ({
@@ -32,10 +39,10 @@ const createInitialState = () => ({
 
 const userCreated = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
-  payload: UserSuccess<ReceivedUser>,
+  payload: UserSuccess<ReceivedUser>
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   newState.byId[payload.response.data.id] = payload.response.data;
@@ -45,10 +52,10 @@ const userCreated = <ReceivedUser extends User<ObjectsCustom>>(
 
 const userUpdated = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
-  payload: UserSuccess<ReceivedUser>,
+  payload: UserSuccess<ReceivedUser>
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   newState.byId[payload.response.data.id] = payload.response.data;
@@ -61,7 +68,7 @@ const userDeleted = <ReceivedUser extends User<ObjectsCustom>>(
   payload: DeleteUserSuccess
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   delete newState.byId[payload.request.userId];
@@ -71,10 +78,10 @@ const userDeleted = <ReceivedUser extends User<ObjectsCustom>>(
 
 const usersRetrieved = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
-  payload: FetchUsersSuccess<ReceivedUser>,
+  payload: FetchUsersSuccess<ReceivedUser>
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   payload.response.data.forEach((item) => {
@@ -86,10 +93,10 @@ const usersRetrieved = <ReceivedUser extends User<ObjectsCustom>>(
 
 const userRetrieved = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
-  payload: FetchUserByIdSuccess<ReceivedUser>,
+  payload: FetchUserByIdSuccess<ReceivedUser>
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   newState.byId[payload.response.data.id] = payload.response.data;
@@ -99,10 +106,10 @@ const userRetrieved = <ReceivedUser extends User<ObjectsCustom>>(
 
 const userUpdatedEventReceived = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
-  payload: UserEventMessage<ReceivedUser>,
+  payload: UserEventMessage<ReceivedUser>
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   newState.byId[payload.data.id] = payload.data;
@@ -112,33 +119,33 @@ const userUpdatedEventReceived = <ReceivedUser extends User<ObjectsCustom>>(
 
 const userDeletedEventReceived = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
-  payload: UserEventMessage<ReceivedUser>,
+  payload: UserEventMessage<ReceivedUser>
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   delete newState.byId[payload.data.id];
 
   return newState;
-}
+};
 
 const membersRetrieved = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
-  payload: FetchMembersSuccess<Members<ObjectsCustom, ReceivedUser>>,
+  payload: FetchMembersSuccess<Members<ObjectsCustom, ReceivedUser>>
 ) => {
   let newState = state;
 
   if (payload.response.data.length > 0) {
     newState = {
       byId: {
-        ...state.byId
-      }
+        ...state.byId,
+      },
     };
 
     for (let i = 0; i < payload.response.data.length; i++) {
       let currentMember = payload.response.data[i];
-      
+
       if (currentMember.user) {
         newState.byId[currentMember.id] = currentMember.user;
       }
@@ -149,18 +156,22 @@ const membersRetrieved = <ReceivedUser extends User<ObjectsCustom>>(
 };
 
 type UserReducerActions<StoredUser extends User<ObjectsCustom>> =
-| UserActions<StoredUser, AnyMeta>
-| UserListenerActions<StoredUser> 
-| MembersActions<Members<ObjectsCustom, AnySpace>, AnyMeta>
-| MembershipActions<Membership<ObjectsCustom, AnySpace>, AnyMeta>;
+  | UserActions<StoredUser, AnyMeta>
+  | UserListenerActions<StoredUser>
+  | MembersActions<Members<ObjectsCustom, AnySpace>, AnyMeta>
+  | MembershipActions<Membership<ObjectsCustom, AnySpace>, AnyMeta>;
 
-export type UserReducer<StoredUser extends User<ObjectsCustom>, UserAction extends AnyAction> = 
-  (state: UsersByIdState<StoredUser> | undefined, action: UserAction)
-   => UsersByIdState<StoredUser>;
+export type UserReducer<
+  StoredUser extends User<ObjectsCustom>,
+  UserAction extends AnyAction
+> = (
+  state: UsersByIdState<StoredUser> | undefined,
+  action: UserAction
+) => UsersByIdState<StoredUser>;
 
 export const createUserReducer = <
   StoredUser extends User<ObjectsCustom> = AnyUser,
-  UserAction extends AnyAction = UserReducerActions<StoredUser>,
+  UserAction extends AnyAction = UserReducerActions<StoredUser>
 >(): UserReducer<StoredUser, UserAction> => (
   state: UsersByIdState<StoredUser> = createInitialState(),
   action: UserAction

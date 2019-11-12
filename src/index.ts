@@ -132,17 +132,17 @@ import {
   requestMessageCountExceeded,
   unknown,
   createErrorStatusListener,
-} from './features/errorStatus/ErrorStatusListener'
+} from './features/errorStatus/ErrorStatusListener';
 import {
   networkUp,
   networkDown,
   createNetworkStatusListener,
-} from './features/networkStatus/NetworkStatusListener'
+} from './features/networkStatus/NetworkStatusListener';
 import {
   connected,
   reconnected,
   createSubscriptionStatusListener,
-} from './features/subscriptionStatus/SubscriptionStatusListener'
+} from './features/subscriptionStatus/SubscriptionStatusListener';
 // Reducers
 import { createMessageReducer } from './features/message/MessageReducer';
 import { createNetworkStatusReducer } from './features/networkStatus/NetworkStatusReducer';
@@ -155,7 +155,10 @@ import { createMembersReducer } from './features/members/MembersReducer';
 // Types
 import { User } from './features/user/UserActions';
 import { Space } from './features/space/SpaceActions';
-import { Message, MessageRequestOptions } from './features/message/MessageActions';
+import {
+  Message,
+  MessageRequestOptions,
+} from './features/message/MessageActions';
 // Response Types
 import { ErrorStatusResponse } from './features/errorStatus/ErrorStatusActions';
 import { NetworkStatusResponse } from './features/networkStatus/NetworkStatusActions';

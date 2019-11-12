@@ -1,3 +1,4 @@
+import { Dispatch } from 'redux';
 import {
   ErrorFetchingUsersAction,
   UsersRetrievedAction,
@@ -10,20 +11,23 @@ import {
 } from '../UserActions';
 import { UserActionType } from '../UserActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 
 export const fetchingUsers = <Meta extends ActionMeta>(
   payload: FetchUsersRequest,
-  meta?: Meta,
+  meta?: Meta
 ): FetchingUsersAction<Meta> => ({
   type: UserActionType.FETCHING_USERS,
   payload,
   meta,
 });
 
-export const usersRetrieved = <UserType extends User<ObjectsCustom>, Meta extends ActionMeta>(
+export const usersRetrieved = <
+  UserType extends User<ObjectsCustom>,
+  Meta extends ActionMeta
+>(
   payload: FetchUsersSuccess<UserType>,
   meta?: Meta
 ): UsersRetrievedAction<UserType, Meta> => ({
@@ -42,11 +46,18 @@ export const errorFetchingUsers = <Meta extends ActionMeta = never>(
   error: true,
 });
 
-export const fetchUsers = <UserType extends User<ObjectsCustom>, Meta extends ActionMeta = never>(
+export const fetchUsers = <
+  UserType extends User<ObjectsCustom>,
+  Meta extends ActionMeta = never
+>(
   request: FetchUsersRequest = {},
   meta?: Meta
 ) => {
-  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (
+    dispatch: Dispatch,
+    _getState: any,
+    { pubnub }: PubnubThunkContext
+  ) =>
     new Promise<void>((resolve, reject) => {
       dispatch(fetchingUsers<Meta>(request, meta));
 
@@ -68,9 +79,7 @@ export const fetchUsers = <UserType extends User<ObjectsCustom>, Meta extends Ac
               status,
             };
 
-            dispatch(
-              usersRetrieved<UserType, Meta>(payload, meta)
-            );
+            dispatch(usersRetrieved<UserType, Meta>(payload, meta));
             resolve();
           }
         }

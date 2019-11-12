@@ -1,5 +1,11 @@
 import { Dispatch } from 'redux';
-import { PresenceListenerActions, JoinAction, LeaveAction, TimeoutAction, StateChangeAction } from './PresenceActions';
+import {
+  PresenceListenerActions,
+  JoinAction,
+  LeaveAction,
+  TimeoutAction,
+  StateChangeAction,
+} from './PresenceActions';
 import { PresenceActionPayload } from './Presence';
 import { PresenceActionType } from './PresenceActionType.enum';
 
@@ -24,27 +30,26 @@ const userStateChange = (
   type: PresenceActionType.STATE_CHANGE,
   payload,
 });
-  
+
 export const createPresenceListener = (
-    dispatch: Dispatch<PresenceListenerActions>
-  ) => ({
-    presence: (payload: PresenceActionPayload) => {
-      switch (payload.action) {
-        case 'join':
-          dispatch(userJoin(payload));
-          break;
-        case 'leave':
-          dispatch(userLeave(payload));
-          break;
-        case 'timeout':
-          dispatch(userTimeout(payload));
-          break;
-        case 'state-change':
-          dispatch(userStateChange(payload));
-          break;
-        default:
-          break;
-      }
-    },
-  });
-  
+  dispatch: Dispatch<PresenceListenerActions>
+) => ({
+  presence: (payload: PresenceActionPayload) => {
+    switch (payload.action) {
+      case 'join':
+        dispatch(userJoin(payload));
+        break;
+      case 'leave':
+        dispatch(userLeave(payload));
+        break;
+      case 'timeout':
+        dispatch(userTimeout(payload));
+        break;
+      case 'state-change':
+        dispatch(userStateChange(payload));
+        break;
+      default:
+        break;
+    }
+  },
+});

@@ -1,6 +1,6 @@
-import { Dispatch } from "redux";
-import { ErrorStatusCategory } from "./ErrorStatusCategory.enum";
-import { ErrorStatusActionType } from "./ErrorStatusActionType.enum";
+import { Dispatch } from 'redux';
+import { ErrorStatusCategory } from './ErrorStatusCategory.enum';
+import { ErrorStatusActionType } from './ErrorStatusActionType.enum';
 import {
   NetworkIssuesEventAction,
   AccessDeniedEventAction,
@@ -11,14 +11,18 @@ import {
   RequestMessageCountExceedEventAction,
   UnknownEventAction,
   ErrorStatusResponse,
-} from "./ErrorStatusActions";
+} from './ErrorStatusActions';
 
-export const networkIssues = (payload: ErrorStatusResponse): NetworkIssuesEventAction => ({
+export const networkIssues = (
+  payload: ErrorStatusResponse
+): NetworkIssuesEventAction => ({
   type: ErrorStatusActionType.NETWORK_ISSUES_EVENT,
   payload,
 });
 
-export const accessDenied = (payload: ErrorStatusResponse): AccessDeniedEventAction => ({
+export const accessDenied = (
+  payload: ErrorStatusResponse
+): AccessDeniedEventAction => ({
   type: ErrorStatusActionType.ACCESS_DENIED_EVENT,
   payload,
 });
@@ -30,7 +34,9 @@ export const malformedResponse = (
   payload,
 });
 
-export const badRequest = (payload: ErrorStatusResponse): BadRequestEventAction => ({
+export const badRequest = (
+  payload: ErrorStatusResponse
+): BadRequestEventAction => ({
   type: ErrorStatusActionType.BAD_REQUEST_EVENT,
   payload,
 });
@@ -62,14 +68,14 @@ export const unknown = (payload: ErrorStatusResponse): UnknownEventAction => ({
 });
 
 export type ErrorStatusListenerActions =
-| NetworkIssuesEventAction
-| AccessDeniedEventAction
-| MalformedResponseEventAction
-| BadRequestEventAction
-| RequestMessageCountExceedEventAction
-| DecryptionErrorEventAction
-| TimeoutConnectionEventAction
-| UnknownEventAction;
+  | NetworkIssuesEventAction
+  | AccessDeniedEventAction
+  | MalformedResponseEventAction
+  | BadRequestEventAction
+  | RequestMessageCountExceedEventAction
+  | DecryptionErrorEventAction
+  | TimeoutConnectionEventAction
+  | UnknownEventAction;
 
 export const createErrorStatusListener = (
   dispatch: Dispatch<ErrorStatusListenerActions>

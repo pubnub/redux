@@ -1,3 +1,4 @@
+import { Dispatch } from 'redux';
 import {
   SpaceDeletedAction,
   DeletingSpaceAction,
@@ -5,11 +6,11 @@ import {
   DeleteSpaceRequest,
   DeleteSpaceResponse,
   DeleteSpaceError,
-  DeleteSpaceSuccess
+  DeleteSpaceSuccess,
 } from '../SpaceActions';
 import { SpaceActionType } from '../SpaceActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 
 // tag::RDX-165[]
@@ -26,7 +27,7 @@ export const deletingSpace = <Meta extends ActionMeta>(
 // tag::RDX-166[]
 export const spaceDeleted = <Meta extends ActionMeta>(
   payload: DeleteSpaceSuccess,
-  meta?: Meta,
+  meta?: Meta
 ): SpaceDeletedAction<Meta> => ({
   type: SpaceActionType.SPACE_DELETED,
   payload,
@@ -37,7 +38,7 @@ export const spaceDeleted = <Meta extends ActionMeta>(
 // tag::RDX-167[]
 export const errorDeletingSpace = <Meta extends ActionMeta>(
   payload: DeleteSpaceError,
-  meta?: Meta,
+  meta?: Meta
 ): ErrorDeletingSpaceAction<Meta> => ({
   type: SpaceActionType.ERROR_DELETING_SPACE,
   payload,
@@ -46,14 +47,21 @@ export const errorDeletingSpace = <Meta extends ActionMeta>(
 });
 // end::RDX-167[]
 
-export const deleteSpace = <Meta extends ActionMeta = never>(request: DeleteSpaceRequest, meta?: Meta) => {
-  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
+export const deleteSpace = <Meta extends ActionMeta = never>(
+  request: DeleteSpaceRequest,
+  meta?: Meta
+) => {
+  const thunkFunction = (
+    dispatch: Dispatch,
+    _getState: any,
+    { pubnub }: PubnubThunkContext
+  ) =>
     new Promise<void>((resolve, reject) => {
       dispatch(deletingSpace<Meta>(request, meta));
 
       pubnub.api.deleteSpace(
         request.spaceId,
-        (status: PubNubApiStatus , response: DeleteSpaceResponse) => {
+        (status: PubNubApiStatus, response: DeleteSpaceResponse) => {
           if (status.error) {
             let payload: DeleteSpaceError = {
               request,

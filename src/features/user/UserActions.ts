@@ -25,8 +25,8 @@ export interface UserPage {
 }
 
 export interface UserRequestOptions {
-  limit?: number,
-  page?: UserPage,
+  limit?: number;
+  page?: UserPage;
   include?: {
     totalCount?: boolean;
     customFields?: boolean;
@@ -42,7 +42,7 @@ export interface UserEventMessage<ReceivedUser extends User<ObjectsCustom>> {
 export type FetchUsersRequest = UserRequestOptions;
 
 export interface FetchUsersResponse<ReceivedUser extends User<ObjectsCustom>> {
-  status: string,
+  status: string;
   data: ReceivedUser[];
 }
 
@@ -67,7 +67,7 @@ export interface UserSuccess<ReceivedUser extends User<ObjectsCustom>> {
 
 export interface UserResponse<ReceivedUser extends User<ObjectsCustom>> {
   status: string;
-  data: ReceivedUser
+  data: ReceivedUser;
 }
 
 export interface UserError {
@@ -79,7 +79,9 @@ export interface FetchUserByIdRequest extends UserRequestOptions {
   userId: string;
 }
 
-export interface FetchUserByIdSuccess<ReceivedUser extends User<ObjectsCustom>> {
+export interface FetchUserByIdSuccess<
+  ReceivedUser extends User<ObjectsCustom>
+> {
   request: FetchUserByIdRequest;
   response: UserResponse<ReceivedUser>;
   status: PubNubApiStatus;
@@ -95,8 +97,8 @@ export interface DeleteUserRequest {
 }
 
 export interface DeleteUserResponse {
-  status: number,
-  request: DeleteUserRequest,
+  status: number;
+  request: DeleteUserRequest;
 }
 
 export interface DeleteUserSuccess {
@@ -106,7 +108,7 @@ export interface DeleteUserSuccess {
 }
 
 export interface DeleteUserError {
-  request: DeleteUserRequest,
+  request: DeleteUserRequest;
   status: PubNubApiStatus;
 }
 
@@ -117,11 +119,14 @@ export interface FetchingUsersAction<Meta extends ActionMeta> {
   meta?: Meta;
 }
 // end::RDX-094[]
-  
+
 // tag::RDX-095[]
-export interface UsersRetrievedAction<ReceivedUser extends User<ObjectsCustom>, Meta extends ActionMeta> {
+export interface UsersRetrievedAction<
+  ReceivedUser extends User<ObjectsCustom>,
+  Meta extends ActionMeta
+> {
   type: typeof UserActionType.USERS_RETRIEVED;
-  payload: FetchUsersSuccess<ReceivedUser>,
+  payload: FetchUsersSuccess<ReceivedUser>;
   meta?: Meta;
 }
 // end::RDX-095[]
@@ -144,7 +149,10 @@ export interface FetchingUserByIdAction<Meta extends ActionMeta> {
 // end::RDX-098[]
 
 // tag::RDX-099[]
-export interface UserRetrievedAction<ReceivedUser extends User<ObjectsCustom>, Meta extends ActionMeta> {
+export interface UserRetrievedAction<
+  ReceivedUser extends User<ObjectsCustom>,
+  Meta extends ActionMeta
+> {
   type: typeof UserActionType.USER_RETRIEVED;
   payload: FetchUserByIdSuccess<ReceivedUser>;
   meta?: Meta;
@@ -163,13 +171,16 @@ export interface ErrorFetchingUserByIdAction<Meta extends ActionMeta> {
 // tag::RDX-092[]
 export interface CreatingUserAction<Meta extends ActionMeta> {
   type: typeof UserActionType.CREATING_USER;
-  payload: UserRequest
+  payload: UserRequest;
   meta?: Meta;
 }
 // end::RDX-092[]
 
 // tag::RDX-091[]
-export interface UserCreatedAction<ReceivedUser extends User<ObjectsCustom>, Meta extends ActionMeta> {
+export interface UserCreatedAction<
+  ReceivedUser extends User<ObjectsCustom>,
+  Meta extends ActionMeta
+> {
   type: typeof UserActionType.USER_CREATED;
   payload: UserSuccess<ReceivedUser>;
   meta?: Meta;
@@ -181,20 +192,23 @@ export interface ErrorCreatingUserAction<Meta extends ActionMeta> {
   type: typeof UserActionType.ERROR_CREATING_USER;
   payload: UserError;
   meta?: Meta;
-  error: true,
+  error: true;
 }
 // end::RDX-093[]
 
 // tag::RDX-086[]
 export interface UpdatingUserAction<Meta extends ActionMeta> {
   type: typeof UserActionType.UPDATING_USER;
-  payload: UserRequest
+  payload: UserRequest;
   meta?: Meta;
 }
 // end::RDX-086[]
 
 // tag::RDX-085[]
-export interface UserUpdatedAction<ReceivedUser extends User<ObjectsCustom>, Meta extends ActionMeta> {
+export interface UserUpdatedAction<
+  ReceivedUser extends User<ObjectsCustom>,
+  Meta extends ActionMeta
+> {
   type: typeof UserActionType.USER_UPDATED;
   payload: UserSuccess<ReceivedUser>;
   meta?: Meta;
@@ -235,17 +249,24 @@ export interface ErrorDeletingUserAction<Meta extends ActionMeta> {
 }
 // end::RDX-090[]
 
-export interface UserUpdatedEventAction<ReceivedUser extends User<ObjectsCustom>> {
+export interface UserUpdatedEventAction<
+  ReceivedUser extends User<ObjectsCustom>
+> {
   type: typeof UserActionType.USER_UPDATED_EVENT;
   payload: UserEventMessage<ReceivedUser>;
 }
 
-export interface UserDeletedEventAction<ReceivedUser extends User<ObjectsCustom>> {
+export interface UserDeletedEventAction<
+  ReceivedUser extends User<ObjectsCustom>
+> {
   type: typeof UserActionType.USER_DELETED_EVENT;
   payload: UserEventMessage<ReceivedUser>;
 }
 
-export type UserActions<ReceivedUser extends User<ObjectsCustom>, Meta extends ActionMeta> =
+export type UserActions<
+  ReceivedUser extends User<ObjectsCustom>,
+  Meta extends ActionMeta
+> =
   | FetchingUsersAction<Meta>
   | UsersRetrievedAction<ReceivedUser, Meta>
   | ErrorFetchingUsersAction<Meta>

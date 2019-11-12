@@ -17,11 +17,11 @@ export interface MessageRequestOptions<MessageContentType, MessageMetaType> {
   storeInHistory?: boolean;
   sendByPost?: boolean;
   meta?: MessageMetaType;
-  ttl? : number;
+  ttl?: number;
 }
 
 export interface SendMessageRequest<MessageContentType, MessageMetaType>
-extends MessageRequestOptions<MessageContentType, MessageMetaType> {}
+  extends MessageRequestOptions<MessageContentType, MessageMetaType> {}
 
 export interface SendMessageResponse {
   timetoken: number;
@@ -43,25 +43,42 @@ export interface MessageReceivedAction<MessageType> {
   payload: MessageType;
 }
 
-export interface SendingMessageAction<MessageContentType, MessageMetaType, MetaType> {
+export interface SendingMessageAction<
+  MessageContentType,
+  MessageMetaType,
+  MetaType
+> {
   type: typeof MessageActionType.SENDING_MESSAGE;
   payload: SendMessageRequest<MessageContentType, MessageMetaType>;
   meta?: MetaType;
 }
-export interface MessageSentAction<MessageContentType, MessageMetaType, MetaType> {
+export interface MessageSentAction<
+  MessageContentType,
+  MessageMetaType,
+  MetaType
+> {
   type: typeof MessageActionType.MESSAGE_SENT;
   payload: SendMessageSuccess<MessageContentType, MessageMetaType>;
   meta?: MetaType;
 }
 
-export interface ErrorSendingMessageAction<MessageContentType, MessageMetaType, MetaType> {
+export interface ErrorSendingMessageAction<
+  MessageContentType,
+  MessageMetaType,
+  MetaType
+> {
   type: typeof MessageActionType.ERROR_SENDING_MESSAGE;
   payload: SendMessageError<MessageContentType, MessageMetaType>;
   meta?: MetaType;
 }
 
-export type MessageActions<MessageType, MessageContentType, MessageMetaType, MetaType> =
-| MessageReceivedAction<MessageType>
-| MessageSentAction<MessageContentType, MessageMetaType, MetaType>
-| SendingMessageAction<MessageContentType, MessageMetaType, MetaType>
-| ErrorSendingMessageAction<MessageContentType, MessageMetaType, MetaType>;
+export type MessageActions<
+  MessageType,
+  MessageContentType,
+  MessageMetaType,
+  MetaType
+> =
+  | MessageReceivedAction<MessageType>
+  | MessageSentAction<MessageContentType, MessageMetaType, MetaType>
+  | SendingMessageAction<MessageContentType, MessageMetaType, MetaType>
+  | ErrorSendingMessageAction<MessageContentType, MessageMetaType, MetaType>;

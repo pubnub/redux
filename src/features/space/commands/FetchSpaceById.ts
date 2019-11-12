@@ -1,3 +1,4 @@
+import { Dispatch } from 'redux';
 import { SpaceActionType } from '../SpaceActionType.enum';
 import {
   ErrorFetchingSpaceByIdAction,
@@ -10,14 +11,14 @@ import {
   FetchSpaceByIdSuccess,
 } from '../SpaceActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 
 // tag::RDX-168[]
 export const fetchingSpaceById = <Meta extends ActionMeta>(
   payload: FetchSpaceByIdRequest,
-  meta?: Meta,
+  meta?: Meta
 ): FetchingSpaceByIdAction<Meta> => ({
   type: SpaceActionType.FETCHING_SPACE_BY_ID,
   payload,
@@ -26,7 +27,10 @@ export const fetchingSpaceById = <Meta extends ActionMeta>(
 // end::RDX-168[]
 
 // tag::RDX-169[]
-export const spaceRetrieved = <SpaceType extends Space<ObjectsCustom>, Meta extends ActionMeta>(
+export const spaceRetrieved = <
+  SpaceType extends Space<ObjectsCustom>,
+  Meta extends ActionMeta
+>(
   payload: FetchSpaceByIdSuccess<SpaceType>,
   meta?: Meta
 ): SpaceRetrievedAction<SpaceType, Meta> => ({
@@ -48,15 +52,27 @@ export const errorFetchingSpaceById = <Meta extends ActionMeta>(
 });
 // end::RDX-170[]
 
-export const fetchSpaceById = <SpaceType extends Space<ObjectsCustom>, Meta extends ActionMeta = never>(
+export const fetchSpaceById = <
+  SpaceType extends Space<ObjectsCustom>,
+  Meta extends ActionMeta = never
+>(
   request: FetchSpaceByIdRequest,
   meta?: Meta
 ) => {
-  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (
+    dispatch: Dispatch,
+    _getState: any,
+    { pubnub }: PubnubThunkContext
+  ) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(fetchingSpaceById<Meta>({
-        ...request,
-      }, meta));
+      dispatch(
+        fetchingSpaceById<Meta>(
+          {
+            ...request,
+          },
+          meta
+        )
+      );
 
       pubnub.api.getSpace(
         {

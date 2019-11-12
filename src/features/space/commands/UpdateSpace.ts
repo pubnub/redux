@@ -1,3 +1,4 @@
+import { Dispatch } from 'redux';
 import {
   SpaceRequest,
   UpdatingSpaceAction,
@@ -10,7 +11,7 @@ import {
 } from '../SpaceActions';
 import { SpaceActionType } from '../SpaceActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 
@@ -26,7 +27,10 @@ export const updatingSpace = <Meta extends ActionMeta>(
 // end::RDX-174[]
 
 // tag::RDX-175[]
-export const spaceUpdated = <SpaceType extends Space<ObjectsCustom>, Meta extends ActionMeta>(
+export const spaceUpdated = <
+  SpaceType extends Space<ObjectsCustom>,
+  Meta extends ActionMeta
+>(
   payload: SpaceSuccess<SpaceType>,
   meta?: Meta
 ): SpaceUpdatedAction<SpaceType, Meta> => ({
@@ -48,8 +52,18 @@ export const errorUpdatingSpace = <Meta extends ActionMeta>(
 });
 // end::RDX-176[]
 
-export const updateSpace = <SpaceType extends Space<ObjectsCustom>, Meta extends ActionMeta = never>(request: SpaceRequest, meta?: Meta) => {
-  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
+export const updateSpace = <
+  SpaceType extends Space<ObjectsCustom>,
+  Meta extends ActionMeta = never
+>(
+  request: SpaceRequest,
+  meta?: Meta
+) => {
+  const thunkFunction = (
+    dispatch: Dispatch,
+    _getState: any,
+    { pubnub }: PubnubThunkContext
+  ) =>
     new Promise<void>((resolve, reject) => {
       dispatch(updatingSpace<Meta>(request, meta));
 
@@ -61,7 +75,7 @@ export const updateSpace = <SpaceType extends Space<ObjectsCustom>, Meta extends
           if (status.error) {
             let payload: SpaceError = {
               request,
-              status
+              status,
             };
 
             dispatch(errorUpdatingSpace<Meta>(payload, meta));

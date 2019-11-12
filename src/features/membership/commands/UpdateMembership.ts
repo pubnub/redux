@@ -1,32 +1,51 @@
-import { UpdatingMembershipAction, MembershipRequest, MembershipUpdatedAction, MembershipSuccess, ErrorUpdatingMembershipAction, MembershipError, MembershipResponse, Membership } from '../MembershipActions';
+import { Dispatch } from 'redux';
+import {
+  UpdatingMembershipAction,
+  MembershipRequest,
+  MembershipUpdatedAction,
+  MembershipSuccess,
+  ErrorUpdatingMembershipAction,
+  MembershipError,
+  MembershipResponse,
+  Membership,
+} from '../MembershipActions';
 import { MembershipActionType } from '../MembershipActionType.enum';
 import { Space } from '../../../features/space/SpaceActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
-import { Dispatch, PubnubThunkContext } from '../../../foundations/ThunkTypes';
+import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 
-export const updatingMemberships = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+export const updatingMemberships = <
+  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta
+>(
   payload: MembershipRequest<MembershipType>,
-  meta?: Meta,
+  meta?: Meta
 ): UpdatingMembershipAction<MembershipType, Meta> => ({
   type: MembershipActionType.UPDATING_MEMBERSHIP,
   payload,
   meta,
 });
 
-export const membershipUpdated = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+export const membershipUpdated = <
+  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta
+>(
   payload: MembershipSuccess<MembershipType>,
-  meta?: Meta,
+  meta?: Meta
 ): MembershipUpdatedAction<MembershipType, Meta> => ({
   type: MembershipActionType.MEMBERSHIP_UPDATED,
   payload,
   meta,
 });
 
-export const errorUpdatingMembership = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta>(
+export const errorUpdatingMembership = <
+  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta
+>(
   payload: MembershipError<MembershipType>,
-  meta?: Meta,
+  meta?: Meta
 ): ErrorUpdatingMembershipAction<MembershipType, Meta> => ({
   type: MembershipActionType.ERROR_UPDATING_MEMBERSHIP,
   payload,
@@ -34,11 +53,18 @@ export const errorUpdatingMembership = <MembershipType extends Membership<Object
   error: true,
 });
 
-export const updateMembership = <MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>, Meta extends ActionMeta = never>(
+export const updateMembership = <
+  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+  Meta extends ActionMeta = never
+>(
   request: MembershipRequest<MembershipType>,
-  meta?: Meta,
+  meta?: Meta
 ) => {
-  const thunkFunction = (dispatch: Dispatch, _getState: any, { pubnub }: PubnubThunkContext) =>
+  const thunkFunction = (
+    dispatch: Dispatch,
+    _getState: any,
+    { pubnub }: PubnubThunkContext
+  ) =>
     new Promise<void>((resolve, reject) => {
       dispatch(updatingMemberships<MembershipType, Meta>(request, meta));
 
@@ -46,14 +72,19 @@ export const updateMembership = <MembershipType extends Membership<ObjectsCustom
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: MembershipResponse<MembershipType>) => {
+        (
+          status: PubNubApiStatus,
+          response: MembershipResponse<MembershipType>
+        ) => {
           if (status.error) {
             let payload: MembershipError<MembershipType> = {
               request,
               status,
             };
 
-            dispatch(errorUpdatingMembership<MembershipType, Meta>(payload, meta));
+            dispatch(
+              errorUpdatingMembership<MembershipType, Meta>(payload, meta)
+            );
             reject(payload);
           } else {
             let payload: MembershipSuccess<MembershipType> = {

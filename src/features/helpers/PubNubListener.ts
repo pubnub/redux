@@ -10,9 +10,7 @@ import { createSpaceListener } from '../space/SpaceListener';
 import { createUserListener } from '../user/UserListener';
 import { combineListeners } from '../../foundations/Combinelisteners';
 
-export const createPubNubListener = (
-  dispatch: Dispatch
-) =>
+export const createPubNubListener = (dispatch: Dispatch) =>
   combineListeners(
     createMessageListener(dispatch),
     createPresenceListener(dispatch),
@@ -23,5 +21,5 @@ export const createPubNubListener = (
     createSubscriptionStatusListener(dispatch),
     createUserListener(dispatch),
     createSpaceListener(dispatch),
-    createMembershipListener(dispatch),
+    createMembershipListener(dispatch)
   );

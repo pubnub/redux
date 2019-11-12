@@ -16,7 +16,7 @@ import {
   FetchMembershipSuccess,
   MembershipRetrievedAction,
   AnyMembership,
-  Membership
+  Membership,
 } from '../membership/MembershipActions';
 import { MembershipActionType } from '../../features/membership/MembershipActionType.enum';
 import { AnyMeta } from '../../foundations/ActionMeta';
@@ -25,8 +25,8 @@ import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 // tag::RDX-025[]
 export type SpacesByIdState<ReceivedSpace extends Space<ObjectsCustom>> = {
   byId: {
-    [spaceId: string]: ReceivedSpace,
-  },
+    [spaceId: string]: ReceivedSpace;
+  };
 };
 // end::RDX-025[]
 
@@ -36,10 +36,10 @@ const createInitialState = () => ({
 
 const spaceCreated = <ReceivedSpace extends Space<ObjectsCustom>>(
   state: SpacesByIdState<ReceivedSpace>,
-  payload: SpaceSuccess<ReceivedSpace>,
+  payload: SpaceSuccess<ReceivedSpace>
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   newState.byId[payload.response.data.id] = payload.response.data;
@@ -49,10 +49,10 @@ const spaceCreated = <ReceivedSpace extends Space<ObjectsCustom>>(
 
 const spaceUpdated = <ReceivedSpace extends Space<ObjectsCustom>>(
   state: SpacesByIdState<ReceivedSpace>,
-  payload: SpaceSuccess<ReceivedSpace>,
+  payload: SpaceSuccess<ReceivedSpace>
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   newState.byId[payload.response.data.id] = payload.response.data;
@@ -65,7 +65,7 @@ const spaceDeleted = <ReceivedSpace extends Space<ObjectsCustom>>(
   payload: DeleteSpaceSuccess
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   delete newState.byId[payload.request.spaceId];
@@ -75,10 +75,10 @@ const spaceDeleted = <ReceivedSpace extends Space<ObjectsCustom>>(
 
 const spacesRetrieved = <ReceivedSpace extends Space<ObjectsCustom>>(
   state: SpacesByIdState<ReceivedSpace>,
-  payload: FetchSpacesSuccess<ReceivedSpace>,
+  payload: FetchSpacesSuccess<ReceivedSpace>
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   payload.response.data.forEach((item) => {
@@ -90,10 +90,10 @@ const spacesRetrieved = <ReceivedSpace extends Space<ObjectsCustom>>(
 
 const spaceRetrieved = <ReceivedSpace extends Space<ObjectsCustom>>(
   state: SpacesByIdState<ReceivedSpace>,
-  payload: FetchSpaceByIdSuccess<ReceivedSpace>,
+  payload: FetchSpaceByIdSuccess<ReceivedSpace>
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   newState.byId[payload.response.data.id] = payload.response.data;
@@ -103,10 +103,10 @@ const spaceRetrieved = <ReceivedSpace extends Space<ObjectsCustom>>(
 
 const spaceUpdatedEventReceived = <ReceivedSpace extends Space<ObjectsCustom>>(
   state: SpacesByIdState<ReceivedSpace>,
-  payload: SpaceEventMessage<ReceivedSpace>,
+  payload: SpaceEventMessage<ReceivedSpace>
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   newState.byId[payload.data.id] = payload.data;
@@ -116,33 +116,33 @@ const spaceUpdatedEventReceived = <ReceivedSpace extends Space<ObjectsCustom>>(
 
 const spaceDeletedEventReceived = <ReceivedSpace extends Space<ObjectsCustom>>(
   state: SpacesByIdState<ReceivedSpace>,
-  payload: SpaceEventMessage<ReceivedSpace>,
+  payload: SpaceEventMessage<ReceivedSpace>
 ) => {
   let newState = {
-    byId: { ...state.byId }
+    byId: { ...state.byId },
   };
 
   delete newState.byId[payload.data.id];
 
   return newState;
-}
+};
 
 const membershipRetrieved = <ReceivedSpace extends Space<ObjectsCustom>>(
   state: SpacesByIdState<ReceivedSpace>,
-  payload: FetchMembershipSuccess<Membership<ObjectsCustom, ReceivedSpace>>,
+  payload: FetchMembershipSuccess<Membership<ObjectsCustom, ReceivedSpace>>
 ) => {
   let newState = state;
 
   if (payload.response.data.length > 0) {
     newState = {
       byId: {
-        ...state.byId
-      }
+        ...state.byId,
+      },
     };
 
     for (let i = 0; i < payload.response.data.length; i++) {
       let currentMembership = payload.response.data[i];
-      
+
       if (currentMembership.space) {
         newState.byId[currentMembership.id] = currentMembership.space;
       }
@@ -154,17 +154,21 @@ const membershipRetrieved = <ReceivedSpace extends Space<ObjectsCustom>>(
 
 type SpaceReducerActions<StoredSpace extends Space<ObjectsCustom>> =
   | SpaceActions<StoredSpace, AnyMeta>
-  | SpaceListenerActions<StoredSpace> 
+  | SpaceListenerActions<StoredSpace>
   | MembershipRetrievedAction<AnyMembership, AnyMeta>
   | MembershipActions<Membership<ObjectsCustom, StoredSpace>, AnyMeta>;
 
-export type SpaceReducer<StoredSpace extends Space<ObjectsCustom>, SpaceAction extends AnyAction> = 
-  (state: SpacesByIdState<StoredSpace> | undefined, action: SpaceAction)
-   => SpacesByIdState<StoredSpace>;
+export type SpaceReducer<
+  StoredSpace extends Space<ObjectsCustom>,
+  SpaceAction extends AnyAction
+> = (
+  state: SpacesByIdState<StoredSpace> | undefined,
+  action: SpaceAction
+) => SpacesByIdState<StoredSpace>;
 
 export const createSpaceReducer = <
   StoredSpace extends Space<ObjectsCustom> = AnySpace,
-  SpaceAction extends AnyAction = SpaceReducerActions<StoredSpace>,
+  SpaceAction extends AnyAction = SpaceReducerActions<StoredSpace>
 >(): SpaceReducer<StoredSpace, SpaceAction> => (
   state: SpacesByIdState<StoredSpace> = createInitialState(),
   action: SpaceAction

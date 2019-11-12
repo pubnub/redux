@@ -24,7 +24,9 @@ export const userDeleted = <UserType extends User<ObjectsCustom>>(
   payload,
 });
 
-export const createUserListener = <UserType extends User<ObjectsCustom> = AnyUser>(
+export const createUserListener = <
+  UserType extends User<ObjectsCustom> = AnyUser
+>(
   dispatch: Dispatch<UserListenerActions<UserType>>
 ) => ({
   user: (payload: UserEventMessage<UserType>) => {

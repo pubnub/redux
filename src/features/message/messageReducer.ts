@@ -4,12 +4,14 @@ import { ActionMeta, AnyMeta } from '../../foundations/ActionMeta';
 
 export type MessageState<MessageType extends Message> = {
   byId: {
-    [channel: string]: MessageType[]
-  },
+    [channel: string]: MessageType[];
+  };
 };
 
 // tag::RDX-028[]
-const createInitialState = <MessageType extends Message>(): MessageState<MessageType> => ({
+const createInitialState = <MessageType extends Message>(): MessageState<
+  MessageType
+> => ({
   byId: {},
 });
 // end::RDX-028[]
@@ -26,12 +28,17 @@ const messageReceived = <MessageType extends Message>(
     newState.byId[payload.channel] = [];
   }
 
-  newState.byId[payload.channel] = [ ...newState.byId[payload.channel], payload ];
+  newState.byId[payload.channel] = [...newState.byId[payload.channel], payload];
 
   return newState;
 };
 
-export const createMessageReducer = <MessageType extends Message = Message, MessageContentType extends object = {}, MessageMetaType extends object = {}, Meta extends ActionMeta = AnyMeta>() => (
+export const createMessageReducer = <
+  MessageType extends Message = Message,
+  MessageContentType extends object = {},
+  MessageMetaType extends object = {},
+  Meta extends ActionMeta = AnyMeta
+>() => (
   state: MessageState<MessageType> = createInitialState<MessageType>(),
   action: MessageActions<MessageType, MessageContentType, MessageMetaType, Meta>
 ): MessageState<MessageType> => {
