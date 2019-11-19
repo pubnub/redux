@@ -69,7 +69,7 @@ const userJoined = <ReceivedPresence extends Presence<PresenceState>>(
 ) => {
   let newState = {
     byId: { ...state.byId },
-    totalOccupancy: state.totalOccupancy + 1,
+    totalOccupancy: state.totalOccupancy,
   };
 
   let occupants: ReceivedPresence[] = [];
@@ -81,6 +81,15 @@ const userJoined = <ReceivedPresence extends Presence<PresenceState>>(
     newState.byId[payload.channel].occupants = occupants.filter(
       (occupant) => occupant.uuid !== payload.uuid
     );
+
+    newState.byId[payload.channel].occupancy =
+      newState.byId[payload.channel].occupants.length;
+
+    if (occupants.length === newState.byId[payload.channel].occupants.length) {
+      newState.totalOccupancy++;
+    }
+  } else {
+    newState.totalOccupancy++;
   }
 
   // add occupant and update occupancy
@@ -105,7 +114,7 @@ const userLeft = <ReceivedPresence extends Presence<PresenceState>>(
 ) => {
   let newState = {
     byId: { ...state.byId },
-    totalOccupancy: state.totalOccupancy - 1,
+    totalOccupancy: state.totalOccupancy,
   };
 
   // remove occupant if exists
@@ -115,6 +124,11 @@ const userLeft = <ReceivedPresence extends Presence<PresenceState>>(
     newState.byId[payload.channel].occupants = occupants.filter(
       (occupant) => occupant.uuid !== payload.uuid
     );
+
+    if (occupants.length > newState.byId[payload.channel].occupants.length) {
+      newState.byId[payload.channel].occupancy--;
+      newState.totalOccupancy--;
+    }
   }
 
   return newState;
