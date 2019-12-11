@@ -13,9 +13,10 @@ import { MembersActionType } from '../MembersActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 import { Space } from '../../space/SpaceActions';
 
+// tag::RDX-function-members-remove[]
 export const removingMembers = <
   MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -27,7 +28,9 @@ export const removingMembers = <
   payload,
   meta,
 });
+// end::RDX-function-members-remove[]
 
+// tag::RDX-function-members-remove-success[]
 export const membersRemoved = <
   MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -39,7 +42,9 @@ export const membersRemoved = <
   payload,
   meta,
 });
+// end::RDX-function-members-remove-success[]
 
+// tag::RDX-function-members-remove-error[]
 export const errorRemovingMembers = <
   MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -52,10 +57,12 @@ export const errorRemovingMembers = <
   meta,
   error: true,
 });
+// end::RDX-function-members-remove-error[]
 
+// tag::RDX-command-members-remove[]
 export const removeMembers = <
   MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >(
   request: MembersRequest<MembersType>,
   meta?: Meta
@@ -99,3 +106,4 @@ export const removeMembers = <
 
   return thunkFunction;
 };
+// end::RDX-command-members-remove[]

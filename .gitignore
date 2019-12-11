@@ -9,3 +9,5 @@ pubnub-redux-*.tgz
 
 deployment_keys
 deployment_keys.pub
+
+.idea

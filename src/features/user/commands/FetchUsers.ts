@@ -12,9 +12,10 @@ import {
 import { UserActionType } from '../UserActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 
+// tag::RDX-function-user-fetch[]
 export const fetchingUsers = <Meta extends ActionMeta>(
   payload: FetchUsersRequest,
   meta?: Meta
@@ -23,7 +24,9 @@ export const fetchingUsers = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-user-fetch[]
 
+// tag::RDX-function-user-fetch-success[]
 export const usersRetrieved = <
   UserType extends User<ObjectsCustom>,
   Meta extends ActionMeta
@@ -35,8 +38,10 @@ export const usersRetrieved = <
   payload,
   meta,
 });
+// end::RDX-function-user-fetch-success[]
 
-export const errorFetchingUsers = <Meta extends ActionMeta = never>(
+// tag::RDX-function-user-fetch-error[]
+export const errorFetchingUsers = <Meta extends ActionMeta = AnyMeta>(
   payload: FetchUsersError,
   meta?: Meta
 ): ErrorFetchingUsersAction<Meta> => ({
@@ -45,10 +50,12 @@ export const errorFetchingUsers = <Meta extends ActionMeta = never>(
   meta,
   error: true,
 });
+// end::RDX-function-user-fetch-error[]
 
+// tag::RDX-command-user-fetch[]
 export const fetchUsers = <
   UserType extends User<ObjectsCustom>,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >(
   request: FetchUsersRequest = {},
   meta?: Meta
@@ -90,3 +97,4 @@ export const fetchUsers = <
 
   return thunkFunction;
 };
+// end::RDX-command-user-fetch[]

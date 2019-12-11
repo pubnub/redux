@@ -12,6 +12,7 @@ import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 import { AnyMeta } from '../../foundations/ActionMeta';
 import { User } from '../user/UserActions';
 
+// tag::RDX-type-memberships-byuserid[]
 export type MembershipByUserIdState<
   ReceivedMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>
 > = {
@@ -19,6 +20,7 @@ export type MembershipByUserIdState<
     [userId: string]: ReceivedMembership[];
   };
 };
+// end::RDX-type-memberships-byuserid[]
 
 const createInitialState = () => ({
   byId: {},
@@ -62,7 +64,7 @@ const userRemovedFromSpace = <
   if (
     state.byId[payload.data.userId].filter(
       (membership) => membership.id === payload.data.spaceId
-    ).length === 0
+    ).length > 0
   ) {
     let newState = {
       byId: { ...state.byId },
@@ -84,9 +86,28 @@ const userMembershipUpdatedOnSpace = <
   state: MembershipByUserIdState<ReceivedMembership>,
   payload: MembershipEventMessage<ReceivedMembership>
 ) => {
-  console.log(payload);
-  // TODO: need to update the custom object
-  return state;
+  let newState = {
+    byId: { ...state.byId },
+  };
+
+  let clonedUser = [...newState.byId[payload.data.userId]];
+
+  if (clonedUser !== undefined) {
+    clonedUser = clonedUser.map((space) => {
+      if (space.id === payload.data.spaceId) {
+        return {
+          ...space,
+          custom: payload.data.custom,
+        };
+      } else {
+        return space;
+      }
+    });
+  }
+
+  newState.byId[payload.data.userId] = clonedUser;
+
+  return newState;
 };
 
 const membershipResult = <
@@ -112,6 +133,7 @@ type MembershipReducerActions<
   | MembershipActions<ReceivedMembership, AnyMeta>
   | MembershipListenerActions<ReceivedMembership>;
 
+// tag::RDX-type-membership[]
 export type MembershipReducer<
   StoredMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>,
   MembershipAction extends AnyAction
@@ -119,7 +141,9 @@ export type MembershipReducer<
   state: MembershipByUserIdState<StoredMembership> | undefined,
   action: MembershipAction
 ) => MembershipByUserIdState<StoredMembership>;
+// end::RDX-type-membership[]
 
+// tag::RDX-method-reducer-membership[]
 export const createMembershipReducer = <
   StoredMembership extends Membership<
     ObjectsCustom,
@@ -151,3 +175,4 @@ export const createMembershipReducer = <
       return state;
   }
 };
+// end::RDX-method-reducer-membership[]

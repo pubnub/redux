@@ -13,8 +13,9 @@ import { UserActionType } from '../UserActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 
+// tag::RDX-function-user-create[]
 export const creatingUser = <Meta extends ActionMeta>(
   payload: UserRequest,
   meta?: Meta
@@ -23,7 +24,9 @@ export const creatingUser = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-user-create[]
 
+// tag::RDX-function-user-create-success[]
 export const userCreated = <
   UserType extends User<ObjectsCustom>,
   Meta extends ActionMeta
@@ -35,7 +38,9 @@ export const userCreated = <
   payload,
   meta,
 });
+// end::RDX-function-user-create-success[]
 
+// tag::RDX-function-user-create-error[]
 export const errorCreatingUser = <Meta extends ActionMeta>(
   payload: UserError,
   meta?: Meta
@@ -45,10 +50,12 @@ export const errorCreatingUser = <Meta extends ActionMeta>(
   meta,
   error: true,
 });
+// end::RDX-function-user-create-error[]
 
+// tag::RDX-command-user-create[]
 export const createUser = <
   UserType extends User<ObjectsCustom>,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >(
   request: UserRequest,
   meta?: Meta
@@ -92,3 +99,4 @@ export const createUser = <
 
   return thunkFunction;
 };
+// end::RDX-command-user-create[]

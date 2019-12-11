@@ -1,3 +1,4 @@
+// tag::RDX-enum-user-action[]
 export enum UserActionType {
   FETCH_USERS_COMMAND = 'pubnub/FETCH_USERS_COMMAND',
   FETCH_USER_BY_ID_COMMAND = 'pubnub/FETCH_USER_BY_ID_COMMAND',
@@ -22,3 +23,4 @@ export enum UserActionType {
   USER_UPDATED_EVENT = 'pubnub/USER_UPDATED_EVENT',
   USER_DELETED_EVENT = 'pubnub/USER_DELETED_EVENT',
 }
+// end::RDX-enum-user-action[]

@@ -2,6 +2,7 @@ import { ErrorStatusListenerActions } from './ErrorStatusListener';
 import { ErrorStatusActionType } from './ErrorStatusActionType.enum';
 import { ErrorStatusResponse } from './ErrorStatusActions';
 
+// tag::RDX-state-error[]
 export interface ErrorState {
   networkIssues: ErrorStatusResponse[];
   accessDenied: ErrorStatusResponse[];
@@ -12,6 +13,7 @@ export interface ErrorState {
   timeoutConnection: ErrorStatusResponse[];
   unknown: ErrorStatusResponse[];
 }
+// end::RDX-state-error[]
 
 const createInitialState = (): ErrorState => {
   return {
@@ -26,6 +28,7 @@ const createInitialState = (): ErrorState => {
   };
 };
 
+// tag::RDX-reducer-error[]
 export const createErrorStatusReducer = () => {
   return function errorStatusReducer(
     state = createInitialState(),
@@ -71,3 +74,4 @@ export const createErrorStatusReducer = () => {
     }
   };
 };
+// end::RDX-reducer-error[]

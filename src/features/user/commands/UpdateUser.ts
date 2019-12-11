@@ -13,8 +13,9 @@ import { UserActionType } from '../UserActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 
+// tag::RDX-function-user-update[]
 export const updatingUser = <Meta extends ActionMeta>(
   payload: UserRequest,
   meta?: Meta
@@ -23,7 +24,9 @@ export const updatingUser = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-user-update[]
 
+// tag::RDX-function-user-update-success[]
 export const userUpdated = <
   UserType extends User<ObjectsCustom>,
   Meta extends ActionMeta
@@ -35,7 +38,9 @@ export const userUpdated = <
   payload,
   meta,
 });
+// end::RDX-function-user-update-success[]
 
+// tag::RDX-function-user-update-error[]
 export const errorUpdatingUser = <Meta extends ActionMeta>(
   payload: UserError,
   meta?: Meta
@@ -45,10 +50,12 @@ export const errorUpdatingUser = <Meta extends ActionMeta>(
   meta,
   error: true,
 });
+// end::RDX-function-user-update-error[]
 
+// tag::RDX-command-user-update[]
 export const updateUser = <
   UserType extends User<ObjectsCustom>,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >(
   request: UserRequest,
   meta?: Meta
@@ -92,3 +99,4 @@ export const updateUser = <
 
   return thunkFunction;
 };
+// end::RDX-command-user-update[]

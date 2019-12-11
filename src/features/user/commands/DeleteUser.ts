@@ -11,8 +11,9 @@ import {
 import { UserActionType } from '../UserActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 
+// tag::RDX-function-user-delete[]
 export const deletingUser = <Meta extends ActionMeta>(
   payload: DeleteUserRequest,
   meta?: Meta
@@ -21,7 +22,9 @@ export const deletingUser = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-user-delete[]
 
+// tag::RDX-function-user-delete-success[]
 export const userDeleted = <Meta extends ActionMeta>(
   payload: DeleteUserSuccess,
   meta?: Meta
@@ -30,7 +33,9 @@ export const userDeleted = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-user-delete-success[]
 
+// tag::RDX-function-user-delete-error[]
 export const errorDeletingUser = <Meta extends ActionMeta>(
   payload: DeleteUserError,
   meta?: Meta
@@ -40,8 +45,10 @@ export const errorDeletingUser = <Meta extends ActionMeta>(
   meta,
   error: true,
 });
+// end::RDX-function-user-delete-error[]
 
-export const deleteUser = <Meta extends ActionMeta = never>(
+// tag::RDX-command-user-delete[]
+export const deleteUser = <Meta extends ActionMeta = AnyMeta>(
   request: DeleteUserRequest,
   meta?: Meta
 ) => {
@@ -82,3 +89,4 @@ export const deleteUser = <Meta extends ActionMeta = never>(
 
   return thunkFunction;
 };
+// end::RDX-command-user-delete[]

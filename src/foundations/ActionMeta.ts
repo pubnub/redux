@@ -1,4 +1,7 @@
-export type ActionMeta = object;
-export interface AnyMeta extends ActionMeta {
-  [key: string]: any;
-}
+// tag::RDX-type-pubnub-meta[]
+export interface ActionMeta {}
+// end::RDX-type-pubnub-meta[]
+
+// tag::RDX-type-pubnub-metaany[]
+export type AnyMeta = {};
+// end::RDX-type-pubnub-metaany[]

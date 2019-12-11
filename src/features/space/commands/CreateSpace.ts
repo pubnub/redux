@@ -13,9 +13,9 @@ import { SpaceActionType } from '../SpaceActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 
-// tag::RDX-162[]
+// tag::RDX-function-space-create[]
 export const creatingSpace = <Meta extends ActionMeta>(
   payload: SpaceRequest,
   meta?: Meta
@@ -24,9 +24,9 @@ export const creatingSpace = <Meta extends ActionMeta>(
   payload,
   meta,
 });
-// end::RDX-162[]
+// end::RDX-function-space-create[]
 
-// tag::RDX-163[]
+// tag::RDX-function-space-create-success[]
 export const spaceCreated = <
   SpaceType extends Space<ObjectsCustom>,
   Meta extends ActionMeta
@@ -38,9 +38,9 @@ export const spaceCreated = <
   payload,
   meta,
 });
-// end::RDX-163[]
+// end::RDX-function-space-create-success[]
 
-// tag::RDX-164[]
+// tag::RDX-function-space-create-error[]
 export const errorCreatingSpace = <Meta extends ActionMeta>(
   payload: SpaceError,
   meta?: Meta
@@ -50,11 +50,12 @@ export const errorCreatingSpace = <Meta extends ActionMeta>(
   meta,
   error: true,
 });
-// end::RDX-164[]
+// end::RDX-function-space-create-error[]
 
+// tag::RDX-command-space-create[]
 export const createSpace = <
   SpaceType extends Space<ObjectsCustom>,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >(
   request: SpaceRequest,
   meta?: Meta
@@ -98,3 +99,4 @@ export const createSpace = <
 
   return thunkFunction;
 };
+// end::RDX-command-space-create[]

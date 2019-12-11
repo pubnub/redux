@@ -16,6 +16,7 @@ import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 import { Space } from '../space/SpaceActions';
 import { AnyMeta } from '../../foundations/ActionMeta';
 
+// tag::RDX-type-members-byspaceid[]
 export type MembersBySpaceIdState<
   ReceivedMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>
 > = {
@@ -23,6 +24,7 @@ export type MembersBySpaceIdState<
     [spaceId: string]: ReceivedMembers[];
   };
 };
+// end::RDX-type-members-byspaceid[]
 
 const createInitialState = () => ({
   byId: {},
@@ -66,13 +68,13 @@ const userRemovedFromSpace = <
   if (
     state.byId[payload.data.spaceId].filter(
       (membership) => membership.id === payload.data.userId
-    ).length === 0
+    ).length > 0
   ) {
     let newState = {
       byId: { ...state.byId },
     };
 
-    newState.byId[payload.data.userId] = newState.byId[
+    newState.byId[payload.data.spaceId] = newState.byId[
       payload.data.spaceId
     ].filter((membership) => membership.id !== payload.data.userId);
 
@@ -88,9 +90,28 @@ const userMembershipUpdatedOnSpace = <
   state: MembersBySpaceIdState<ReceivedMembers>,
   payload: MembershipEventMessage<Membership>
 ) => {
-  console.log(payload);
-  // TODO: need to update the custom object
-  return state;
+  let newState = {
+    byId: { ...state.byId },
+  };
+
+  let clonedSpace = [...newState.byId[payload.data.spaceId]];
+
+  if (clonedSpace !== undefined) {
+    clonedSpace = clonedSpace.map((user) => {
+      if (user.id === payload.data.userId) {
+        return {
+          ...user,
+          custom: payload.data.custom,
+        };
+      } else {
+        return user;
+      }
+    });
+  }
+
+  newState.byId[payload.data.spaceId] = clonedSpace;
+
+  return newState;
 };
 
 const membersResult = <
@@ -116,6 +137,7 @@ type MembersReducerActions<
   | MembersActions<ReceivedMembers, AnyMeta>
   | MembershipListenerActions<Membership>;
 
+// tag::RDX-type-member[]
 export type MembersReducer<
   StoredMembers extends Members<ObjectsCustom, Space<ObjectsCustom>>,
   MembersAction extends AnyAction
@@ -123,7 +145,9 @@ export type MembersReducer<
   state: MembersBySpaceIdState<StoredMembers> | undefined,
   action: MembersAction
 ) => MembersBySpaceIdState<StoredMembers>;
+// end::RDX-type-member[]
 
+// tag::RDX-method-reducer-member[]
 export const createMembersReducer = <
   StoredMembers extends Members<ObjectsCustom, Space<ObjectsCustom>> = Members,
   MembersAction extends AnyAction = MembersReducerActions<StoredMembers>
@@ -147,3 +171,4 @@ export const createMembersReducer = <
       return state;
   }
 };
+// end::RDX-method-reducer-member[]

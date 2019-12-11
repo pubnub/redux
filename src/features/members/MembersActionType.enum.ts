@@ -1,3 +1,4 @@
+// tag::RDX-enum-memmber-action[]
 export enum MembersActionType {
   FETCH_MEMBERS_COMMAND = 'pubnub/FETCH_MEMBERS_COMMAND',
   UPDATE_MEMBERS_COMMAND = 'pubnub/UPDATE_MEMBERS_COMMAND',
@@ -16,3 +17,4 @@ export enum MembersActionType {
   MEMBERS_REMOVED = 'pubnub/MEMBERS_REMOVED',
   ERROR_REMOVING_MEMBERS = 'pubnub/ERROR_REMOVING_MEMBERS',
 }
+// end::RDX-enum-memmber-action[]

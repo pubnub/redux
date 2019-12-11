@@ -4,6 +4,7 @@ import { ObjectsCustom, AnyCustom } from '../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../foundations/ActionMeta';
 import { User } from '../user/UserActions';
 
+// tag::RDX-type-members[]
 export interface Members<
   CustomMemberFields extends ObjectsCustom = AnyCustom,
   ReceivedUser extends User<ObjectsCustom> = User
@@ -15,13 +16,16 @@ export interface Members<
   updated?: string;
   eTag?: string;
 }
+// end::RDX-type-members[]
 
+// tag::RDX-type-memberpage[]
 export interface MemberPage {
   next?: string;
   prev?: string;
 }
+// end::RDX-type-memberpage[]
 
-// tag::RDX-000[]
+// tag::RDX-type-member-fetch-option[]
 export interface MembersFetchRequestOptions {
   limit?: number;
   page?: MemberPage;
@@ -32,23 +36,24 @@ export interface MembersFetchRequestOptions {
     totalCount?: boolean;
   };
 }
-// end::RDX-000[]
+// end::RDX-type-member-fetch-option[]
 
-// // tag::RDX-001[]
+// tag::RDX-type-member-fetch[]
 export interface FetchMembersRequest extends MembersFetchRequestOptions {
   spaceId: string;
 }
-// // end::RDX-001[]
+// end::RDX-type-member-fetch[]
 
-// // tag::RDX-002[]
+// tag::RDX-type-member-fetch-response[]
 export interface FetchMembersResponse<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>
 > {
   status: string;
   data: ReceivedMembers[];
 }
-// // end::RDX-002[]
+// end::RDX-type-member-fetch-response[]
 
+// tag::RDX-type-member-fetch-success[]
 export interface FetchMembersSuccess<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>
 > {
@@ -56,26 +61,34 @@ export interface FetchMembersSuccess<
   response: FetchMembersResponse<ReceivedMembers>;
   status: PubNubApiStatus;
 }
+// end::RDX-type-member-fetch-success[]
 
+// tag::RDX-type-member-fetch-error[]
 export interface FetchMembersError {
   request: FetchMembersRequest;
   status: PubNubApiStatus;
 }
+// end::RDX-type-member-fetch-error[]
 
+// tag::RDX-type-member-request[]
 export type MembersRequest<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>
 > = {
   spaceId: string;
   users: ReceivedMembers[];
 };
+// end::RDX-type-member-request[]
 
+// tag::RDX-type-member-response[]
 export interface MembersResponse<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>
 > {
   status: string;
   data: ReceivedMembers[];
 }
+// end::RDX-type-member-response[]
 
+// tag::RDX-type-member-success[]
 export interface MembersSuccess<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>
 > {
@@ -83,23 +96,26 @@ export interface MembersSuccess<
   response: MembersResponse<ReceivedMembers>;
   status: PubNubApiStatus;
 }
+// end::RDX-type-member-success[]
 
+// tag::RDX-type-member-error[]
 export interface MembersError<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>
 > {
   request: MembersRequest<ReceivedMembers>;
   status: PubNubApiStatus;
 }
+// end::RDX-type-member-error[]
 
-// tag::RDX-118[]
+// tag::RDX-action-member-fetch[]
 export interface FetchingMembersAction<Meta> {
   type: typeof MembersActionType.FETCHING_MEMBERS;
   payload: FetchMembersRequest;
   meta?: Meta;
 }
-// end::RDX-118[]
+// end::RDX-action-member-fetch[]
 
-// tag::RDX-119[]
+// tag::RDX-action-member-retrieved[]
 export interface MembersRetrievedAction<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -108,18 +124,18 @@ export interface MembersRetrievedAction<
   payload: FetchMembersSuccess<ReceivedMembers>;
   meta?: Meta;
 }
-// end::RDX-119[]
+// end::RDX-action-member-retrieved[]
 
-// tag::RDX-120[]
+// tag::RDX-action-member-fetch-error[]
 export interface ErrorFetchingMembersAction<Meta> {
   type: typeof MembersActionType.ERROR_FETCHING_MEMBERS;
   payload: FetchMembersError;
   meta?: Meta;
   error: true;
 }
-// end::RDX-120[]
+// end::RDX-action-member-fetch-error[]
 
-// tag::RDX-122[]
+// tag::RDX-action-member-update[]
 export interface UpdatingMembersAction<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -128,9 +144,9 @@ export interface UpdatingMembersAction<
   payload: MembersRequest<ReceivedMembers>;
   meta?: Meta;
 }
-// end::RDX-122[]
+// end::RDX-action-member-update[]
 
-// tag::RDX-121[]
+// tag::RDX-action-member-update-success[]
 export interface MembersUpdatedAction<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -139,9 +155,9 @@ export interface MembersUpdatedAction<
   payload: MembersSuccess<ReceivedMembers>;
   meta?: Meta;
 }
-// end::RDX-121[]
+// end::RDX-action-member-update-success[]
 
-// tag::RDX-123[]
+// tag::RDX-action-member-update-error[]
 export interface ErrorUpdatingMembersAction<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -151,9 +167,9 @@ export interface ErrorUpdatingMembersAction<
   meta?: Meta;
   error: true;
 }
-// end::RDX-123[]
+// end::RDX-action-member-update-error[]
 
-// tag::RDX-125[]
+// tag::RDX-action-member-add[]
 export interface AddingMembersAction<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -162,9 +178,9 @@ export interface AddingMembersAction<
   payload: MembersRequest<ReceivedMembers>;
   meta?: Meta;
 }
-// end::RDX-125[]
+// end::RDX-action-member-add[]
 
-// tag::RDX-124[]
+// tag::RDX-action-member-add-success[]
 export interface MembersAddedAction<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -173,9 +189,9 @@ export interface MembersAddedAction<
   payload: MembersSuccess<ReceivedMembers>;
   meta?: Meta;
 }
-// end::RDX-124[]
+// end::RDX-action-member-add-success[]
 
-// tag::RDX-126[]
+// tag::RDX-action-member-add-error[]
 export interface ErrorAddingMembersAction<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -185,9 +201,9 @@ export interface ErrorAddingMembersAction<
   meta?: Meta;
   error: true;
 }
-// end::RDX-126[]
+// end::RDX-action-member-add-error[]
 
-// tag::RDX-128[]
+// tag::RDX-action-member-remove[]
 export interface RemovingMembersAction<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -196,9 +212,9 @@ export interface RemovingMembersAction<
   payload: MembersRequest<ReceivedMembers>;
   meta?: Meta;
 }
-// end::RDX-128[]
+// end::RDX-action-member-remove[]
 
-// tag::RDX-127[]
+// tag::RDX-action-member-remove-success[]
 export interface MembersRemovedAction<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -207,9 +223,9 @@ export interface MembersRemovedAction<
   payload: MembersSuccess<ReceivedMembers>;
   meta?: Meta;
 }
-// end::RDX-127[]
+// end::RDX-action-member-remove-success[]
 
-// tag::RDX-129[]
+// tag::RDX-action-member-remove-error[]
 export interface ErrorRemovingMembersAction<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -219,7 +235,7 @@ export interface ErrorRemovingMembersAction<
   meta?: Meta;
   error: true;
 }
-// end::RDX-129[]
+// end::RDX-action-member-remove-error[]
 
 export type MembersActions<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>,

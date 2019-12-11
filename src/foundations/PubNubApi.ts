@@ -1,4 +1,6 @@
-// tag::RDX-017[]
+export type PubNub = any;
+
+// tag::RDX-type-pubnub-api[]
 export interface PubNubApiStatus {
   error: boolean;
   errorData: string;
@@ -6,4 +8,4 @@ export interface PubNubApiStatus {
   operation: string;
   statusCode: number;
 }
-// end::RDX-017[]
+// end::RDX-type-pubnub-api[]

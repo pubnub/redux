@@ -5,7 +5,7 @@ import {
 } from './SpaceActions';
 import { SpaceActionType } from './SpaceActionType.enum';
 import { ObjectsCustom } from '../../foundations/ObjectsCustom';
-import { ActionMeta } from '../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../foundations/ActionMeta';
 
 interface SpaceListState {
   spaceIds: string[];
@@ -19,9 +19,10 @@ const spacesRetrieved = <SpaceType extends Space<ObjectsCustom>>(
   payload: FetchSpacesSuccess<SpaceType>
 ) => ({ spaceIds: payload.response.data.map((space) => space.id) });
 
+// tag::RDX-method-reducer-spacelist[]
 export const createSpaceListReducer = <
   SpaceType extends Space<ObjectsCustom> = Space,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >() => (
   state: SpaceListState = createInitialState(),
   action: SpacesRetrievedAction<SpaceType, Meta>
@@ -33,3 +34,4 @@ export const createSpaceListReducer = <
       return state;
   }
 };
+// end::RDX-method-reducer-spacelist[]

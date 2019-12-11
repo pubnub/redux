@@ -129,7 +129,6 @@ const createCombinedListener = (listenerType: string, listeners: any): any => {
   return {
     [listenerType]: (payload: any) => {
       listeners.forEach((listener: any) => {
-        console.log('any event', JSON.stringify(payload));
         listener[listenerType](payload);
       });
     },

@@ -11,8 +11,9 @@ import {
 import { MessageActionType } from '../MessageActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 
+// tag::RDX-function-messages-send[]
 export const sendingMessage = <
   MessageContentType extends object,
   MessageMeta extends object,
@@ -25,7 +26,9 @@ export const sendingMessage = <
   payload,
   meta,
 });
+// end::RDX-function-messages-send[]
 
+// tag::RDX-function-messages-send-success[]
 export const messageSent = <
   MessageContentType extends object,
   MessageMeta extends object,
@@ -38,7 +41,9 @@ export const messageSent = <
   payload,
   meta,
 });
+// end::RDX-function-messages-send-success[]
 
+// tag::RDX-function-messages-send-error[]
 export const errorSendingmessage = <
   MessageContentType extends object,
   MessageMeta extends object,
@@ -51,11 +56,13 @@ export const errorSendingmessage = <
   payload,
   meta,
 });
+// end::RDX-function-messages-send-error[]
 
+// tag::RDX-command-messages-send[]
 export const sendMessage = <
   MessageContentType extends object = {},
   MessageMeta extends object = {},
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >(
   request: SendMessageRequest<MessageContentType, MessageMeta>,
   meta?: Meta
@@ -106,3 +113,4 @@ export const sendMessage = <
 
   return thunkFunction;
 };
+// end::RDX-command-messages-send[]

@@ -14,8 +14,9 @@ import { Space } from '../../../features/space/SpaceActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 
+// tag::RDX-function-memberships-update[]
 export const updatingMemberships = <
   MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -27,7 +28,9 @@ export const updatingMemberships = <
   payload,
   meta,
 });
+// end::RDX-function-memberships-update[]
 
+// tag::RDX-function-memberships-update-success[]
 export const membershipUpdated = <
   MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -39,7 +42,9 @@ export const membershipUpdated = <
   payload,
   meta,
 });
+// end::RDX-function-memberships-update-success[]
 
+// tag::RDX-function-memberships-update-error[]
 export const errorUpdatingMembership = <
   MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -52,10 +57,12 @@ export const errorUpdatingMembership = <
   meta,
   error: true,
 });
+// end::RDX-function-memberships-update-error[]
 
+// tag::RDX-command-memberships-update[]
 export const updateMembership = <
   MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >(
   request: MembershipRequest<MembershipType>,
   meta?: Meta
@@ -104,3 +111,4 @@ export const updateMembership = <
 
   return thunkFunction;
 };
+// end::RDX-command-memberships-update[]

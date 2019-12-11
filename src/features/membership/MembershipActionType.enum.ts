@@ -1,3 +1,4 @@
+// tag::RDX-enum-memberships-action[]
 export enum MembershipActionType {
   FETCH_MEMBERSHIP_COMMAND = 'pubnub/FETCH_MEMBERSHIP_COMMAND',
   JOIN_SPACES_COMMAND = 'pubnub/JOIN_SPACES_COMMAND',
@@ -19,3 +20,4 @@ export enum MembershipActionType {
   SPACES_LEFT = 'pubnub/SPACES_LEFT',
   ERROR_LEAVING_SPACES = 'pubnub/ERROR_LEAVING_SPACES',
 }
+// end::RDX-enum-memberships-action[]

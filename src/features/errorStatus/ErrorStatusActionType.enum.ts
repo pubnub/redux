@@ -1,3 +1,4 @@
+// tag::RDX-enum-error-action[]
 export enum ErrorStatusActionType {
   NETWORK_ISSUES_EVENT = 'pubnub/NETWORK_ISSUES_EVENT',
   ACCESS_DENIED_EVENT = 'pubnub/ACCESS_DENIED_EVENT',
@@ -8,3 +9,4 @@ export enum ErrorStatusActionType {
   REQUEST_MESSAGE_COUNT_EXCEED_EVENT = 'pubnub/REQUEST_MESSAGE_COUNT_EXCEED_EVENT',
   UNKNOWN_EVENT = 'pubnub/UNKNOWN_EVENT',
 }
+// end::RDX-enum-error-action[]

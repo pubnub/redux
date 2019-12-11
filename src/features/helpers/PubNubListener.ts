@@ -8,8 +8,9 @@ import { createSubscriptionStatusListener } from '../subscriptionStatus/Subscrip
 import { createMembershipListener } from '../membership/MembershipListener';
 import { createSpaceListener } from '../space/SpaceListener';
 import { createUserListener } from '../user/UserListener';
-import { combineListeners } from '../../foundations/Combinelisteners';
+import { combineListeners } from '../../foundations/CombineListeners';
 
+// tag::RDX-listener-pubnub[]
 export const createPubNubListener = (dispatch: Dispatch) =>
   combineListeners(
     createMessageListener(dispatch),
@@ -23,3 +24,4 @@ export const createPubNubListener = (dispatch: Dispatch) =>
     createSpaceListener(dispatch),
     createMembershipListener(dispatch)
   );
+// end::RDX-listener-pubnub[]

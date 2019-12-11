@@ -24,13 +24,13 @@ import { MembersActionType } from '../../features/members/MembersActionType.enum
 import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 import { AnyMeta } from '../../foundations/ActionMeta';
 
-// tag::RDX-059[]
+// tag::RDX-state-users-byid[]
 export interface UsersByIdState<ReceivedUser extends User<ObjectsCustom>> {
   byId: {
     [userId: string]: ReceivedUser;
   };
 }
-// end::RDX-059[]
+// end::RDX-state-users-byid[]
 
 const createInitialState = () => ({
   byId: {},
@@ -160,6 +160,7 @@ type UserReducerActions<StoredUser extends User<ObjectsCustom>> =
   | MembersActions<Members<ObjectsCustom, Space>, AnyMeta>
   | MembershipActions<Membership<ObjectsCustom, Space>, AnyMeta>;
 
+// tag::RDX-type-user[]
 export type UserReducer<
   StoredUser extends User<ObjectsCustom>,
   UserAction extends AnyAction
@@ -167,7 +168,9 @@ export type UserReducer<
   state: UsersByIdState<StoredUser> | undefined,
   action: UserAction
 ) => UsersByIdState<StoredUser>;
+// end::RDX-type-user[]
 
+// tag::RDX-method-reducer-user[]
 export const createUserReducer = <
   StoredUser extends User<ObjectsCustom> = User,
   UserAction extends AnyAction = UserReducerActions<StoredUser>
@@ -196,3 +199,4 @@ export const createUserReducer = <
       return state;
   }
 };
+// end::RDX-method-reducer-user[]

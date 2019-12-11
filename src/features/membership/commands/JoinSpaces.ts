@@ -14,8 +14,9 @@ import { Space } from '../../../features/space/SpaceActions';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 
+// tag::RDX-function-spaces-join[]
 export const joiningSpaces = <
   MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -27,7 +28,9 @@ export const joiningSpaces = <
   payload,
   meta,
 });
+// end::RDX-function-spaces-join[]
 
+// tag::RDX-function-spaces-join-success[]
 export const spacesJoined = <
   MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -39,7 +42,9 @@ export const spacesJoined = <
   payload,
   meta,
 });
+// end::RDX-function-spaces-join-success[]
 
+// tag::RDX-function-spaces-join-error[]
 export const errorJoiningSpaces = <
   MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -52,10 +57,12 @@ export const errorJoiningSpaces = <
   meta,
   error: true,
 });
+// end::RDX-function-spaces-join-error[]
 
+// tag::RDX-command-spaces-join[]
 export const joinSpaces = <
   MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >(
   request: MembershipRequest<MembershipType>,
   meta?: Meta
@@ -102,3 +109,4 @@ export const joinSpaces = <
 
   return thunkFunction;
 };
+// end::RDX-command-spaces-join[]

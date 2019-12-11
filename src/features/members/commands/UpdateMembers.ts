@@ -12,10 +12,11 @@ import {
 import { MembersActionType } from '../MembersActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { Space } from '../../space/SpaceActions';
 
+// tag::RDX-function-members-update[]
 export const updatingMembers = <
   MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -27,7 +28,9 @@ export const updatingMembers = <
   payload,
   meta,
 });
+// end::RDX-function-members-update[]
 
+// tag::RDX-function-members-update-success[]
 export const membersUpdated = <
   MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -39,7 +42,9 @@ export const membersUpdated = <
   payload,
   meta,
 });
+// end::RDX-function-members-update-success[]
 
+// tag::RDX-function-members-update-error[]
 export const errorUpdatingMembers = <
   MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -52,10 +57,12 @@ export const errorUpdatingMembers = <
   meta,
   error: true,
 });
+// end::RDX-function-members-update-error[]
 
+// tag::RDX-command-members-update[]
 export const updateMembers = <
   MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >(
   request: MembersRequest<MembersType>,
   meta?: Meta
@@ -99,3 +106,4 @@ export const updateMembers = <
 
   return thunkFunction;
 };
+// end::RDX-command-members-update[]

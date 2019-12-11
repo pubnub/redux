@@ -11,6 +11,7 @@ import {
 } from './PresenceActions';
 import { PresenceState } from './PresenceState';
 
+// tag::RDX-type-presence-byid[]
 export interface PresencebyIdState<ReceivedPresence extends Presence> {
   byId: {
     [channelId: string]: {
@@ -21,6 +22,7 @@ export interface PresencebyIdState<ReceivedPresence extends Presence> {
   };
   totalOccupancy: number;
 }
+// end::RDX-type-presence-byid[]
 
 const createInitialState = () => {
   return {
@@ -157,11 +159,14 @@ const userStateChange = <ReceivedPresence extends Presence<PresenceState>>(
   return newState;
 };
 
+// tag::RDX-type-presence-action[]
 export type PresenceActions<RetrievedPresence extends Presence> =
   | HereNowRetrievedAction<RetrievedPresence>
   | PresenceStateRetrievedAction<RetrievedPresence>
   | PresenceListenerActions;
+// end::RDX-type-presence-action[]
 
+// tag::RDX-type-presence[]
 export type PresenceReducer<
   StoredPresence extends Presence,
   PresenceAction extends AnyAction
@@ -169,7 +174,9 @@ export type PresenceReducer<
   state: PresencebyIdState<StoredPresence> | undefined,
   action: PresenceAction
 ) => PresencebyIdState<StoredPresence>;
+// end::RDX-type-presence[]
 
+// tag::RDX-method-reducer-presence[]
 export const createPresenceReducer = <
   StoredPresence extends Presence<PresenceState> = Presence,
   PresenceAction extends AnyAction = PresenceActions<StoredPresence>
@@ -193,3 +200,4 @@ export const createPresenceReducer = <
       return state;
   }
 };
+// end::RDX-method-reducer-presence[]

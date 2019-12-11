@@ -7,22 +7,25 @@ import {
 import { NetworkStatusActionType } from './NetworkStatusActionType.enum';
 import { NetworkStatusCategory } from './NetworkStatusCategory.enum';
 
-// tag::RDX-155[]
+// tag::RDX-type-networkup[]
 export const networkUp = (): NetworkUpEventAction => ({
   type: NetworkStatusActionType.NETWORK_UP_EVENT,
 });
-// end::RDX-155[]
+// end::RDX-type-networkup[]
 
-// tag::RDX-156[]
+// tag::RDX-type-networkdown[]
 export const networkDown = (): NetworkDownEventAction => ({
   type: NetworkStatusActionType.NETWORK_DOWN_EVENT,
 });
-// end::RDX-156[]
+// end::RDX-type-networkdown[]
 
+// tag::RDX-type-networkstatus[]
 export type NetworkStatusListenerActions =
   | NetworkUpEventAction
   | NetworkDownEventAction;
+// end::RDX-type-networkstatus[]
 
+// tag::RDX-method-listener-networkstatus[]
 export const createNetworkStatusListener = (
   dispatch: Dispatch<NetworkStatusListenerActions>
 ) => ({
@@ -48,3 +51,4 @@ export const createNetworkStatusListener = (
     }
   },
 });
+// end::RDX-method-listener-networkstatus[]

@@ -1,3 +1,4 @@
+// tag::RDX-enum-space-action[]
 export enum SpaceActionType {
   FETCH_SPACES_COMMAND = 'pubnub/FETCH_SPACES_COMMAND',
   FETCH_SPACE_BY_ID_COMMAND = 'pubnub/FETCH_SPACE_BY_ID_COMMAND',
@@ -22,3 +23,4 @@ export enum SpaceActionType {
   SPACE_UPDATED_EVENT = 'pubnub/SPACE_UPDATED_EVENT',
   SPACE_DELETED_EVENT = 'pubnub/SPACE_DELETED_EVENT',
 }
+// end::RDX-enum-space-action[]

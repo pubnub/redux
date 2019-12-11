@@ -13,6 +13,7 @@ import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 
+// tag::RDX-function-presence-fetch[]
 export const fetchingPresenceState = <Meta extends ActionMeta>(
   payload: PresenceStateRequest,
   meta?: Meta
@@ -21,7 +22,9 @@ export const fetchingPresenceState = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-presence-fetch[]
 
+// tag::RDX-function-presence-fetch-success[]
 export const presenceStateRetrieved = <Meta extends ActionMeta>(
   payload: PresenceStateSuccess,
   meta?: Meta
@@ -30,7 +33,9 @@ export const presenceStateRetrieved = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-presence-fetch-success[]
 
+// tag::RDX-function-presence-fetch-error[]
 export const errorFetchingPresenceState = <Meta extends ActionMeta>(
   payload: PresenceStateError,
   meta?: Meta
@@ -39,7 +44,9 @@ export const errorFetchingPresenceState = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-presence-fetch-error[]
 
+// tag::RDX-command-presence-fetch[]
 export const fetchPresenceState = <Meta extends ActionMeta>(
   request: PresenceStateRequest,
   meta?: Meta
@@ -83,3 +90,4 @@ export const fetchPresenceState = <Meta extends ActionMeta>(
 
   return thunkFunction;
 };
+// end::RDX-command-presence-fetch[]

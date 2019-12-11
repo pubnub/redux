@@ -1,7 +1,7 @@
 import { ErrorStatusActionType } from './ErrorStatusActionType.enum';
 import { ErrorStatusCategory } from './ErrorStatusCategory.enum';
 
-// tag::RDX-026[]
+// tag::RDX-type-error-response[]
 export interface ErrorStatusResponse {
   affectedChannelGroups: string[];
   affectedChannels: string[];
@@ -11,60 +11,60 @@ export interface ErrorStatusResponse {
   currentTimetoken: string;
   subscribedChannels: string[];
 }
-// end::RDX-026[]
+// end::RDX-type-error-response[]
 
-// tag::RDX-078[]
+// tag::RDX-action-error-denied[]
 export interface AccessDeniedEventAction {
   type: typeof ErrorStatusActionType.ACCESS_DENIED_EVENT;
   payload: ErrorStatusResponse;
 }
-// end::RDX-078[]
+// end::RDX-action-error-denied[]
 
-// tag::RDX-079[]
+// tag::RDX-action-error-malformed[]
 export interface MalformedResponseEventAction {
   type: typeof ErrorStatusActionType.MALFORMED_RESPONSE_EVENT;
   payload: ErrorStatusResponse;
 }
-// end::RDX-079[]
+// end::RDX-action-error-malformed[]
 
-// tag::RDX-080[]
+// tag::RDX-action-error-badrequest[]
 export interface BadRequestEventAction {
   type: typeof ErrorStatusActionType.BAD_REQUEST_EVENT;
   payload: ErrorStatusResponse;
 }
-// end::RDX-080[]
+// end::RDX-action-error-badrequest[]
 
-// tag::RDX-081[]
+// tag::RDX-action-error-decrypt[]
 export interface DecryptionErrorEventAction {
   type: typeof ErrorStatusActionType.DECRYPTION_ERROR_EVENT;
   payload: ErrorStatusResponse;
 }
-// end::RDX-081[]
+// end::RDX-action-error-decrypt[]
 
-// tag::RDX-082[]
+// tag::RDX-action-error-requestmsgcount[]
 export interface RequestMessageCountExceedEventAction {
   type: typeof ErrorStatusActionType.REQUEST_MESSAGE_COUNT_EXCEED_EVENT;
   payload: ErrorStatusResponse;
 }
-// end::RDX-082[]
+// end::RDX-action-error-requestmsgcount[]
 
-// tag::RDX-083[]
+// tag::RDX-action-error-timeout[]
 export interface TimeoutConnectionEventAction {
   type: typeof ErrorStatusActionType.TIMEOUT_CONNECTION_EVENT;
   payload: ErrorStatusResponse;
 }
-// end::RDX-083[]
+// end::RDX-action-error-timeout[]
 
-// tag::RDX-084[]
+// tag::RDX-action-error-unknown[]
 export interface UnknownEventAction {
   type: typeof ErrorStatusActionType.UNKNOWN_EVENT;
   payload: ErrorStatusResponse;
 }
-// end::RDX-084[]
+// end::RDX-action-error-unknown[]
 
-// tag::RDX-075[]
+// tag::RDX-action-error-network[]
 export interface NetworkIssuesEventAction {
   type: typeof ErrorStatusActionType.NETWORK_ISSUES_EVENT;
   payload: ErrorStatusResponse;
 }
-// end::RDX-075[]
+// end::RDX-action-error-network[]

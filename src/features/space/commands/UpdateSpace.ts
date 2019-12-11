@@ -13,9 +13,9 @@ import { SpaceActionType } from '../SpaceActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 
-// tag::RDX-174[]
+// tag::RDX-function-space-update[]
 export const updatingSpace = <Meta extends ActionMeta>(
   payload: SpaceRequest,
   meta?: Meta
@@ -24,9 +24,9 @@ export const updatingSpace = <Meta extends ActionMeta>(
   payload,
   meta,
 });
-// end::RDX-174[]
+// end::RDX-function-space-update[]
 
-// tag::RDX-175[]
+// tag::RDX-function-space-update-success[]
 export const spaceUpdated = <
   SpaceType extends Space<ObjectsCustom>,
   Meta extends ActionMeta
@@ -38,9 +38,9 @@ export const spaceUpdated = <
   payload,
   meta,
 });
-// end::RDX-175[]
+// end::RDX-function-space-update-success[]
 
-// tag::RDX-176[]
+// tag::RDX-function-space-update-error[]
 export const errorUpdatingSpace = <Meta extends ActionMeta>(
   payload: SpaceError,
   meta?: Meta
@@ -50,11 +50,12 @@ export const errorUpdatingSpace = <Meta extends ActionMeta>(
   meta,
   error: true,
 });
-// end::RDX-176[]
+// end::RDX-function-space-update-error[]
 
+// tag::RDX-command-space-update[]
 export const updateSpace = <
   SpaceType extends Space<ObjectsCustom>,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >(
   request: SpaceRequest,
   meta?: Meta
@@ -98,3 +99,4 @@ export const updateSpace = <
 
   return thunkFunction;
 };
+// end::RDX-command-space-update[]

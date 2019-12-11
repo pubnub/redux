@@ -16,6 +16,7 @@ import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 
+// tag::RDX-function-memberships-fetch[]
 export const fetchingMembership = <Meta extends ActionMeta>(
   payload: FetchMembershipRequest,
   meta?: Meta
@@ -24,7 +25,9 @@ export const fetchingMembership = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-memberships-fetch[]
 
+// tag::RDX-function-memberships-fetch-success[]
 export const membershipRetrieved = <
   MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -36,7 +39,9 @@ export const membershipRetrieved = <
   payload,
   meta,
 });
+// end::RDX-function-memberships-fetch-success[]
 
+// tag::RDX-function-memberships-fetch-error[]
 export const errorFetchingMembership = <Meta extends ActionMeta>(
   payload: FetchMembershipError,
   meta?: Meta
@@ -46,7 +51,9 @@ export const errorFetchingMembership = <Meta extends ActionMeta>(
   meta,
   error: true,
 });
+// end::RDX-function-memberships-fetch-error[]
 
+// tag::RDX-command-memberships-fetch[]
 export const fetchMemberships = <
   MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -96,3 +103,4 @@ export const fetchMemberships = <
 
   return thunkFunction;
 };
+// end::RDX-command-memberships-fetch[]

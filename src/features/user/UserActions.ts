@@ -3,7 +3,7 @@ import { PubNubApiStatus } from '../../foundations/PubNubApi';
 import { ObjectsCustom, AnyCustom } from '../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../foundations/ActionMeta';
 
-// tag::RDX-027[]
+// tag::RDX-type-user[]
 export interface User<CustomSpaceFields extends ObjectsCustom = AnyCustom> {
   id: string;
   name: string;
@@ -15,13 +15,16 @@ export interface User<CustomSpaceFields extends ObjectsCustom = AnyCustom> {
   updated?: string;
   eTag?: string;
 }
-// end::RDX-027[]
+// end::RDX-type-user[]
 
+// tag::RDX-type-userpage[]
 export interface UserPage {
   next?: string;
   prev?: string;
 }
+// end::RDX-type-userpage[]
 
+// tag::RDX-type-user-options[]
 export interface UserRequestOptions {
   limit?: number;
   page?: UserPage;
@@ -30,53 +33,75 @@ export interface UserRequestOptions {
     customFields?: boolean;
   };
 }
+// end::RDX-type-user-options[]
 
+// tag::RDX-user-eventmessage[]
 export interface UserEventMessage<ReceivedUser extends User<ObjectsCustom>> {
   data: ReceivedUser;
   event: string;
   type: string;
 }
+// end::RDX-user-eventmessage[]
 
+// tag::RDX-type-user-fetch-request[]
 export type FetchUsersRequest = UserRequestOptions;
+// end::RDX-type-user-fetch-request[]
 
+// tag::RDX-type-user-fetch-response[]
 export interface FetchUsersResponse<ReceivedUser extends User<ObjectsCustom>> {
   status: string;
   data: ReceivedUser[];
 }
+// end::RDX-type-user-fetch-response[]
 
+// tag::RDX-type-user-fetch-error-event[]
 export interface FetchUsersError {
   request: FetchUsersRequest;
   status: PubNubApiStatus;
 }
+// end::RDX-type-user-fetch-error-event[]
 
+// tag::RDX-type-user-fetch-success-event[]
 export interface FetchUsersSuccess<ReceivedUser extends User<ObjectsCustom>> {
   request: FetchUsersRequest;
   response: FetchUsersResponse<ReceivedUser>;
   status: PubNubApiStatus;
 }
+// end::RDX-type-user-fetch-success-event[]
 
+// tag::RDX-type-user-request[]
 export interface UserRequest extends User<ObjectsCustom>, UserRequestOptions {}
+// end::RDX-type-user-request[]
 
+// tag::RDX-type-user-success[]
 export interface UserSuccess<ReceivedUser extends User<ObjectsCustom>> {
   request: UserRequest;
   response: UserResponse<ReceivedUser>;
   status: PubNubApiStatus;
 }
+// end::RDX-type-user-success[]
 
+// tag::RDX-type-user-response[]
 export interface UserResponse<ReceivedUser extends User<ObjectsCustom>> {
   status: string;
   data: ReceivedUser;
 }
+// end::RDX-type-user-response[]
 
+// tag::RDX-type-user-error[]
 export interface UserError {
   request: UserRequest;
   status: PubNubApiStatus;
 }
+// end::RDX-type-user-error[]
 
+// tag::RDX-type-user-fetchbyid-request[]
 export interface FetchUserByIdRequest extends UserRequestOptions {
   userId: string;
 }
+// end::RDX-type-user-fetchbyid-request[]
 
+// tag::RDX-type-user-fetechbyid-success[]
 export interface FetchUserByIdSuccess<
   ReceivedUser extends User<ObjectsCustom>
 > {
@@ -84,41 +109,52 @@ export interface FetchUserByIdSuccess<
   response: UserResponse<ReceivedUser>;
   status: PubNubApiStatus;
 }
+// end::RDX-type-user-fetechbyid-success[]
 
+// tag::RDX-type-user-fetchbyid-error-event[]
 export interface FetchUserByIdError {
   request: FetchUserByIdRequest;
   status: PubNubApiStatus;
 }
+// end::RDX-type-user-fetchbyid-error-event[]
 
+// tag::RDX-type-user-delete-request[]
 export interface DeleteUserRequest {
   userId: string;
 }
+// end::RDX-type-user-delete-request[]
 
+// tag::RDX-type-user-delete-response[]
 export interface DeleteUserResponse {
   status: number;
   request: DeleteUserRequest;
 }
+// end::RDX-type-user-delete-response[]
 
+// tag::RDX-type-user-delete-event[]
 export interface DeleteUserSuccess {
   request: DeleteUserRequest;
   response: DeleteUserResponse;
   status: PubNubApiStatus;
 }
+// end::RDX-type-user-delete-event[]
 
+// tag::RDX-type-user-delete-error-request[]
 export interface DeleteUserError {
   request: DeleteUserRequest;
   status: PubNubApiStatus;
 }
+// end::RDX-type-user-delete-error-request[]
 
-// tag::RDX-094[]
+// tag::RDX-type-user-fetch[]
 export interface FetchingUsersAction<Meta extends ActionMeta> {
   type: typeof UserActionType.FETCHING_USERS;
   payload: FetchUsersRequest;
   meta?: Meta;
 }
-// end::RDX-094[]
+// end::RDX-type-user-fetch[]
 
-// tag::RDX-095[]
+// tag::RDX-type-user-fetch-success[]
 export interface UsersRetrievedAction<
   ReceivedUser extends User<ObjectsCustom>,
   Meta extends ActionMeta
@@ -127,26 +163,26 @@ export interface UsersRetrievedAction<
   payload: FetchUsersSuccess<ReceivedUser>;
   meta?: Meta;
 }
-// end::RDX-095[]
+// end::RDX-type-user-fetch-success[]
 
-// tag::RDX-096[]
+// tag::RDX-type-user-fetch-error[]
 export interface ErrorFetchingUsersAction<Meta extends ActionMeta> {
   type: typeof UserActionType.ERROR_FETCHING_USERS;
   payload: FetchUsersError;
   meta?: Meta;
   error: true;
 }
-// end::RDX-096[]
+// end::RDX-type-user-fetch-error[]
 
-// tag::RDX-098[]
+// tag::RDX-type-user-fetchbyid[]
 export interface FetchingUserByIdAction<Meta extends ActionMeta> {
   type: typeof UserActionType.FETCHING_USER_BY_ID;
   payload: FetchUserByIdRequest;
   meta?: Meta;
 }
-// end::RDX-098[]
+// end::RDX-type-user-fetchbyid[]
 
-// tag::RDX-099[]
+// tag::RDX-type-user-fetchbyid-success[]
 export interface UserRetrievedAction<
   ReceivedUser extends User<ObjectsCustom>,
   Meta extends ActionMeta
@@ -155,26 +191,26 @@ export interface UserRetrievedAction<
   payload: FetchUserByIdSuccess<ReceivedUser>;
   meta?: Meta;
 }
-// end::RDX-099[]
+// end::RDX-type-user-fetchbyid-success[]
 
-// tag::RDX-097[]
+// tag::RDX-type-user-fetchbyid-error[]
 export interface ErrorFetchingUserByIdAction<Meta extends ActionMeta> {
   type: typeof UserActionType.ERROR_FETCHING_USER_BY_ID;
   payload: FetchUserByIdError;
   meta?: Meta;
   error: true;
 }
-// end::RDX-097[]
+// end::RDX-type-user-fetchbyid-error[]
 
-// tag::RDX-092[]
+// tag::RDX-type-user-create[]
 export interface CreatingUserAction<Meta extends ActionMeta> {
   type: typeof UserActionType.CREATING_USER;
   payload: UserRequest;
   meta?: Meta;
 }
-// end::RDX-092[]
+// end::RDX-type-user-create[]
 
-// tag::RDX-091[]
+// tag::RDX-type-user-create-success[]
 export interface UserCreatedAction<
   ReceivedUser extends User<ObjectsCustom>,
   Meta extends ActionMeta
@@ -183,26 +219,26 @@ export interface UserCreatedAction<
   payload: UserSuccess<ReceivedUser>;
   meta?: Meta;
 }
-// end::RDX-091[]
+// end::RDX-type-user-create-success[]
 
-// tag::RDX-093[]
+// tag::RDX-type-user-create-error[]
 export interface ErrorCreatingUserAction<Meta extends ActionMeta> {
   type: typeof UserActionType.ERROR_CREATING_USER;
   payload: UserError;
   meta?: Meta;
   error: true;
 }
-// end::RDX-093[]
+// end::RDX-type-user-create-error[]
 
-// tag::RDX-086[]
+// tag::RDX-type-user-update[]
 export interface UpdatingUserAction<Meta extends ActionMeta> {
   type: typeof UserActionType.UPDATING_USER;
   payload: UserRequest;
   meta?: Meta;
 }
-// end::RDX-086[]
+// end::RDX-type-user-update[]
 
-// tag::RDX-085[]
+// tag::RDX-type-user-update-success[]
 export interface UserUpdatedAction<
   ReceivedUser extends User<ObjectsCustom>,
   Meta extends ActionMeta
@@ -211,56 +247,61 @@ export interface UserUpdatedAction<
   payload: UserSuccess<ReceivedUser>;
   meta?: Meta;
 }
-// end::RDX-085[]
+// end::RDX-type-user-update-success[]
 
-// tag::RDX-087[]
+// tag::RDX-type-user-update-error[]
 export interface ErrorUpdatingUserAction<Meta extends ActionMeta> {
   type: typeof UserActionType.ERROR_UPDATING_USER;
   payload: UserError;
   meta?: Meta;
   error: true;
 }
-// end::RDX-087[]
+// end::RDX-type-user-update-error[]
 
-// tag::RDX-089[]
+// tag::RDX-type-user-delete[]
 export interface DeletingUserAction<Meta extends ActionMeta> {
   type: typeof UserActionType.DELETING_USER;
   payload: DeleteUserRequest;
   meta?: Meta;
 }
-// end::RDX-089[]
+// end::RDX-type-user-delete[]
 
-// tag::RDX-088[]
+// tag::RDX-type-user-delete-success[]
 export interface UserDeletedAction<Meta extends ActionMeta> {
   type: typeof UserActionType.USER_DELETED;
   payload: DeleteUserSuccess;
   meta?: Meta;
 }
-// end::RDX-088[]
+// end::RDX-type-user-delete-success[]
 
-// tag::RDX-090[]
+// tag::RDX-type-user-delete-error[]
 export interface ErrorDeletingUserAction<Meta extends ActionMeta> {
   type: typeof UserActionType.ERROR_DELETING_USER;
   payload: DeleteUserError;
   meta?: Meta;
   error: true;
 }
-// end::RDX-090[]
+// end::RDX-type-user-delete-error[]
 
+// tag::RDX-event-user-updated-action[]
 export interface UserUpdatedEventAction<
   ReceivedUser extends User<ObjectsCustom>
 > {
   type: typeof UserActionType.USER_UPDATED_EVENT;
   payload: UserEventMessage<ReceivedUser>;
 }
+// end::RDX-event-user-updated-action[]
 
+// tag::RDX-event-user-deleted-action[]
 export interface UserDeletedEventAction<
   ReceivedUser extends User<ObjectsCustom>
 > {
   type: typeof UserActionType.USER_DELETED_EVENT;
   payload: UserEventMessage<ReceivedUser>;
 }
+// end::RDX-event-user-deleted-action[]
 
+// tag::RDX-action-user[]
 export type UserActions<
   ReceivedUser extends User<ObjectsCustom>,
   Meta extends ActionMeta
@@ -280,7 +321,10 @@ export type UserActions<
   | DeletingUserAction<Meta>
   | UserDeletedAction<Meta>
   | ErrorDeletingUserAction<Meta>;
+// end::RDX-action-user[]
 
+// tag::RDX-action-user-listener[]
 export type UserListenerActions<ReceivedUser extends User<ObjectsCustom>> =
   | UserUpdatedEventAction<ReceivedUser>
   | UserDeletedEventAction<ReceivedUser>;
+// end::RDX-action-user-listener[]

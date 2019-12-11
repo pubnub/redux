@@ -1,14 +1,17 @@
 import { SubscriptionStatusListenerActions } from './SubscriptionStatusListener';
 import { SubscriptionStatusActionType } from './SubscriptionStatusActionType.enum';
 
+// tag::RDX-state-subscription[]
 export interface SubscriptionState {
   channels: string[];
 }
+// end::RDX-state-subscription[]
 
 const createInitialState = (): SubscriptionState => {
   return { channels: [] };
 };
 
+// tag::RDX-method-reducer-subscription[]
 export const createSubscriptionStatusReducer = () => {
   return (
     state = createInitialState(),
@@ -28,3 +31,4 @@ export const createSubscriptionStatusReducer = () => {
     }
   };
 };
+// end::RDX-method-reducer-subscription[]

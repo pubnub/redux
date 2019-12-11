@@ -12,10 +12,11 @@ import {
 import { MembersActionType } from '../MembersActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { Space } from '../../space/SpaceActions';
 
+// tag::RDX-function-member-fetch[]
 export const fetchingMembers = <Meta extends ActionMeta>(
   payload: FetchMembersRequest,
   meta?: Meta
@@ -24,7 +25,9 @@ export const fetchingMembers = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-member-fetch[]
 
+// tag::RDX-function-member-fetch-success[]
 export const membersRetrieved = <
   MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
   Meta extends ActionMeta
@@ -36,7 +39,9 @@ export const membersRetrieved = <
   payload,
   meta,
 });
+// end::RDX-function-member-fetch-success[]
 
+// tag::RDX-function-member-fetch-error[]
 export const errorFetchingMembers = <Meta extends ActionMeta>(
   payload: FetchMembersError,
   meta?: Meta
@@ -46,10 +51,12 @@ export const errorFetchingMembers = <Meta extends ActionMeta>(
   meta,
   error: true,
 });
+// end::RDX-function-member-fetch-error[]
 
+// tag::RDX-command-member-fetch[]
 export const fetchMembers = <
   MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >(
   request: FetchMembersRequest,
   meta?: Meta
@@ -96,3 +103,4 @@ export const fetchMembers = <
 
   return thunkFunction;
 };
+// end::RDX-command-member-fetch[]

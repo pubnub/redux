@@ -12,10 +12,10 @@ import {
 import { SpaceActionType } from '../SpaceActionType.enum';
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 
-// tag::RDX-171[]
+// tag::RDX-function-space-fetch[]
 export const fetchingSpaces = <Meta extends ActionMeta>(
   payload: FetchSpacesRequest,
   meta?: Meta
@@ -24,9 +24,9 @@ export const fetchingSpaces = <Meta extends ActionMeta>(
   payload,
   meta,
 });
-// end::RDX-171[]
+// end::RDX-function-space-fetch[]
 
-// tag::RDX-172[]
+// tag::RDX-function-space-fetch-success[]
 export const spacesRetrieved = <
   SpaceType extends Space<ObjectsCustom>,
   Meta extends ActionMeta
@@ -38,9 +38,9 @@ export const spacesRetrieved = <
   payload,
   meta,
 });
-// end::RDX-172[]
+// end::RDX-function-space-fetch-success[]
 
-// tag::RDX-173[]
+// tag::RDX-function-space-fetch-error[]
 export const errorFetchingSpaces = <Meta extends ActionMeta>(
   payload: FetchSpacesError,
   meta?: Meta
@@ -50,11 +50,12 @@ export const errorFetchingSpaces = <Meta extends ActionMeta>(
   meta,
   error: true,
 });
-// end::RDX-173[]
+// end::RDX-function-space-fetch-error[]
 
+// tag::RDX-command-space-fetch[]
 export const fetchSpaces = <
   SpaceType extends Space<ObjectsCustom>,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >(
   request: FetchSpacesRequest = {},
   meta?: Meta
@@ -96,3 +97,4 @@ export const fetchSpaces = <
 
   return thunkFunction;
 };
+// end::RDX-command-space-fetch[]

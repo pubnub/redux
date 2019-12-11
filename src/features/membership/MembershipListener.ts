@@ -38,6 +38,7 @@ const userRemovedFromSpace = <
   payload,
 });
 
+// tag::RDX-method-listener-membership[]
 export const createMembershipListener = <
   ReceivedMembership extends Membership<
     ObjectsCustom,
@@ -62,3 +63,4 @@ export const createMembershipListener = <
     }
   },
 });
+// end::RDX-method-listener-membership[]

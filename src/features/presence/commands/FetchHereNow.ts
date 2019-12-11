@@ -13,6 +13,7 @@ import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 
+// tag::RDX-function-presence-herenow[]
 export const fetchingHereNow = <Meta extends ActionMeta>(
   payload: HereNowRequest,
   meta?: Meta
@@ -21,7 +22,9 @@ export const fetchingHereNow = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-presence-herenow[]
 
+// tag::RDX-function-presence-herenow-success[]
 export const hereNowRetrieved = <Meta extends ActionMeta>(
   payload: HereNowSuccess,
   meta?: Meta
@@ -30,7 +33,9 @@ export const hereNowRetrieved = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-presence-herenow-success[]
 
+// tag::RDX-function-presence-herenow-error[]
 export const errorFetchingHereNow = <Meta extends ActionMeta>(
   payload: HereNowError,
   meta?: Meta
@@ -39,7 +44,9 @@ export const errorFetchingHereNow = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-presence-herenow-error[]
 
+// tag::RDX-command-presence-herenow[]
 export const fetchHereNow = <Meta extends ActionMeta>(
   request: HereNowRequest,
   meta?: Meta
@@ -83,3 +90,4 @@ export const fetchHereNow = <Meta extends ActionMeta>(
 
   return thunkFunction;
 };
+// end::RDX-command-presence-herenow[]

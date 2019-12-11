@@ -3,7 +3,7 @@ import { ObjectsCustom, AnyCustom } from '../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../foundations/ActionMeta';
 import { PubNubApiStatus } from '../../foundations/PubNubApi';
 
-// tag::RDX-025[]
+// tag::RDX-type-space[]
 export interface Space<CustomSpaceFields extends ObjectsCustom = AnyCustom> {
   id: string;
   name: string;
@@ -13,16 +13,16 @@ export interface Space<CustomSpaceFields extends ObjectsCustom = AnyCustom> {
   updated?: string;
   eTag?: string;
 }
-// end::RDX-025[]
+// end::RDX-type-space[]
 
-// tag::RDX-064[]
+// tag::RDX-type-spacepage[]
 export interface SpacePage {
   next?: string;
   prev?: string;
 }
-// end::RDX-064[]
+// end::RDX-type-spacepage[]
 
-// tag::RDX-066[]
+// tag::RDX-type-space-options[]
 export interface SpaceRequestOptions {
   limit?: number;
   page?: SpacePage;
@@ -31,39 +31,39 @@ export interface SpaceRequestOptions {
     customFields?: boolean;
   };
 }
-// end::RDX-066[]
+// end::RDX-type-space-options[]
 
-// tag::RDX-178[]
+// tag::RDX-event-space[]
 export interface SpaceEventMessage<ReceivedSpace extends Space<ObjectsCustom>> {
   data: ReceivedSpace;
   event: string;
   type: string;
 }
-// end::RDX-178[]
+// end::RDX-event-space[]
 
-// tag::RDX-179[]
+// tag::RDX-type-space-fetch-options[]
 export type FetchSpacesRequest = SpaceRequestOptions;
-// end::RDX-179[]
+// end::RDX-type-space-fetch-options[]
 
 type FetchSpacesRequest = SpaceRequestOptions;
 
-// tag::RDX-180[]
+// tag::RDX-type-space-fetch-response[]
 export interface FetchSpacesResponse<
   ReceivedSpace extends Space<ObjectsCustom>
 > {
   status: string;
   data: ReceivedSpace[];
 }
-// end::RDX-180[]
+// end::RDX-type-space-fetch-response[]
 
-// tag::RDX-181[]
+// tag::RDX-type-space-fetch-error[]
 export interface FetchSpacesError {
   request: FetchSpacesRequest;
   status: PubNubApiStatus;
 }
-// end::RDX-181[]
+// end::RDX-type-space-fetch-error[]
 
-// tag::RDX-182[]
+// tag::RDX-type-space-fetch-success[]
 export interface FetchSpacesSuccess<
   ReceivedSpace extends Space<ObjectsCustom>
 > {
@@ -71,43 +71,43 @@ export interface FetchSpacesSuccess<
   response: FetchSpacesResponse<ReceivedSpace>;
   status: PubNubApiStatus;
 }
-// end::RDX-182[]
+// end::RDX-type-space-fetch-success[]
 
-// tag::RDX-183[]
+// tag::RDX-type-space-request[]
 export interface SpaceRequest
   extends Space<ObjectsCustom>,
     SpaceRequestOptions {}
-// end::RDX-183[]
+// end::RDX-type-space-request[]
 
-// tag::RDX-184[]
+// tag::RDX-type-space-success[]
 export interface SpaceSuccess<ReceivedSpace extends Space<ObjectsCustom>> {
   request: SpaceRequest;
   response: SpaceResponse<ReceivedSpace>;
   status: PubNubApiStatus;
 }
-// end::RDX-184[]
+// end::RDX-type-space-success[]
 
-// tag::RDX-185[]
+// tag::RDX-type-space-response[]
 export interface SpaceResponse<ReceivedSpace extends Space<ObjectsCustom>> {
   status: string;
   data: ReceivedSpace;
 }
-// end::RDX-185[]
+// end::RDX-type-space-response[]
 
-// tag::RDX-186[]
+// tag::RDX-type-space-error[]
 export interface SpaceError {
   request: SpaceRequest;
   status: PubNubApiStatus;
 }
-// end::RDX-186[]
+// end::RDX-type-space-error[]
 
-// tag::RDX-187[]
+// tag::RDX-type-space-fetchbyid-options[]
 export interface FetchSpaceByIdRequest extends SpaceRequestOptions {
   spaceId: string;
 }
-// end::RDX-187[]
+// end::RDX-type-space-fetchbyid-options[]
 
-// tag::RDX-188[]
+// tag::RDX-type-space-fetchbyid-success[]
 export interface FetchSpaceByIdSuccess<
   ReceivedSpace extends Space<ObjectsCustom>
 > {
@@ -115,52 +115,52 @@ export interface FetchSpaceByIdSuccess<
   response: SpaceResponse<ReceivedSpace>;
   status: PubNubApiStatus;
 }
-// end::RDX-188[]
+// end::RDX-type-space-fetchbyid-success[]
 
-// tag::RDX-189[]
+// tag::RDX-type-space-fetchbyid-error[]
 export interface FetchSpaceByIdError {
   request: FetchSpaceByIdRequest;
   status: PubNubApiStatus;
 }
-// end::RDX-189[]
+// end::RDX-type-space-fetchbyid-error[]
 
-// tag::RDX-190[]
+// tag::RDX-type-space-delete-request[]
 export interface DeleteSpaceRequest {
   spaceId: string;
 }
-// end::RDX-190[]
+// end::RDX-type-space-delete-request[]
 
-// tag::RDX-191[]
+// tag::RDX-type-space-delete-response[]
 export interface DeleteSpaceResponse {
   status: number;
   request: DeleteSpaceRequest;
 }
-// end::RDX-191[]
+// end::RDX-type-space-delete-response[]
 
-// tag::RDX-192[]
+// tag::RDX-type-space-delete-success[]
 export interface DeleteSpaceSuccess {
   request: DeleteSpaceRequest;
   response: DeleteSpaceResponse;
   status: PubNubApiStatus;
 }
-// end::RDX-192[]
+// end::RDX-type-space-delete-success[]
 
-// tag::RDX-193[]
+// tag::RDX-type-space-delete-error[]
 export interface DeleteSpaceError {
   request: DeleteSpaceRequest;
   status: PubNubApiStatus;
 }
-// end::RDX-193[]
+// end::RDX-type-space-delete-error[]
 
-// tag::RDX-101[]
+// tag::RDX-action-spaces-fetch[]
 export interface FetchingSpacesAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.FETCHING_SPACES;
   payload: FetchSpacesRequest;
   meta?: Meta;
 }
-// end::RDX-101[]
+// end::RDX-action-spaces-fetch[]
 
-// tag::RDX-100[]
+// tag::RDX-action-spaces-fetch-success[]
 export interface SpacesRetrievedAction<
   ReceivedSpace extends Space<ObjectsCustom>,
   Meta extends ActionMeta
@@ -169,26 +169,26 @@ export interface SpacesRetrievedAction<
   payload: FetchSpacesSuccess<ReceivedSpace>;
   meta?: Meta;
 }
-// end::RDX-100[]
+// end::RDX-action-spaces-fetch-success[]
 
-// tag::RDX-102[]
+// tag::RDX-action-spaces-fetch-error[]
 export interface ErrorFetchingSpacesAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.ERROR_FETCHING_SPACES;
   payload: FetchSpacesError;
   meta?: Meta;
   error: true;
 }
-// end::RDX-102[]
+// end::RDX-action-spaces-fetch-error[]
 
-// tag::RDX-113[]
+// tag::RDX-action-space-fetchbyid[]
 export interface FetchingSpaceByIdAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.FETCHING_SPACE_BY_ID;
   payload: FetchSpaceByIdRequest;
   meta?: Meta;
 }
-// end::RDX-113[]
+// end::RDX-action-space-fetchbyid[]
 
-// tag::RDX-112[]
+// tag::RDX-action-space-retrieved-success[]
 export interface SpaceRetrievedAction<
   ReceivedSpace extends Space<ObjectsCustom>,
   Meta extends ActionMeta
@@ -197,26 +197,26 @@ export interface SpaceRetrievedAction<
   payload: FetchSpaceByIdSuccess<ReceivedSpace>;
   meta?: Meta;
 }
-// end::RDX-112[]
+// end::RDX-action-space-retrieved-success[]
 
-// tag::RDX-114[]
+// tag::RDX-action-space-retrieved-error[]
 export interface ErrorFetchingSpaceByIdAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.ERROR_FETCHING_SPACE_BY_ID;
   payload: FetchSpaceByIdError;
   meta?: Meta;
   error: true;
 }
-// end::RDX-114[]
+// end::RDX-action-space-retrieved-error[]
 
-// tag::RDX-104[]
+// tag::RDX-action-space-create[]
 export interface CreatingSpaceAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.CREATING_SPACE;
   payload: SpaceRequest;
   meta?: Meta;
 }
-// end::RDX-104[]
+// end::RDX-action-space-create[]
 
-// tag::RDX-103[]
+// tag::RDX-action-space-create-success[]
 export interface SpaceCreatedAction<
   ReceivedSpace extends Space<ObjectsCustom>,
   Meta extends ActionMeta
@@ -225,26 +225,26 @@ export interface SpaceCreatedAction<
   payload: SpaceSuccess<ReceivedSpace>;
   meta?: Meta;
 }
-// end::RDX-103[]
+// end::RDX-action-space-create-success[]
 
-// tag::RDX-105[]
+// tag::RDX-action-space-create-error[]
 export interface ErrorCreatingSpaceAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.ERROR_CREATING_SPACE;
   payload: SpaceError;
   meta?: Meta;
   error: true;
 }
-// end::RDX-105[]
+// end::RDX-action-space-create-error[]
 
-// tag::RDX-107[]
+// tag::RDX-action-space-update[]
 export interface UpdatingSpaceAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.UPDATING_SPACE;
   payload: SpaceRequest;
   meta?: Meta;
 }
-// end::RDX-107[]
+// end::RDX-action-space-update[]
 
-// tag::RDX-106[]
+// tag::RDX-action-space-update-success[]
 export interface SpaceUpdatedAction<
   ReceivedSpace extends Space<ObjectsCustom>,
   Meta extends ActionMeta
@@ -253,60 +253,61 @@ export interface SpaceUpdatedAction<
   payload: SpaceSuccess<ReceivedSpace>;
   meta?: Meta;
 }
-// end::RDX-106[]
+// end::RDX-action-space-update-success[]
 
-// tag::RDX-108[]
+// tag::RDX-action-space-update-error[]
 export interface ErrorUpdatingSpaceAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.ERROR_UPDATING_SPACE;
   payload: SpaceError;
   meta?: Meta;
   error: true;
 }
-// end::RDX-108[]
+// end::RDX-action-space-update-error[]
 
-// tag::RDX-110[]
+// tag::RDX-action-space-delete[]
 export interface DeletingSpaceAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.DELETING_SPACE;
   payload: DeleteSpaceRequest;
   meta?: Meta;
 }
-// end::RDX-110[]
+// end::RDX-action-space-delete[]
 
-// tag::RDX-109[]
+// tag::RDX-action-space-delete-success[]
 export interface SpaceDeletedAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.SPACE_DELETED;
   payload: DeleteSpaceSuccess;
   meta?: Meta;
 }
-// end::RDX-109[]
+// end::RDX-action-space-delete-success[]
 
-// tag::RDX-111[]
+// tag::RDX-action-space-delete-error[]
 export interface ErrorDeletingSpaceAction<Meta extends ActionMeta> {
   type: typeof SpaceActionType.ERROR_DELETING_SPACE;
   payload: DeleteSpaceError;
   meta?: Meta;
   error: true;
 }
-// end::RDX-111[]
+// end::RDX-action-space-delete-error[]
 
-// tag::RDX-177[]
+// tag::RDX-event-space-updated[]
 export interface SpaceUpdatedEventAction<
   ReceivedSpace extends Space<ObjectsCustom>
 > {
   type: typeof SpaceActionType.SPACE_UPDATED_EVENT;
   payload: SpaceEventMessage<ReceivedSpace>;
 }
-// end::RDX-177[]
+// end::RDX-event-space-updated[]
 
-// tag::RDX-194[]
+// tag::RDX-event-space-deleted[]
 export interface SpaceDeletedEventAction<
   ReceivedSpace extends Space<ObjectsCustom>
 > {
   type: typeof SpaceActionType.SPACE_DELETED_EVENT;
   payload: SpaceEventMessage<ReceivedSpace>;
 }
-// end::RDX-194[]
+// end::RDX-event-space-deleted[]
 
+// tag::RDX-action-space[]
 export type SpaceActions<
   ReceivedSpace extends Space<ObjectsCustom>,
   Meta extends ActionMeta
@@ -326,7 +327,10 @@ export type SpaceActions<
   | DeletingSpaceAction<Meta>
   | SpaceDeletedAction<Meta>
   | ErrorDeletingSpaceAction<Meta>;
+// end::RDX-action-space[]
 
+// tag::RDX-action-space-listener[]
 export type SpaceListenerActions<ReceivedSpace extends Space<ObjectsCustom>> =
   | SpaceUpdatedEventAction<ReceivedSpace>
   | SpaceDeletedEventAction<ReceivedSpace>;
+// end::RDX-action-space-listener[]

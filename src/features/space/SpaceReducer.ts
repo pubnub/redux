@@ -20,13 +20,13 @@ import { MembershipActionType } from '../../features/membership/MembershipAction
 import { AnyMeta } from '../../foundations/ActionMeta';
 import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 
-// tag::RDX-025[]
+// tag::RDX-type-spacesbyid[]
 export type SpacesByIdState<ReceivedSpace extends Space<ObjectsCustom>> = {
   byId: {
     [spaceId: string]: ReceivedSpace;
   };
 };
-// end::RDX-025[]
+// end::RDX-type-spacesbyid[]
 
 const createInitialState = () => ({
   byId: {},
@@ -156,6 +156,7 @@ type SpaceReducerActions<StoredSpace extends Space<ObjectsCustom>> =
   | MembershipRetrievedAction<Membership, AnyMeta>
   | MembershipActions<Membership<ObjectsCustom, StoredSpace>, AnyMeta>;
 
+// tag::RDX-type-space[]
 export type SpaceReducer<
   StoredSpace extends Space<ObjectsCustom>,
   SpaceAction extends AnyAction
@@ -163,7 +164,9 @@ export type SpaceReducer<
   state: SpacesByIdState<StoredSpace> | undefined,
   action: SpaceAction
 ) => SpacesByIdState<StoredSpace>;
+// end::RDX-type-space[]
 
+// tag::RDX-method-reducer-space[]
 export const createSpaceReducer = <
   StoredSpace extends Space<ObjectsCustom> = Space,
   SpaceAction extends AnyAction = SpaceReducerActions<StoredSpace>
@@ -192,3 +195,4 @@ export const createSpaceReducer = <
       return state;
   }
 };
+// end::RDX-method-reducer-space[]

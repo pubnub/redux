@@ -9,24 +9,25 @@ import {
 import { SpaceActionType } from './SpaceActionType.enum';
 import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 
-// tag::RDX-175[]
+// tag::RDX-type-event-space-updated[]
 export const spaceUpdated = <ReceivedSpace extends Space<ObjectsCustom>>(
   payload: SpaceEventMessage<ReceivedSpace>
 ): SpaceUpdatedEventAction<ReceivedSpace> => ({
   type: SpaceActionType.SPACE_UPDATED_EVENT,
   payload,
 });
-// end::RDX-175[]
+// end::RDX-type-event-space-updated[]
 
-// tag::RDX-166[]
+// tag::RDX-type-event-space-deleted[]
 export const spaceDeleted = <ReceivedSpace extends Space<ObjectsCustom>>(
   payload: SpaceEventMessage<ReceivedSpace>
 ): SpaceDeletedEventAction<ReceivedSpace> => ({
   type: SpaceActionType.SPACE_DELETED_EVENT,
   payload,
 });
-// end::RDX-166[]
+// end::RDX-type-event-space-deleted[]
 
+// tag::RDX-method-listener-space[]
 export const createSpaceListener = <ReceivedSpace extends Space<ObjectsCustom>>(
   dispatch: Dispatch<SpaceListenerActions<ReceivedSpace>>
 ) => ({
@@ -43,3 +44,4 @@ export const createSpaceListener = <ReceivedSpace extends Space<ObjectsCustom>>(
     }
   },
 });
+// end::RDX-method-listener-space[]

@@ -9,36 +9,47 @@ import {
 import { PresenceActionType } from './PresenceActionType.enum';
 import { PresenceCategory } from './PresenceCategory.enum';
 
+// tag::RDX-type-presence-user-join[]
 export const userJoin = (payload: PresenceEventMessage): JoinEventAction => ({
   type: PresenceActionType.JOIN_EVENT,
   payload,
 });
+// end::RDX-type-presence-user-join[]
 
+// tag::RDX-type-presence-user-leave[]
 export const userLeave = (payload: PresenceEventMessage): LeaveEventAction => ({
   type: PresenceActionType.LEAVE_EVENT,
   payload,
 });
+// end::RDX-type-presence-user-leave[]
 
+// tag::RDX-type-presence-user-timeout[]
 export const userTimeout = (
   payload: PresenceEventMessage
 ): TimeoutEventAction => ({
   type: PresenceActionType.TIMEOUT_EVENT,
   payload,
 });
+// end::RDX-type-presence-user-timeout[]
 
+// tag::RDX-type-presence-user-change[]
 export const userStateChange = (
   payload: PresenceEventMessage
 ): StateChangeEventAction => ({
   type: PresenceActionType.STATE_CHANGE_EVENT,
   payload,
 });
+// end::RDX-type-presence-user-change[]
 
+// tag::RDX-type-presence-listener-action[]
 export type PresenceListenerActions =
   | JoinEventAction
   | LeaveEventAction
   | TimeoutEventAction
   | StateChangeEventAction;
+// end::RDX-type-presence-listener-action[]
 
+// tag::RDX-method-listener-presence[]
 export const createPresenceListener = (
   dispatch: Dispatch<PresenceListenerActions>
 ) => ({
@@ -61,3 +72,4 @@ export const createPresenceListener = (
     }
   },
 });
+// end::RDX-method-listener-presence[]

@@ -1,29 +1,26 @@
 import { UsersRetrievedAction, User, FetchUsersSuccess } from './UserActions';
 import { UserActionType } from './UserActionType.enum';
 import { ObjectsCustom } from '../../foundations/ObjectsCustom';
-import { ActionMeta } from '../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../foundations/ActionMeta';
 
-// tag::RDX-049[]
+// tag::RDX-state-userlist[]
 interface UserListState {
   userIds: string[];
 }
-// end::RDX-049[]
+// end::RDX-state-userlist[]
 
-// tag::RDX-050[]
 const createInitialState = (): UserListState => ({
   userIds: [],
 });
-// end::RDX-050[]
 
-// tag::RDX-052[]
 const usersRetrieved = <UserType extends User<ObjectsCustom>>(
   payload: FetchUsersSuccess<UserType>
 ) => ({ userIds: payload.response.data.map((user) => user.id) });
-// end::RDX-052[]
 
+// tag::RDX-method-reducer-userlist[]
 export const createUserListReducer = <
   UserType extends User<ObjectsCustom> = User,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >() => (
   state: UserListState = createInitialState(),
   action: UsersRetrievedAction<UserType, Meta>
@@ -35,3 +32,4 @@ export const createUserListReducer = <
       return state;
   }
 };
+// end::RDX-method-reducer-userlist[]

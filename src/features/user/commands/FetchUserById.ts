@@ -13,8 +13,9 @@ import {
 import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 
+// tag::RDX-function-user-fetchbyid[]
 export const fetchingUserById = <Meta extends ActionMeta>(
   payload: FetchUserByIdRequest,
   meta?: Meta
@@ -23,7 +24,9 @@ export const fetchingUserById = <Meta extends ActionMeta>(
   payload,
   meta,
 });
+// end::RDX-function-user-fetchbyid[]
 
+// tag::RDX-function-user-fetchbyid-success[]
 export const userRetrieved = <
   UserType extends User<ObjectsCustom>,
   Meta extends ActionMeta
@@ -35,7 +38,9 @@ export const userRetrieved = <
   payload,
   meta,
 });
+// end::RDX-function-user-fetchbyid-success[]
 
+// tag::RDX-function-user-fetchbyid-error[]
 export const errorFetchingUserById = <Meta extends ActionMeta>(
   payload: FetchUserByIdError,
   meta?: Meta
@@ -45,10 +50,12 @@ export const errorFetchingUserById = <Meta extends ActionMeta>(
   meta,
   error: true,
 });
+// end::RDX-function-user-fetchbyid-error[]
 
+// tag::RDX-command-user-fetchbyid[]
 export const fetchUserById = <
   UserType extends User<ObjectsCustom>,
-  Meta extends ActionMeta = never
+  Meta extends ActionMeta = AnyMeta
 >(
   request: FetchUserByIdRequest,
   meta?: Meta
@@ -99,3 +106,4 @@ export const fetchUserById = <
 
   return thunkFunction;
 };
+// end::RDX-command-user-fetchbyid[]
