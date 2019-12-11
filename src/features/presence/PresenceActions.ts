@@ -31,8 +31,6 @@ export interface PresenceEventMessage<
 export interface HereNowRequest {
   channels?: string[];
   channelGroups?: string[];
-  includeUUIDs?: boolean;
-  includeState?: boolean;
 }
 // end::RDX-type-presence-herenow[]
 

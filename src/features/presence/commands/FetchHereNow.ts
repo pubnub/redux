@@ -62,6 +62,8 @@ export const fetchHereNow = <Meta extends ActionMeta>(
       pubnub.api.hereNow(
         {
           ...request,
+          includeUUIDs: true,
+          includeState: false,
         },
         (status: PubNubApiStatus, response: HereNowResponse) => {
           if (status.error) {

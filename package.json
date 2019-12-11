@@ -1,6 +1,6 @@
 {
   "name": "pubnub-redux",
-  "version": "0.0.3-beta",
+  "version": "0.0.4-beta",
   "main": "dist/index.js",
   "module": "dist/pubnub-redux.esm.js",
   "typings": "dist/index.d.ts",
