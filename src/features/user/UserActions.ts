@@ -43,6 +43,10 @@ export interface UserEventMessage<ReceivedUser extends User<ObjectsCustom>> {
 }
 // end::RDX-user-eventmessage[]
 
+export type UserListenerPayload<ReceivedUser extends User<ObjectsCustom>> = {
+  message: UserEventMessage<ReceivedUser>;
+};
+
 // tag::RDX-type-user-fetch-request[]
 export type FetchUsersRequest = UserRequestOptions;
 // end::RDX-type-user-fetch-request[]

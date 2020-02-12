@@ -1,18 +1,23 @@
 ---
 changelog:
   - changes:
+      - text: 'Fix support for membership'
+        type: improvement
+    date: 2020-02-12
+    version: v0.0.5-beta
+  - changes:
       - text: 'travis setup'
         type: feature
     date: 2019-08-22
-    version: v1.0.1
+    version: v0.0.4-beta
   - changes:
       - text: 'first public version'
         type: feature
     date: 2019-08-14
-    version: v1.0.0
+    version: v0.0.2-beta
 files:
   - dist/index.js
 name: pubnub-redux
 schema: 1
 scm: github.com/pubnub/redux
-version: '1.0.0'
+version: '0.0.5'

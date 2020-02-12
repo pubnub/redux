@@ -33,6 +33,7 @@ const userAddedToSpace = <
   payload: MembershipEventMessage<ReceivedMembership>
 ) => {
   if (
+    state.byId[payload.data.userId] &&
     state.byId[payload.data.userId].filter(
       (membership) => membership.id === payload.data.spaceId
     ).length === 0
@@ -62,6 +63,7 @@ const userRemovedFromSpace = <
   payload: MembershipEventMessage<ReceivedMembership>
 ) => {
   if (
+    state.byId[payload.data.userId] &&
     state.byId[payload.data.userId].filter(
       (membership) => membership.id === payload.data.spaceId
     ).length > 0

@@ -3,6 +3,7 @@ import {
   MembershipListenerActions,
   UserMembershipUpdatedOnSpaceEventAction,
   MembershipEventMessage,
+  MembershipListenerPayload,
   UserAddedToSpaceEventAction,
   UserRemovedFromSpaceEventAction,
   Membership,
@@ -47,16 +48,16 @@ export const createMembershipListener = <
 >(
   dispatch: Dispatch<MembershipListenerActions<ReceivedMembership>>
 ) => ({
-  membership: (payload: MembershipEventMessage<ReceivedMembership>) => {
-    switch (payload.event) {
+  membership: (payload: MembershipListenerPayload<ReceivedMembership>) => {
+    switch (payload.message.event) {
       case 'create':
-        dispatch(userAddedToSpace(payload));
+        dispatch(userAddedToSpace(payload.message));
         break;
       case 'update':
-        dispatch(userMembershipUpdatedOnSpace(payload));
+        dispatch(userMembershipUpdatedOnSpace(payload.message));
         break;
       case 'delete':
-        dispatch(userRemovedFromSpace(payload));
+        dispatch(userRemovedFromSpace(payload.message));
         break;
       default:
         break;

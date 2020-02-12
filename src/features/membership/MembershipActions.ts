@@ -127,6 +127,15 @@ export interface MembershipEventMessage<
 }
 // end::RDX-type-membership-event-message[]
 
+export type MembershipListenerPayload<
+  ReceivedMembership extends Membership<
+    ObjectsCustom,
+    Space<ObjectsCustom>
+  > = Membership
+> = {
+  message: MembershipEventMessage<ReceivedMembership>;
+};
+
 // tag::RDX-action-membership-fetch[]
 export interface FetchingMembershipAction<Meta extends ActionMeta> {
   type: typeof MembershipActionType.FETCHING_MEMBERSHIP;

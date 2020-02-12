@@ -3,7 +3,7 @@ import { MessageReceivedAction, Message } from './MessageActions';
 import { MessageActionType } from './MessageActionType.enum';
 
 // tag::RDX-type-messages[]
-export const messageRecieved = <MessageType extends Message>(
+export const messageReceived = <MessageType extends Message>(
   payload: MessageType
 ): MessageReceivedAction<MessageType> => ({
   type: MessageActionType.MESSAGE_RECEIVED,
@@ -16,6 +16,6 @@ export const createMessageListener = <MessageType extends Message>(
   dispatch: Dispatch<MessageReceivedAction<MessageType>>
 ) => ({
   message: (payload: MessageType) =>
-    dispatch(messageRecieved<MessageType>(payload)),
+    dispatch(messageReceived<MessageType>(payload)),
 });
 // end::RDX-method-listener-messages[]

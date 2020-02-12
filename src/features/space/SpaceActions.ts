@@ -41,6 +41,10 @@ export interface SpaceEventMessage<ReceivedSpace extends Space<ObjectsCustom>> {
 }
 // end::RDX-event-space[]
 
+export type SpaceListenerPayload<ReceivedSpace extends Space<ObjectsCustom>> = {
+  message: SpaceEventMessage<ReceivedSpace>;
+};
+
 // tag::RDX-type-space-fetch-options[]
 export type FetchSpacesRequest = SpaceRequestOptions;
 // end::RDX-type-space-fetch-options[]

@@ -3,6 +3,7 @@ import {
   UserUpdatedEventAction,
   UserDeletedEventAction,
   UserEventMessage,
+  UserListenerPayload,
   UserListenerActions,
   User,
 } from './UserActions';
@@ -31,13 +32,13 @@ export const userDeleted = <UserType extends User<ObjectsCustom>>(
 export const createUserListener = <UserType extends User<ObjectsCustom> = User>(
   dispatch: Dispatch<UserListenerActions<UserType>>
 ) => ({
-  user: (payload: UserEventMessage<UserType>) => {
-    switch (payload.event) {
+  user: (payload: UserListenerPayload<UserType>) => {
+    switch (payload.message.event) {
       case 'update':
-        dispatch(userUpdated<UserType>(payload));
+        dispatch(userUpdated<UserType>(payload.message));
         break;
       case 'delete':
-        dispatch(userDeleted<UserType>(payload));
+        dispatch(userDeleted<UserType>(payload.message));
         break;
       default:
         break;

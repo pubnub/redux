@@ -3,6 +3,7 @@ import {
   SpaceUpdatedEventAction,
   SpaceDeletedEventAction,
   SpaceEventMessage,
+  SpaceListenerPayload,
   SpaceListenerActions,
   Space,
 } from './SpaceActions';
@@ -31,13 +32,13 @@ export const spaceDeleted = <ReceivedSpace extends Space<ObjectsCustom>>(
 export const createSpaceListener = <ReceivedSpace extends Space<ObjectsCustom>>(
   dispatch: Dispatch<SpaceListenerActions<ReceivedSpace>>
 ) => ({
-  space: (payload: SpaceEventMessage<ReceivedSpace>) => {
-    switch (payload.event) {
+  space: (payload: SpaceListenerPayload<ReceivedSpace>) => {
+    switch (payload.message.event) {
       case 'update':
-        dispatch(spaceUpdated<ReceivedSpace>(payload));
+        dispatch(spaceUpdated<ReceivedSpace>(payload.message));
         break;
       case 'delete':
-        dispatch(spaceDeleted<ReceivedSpace>(payload));
+        dispatch(spaceDeleted<ReceivedSpace>(payload.message));
         break;
       default:
         break;
