@@ -1,14 +1,21 @@
 import { Dispatch } from 'redux';
-import { SignalAction } from './SignalActions';
-import { SignalActionPayload } from './Signal';
+import { SignalReceivedAction, Signal } from './SignalActions';
 import { SignalActionType } from './SignalActionType.enum';
 
-// tag::RDX-method-listener-signal[]
-export const createSignalListener = (dispatch: Dispatch<SignalAction>) => ({
-  signal: (payload: SignalActionPayload): SignalAction =>
-    dispatch({
-      type: SignalActionType.SIGNAL,
-      payload,
-    }),
+// tag::RDX-type-signals[]
+export const signalReceived = <SignalType extends Signal>(
+  payload: SignalType
+): SignalReceivedAction<SignalType> => ({
+  type: SignalActionType.SIGNAL_RECEIVED,
+  payload,
 });
-// end::RDX-method-listener-signal[]
+// end::RDX-type-signals[]
+
+// tag::RDX-method-listener-signals[]
+export const createSignalListener = <SignalType extends Signal>(
+  dispatch: Dispatch<SignalReceivedAction<SignalType>>
+) => ({
+  signal: (payload: SignalType) =>
+    dispatch(signalReceived<SignalType>(payload)),
+});
+// end::RDX-method-listener-signals[]

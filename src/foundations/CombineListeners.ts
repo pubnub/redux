@@ -1,6 +1,6 @@
 import { Message } from 'features/message/MessageActions';
 import { PresenceEventMessage } from 'features/presence/PresenceActions';
-import { SignalActionPayload } from 'features/signal/Signal';
+import { Signal } from 'features/signal/SignalActions';
 import { User, UserListenerPayload } from 'features/user/UserActions';
 import { Space, SpaceListenerPayload } from 'features/space/SpaceActions';
 import {
@@ -16,7 +16,7 @@ import { ObjectsCustom } from './ObjectsCustom';
 export interface PubNubListener {
   message?: (message: Message) => void;
   presence?: (presence: PresenceEventMessage) => void;
-  signal?: (signal: SignalActionPayload) => void;
+  signal?: (signal: Signal) => void;
   user?: (user: UserListenerPayload<User<ObjectsCustom>>) => void;
   space?: (space: SpaceListenerPayload<Space<ObjectsCustom>>) => void;
   membership?: (
@@ -151,7 +151,7 @@ const createCombinedListener = (
     [listenerType]: (
       payload: Message &
         PresenceEventMessage &
-        SignalActionPayload &
+        Signal &
         UserListenerPayload<User<ObjectsCustom>> &
         SpaceListenerPayload<Space<ObjectsCustom>> &
         MembershipListenerPayload<

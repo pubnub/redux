@@ -51,8 +51,14 @@ import {
   sendMessage,
   sendingMessage,
   messageSent,
-  errorSendingmessage,
+  errorSendingMessage,
 } from './features/message/commands/SendMessage';
+import {
+  sendSignal,
+  sendingSignal,
+  signalSent,
+  errorSendingSignal,
+} from './features/signal/commands/SendSignal';
 import {
   fetchMessageHistory,
   fetchingMessageHistory,
@@ -163,6 +169,7 @@ import {
 } from './features/subscriptionStatus/SubscriptionStatusListener';
 // Reducers
 import { createMessageReducer } from './features/message/MessageReducer';
+import { createSignalReducer } from './features/signal/SignalReducer';
 import { createPresenceReducer } from './features/presence/PresenceReducer';
 import { createNetworkStatusReducer } from './features/networkStatus/NetworkStatusReducer';
 import { createUserReducer } from './features/user/UserReducer';
@@ -178,6 +185,7 @@ import {
   Message,
   MessageRequestOptions,
 } from './features/message/MessageActions';
+import { Signal, SignalRequestOptions } from './features/signal/SignalActions';
 import {
   Presence,
   PresenceStateRequest,
@@ -190,6 +198,18 @@ import { PubnubThunkContext } from './foundations/ThunkTypes';
 import { ErrorStatusResponse } from './features/errorStatus/ErrorStatusActions';
 import { NetworkStatusResponse } from './features/networkStatus/NetworkStatusActions';
 import { SubscriptionStatusResponse } from './features/subscriptionStatus/SubscribeStatusActions';
+// Action Types
+import { SignalActionType } from './features/signal/SignalActionType.enum';
+import { MessageActionType } from './features/message/MessageActionType.enum';
+import { PresenceActionType } from './features/presence/PresenceActionType.enum';
+import { UserActionType } from './features/user/UserActionType.enum';
+import { SpaceActionType } from './features/space/SpaceActionType.enum';
+import { MembershipActionType } from './features/membership/MembershipActionType.enum';
+import { MembersActionType } from './features/members/MembersActionType.enum';
+import { SubscriptionStatusActionType } from './features/subscriptionStatus/SubscriptionStatusActionType.enum';
+import { NetworkStatusActionType } from './features/networkStatus/NetworkStatusActionType.enum';
+import { ErrorStatusActionType } from './features/errorStatus/ErrorStatusActionType.enum';
+import { PresenceCategory } from './features/presence/PresenceCategory.enum';
 
 export {
   // Commands
@@ -228,7 +248,11 @@ export {
   sendMessage,
   sendingMessage,
   messageSent,
-  errorSendingmessage,
+  errorSendingMessage,
+  sendSignal,
+  sendingSignal,
+  signalSent,
+  errorSendingSignal,
   fetchMessageHistory,
   fetchingMessageHistory,
   messageHistoryRetrieved,
@@ -294,6 +318,7 @@ export {
   userUpdated,
   errorUpdatingUser,
   createMessageReducer,
+  createSignalReducer,
   createPresenceReducer,
   createNetworkStatusReducer,
   createUserReducer,
@@ -321,10 +346,25 @@ export {
   User,
   Message,
   MessageRequestOptions,
+  Signal,
+  SignalRequestOptions,
   Presence,
   PresenceStateRequest,
   HereNowRequest,
   ErrorStatusResponse,
   NetworkStatusResponse,
   SubscriptionStatusResponse,
+  // Action Types
+  SignalActionType,
+  MessageActionType,
+  PresenceActionType,
+  UserActionType,
+  SpaceActionType,
+  MembershipActionType,
+  MembersActionType,
+  SubscriptionStatusActionType,
+  NetworkStatusActionType,
+  ErrorStatusActionType,
+  // Enums
+  PresenceCategory,
 };

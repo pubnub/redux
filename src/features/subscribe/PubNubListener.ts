@@ -24,7 +24,10 @@ import {
 import { User, UserListenerActions } from '../../features/user/UserActions';
 import { Space, SpaceListenerActions } from '../../features/space/SpaceActions';
 import { PresenceListenerActions } from '../../features/presence/PresenceActions';
-import { SignalAction } from '../../features/signal/SignalActions';
+import {
+  SignalReceivedAction,
+  Signal,
+} from '../../features/signal/SignalActions';
 import {
   MembershipListenerActions,
   Membership,
@@ -32,13 +35,14 @@ import {
 
 export type ListenerActions<
   MessageType extends Message,
+  SignalType extends Signal,
   UserType extends User,
   SpaceType extends Space,
   MembershipType extends Membership
 > =
   | MessageReceivedAction<MessageType>
   | PresenceListenerActions
-  | SignalAction
+  | SignalReceivedAction<SignalType>
   | UserListenerActions<UserType>
   | SpaceListenerActions<SpaceType>
   | MembershipListenerActions<MembershipType>
@@ -48,12 +52,19 @@ export type ListenerActions<
 
 export const createPubNubListener = <
   MessageType extends Message,
+  SignalType extends Signal,
   UserType extends User,
   SpaceType extends Space,
   MembershipType extends Membership
 >(
   dispatch: Dispatch<
-    ListenerActions<MessageType, UserType, SpaceType, MembershipType>
+    ListenerActions<
+      MessageType,
+      SignalType,
+      UserType,
+      SpaceType,
+      MembershipType
+    >
   >
 ) =>
   combineListeners(

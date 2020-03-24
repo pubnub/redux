@@ -44,7 +44,7 @@ export const messageSent = <
 // end::RDX-function-messages-send-success[]
 
 // tag::RDX-function-messages-send-error[]
-export const errorSendingmessage = <
+export const errorSendingMessage = <
   MessageContentType extends object,
   MessageMeta extends object,
   Meta extends ActionMeta
@@ -87,7 +87,7 @@ export const sendMessage = <
             };
 
             dispatch(
-              errorSendingmessage<MessageContentType, MessageMeta, Meta>(
+              errorSendingMessage<MessageContentType, MessageMeta, Meta>(
                 payload,
                 meta
               )
