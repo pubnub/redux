@@ -75,7 +75,7 @@ export const updateMembership = <
     new Promise<void>((resolve, reject) => {
       dispatch(updatingMemberships<MembershipType, Meta>(request, meta));
 
-      pubnub.api.updateMembership(
+      pubnub.api.updateMemberships(
         {
           ...request,
         },
