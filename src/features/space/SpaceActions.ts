@@ -1,7 +1,19 @@
+import Pubnub from 'pubnub';
 import { SpaceActionType } from './SpaceActionType.enum';
-import { ObjectsCustom, AnyCustom } from '../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../foundations/ActionMeta';
-import { PubNubApiStatus } from '../../foundations/PubNubApi';
+import { ObjectsCustom, AnyCustom } from 'foundations/ObjectsCustom';
+
+export type SpaceCallback<SpaceType extends Space<ObjectsCustom>> = (
+  status: Pubnub.PubnubStatus,
+  response: SpaceResponse<SpaceType>
+) => void;
+
+export type DeleteSpaceCallback = (status: Pubnub.PubnubStatus) => void;
+
+export type FetchSpacesCallback<SpaceType extends Space<ObjectsCustom>> = (
+  status: Pubnub.PubnubStatus,
+  response: FetchSpacesResponse<SpaceType>
+) => void;
 
 // tag::RDX-type-space[]
 export interface Space<CustomSpaceFields extends ObjectsCustom = AnyCustom> {
@@ -33,6 +45,32 @@ export interface SpaceRequestOptions {
 }
 // end::RDX-type-space-options[]
 
+// tag::RDX-type-space-fetch-options[]
+export type FetchSpacesRequest = SpaceRequestOptions;
+// end::RDX-type-space-fetch-options[]
+
+// tag::RDX-type-space-fetch-response[]
+export interface FetchSpacesResponse<
+  ReceivedSpace extends Space<ObjectsCustom>
+> {
+  status: number;
+  data: ReceivedSpace[];
+}
+// end::RDX-type-space-fetch-response[]
+
+// tag::RDX-type-space-request[]
+export interface SpaceRequest
+  extends Space<ObjectsCustom>,
+    SpaceRequestOptions {}
+// end::RDX-type-space-request[]
+
+// tag::RDX-type-space-response[]
+export interface SpaceResponse<ReceivedSpace extends Space<ObjectsCustom>> {
+  status: number;
+  data: ReceivedSpace;
+}
+// end::RDX-type-space-response[]
+
 // tag::RDX-event-space[]
 export interface SpaceEventMessage<ReceivedSpace extends Space<ObjectsCustom>> {
   data: ReceivedSpace;
@@ -45,25 +83,16 @@ export type SpaceListenerPayload<ReceivedSpace extends Space<ObjectsCustom>> = {
   message: SpaceEventMessage<ReceivedSpace>;
 };
 
-// tag::RDX-type-space-fetch-options[]
-export type FetchSpacesRequest = SpaceRequestOptions;
-// end::RDX-type-space-fetch-options[]
-
-type FetchSpacesRequest = SpaceRequestOptions;
-
-// tag::RDX-type-space-fetch-response[]
-export interface FetchSpacesResponse<
-  ReceivedSpace extends Space<ObjectsCustom>
-> {
-  status: string;
-  data: ReceivedSpace[];
+// tag::RDX-type-space-fetchbyid-options[]
+export interface FetchSpaceByIdRequest extends SpaceRequestOptions {
+  spaceId: string;
 }
-// end::RDX-type-space-fetch-response[]
+// end::RDX-type-space-fetchbyid-options[]
 
 // tag::RDX-type-space-fetch-error[]
 export interface FetchSpacesError {
   request: FetchSpacesRequest;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-space-fetch-error[]
 
@@ -73,43 +102,24 @@ export interface FetchSpacesSuccess<
 > {
   request: FetchSpacesRequest;
   response: FetchSpacesResponse<ReceivedSpace>;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-space-fetch-success[]
-
-// tag::RDX-type-space-request[]
-export interface SpaceRequest
-  extends Space<ObjectsCustom>,
-    SpaceRequestOptions {}
-// end::RDX-type-space-request[]
 
 // tag::RDX-type-space-success[]
 export interface SpaceSuccess<ReceivedSpace extends Space<ObjectsCustom>> {
   request: SpaceRequest;
   response: SpaceResponse<ReceivedSpace>;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-space-success[]
-
-// tag::RDX-type-space-response[]
-export interface SpaceResponse<ReceivedSpace extends Space<ObjectsCustom>> {
-  status: string;
-  data: ReceivedSpace;
-}
-// end::RDX-type-space-response[]
 
 // tag::RDX-type-space-error[]
 export interface SpaceError {
   request: SpaceRequest;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-space-error[]
-
-// tag::RDX-type-space-fetchbyid-options[]
-export interface FetchSpaceByIdRequest extends SpaceRequestOptions {
-  spaceId: string;
-}
-// end::RDX-type-space-fetchbyid-options[]
 
 // tag::RDX-type-space-fetchbyid-success[]
 export interface FetchSpaceByIdSuccess<
@@ -117,14 +127,14 @@ export interface FetchSpaceByIdSuccess<
 > {
   request: FetchSpaceByIdRequest;
   response: SpaceResponse<ReceivedSpace>;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-space-fetchbyid-success[]
 
 // tag::RDX-type-space-fetchbyid-error[]
 export interface FetchSpaceByIdError {
   request: FetchSpaceByIdRequest;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-space-fetchbyid-error[]
 
@@ -134,25 +144,17 @@ export interface DeleteSpaceRequest {
 }
 // end::RDX-type-space-delete-request[]
 
-// tag::RDX-type-space-delete-response[]
-export interface DeleteSpaceResponse {
-  status: number;
-  request: DeleteSpaceRequest;
-}
-// end::RDX-type-space-delete-response[]
-
 // tag::RDX-type-space-delete-success[]
 export interface DeleteSpaceSuccess {
   request: DeleteSpaceRequest;
-  response: DeleteSpaceResponse;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-space-delete-success[]
 
 // tag::RDX-type-space-delete-error[]
 export interface DeleteSpaceError {
   request: DeleteSpaceRequest;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-space-delete-error[]
 

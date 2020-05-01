@@ -1,3 +1,4 @@
+import Pubnub from 'pubnub';
 import { Dispatch } from 'redux';
 import { MessageReceivedAction, Message } from './MessageActions';
 import { MessageActionType } from './MessageActionType.enum';
@@ -15,7 +16,7 @@ export const messageReceived = <MessageType extends Message>(
 export const createMessageListener = <MessageType extends Message>(
   dispatch: Dispatch<MessageReceivedAction<MessageType>>
 ) => ({
-  message: (payload: MessageType) =>
-    dispatch(messageReceived<MessageType>(payload)),
+  message: (payload: Pubnub.MessageEvent) =>
+    dispatch(messageReceived<MessageType>((payload as unknown) as MessageType)),
 });
 // end::RDX-method-listener-messages[]

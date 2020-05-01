@@ -1,16 +1,17 @@
+import Pubnub from 'pubnub';
 import { Dispatch } from 'redux';
 import {
   MembershipListenerActions,
   UserMembershipUpdatedOnSpaceEventAction,
-  MembershipEventMessage,
-  MembershipListenerPayload,
   UserAddedToSpaceEventAction,
   UserRemovedFromSpaceEventAction,
   Membership,
+  MembershipEventMessage,
+  MembershipListenerPayload,
 } from './MembershipActions';
 import { MembershipActionType } from './MembershipActionType.enum';
-import { ObjectsCustom } from '../../foundations/ObjectsCustom';
-import { Space } from '../space/SpaceActions';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { Space } from 'features/space/SpaceActions';
 
 const userMembershipUpdatedOnSpace = <
   ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
@@ -48,16 +49,34 @@ export const createMembershipListener = <
 >(
   dispatch: Dispatch<MembershipListenerActions<ReceivedMembership>>
 ) => ({
-  membership: (payload: MembershipListenerPayload<ReceivedMembership>) => {
+  membership: (payload: Pubnub.MembershipEvent) => {
     switch (payload.message.event) {
       case 'create':
-        dispatch(userAddedToSpace(payload.message));
+        dispatch(
+          userAddedToSpace(
+            ((payload as unknown) as MembershipListenerPayload<
+              ReceivedMembership
+            >).message
+          )
+        );
         break;
       case 'update':
-        dispatch(userMembershipUpdatedOnSpace(payload.message));
+        dispatch(
+          userMembershipUpdatedOnSpace(
+            ((payload as unknown) as MembershipListenerPayload<
+              ReceivedMembership
+            >).message
+          )
+        );
         break;
       case 'delete':
-        dispatch(userRemovedFromSpace(payload.message));
+        dispatch(
+          userRemovedFromSpace(
+            ((payload as unknown) as MembershipListenerPayload<
+              ReceivedMembership
+            >).message
+          )
+        );
         break;
       default:
         break;

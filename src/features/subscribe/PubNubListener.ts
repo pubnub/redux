@@ -1,3 +1,12 @@
+import Pubnub, {
+  PresenceEvent,
+  SignalEvent,
+  UserEvent,
+  SpaceEvent,
+  MessageActionEvent,
+  StatusEvent,
+  MembershipEvent,
+} from 'pubnub';
 import { Dispatch } from 'redux';
 import { createPresenceListener } from '../presence/PresenceListener';
 import {
@@ -21,8 +30,8 @@ import {
   Message,
   MessageReceivedAction,
 } from '../../features/message/MessageActions';
-import { User, UserListenerActions } from '../../features/user/UserActions';
-import { Space, SpaceListenerActions } from '../../features/space/SpaceActions';
+import { UserListenerActions, User } from '../../features/user/UserActions';
+import { SpaceListenerActions, Space } from '../../features/space/SpaceActions';
 import { PresenceListenerActions } from '../../features/presence/PresenceActions';
 import {
   SignalReceivedAction,
@@ -103,11 +112,9 @@ const mergeListenersByType = (listeners: any[]): any[] => {
   listeners.forEach((listener) => {
     // each listener is a key/value pair
     // the key is the listener type, the value is the handler function
-    let listenerType = Object.keys(listener)[0];
+    const listenerType = Object.keys(listener)[0];
 
-    if (!incomingListeners.hasOwnProperty(listenerType)) {
-      incomingListeners[listenerType] = [];
-    }
+    incomingListeners[listenerType] = incomingListeners[listenerType] || [];
 
     incomingListeners[listenerType].push(listener);
   });
@@ -135,12 +142,26 @@ const mergeListenersByType = (listeners: any[]): any[] => {
  * @param listenerType The listener type.
  * @param listeners The Array of listeners of the same type.
  */
-const createCombinedListener = (listenerType: string, listeners: any): any => {
+const createCombinedListener = (
+  listenerType: keyof Pubnub.ListenerParameters,
+  listeners: Pubnub.ListenerParameters[]
+): Pubnub.ListenerParameters => {
   // returns a single listener which invokes each of the incomming listeners
   return {
-    [listenerType]: (payload: any) => {
-      listeners.forEach((listener: any) => {
-        listener[listenerType](payload);
+    [listenerType]: (
+      payload: MessageEvent &
+        PresenceEvent &
+        SignalEvent &
+        UserEvent &
+        SpaceEvent &
+        MembershipEvent &
+        StatusEvent &
+        MessageActionEvent
+    ) => {
+      listeners.forEach((listener: Pubnub.ListenerParameters) => {
+        if (listener[listenerType]) {
+          listener[listenerType](payload);
+        }
       });
     },
   };

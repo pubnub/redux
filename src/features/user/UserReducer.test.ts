@@ -1,23 +1,23 @@
 import { UserActionType } from './UserActionType.enum';
 import {
-  User,
   UserUpdatedAction,
   UserDeletedAction,
   UsersRetrievedAction,
   UserRetrievedAction,
+  User,
 } from './UserActions';
 import { createUserReducer } from '../..';
 import { UserCreatedAction } from './UserActions';
 import { MembersRetrievedAction } from '../members/MembersActions';
 import { MembersActionType } from '../members/MembersActionType.enum';
-const deepFreeze = require('deep-freeze');
+import deepFreeze from 'deep-freeze';
 
 describe('Handling user reducer without mutating the state', () => {
-  interface userReducerInitialState {
+  interface UserReducerInitialState {
     byId: { [key: string]: User };
   }
   interface MetaType {}
-  let initialState: userReducerInitialState;
+  let initialState: UserReducerInitialState;
   beforeEach(() => {
     initialState = {
       byId: {
@@ -35,7 +35,7 @@ describe('Handling user reducer without mutating the state', () => {
         name: 'user2',
       },
       response: {
-        status: '',
+        status: 200,
         data: {
           id: 'user2',
           name: 'user2',
@@ -43,7 +43,7 @@ describe('Handling user reducer without mutating the state', () => {
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,
@@ -74,7 +74,7 @@ describe('Handling user reducer without mutating the state', () => {
         name: '',
       },
       response: {
-        status: '',
+        status: 200,
         data: {
           id: 'user2',
           name: 'user2',
@@ -82,7 +82,7 @@ describe('Handling user reducer without mutating the state', () => {
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,
@@ -117,7 +117,7 @@ describe('Handling user reducer without mutating the state', () => {
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,
@@ -140,7 +140,7 @@ describe('Handling user reducer without mutating the state', () => {
     const payload = {
       request: {},
       response: {
-        status: '',
+        status: 200,
         data: [
           {
             id: 'user1',
@@ -167,7 +167,7 @@ describe('Handling user reducer without mutating the state', () => {
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,
@@ -194,7 +194,7 @@ describe('Handling user reducer without mutating the state', () => {
         userId: 'user2',
       },
       response: {
-        status: '',
+        status: 200,
         data: {
           id: 'user2',
           name: 'user2',
@@ -205,7 +205,7 @@ describe('Handling user reducer without mutating the state', () => {
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,
@@ -231,7 +231,7 @@ describe('Handling user reducer without mutating the state', () => {
         spaceId: '',
       },
       response: {
-        status: '',
+        status: 200,
         data: [
           {
             id: 'user1',
@@ -244,7 +244,7 @@ describe('Handling user reducer without mutating the state', () => {
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,

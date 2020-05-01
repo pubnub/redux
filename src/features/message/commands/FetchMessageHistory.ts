@@ -9,9 +9,9 @@ import {
   FetchMessageHistorySuccess,
 } from '../../message/MessageActions';
 import { MessageActionType } from '../../message/MessageActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta } from '../../../foundations/ActionMeta';
+import Pubnub from 'pubnub';
 
 // tag::RDX-function-presence-messagehistory[]
 export const fetchingMessageHistory = <Meta extends ActionMeta>(
@@ -67,14 +67,11 @@ export const fetchMessageHistory = <
 
       pubnub.api.history(
         {
-          ...request,
+          ...(request as Pubnub.HistoryParameters),
         },
-        (
-          status: PubNubApiStatus,
-          response: FetchMessageHistoryResponse<MessageContentType>
-        ) => {
+        (status, response) => {
           if (status.error) {
-            let payload: FetchMessageHistoryError = {
+            const payload = {
               request,
               status,
             };
@@ -82,9 +79,11 @@ export const fetchMessageHistory = <
             dispatch(errorFetchingMessageHistory<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: FetchMessageHistorySuccess<MessageContentType> = {
+            const payload = {
               request,
-              response,
+              response: response as FetchMessageHistoryResponse<
+                MessageContentType
+              >,
               status,
             };
 

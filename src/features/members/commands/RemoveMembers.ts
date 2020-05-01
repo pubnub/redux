@@ -2,19 +2,18 @@ import { Dispatch } from 'redux';
 import {
   RemovingMembersAction,
   MembersRemovedAction,
-  MembersRequest,
-  Members,
-  MembersResponse,
   ErrorRemovingMembersAction,
   MembersError,
   MembersSuccess,
+  Members,
+  MembersRequest,
+  MembersResponse,
 } from '../MembersActions';
 import { MembersActionType } from '../MembersActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
-import { Space } from '../../space/SpaceActions';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { Space } from 'features/space/SpaceActions';
 
 // tag::RDX-function-members-remove[]
 export const removingMembers = <
@@ -78,10 +77,11 @@ export const removeMembers = <
       pubnub.api.removeMembers(
         {
           ...request,
+          users: request.users.map((user) => user.id),
         },
-        (status: PubNubApiStatus, response: MembersResponse<MembersType>) => {
+        (status, response) => {
           if (status.error) {
-            let payload: MembersError<MembersType> = {
+            const payload = {
               request,
               status,
             };
@@ -89,9 +89,9 @@ export const removeMembers = <
             dispatch(errorRemovingMembers<MembersType, Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: MembersSuccess<MembersType> = {
+            const payload = {
               request,
-              response,
+              response: response as MembersResponse<MembersType>,
               status,
             };
 

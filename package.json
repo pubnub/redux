@@ -1,6 +1,6 @@
 {
   "name": "pubnub-redux",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "main": "dist/index.js",
   "module": "dist/pubnub-redux.esm.js",
   "typings": "dist/index.d.ts",
@@ -13,22 +13,26 @@
     "test": "tsdx test",
     "lint": "tsdx lint src --fix"
   },
-  "dependencies": {},
   "devDependencies": {
+    "@types/deep-freeze": "^0.1.2",
     "@types/jest": "^24.0.23",
-    "@types/pubnub": "^4.27.1",
+    "@types/pubnub": "^4.27.2",
+    "@types/redux-mock-store": "^1.0.1",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
     "deep-freeze": "0.0.1",
+    "eslint": "^6.8.0",
     "husky": "^3.1.0",
-    "pubnub": "^4.27.2",
+    "pubnub": "^4.27.6",
     "redux": "^4.0.4",
+    "redux-mock-store": "^1.5.4",
     "redux-thunk": "^2.3.0",
-    "tsdx": "^0.11.0",
+    "tsdx": "^0.13.2",
     "tslib": "^1.10.0",
-    "tslint": "^5.20.1",
     "typescript": "^3.7.3"
   },
   "peerDependencies": {
-    "pubnub": "^4.27.2",
+    "pubnub": "^4.27.6",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0"
   },
@@ -52,5 +56,6 @@
     "roots": [
       "<rootDir>/src"
     ]
-  }
+  },
+  "dependencies": {}
 }

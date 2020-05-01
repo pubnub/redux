@@ -1,19 +1,18 @@
 import { Dispatch } from 'redux';
 import {
-  SpaceRequest,
   UpdatingSpaceAction,
   SpaceUpdatedAction,
   ErrorUpdatingSpaceAction,
-  SpaceResponse,
   SpaceError,
-  Space,
   SpaceSuccess,
+  SpaceRequest,
+  Space,
+  SpaceResponse,
 } from '../SpaceActions';
 import { SpaceActionType } from '../SpaceActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 // tag::RDX-function-space-update[]
 export const updatingSpace = <Meta extends ActionMeta>(
@@ -72,9 +71,9 @@ export const updateSpace = <
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: SpaceResponse<SpaceType>) => {
+        (status, response) => {
           if (status.error) {
-            let payload: SpaceError = {
+            const payload = {
               request,
               status,
             };
@@ -82,9 +81,9 @@ export const updateSpace = <
             dispatch(errorUpdatingSpace<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: SpaceSuccess<SpaceType> = {
+            const payload = {
               request,
-              response,
+              response: response as SpaceResponse<SpaceType>,
               status,
             };
 

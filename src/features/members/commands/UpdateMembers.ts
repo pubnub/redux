@@ -1,20 +1,19 @@
 import { Dispatch } from 'redux';
 import {
   UpdatingMembersAction,
-  MembersRequest,
-  Members,
   MembersUpdatedAction,
   ErrorUpdatingMembersAction,
-  MembersResponse,
   MembersError,
   MembersSuccess,
+  Members,
+  MembersRequest,
+  MembersResponse,
 } from '../MembersActions';
 import { MembersActionType } from '../MembersActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
-import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
-import { Space } from '../../space/SpaceActions';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { Space } from 'features/space/SpaceActions';
 
 // tag::RDX-function-members-update[]
 export const updatingMembers = <
@@ -79,9 +78,9 @@ export const updateMembers = <
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: MembersResponse<MembersType>) => {
+        (status, response) => {
           if (status.error) {
-            let payload: MembersError<MembersType> = {
+            const payload = {
               request,
               status,
             };
@@ -89,9 +88,9 @@ export const updateMembers = <
             dispatch(errorUpdatingMembers<MembersType, Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: MembersSuccess<MembersType> = {
+            const payload = {
               request,
-              response,
+              response: response as MembersResponse<MembersType>,
               status,
             };
 

@@ -3,18 +3,17 @@ import {
   MembersRetrievedAction,
   ErrorFetchingMembersAction,
   FetchingMembersAction,
-  FetchMembersRequest,
-  FetchMembersResponse,
   FetchMembersError,
   FetchMembersSuccess,
+  FetchMembersRequest,
   Members,
+  MembersResponse,
 } from '../MembersActions';
 import { MembersActionType } from '../MembersActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
-import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
-import { Space } from '../../space/SpaceActions';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { Space } from 'features/space/SpaceActions';
 
 // tag::RDX-function-member-fetch[]
 export const fetchingMembers = <Meta extends ActionMeta>(
@@ -73,12 +72,9 @@ export const fetchMembers = <
         {
           ...request,
         },
-        (
-          status: PubNubApiStatus,
-          response: FetchMembersResponse<MembersType>
-        ) => {
+        (status, response) => {
           if (status.error) {
-            let payload: FetchMembersError = {
+            const payload = {
               request,
               status,
             };
@@ -86,9 +82,9 @@ export const fetchMembers = <
             dispatch(errorFetchingMembers<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: FetchMembersSuccess<MembersType> = {
+            const payload = {
               request,
-              response,
+              response: response as MembersResponse<MembersType>,
               status,
             };
 

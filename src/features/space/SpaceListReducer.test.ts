@@ -1,14 +1,13 @@
 import { createSpaceListReducer } from './SpaceListReducer';
 import { SpaceActionType } from './SpaceActionType.enum';
-import { SpacesRetrievedAction } from './SpaceActions';
-import { Space } from './SpaceActions';
-const deepFreeze = require('deep-freeze');
+import { SpacesRetrievedAction, Space } from './SpaceActions';
+import deepFreeze from 'deep-freeze';
 
 describe('Handling space list reducer without mutating the state', () => {
-  interface spaceListReducerInitialState {
+  interface SpaceListReducerInitialState {
     spaceIds: string[];
   }
-  let initialState: spaceListReducerInitialState;
+  let initialState: SpaceListReducerInitialState;
   beforeEach(() => {
     initialState = {
       spaceIds: [],
@@ -21,7 +20,7 @@ describe('Handling space list reducer without mutating the state', () => {
       const payload = {
         request: {},
         response: {
-          status: '',
+          status: 200,
           data: [
             {
               id: 'space1',
@@ -48,7 +47,7 @@ describe('Handling space list reducer without mutating the state', () => {
         },
         status: {
           error: false,
-          errorData: '',
+          errorData: undefined,
           category: '',
           operation: '',
           statusCode: 0,

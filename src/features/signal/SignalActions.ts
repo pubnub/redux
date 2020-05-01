@@ -1,5 +1,5 @@
+import Pubnub from 'pubnub';
 import { SignalActionType } from './SignalActionType.enum';
-import { PubNubApiStatus } from '../../foundations/PubNubApi';
 
 // tag::RDX-type-signal[]
 export interface Signal {
@@ -19,8 +19,9 @@ export interface SignalRequestOptions<SignalContentType> {
 // end::RDX-type-signal-request-option[]
 
 // tag::RDX-type-signal-send[]
-export interface SendSignalRequest<SignalContentType>
-  extends SignalRequestOptions<SignalContentType> {}
+export type SendSignalRequest<SignalContentType> = SignalRequestOptions<
+  SignalContentType
+>;
 // end::RDX-type-signal-send[]
 
 // tag::RDX-type-signal-send-response[]
@@ -32,7 +33,7 @@ export interface SendSignalResponse {
 // tag::RDX-type-signal-send-error[]
 export interface SendSignalError<SignalContentType> {
   request: SendSignalRequest<SignalContentType>;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-signal-send-error[]
 
@@ -40,7 +41,7 @@ export interface SendSignalError<SignalContentType> {
 export interface SendSignalSuccess<SignalContentType> {
   request: SendSignalRequest<SignalContentType>;
   response: SendSignalResponse;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-signal-send-success[]
 

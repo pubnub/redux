@@ -192,7 +192,6 @@ import {
   HereNowRequest,
 } from './features/presence/PresenceActions';
 import { ActionMeta } from './foundations/ActionMeta';
-import { PubNubApiStatus } from './foundations/PubNubApi';
 import { PubnubThunkContext } from './foundations/ThunkTypes';
 // Response Types
 import { ErrorStatusResponse } from './features/errorStatus/ErrorStatusActions';
@@ -340,7 +339,6 @@ export {
   connected,
   reconnected,
   PubnubThunkContext,
-  PubNubApiStatus,
   ActionMeta,
   Space,
   User,

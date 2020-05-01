@@ -1,7 +1,7 @@
+import Pubnub from 'pubnub';
 import { UserActionType } from './UserActionType.enum';
-import { PubNubApiStatus } from '../../foundations/PubNubApi';
-import { ObjectsCustom, AnyCustom } from '../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../foundations/ActionMeta';
+import { ObjectsCustom, AnyCustom } from 'foundations/ObjectsCustom';
 
 // tag::RDX-type-user[]
 export interface User<CustomSpaceFields extends ObjectsCustom = AnyCustom> {
@@ -35,6 +35,34 @@ export interface UserRequestOptions {
 }
 // end::RDX-type-user-options[]
 
+// tag::RDX-type-user-request[]
+export interface UserRequest extends User<ObjectsCustom>, UserRequestOptions {}
+// end::RDX-type-user-request[]
+
+// tag::RDX-type-user-response[]
+export interface UserResponse<ReceivedUser extends User<ObjectsCustom>> {
+  status: number;
+  data: ReceivedUser;
+}
+// end::RDX-type-user-response[]
+
+// tag::RDX-type-user-fetchbyid-request[]
+export interface FetchUserByIdRequest extends UserRequestOptions {
+  userId: string;
+}
+// end::RDX-type-user-fetchbyid-request[]
+
+// tag::RDX-type-user-fetch-request[]
+export type FetchUsersRequest = UserRequestOptions;
+// end::RDX-type-user-fetch-request[]
+
+// tag::RDX-type-user-fetch-response[]
+export interface FetchUsersResponse<ReceivedUser extends User<ObjectsCustom>> {
+  status: number;
+  data: ReceivedUser[];
+}
+// end::RDX-type-user-fetch-response[]
+
 // tag::RDX-user-eventmessage[]
 export interface UserEventMessage<ReceivedUser extends User<ObjectsCustom>> {
   data: ReceivedUser;
@@ -47,63 +75,35 @@ export type UserListenerPayload<ReceivedUser extends User<ObjectsCustom>> = {
   message: UserEventMessage<ReceivedUser>;
 };
 
-// tag::RDX-type-user-fetch-request[]
-export type FetchUsersRequest = UserRequestOptions;
-// end::RDX-type-user-fetch-request[]
-
-// tag::RDX-type-user-fetch-response[]
-export interface FetchUsersResponse<ReceivedUser extends User<ObjectsCustom>> {
-  status: string;
-  data: ReceivedUser[];
-}
-// end::RDX-type-user-fetch-response[]
-
-// tag::RDX-type-user-fetch-error-event[]
-export interface FetchUsersError {
-  request: FetchUsersRequest;
-  status: PubNubApiStatus;
-}
-// end::RDX-type-user-fetch-error-event[]
-
 // tag::RDX-type-user-fetch-success-event[]
 export interface FetchUsersSuccess<ReceivedUser extends User<ObjectsCustom>> {
   request: FetchUsersRequest;
   response: FetchUsersResponse<ReceivedUser>;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-user-fetch-success-event[]
 
-// tag::RDX-type-user-request[]
-export interface UserRequest extends User<ObjectsCustom>, UserRequestOptions {}
-// end::RDX-type-user-request[]
+// tag::RDX-type-user-fetch-error-event[]
+export interface FetchUsersError {
+  request: FetchUsersRequest;
+  status: Pubnub.PubnubStatus;
+}
+// end::RDX-type-user-fetch-error-event[]
 
 // tag::RDX-type-user-success[]
 export interface UserSuccess<ReceivedUser extends User<ObjectsCustom>> {
   request: UserRequest;
   response: UserResponse<ReceivedUser>;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-user-success[]
-
-// tag::RDX-type-user-response[]
-export interface UserResponse<ReceivedUser extends User<ObjectsCustom>> {
-  status: string;
-  data: ReceivedUser;
-}
-// end::RDX-type-user-response[]
 
 // tag::RDX-type-user-error[]
 export interface UserError {
   request: UserRequest;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-user-error[]
-
-// tag::RDX-type-user-fetchbyid-request[]
-export interface FetchUserByIdRequest extends UserRequestOptions {
-  userId: string;
-}
-// end::RDX-type-user-fetchbyid-request[]
 
 // tag::RDX-type-user-fetechbyid-success[]
 export interface FetchUserByIdSuccess<
@@ -111,14 +111,14 @@ export interface FetchUserByIdSuccess<
 > {
   request: FetchUserByIdRequest;
   response: UserResponse<ReceivedUser>;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-user-fetechbyid-success[]
 
 // tag::RDX-type-user-fetchbyid-error-event[]
 export interface FetchUserByIdError {
   request: FetchUserByIdRequest;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-user-fetchbyid-error-event[]
 
@@ -128,25 +128,17 @@ export interface DeleteUserRequest {
 }
 // end::RDX-type-user-delete-request[]
 
-// tag::RDX-type-user-delete-response[]
-export interface DeleteUserResponse {
-  status: number;
-  request: DeleteUserRequest;
-}
-// end::RDX-type-user-delete-response[]
-
 // tag::RDX-type-user-delete-event[]
 export interface DeleteUserSuccess {
   request: DeleteUserRequest;
-  response: DeleteUserResponse;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-user-delete-event[]
 
 // tag::RDX-type-user-delete-error-request[]
 export interface DeleteUserError {
   request: DeleteUserRequest;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-user-delete-error-request[]
 

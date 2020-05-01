@@ -1,5 +1,6 @@
 import { Dispatch } from 'redux';
 import {
+  PresenceListenerActions,
   JoinEventAction,
   LeaveEventAction,
   TimeoutEventAction,
@@ -40,14 +41,6 @@ export const userStateChange = (
   payload,
 });
 // end::RDX-type-presence-user-change[]
-
-// tag::RDX-type-presence-listener-action[]
-export type PresenceListenerActions =
-  | JoinEventAction
-  | LeaveEventAction
-  | TimeoutEventAction
-  | StateChangeEventAction;
-// end::RDX-type-presence-listener-action[]
 
 // tag::RDX-method-listener-presence[]
 export const createPresenceListener = (

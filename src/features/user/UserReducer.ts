@@ -2,27 +2,27 @@ import { AnyAction } from 'redux';
 import {
   UserActions,
   UserListenerActions,
-  User,
-  UserEventMessage,
   UserSuccess,
   DeleteUserSuccess,
   FetchUsersSuccess,
   FetchUserByIdSuccess,
+  User,
+  UserEventMessage,
 } from './UserActions';
 import { UserActionType } from './UserActionType.enum';
 import {
   MembersActions,
-  Members,
   FetchMembersSuccess,
+  Members,
 } from '../../features/members/MembersActions';
 import {
   MembershipActions,
   Membership,
 } from '../../features/membership/MembershipActions';
-import { Space } from '../../features/space/SpaceActions';
 import { MembersActionType } from '../../features/members/MembersActionType.enum';
-import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 import { AnyMeta } from '../../foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { Space } from 'features/space/SpaceActions';
 
 // tag::RDX-state-users-byid[]
 export interface UsersByIdState<ReceivedUser extends User<ObjectsCustom>> {
@@ -40,7 +40,7 @@ const userCreated = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
   payload: UserSuccess<ReceivedUser>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 
@@ -53,7 +53,7 @@ const userUpdated = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
   payload: UserSuccess<ReceivedUser>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 
@@ -66,7 +66,7 @@ const userDeleted = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
   payload: DeleteUserSuccess
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 
@@ -79,7 +79,7 @@ const usersRetrieved = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
   payload: FetchUsersSuccess<ReceivedUser>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 
@@ -94,7 +94,7 @@ const userRetrieved = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
   payload: FetchUserByIdSuccess<ReceivedUser>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 
@@ -107,7 +107,7 @@ const userUpdatedEventReceived = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
   payload: UserEventMessage<ReceivedUser>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 
@@ -120,7 +120,7 @@ const userDeletedEventReceived = <ReceivedUser extends User<ObjectsCustom>>(
   state: UsersByIdState<ReceivedUser>,
   payload: UserEventMessage<ReceivedUser>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 
@@ -143,7 +143,7 @@ const membersRetrieved = <ReceivedUser extends User<ObjectsCustom>>(
     };
 
     for (let i = 0; i < payload.response.data.length; i++) {
-      let currentMember = payload.response.data[i];
+      const currentMember = payload.response.data[i];
 
       if (currentMember.user) {
         newState.byId[currentMember.id] = currentMember.user;

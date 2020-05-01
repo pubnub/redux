@@ -4,16 +4,15 @@ import {
   ErrorFetchingUserByIdAction,
   UserRetrievedAction,
   FetchingUserByIdAction,
-  FetchUserByIdRequest,
   FetchUserByIdError,
-  UserResponse,
-  User,
   FetchUserByIdSuccess,
+  FetchUserByIdRequest,
+  User,
+  UserResponse,
 } from '../UserActions';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 // tag::RDX-function-user-fetchbyid[]
 export const fetchingUserById = <Meta extends ActionMeta>(
@@ -79,9 +78,9 @@ export const fetchUserById = <
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: UserResponse<UserType>) => {
+        (status, response) => {
           if (status.error) {
-            let payload: FetchUserByIdError = {
+            const payload = {
               request,
               status,
             };
@@ -89,9 +88,9 @@ export const fetchUserById = <
             dispatch(errorFetchingUserById<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: FetchUserByIdSuccess<UserType> = {
+            const payload = {
               request,
-              response,
+              response: response as UserResponse<UserType>,
               status,
             };
 

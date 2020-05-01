@@ -1,8 +1,22 @@
-import { Space } from '../../features/space/SpaceActions';
-import { PubNubApiStatus } from '../../foundations/PubNubApi';
+import Pubnub from 'pubnub';
 import { MembershipActionType } from './MembershipActionType.enum';
-import { ObjectsCustom, AnyCustom } from '../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../foundations/ActionMeta';
+import { ObjectsCustom, AnyCustom } from 'foundations/ObjectsCustom';
+import { Space } from 'features/space/SpaceActions';
+
+export type FetchMembershipsCallback<
+  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>
+> = (
+  status: Pubnub.PubnubStatus,
+  response: FetchMembershipResponse<MembershipType>
+) => void;
+
+export type MembershipCallback<
+  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>
+> = (
+  status: Pubnub.PubnubStatus,
+  response: MembershipResponse<MembershipType>
+) => void;
 
 // tag::RDX-type-membership[]
 export interface Membership<
@@ -38,37 +52,20 @@ export interface MembershipFetchRequestOptions {
 }
 // end::RDX-type-membership-fetch-option[]
 
-// tag::RDX-type-membership-fetch-response[]
-export interface FetchMembershipResponse<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> {
-  status: string;
-  data: ReceivedMembership[];
-}
-// end::RDX-type-membership-fetch-response[]
-
-// tag::RDX-type-membership-fetch-success[]
-export interface FetchMembershipSuccess<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> {
-  request: FetchMembershipRequest;
-  response: FetchMembershipResponse<ReceivedMembership>;
-  status: PubNubApiStatus;
-}
-// end::RDX-type-membership-fetch-success[]
-
 // tag::RDX-type-membership-fetch-request[]
 export interface FetchMembershipRequest extends MembershipFetchRequestOptions {
   userId: string;
 }
 // end::RDX-type-membership-fetch-request[]
 
-// tag::RDX-type-membership-fetch-error[]
-export interface FetchMembershipError {
-  request: FetchMembershipRequest;
-  status: PubNubApiStatus;
+// tag::RDX-type-membership-fetch-response[]
+export interface FetchMembershipResponse<
+  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
+> {
+  status: number;
+  data: ReceivedMembership[];
 }
-// end::RDX-type-membership-fetch-error[]
+// end::RDX-type-membership-fetch-response[]
 
 // tag::RDX-type-membership-request[]
 export type MembershipRequest<
@@ -79,33 +76,19 @@ export type MembershipRequest<
 };
 // end::RDX-type-membership-request[]
 
+export type MembershipLeaveRequest = {
+  userId: string;
+  spaces: string[];
+};
+
 // tag::RDX-type-membership-response[]
 export interface MembershipResponse<
   ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
 > {
-  status: string;
+  status: number;
   data: ReceivedMembership[];
 }
 // end::RDX-type-membership-response[]
-
-// tag::RDX-type-membership-success[]
-export interface MembershipSuccess<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> {
-  request: MembershipRequest<ReceivedMembership>;
-  response: MembershipResponse<ReceivedMembership>;
-  status: PubNubApiStatus;
-}
-// end::RDX-type-membership-success[]
-
-// tag::RDX-type-membership-error[]
-export interface MembershipError<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> {
-  request: MembershipRequest<ReceivedMembership>;
-  status: PubNubApiStatus;
-}
-// end::RDX-type-membership-error[]
 
 // tag::RDX-type-membership-event-item[]
 export interface MembershipEventItem<
@@ -135,6 +118,42 @@ export type MembershipListenerPayload<
 > = {
   message: MembershipEventMessage<ReceivedMembership>;
 };
+
+// tag::RDX-type-membership-fetch-success[]
+export interface FetchMembershipSuccess<
+  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
+> {
+  request: FetchMembershipRequest;
+  response: FetchMembershipResponse<ReceivedMembership>;
+  status: Pubnub.PubnubStatus;
+}
+// end::RDX-type-membership-fetch-success[]
+
+// tag::RDX-type-membership-fetch-error[]
+export interface FetchMembershipError {
+  request: FetchMembershipRequest;
+  status: Pubnub.PubnubStatus;
+}
+// end::RDX-type-membership-fetch-error[]
+
+// tag::RDX-type-membership-success[]
+export interface MembershipSuccess<
+  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
+> {
+  request: MembershipRequest<ReceivedMembership>;
+  response: MembershipResponse<ReceivedMembership>;
+  status: Pubnub.PubnubStatus;
+}
+// end::RDX-type-membership-success[]
+
+// tag::RDX-type-membership-error[]
+export interface MembershipError<
+  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
+> {
+  request: MembershipRequest<ReceivedMembership>;
+  status: Pubnub.PubnubStatus;
+}
+// end::RDX-type-membership-error[]
 
 // tag::RDX-action-membership-fetch[]
 export interface FetchingMembershipAction<Meta extends ActionMeta> {

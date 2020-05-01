@@ -1,4 +1,4 @@
-import { PubNub } from './PubNubApi';
+import Pubnub from 'pubnub';
 
 /**
  * Describe thunk middleware context
@@ -6,7 +6,7 @@ import { PubNub } from './PubNubApi';
 // tag::RDX-type-pubnub-thunk[]
 export interface PubnubThunkContext {
   pubnub: {
-    api: PubNub;
+    api: Pubnub;
   };
 }
 // end::RDX-type-pubnub-thunk[]

@@ -24,7 +24,7 @@ const messageReceived = <MessageType extends Message>(
   state: MessageState<MessageType>,
   payload: MessageType
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 
@@ -44,7 +44,7 @@ const messageHistoryRetrieved = <
   state: MessageState<MessageType>,
   payload: FetchMessageHistorySuccess<MessageContentType>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 
@@ -52,7 +52,7 @@ const messageHistoryRetrieved = <
     newState.byId[payload.request.channel] = [];
   }
 
-  let results: MessageType[] = payload.response.messages.map(
+  const results: MessageType[] = payload.response.messages.map(
     (m) =>
       (({
         channel: payload.request.channel,

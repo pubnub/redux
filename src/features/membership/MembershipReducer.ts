@@ -1,16 +1,16 @@
 import { AnyAction } from 'redux';
 import {
-  MembershipEventMessage,
   FetchMembershipSuccess,
   MembershipSuccess,
   MembershipListenerActions,
   MembershipActions,
   Membership,
+  MembershipEventMessage,
 } from './MembershipActions';
 import { MembershipActionType } from './MembershipActionType.enum';
-import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 import { AnyMeta } from '../../foundations/ActionMeta';
-import { User } from '../user/UserActions';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { User } from 'features/user/UserActions';
 
 // tag::RDX-type-memberships-byuserid[]
 export type MembershipByUserIdState<
@@ -38,16 +38,18 @@ const userAddedToSpace = <
       (membership) => membership.id === payload.data.spaceId
     ).length === 0
   ) {
-    let newState = {
+    const newState = {
       byId: { ...state.byId },
+    };
+
+    const newMembership = {
+      id: payload.data.spaceId,
+      custom: payload.data.custom,
     };
 
     newState.byId[payload.data.userId] = [
       ...newState.byId[payload.data.userId],
-      ({
-        id: payload.data.spaceId,
-        custom: payload.data.custom,
-      } as unknown) as ReceivedMembership, // TODO: find out a better pattern here
+      newMembership as ReceivedMembership,
     ];
 
     return newState;
@@ -68,7 +70,7 @@ const userRemovedFromSpace = <
       (membership) => membership.id === payload.data.spaceId
     ).length > 0
   ) {
-    let newState = {
+    const newState = {
       byId: { ...state.byId },
     };
 
@@ -88,7 +90,7 @@ const userMembershipUpdatedOnSpace = <
   state: MembershipByUserIdState<ReceivedMembership>,
   payload: MembershipEventMessage<ReceivedMembership>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 
@@ -120,7 +122,7 @@ const membershipResult = <
     | FetchMembershipSuccess<ReceivedMembership>
     | MembershipSuccess<ReceivedMembership>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 

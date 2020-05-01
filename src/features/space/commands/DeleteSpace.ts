@@ -4,12 +4,10 @@ import {
   DeletingSpaceAction,
   ErrorDeletingSpaceAction,
   DeleteSpaceRequest,
-  DeleteSpaceResponse,
   DeleteSpaceError,
   DeleteSpaceSuccess,
 } from '../SpaceActions';
 import { SpaceActionType } from '../SpaceActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 
@@ -60,29 +58,25 @@ export const deleteSpace = <Meta extends ActionMeta = AnyMeta>(
     new Promise<void>((resolve, reject) => {
       dispatch(deletingSpace<Meta>(request, meta));
 
-      pubnub.api.deleteSpace(
-        request.spaceId,
-        (status: PubNubApiStatus, response: DeleteSpaceResponse) => {
-          if (status.error) {
-            let payload: DeleteSpaceError = {
-              request,
-              status,
-            };
+      pubnub.api.deleteSpace(request.spaceId, (status) => {
+        if (status.error) {
+          const payload = {
+            request,
+            status,
+          };
 
-            dispatch(errorDeletingSpace<Meta>(payload, meta));
-            reject(payload);
-          } else {
-            let payload: DeleteSpaceSuccess = {
-              request,
-              response,
-              status,
-            };
+          dispatch(errorDeletingSpace<Meta>(payload, meta));
+          reject(payload);
+        } else {
+          const payload = {
+            request,
+            status,
+          };
 
-            dispatch(spaceDeleted<Meta>(payload, meta));
-            resolve();
-          }
+          dispatch(spaceDeleted<Meta>(payload, meta));
+          resolve();
         }
-      );
+      });
     });
 
   thunkFunction.type = SpaceActionType.DELETE_SPACE_COMMAND;

@@ -1,20 +1,19 @@
 import { Dispatch } from 'redux';
 import {
   JoiningSpacesAction,
-  MembershipRequest,
-  Membership,
   SpacesJoinedAction,
   MembershipSuccess,
   ErrorJoiningSpacesAction,
   MembershipError,
+  Membership,
+  MembershipRequest,
   MembershipResponse,
 } from '../MembershipActions';
 import { MembershipActionType } from '../MembershipActionType.enum';
-import { Space } from '../../../features/space/SpaceActions';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { Space } from 'features/space/SpaceActions';
 
 // tag::RDX-function-spaces-join[]
 export const joiningSpaces = <
@@ -79,12 +78,9 @@ export const joinSpaces = <
         {
           ...request,
         },
-        (
-          status: PubNubApiStatus,
-          response: MembershipResponse<MembershipType>
-        ) => {
+        (status, response) => {
           if (status.error) {
-            let payload: MembershipError<MembershipType> = {
+            const payload = {
               request,
               status,
             };
@@ -92,9 +88,9 @@ export const joinSpaces = <
             dispatch(errorJoiningSpaces<MembershipType, Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: MembershipSuccess<MembershipType> = {
+            const payload = {
               request,
-              response,
+              response: response as MembershipResponse<MembershipType>,
               status,
             };
 

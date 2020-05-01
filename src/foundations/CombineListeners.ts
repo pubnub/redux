@@ -1,35 +1,12 @@
-import { Message } from 'features/message/MessageActions';
-import { PresenceEventMessage } from 'features/presence/PresenceActions';
-import { Signal } from 'features/signal/SignalActions';
-import { User, UserListenerPayload } from 'features/user/UserActions';
-import { Space, SpaceListenerPayload } from 'features/space/SpaceActions';
-import {
-  Membership,
-  MembershipListenerPayload,
-} from 'features/membership/MembershipActions';
-import { NetworkStatusResponse } from 'features/networkStatus/NetworkStatusActions';
-import { SubscriptionStatusResponse } from 'features/subscriptionStatus/SubscribeStatusActions';
-import { ErrorStatusResponse } from 'features/errorStatus/ErrorStatusActions';
-import { ObjectsCustom } from './ObjectsCustom';
-
-// TODO: replace with type from javascript SDK
-export interface PubNubListener {
-  message?: (message: Message) => void;
-  presence?: (presence: PresenceEventMessage) => void;
-  signal?: (signal: Signal) => void;
-  user?: (user: UserListenerPayload<User<ObjectsCustom>>) => void;
-  space?: (space: SpaceListenerPayload<Space<ObjectsCustom>>) => void;
-  membership?: (
-    membership: MembershipListenerPayload<
-      Membership<ObjectsCustom, Space<ObjectsCustom>>
-    >
-  ) => void;
-  status?: (
-    status: NetworkStatusResponse &
-      SubscriptionStatusResponse &
-      ErrorStatusResponse
-  ) => void;
-}
+import Pubnub, {
+  PresenceEvent,
+  SignalEvent,
+  UserEvent,
+  SpaceEvent,
+  MessageActionEvent,
+  StatusEvent,
+  MembershipEvent,
+} from 'pubnub';
 
 /**
  * Combines multiple listener objects into one object that supports all of them.
@@ -37,7 +14,7 @@ export interface PubNubListener {
  * @param listeners Array of listener objects.
  * @returns The combined listener Object.
  */
-export const combineListeners = (...listeners: PubNubListener[]) => {
+export const combineListeners = (...listeners: Pubnub.ListenerParameters[]) => {
   return Object.assign({}, ...mergeListenersByType(listeners));
 };
 
@@ -48,11 +25,11 @@ export const combineListeners = (...listeners: PubNubListener[]) => {
  * @returns Array of listener objects with like types combined to single listener object.
  */
 const mergeListenersByType = (
-  listeners: PubNubListener[]
-): PubNubListener[] => {
-  const result: PubNubListener[] = [];
+  listeners: Pubnub.ListenerParameters[]
+): Pubnub.ListenerParameters[] => {
+  const result: Pubnub.ListenerParameters[] = [];
   const incomingListeners: {
-    [key in keyof PubNubListener]: PubNubListener[];
+    [key in keyof Pubnub.ListenerParameters]: Pubnub.ListenerParameters[];
   } = {};
 
   // group the listeners by type so we can combine them
@@ -124,7 +101,7 @@ const mergeListenersByType = (
         // multiple listeners for this type so combine them and add to the result list
         result.push(
           createCombinedListener(
-            listenerType as keyof PubNubListener,
+            listenerType as keyof Pubnub.ListenerParameters,
             listenersOfType
           )
         );
@@ -143,26 +120,23 @@ const mergeListenersByType = (
  * @param listeners The Array of listeners of the same type.
  */
 const createCombinedListener = (
-  listenerType: keyof PubNubListener,
-  listeners: PubNubListener[]
-): PubNubListener => {
+  listenerType: keyof Pubnub.ListenerParameters,
+  listeners: Pubnub.ListenerParameters[]
+): Pubnub.ListenerParameters => {
   // returns a single listener which invokes each of the incomming listeners
   return {
     [listenerType]: (
-      payload: Message &
-        PresenceEventMessage &
-        Signal &
-        UserListenerPayload<User<ObjectsCustom>> &
-        SpaceListenerPayload<Space<ObjectsCustom>> &
-        MembershipListenerPayload<
-          Membership<ObjectsCustom, Space<ObjectsCustom>>
-        > &
-        NetworkStatusResponse &
-        SubscriptionStatusResponse &
-        ErrorStatusResponse
+      payload: MessageEvent &
+        PresenceEvent &
+        SignalEvent &
+        UserEvent &
+        SpaceEvent &
+        MembershipEvent &
+        StatusEvent &
+        MessageActionEvent
     ) => {
       listeners.forEach((listener) => {
-        let currentListener = listener[listenerType];
+        const currentListener = listener[listenerType];
 
         if (currentListener !== undefined) {
           currentListener(payload);

@@ -6,19 +6,19 @@ import {
   SpaceDeletedAction,
   SpacesRetrievedAction,
   SpaceRetrievedAction,
+  Space,
 } from './SpaceActions';
-import { Space } from './SpaceActions';
 import { MembershipRetrievedAction } from '../membership/MembershipActions';
 import { MembershipActionType } from '../membership/MembershipActionType.enum';
-const deepFreeze = require('deep-freeze');
+import deepFreeze from 'deep-freeze';
 
 describe('Handling space reducer without mutating the state', () => {
-  interface spaceReducerInitialState {
+  interface SpaceReducerInitialState {
     byId: {
       [spaceId: string]: Space;
     };
   }
-  let initialState: spaceReducerInitialState;
+  let initialState: SpaceReducerInitialState;
   interface MetaType {}
   beforeEach(() => {
     initialState = {
@@ -56,7 +56,7 @@ describe('Handling space reducer without mutating the state', () => {
         name: 'space4',
       },
       response: {
-        status: '',
+        status: 200,
         data: {
           id: 'space4',
           name: 'space4',
@@ -67,7 +67,7 @@ describe('Handling space reducer without mutating the state', () => {
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,
@@ -98,7 +98,7 @@ describe('Handling space reducer without mutating the state', () => {
         name: '',
       },
       response: {
-        status: '',
+        status: 200,
         data: {
           id: 'space2',
           name: 'updatedSpace2',
@@ -109,7 +109,7 @@ describe('Handling space reducer without mutating the state', () => {
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,
@@ -144,7 +144,7 @@ describe('Handling space reducer without mutating the state', () => {
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,
@@ -167,7 +167,7 @@ describe('Handling space reducer without mutating the state', () => {
     const payload = {
       request: {},
       response: {
-        status: '',
+        status: 200,
         data: [
           {
             id: 'space1',
@@ -194,7 +194,7 @@ describe('Handling space reducer without mutating the state', () => {
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,
@@ -221,7 +221,7 @@ describe('Handling space reducer without mutating the state', () => {
         spaceId: 'space2',
       },
       response: {
-        status: '',
+        status: 200,
         data: {
           id: 'space2',
           name: 'space2',
@@ -232,7 +232,7 @@ describe('Handling space reducer without mutating the state', () => {
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,
@@ -258,7 +258,7 @@ describe('Handling space reducer without mutating the state', () => {
         userId: '',
       },
       response: {
-        status: '',
+        status: 200,
         data: [
           {
             id: 'space1',
@@ -278,7 +278,7 @@ describe('Handling space reducer without mutating the state', () => {
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,

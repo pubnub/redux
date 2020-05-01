@@ -6,10 +6,8 @@ import {
   SendSignalSuccess,
   ErrorSendingSignalAction,
   SendSignalError,
-  SendSignalResponse,
 } from '../SignalActions';
 import { SignalActionType } from '../SignalActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 
@@ -75,9 +73,9 @@ export const sendSignal = <
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: SendSignalResponse) => {
+        (status, response) => {
           if (status.error) {
-            let payload: SendSignalError<SignalContentType> = {
+            const payload = {
               request,
               status,
             };
@@ -87,7 +85,7 @@ export const sendSignal = <
             );
             reject(payload);
           } else {
-            let payload: SendSignalSuccess<SignalContentType> = {
+            const payload = {
               request,
               response,
               status,

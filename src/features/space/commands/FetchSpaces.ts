@@ -3,17 +3,16 @@ import {
   ErrorFetchingSpacesAction,
   SpacesRetrievedAction,
   FetchingSpacesAction,
-  FetchSpacesRequest,
-  FetchSpacesResponse,
   FetchSpacesError,
-  Space,
   FetchSpacesSuccess,
+  FetchSpacesRequest,
+  Space,
+  FetchSpacesResponse,
 } from '../SpaceActions';
 import { SpaceActionType } from '../SpaceActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
-import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 // tag::RDX-function-space-fetch[]
 export const fetchingSpaces = <Meta extends ActionMeta>(
@@ -69,10 +68,12 @@ export const fetchSpaces = <
       dispatch(fetchingSpaces<Meta>(request, meta));
 
       pubnub.api.getSpaces(
-        { ...request },
-        (status: PubNubApiStatus, response: FetchSpacesResponse<SpaceType>) => {
+        {
+          ...request,
+        },
+        (status, response) => {
           if (status.error) {
-            let payload: FetchSpacesError = {
+            const payload = {
               request,
               status,
             };
@@ -80,9 +81,9 @@ export const fetchSpaces = <
             dispatch(errorFetchingSpaces<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: FetchSpacesSuccess<SpaceType> = {
+            const payload = {
               request,
-              response,
+              response: response as FetchSpacesResponse<SpaceType>,
               status,
             };
 

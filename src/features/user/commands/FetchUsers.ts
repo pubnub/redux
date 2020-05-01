@@ -3,17 +3,16 @@ import {
   ErrorFetchingUsersAction,
   UsersRetrievedAction,
   FetchingUsersAction,
-  FetchUsersRequest,
-  FetchUsersResponse,
   FetchUsersError,
-  User,
   FetchUsersSuccess,
+  FetchUsersRequest,
+  User,
+  FetchUsersResponse,
 } from '../UserActions';
 import { UserActionType } from '../UserActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
-import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 // tag::RDX-function-user-fetch[]
 export const fetchingUsers = <Meta extends ActionMeta>(
@@ -69,10 +68,12 @@ export const fetchUsers = <
       dispatch(fetchingUsers<Meta>(request, meta));
 
       pubnub.api.getUsers(
-        { ...request },
-        (status: PubNubApiStatus, response: FetchUsersResponse<UserType>) => {
+        {
+          ...request,
+        },
+        (status, response) => {
           if (status.error) {
-            let payload: FetchUsersError = {
+            const payload = {
               request,
               status,
             };
@@ -80,9 +81,9 @@ export const fetchUsers = <
             dispatch(errorFetchingUsers<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: FetchUsersSuccess<UserType> = {
+            const payload = {
               request,
-              response,
+              response: response as FetchUsersResponse<UserType>,
               status,
             };
 

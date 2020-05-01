@@ -1,11 +1,11 @@
 import {
   SpacesRetrievedAction,
-  Space,
   FetchSpacesSuccess,
+  Space,
 } from './SpaceActions';
 import { SpaceActionType } from './SpaceActionType.enum';
-import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 import { ActionMeta, AnyMeta } from '../../foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 interface SpaceListState {
   spaceIds: string[];

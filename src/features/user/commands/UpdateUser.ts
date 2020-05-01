@@ -3,17 +3,16 @@ import {
   UpdatingUserAction,
   UserUpdatedAction,
   ErrorUpdatingUserAction,
-  UserRequest,
-  UserResponse,
   UserError,
-  User,
   UserSuccess,
+  UserRequest,
+  User,
+  UserResponse,
 } from '../UserActions';
 import { UserActionType } from '../UserActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 // tag::RDX-function-user-update[]
 export const updatingUser = <Meta extends ActionMeta>(
@@ -72,9 +71,9 @@ export const updateUser = <
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: UserResponse<UserType>) => {
+        (status, response) => {
           if (status.error) {
-            let payload: UserError = {
+            const payload = {
               request,
               status,
             };
@@ -82,9 +81,9 @@ export const updateUser = <
             dispatch(errorUpdatingUser<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: UserSuccess<UserType> = {
+            const payload = {
               request,
-              response,
+              response: response as UserResponse<UserType>,
               status,
             };
 

@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
-import { PresenceListenerActions } from './PresenceListener';
 import { PresenceActionType } from './PresenceActionType.enum';
 import {
+  PresenceListenerActions,
   PresenceEventMessage,
   Presence,
   HereNowResponse,
@@ -35,7 +35,7 @@ const hereNow = <ReceivedPresence extends Presence<PresenceState>>(
   state: PresencebyIdState<ReceivedPresence>,
   payload: HereNowSuccess<ReceivedPresence>
 ) => {
-  let newState = {
+  const newState = {
     byId: {
       ...state.byId,
       ...payload.response.channels,
@@ -50,7 +50,7 @@ const getState = <ReceivedPresence extends Presence<PresenceState>>(
   state: PresencebyIdState<ReceivedPresence>,
   payload: HereNowResponse<ReceivedPresence>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
     totalOccupancy: state.totalOccupancy,
   };
@@ -69,7 +69,7 @@ const userJoined = <ReceivedPresence extends Presence<PresenceState>>(
   state: PresencebyIdState<ReceivedPresence>,
   payload: PresenceEventMessage<ReceivedPresence>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
     totalOccupancy: state.totalOccupancy,
   };
@@ -114,14 +114,14 @@ const userLeft = <ReceivedPresence extends Presence<PresenceState>>(
   state: PresencebyIdState<ReceivedPresence>,
   payload: PresenceEventMessage<ReceivedPresence>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
     totalOccupancy: state.totalOccupancy,
   };
 
   // remove occupant if exists
   if (newState.byId[payload.channel]) {
-    let occupants = newState.byId[payload.channel].occupants;
+    const occupants = newState.byId[payload.channel].occupants;
 
     newState.byId[payload.channel].occupants = occupants.filter(
       (occupant) => occupant.uuid !== payload.uuid
@@ -140,14 +140,14 @@ const userStateChange = <ReceivedPresence extends Presence<PresenceState>>(
   state: PresencebyIdState<ReceivedPresence>,
   payload: PresenceEventMessage<ReceivedPresence>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
     totalOccupancy: state.totalOccupancy,
   };
 
   // update occupant state if exists
   if (newState.byId[payload.channel]) {
-    let occupants = newState.byId[payload.channel].occupants;
+    const occupants = newState.byId[payload.channel].occupants;
 
     occupants.forEach((occupant) => {
       if (occupant.uuid === payload.uuid) {

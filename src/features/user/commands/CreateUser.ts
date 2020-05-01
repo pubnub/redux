@@ -3,17 +3,16 @@ import {
   ErrorCreatingUserAction,
   UserCreatedAction,
   CreatingUserAction,
-  UserRequest,
-  UserResponse,
   UserSuccess,
   UserError,
+  UserResponse,
+  UserRequest,
   User,
 } from '../UserActions';
 import { UserActionType } from '../UserActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
 import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 // tag::RDX-function-user-create[]
 export const creatingUser = <Meta extends ActionMeta>(
@@ -72,9 +71,9 @@ export const createUser = <
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: UserResponse<UserType>) => {
+        (status, response) => {
           if (status.error) {
-            let payload: UserError = {
+            const payload = {
               request,
               status,
             };
@@ -82,9 +81,9 @@ export const createUser = <
             dispatch(errorCreatingUser<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload = {
+            const payload = {
               request,
-              response,
+              response: response as UserResponse<UserType>,
               status,
             };
 

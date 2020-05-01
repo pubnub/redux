@@ -4,12 +4,10 @@ import {
   DeletingUserAction,
   ErrorDeletingUserAction,
   DeleteUserRequest,
-  DeleteUserResponse,
   DeleteUserError,
   DeleteUserSuccess,
 } from '../UserActions';
 import { UserActionType } from '../UserActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
 
@@ -60,29 +58,25 @@ export const deleteUser = <Meta extends ActionMeta = AnyMeta>(
     new Promise<void>((resolve, reject) => {
       dispatch(deletingUser<Meta>(request, meta));
 
-      pubnub.api.deleteUser(
-        request.userId,
-        (status: PubNubApiStatus, response: DeleteUserResponse) => {
-          if (status.error) {
-            let payload: DeleteUserError = {
-              request,
-              status,
-            };
+      pubnub.api.deleteUser(request.userId, (status) => {
+        if (status.error) {
+          const payload = {
+            request,
+            status,
+          };
 
-            dispatch(errorDeletingUser<Meta>(payload, meta));
-            reject(payload);
-          } else {
-            let payload: DeleteUserSuccess = {
-              request,
-              response,
-              status,
-            };
+          dispatch(errorDeletingUser<Meta>(payload, meta));
+          reject(payload);
+        } else {
+          const payload = {
+            request,
+            status,
+          };
 
-            dispatch(userDeleted<Meta>(payload, meta));
-            resolve();
-          }
+          dispatch(userDeleted<Meta>(payload, meta));
+          resolve();
         }
-      );
+      });
     });
 
   thunkFunction.type = UserActionType.DELETE_USER_COMMAND;

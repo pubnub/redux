@@ -1,14 +1,15 @@
+import Pubnub from 'pubnub';
 import { Dispatch } from 'redux';
 import {
   SpaceUpdatedEventAction,
   SpaceDeletedEventAction,
-  SpaceEventMessage,
-  SpaceListenerPayload,
   SpaceListenerActions,
+  SpaceEventMessage,
   Space,
+  SpaceListenerPayload,
 } from './SpaceActions';
 import { SpaceActionType } from './SpaceActionType.enum';
-import { ObjectsCustom } from '../../foundations/ObjectsCustom';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 // tag::RDX-type-event-space-updated[]
 export const spaceUpdated = <ReceivedSpace extends Space<ObjectsCustom>>(
@@ -32,13 +33,23 @@ export const spaceDeleted = <ReceivedSpace extends Space<ObjectsCustom>>(
 export const createSpaceListener = <ReceivedSpace extends Space<ObjectsCustom>>(
   dispatch: Dispatch<SpaceListenerActions<ReceivedSpace>>
 ) => ({
-  space: (payload: SpaceListenerPayload<ReceivedSpace>) => {
+  space: (payload: Pubnub.SpaceEvent) => {
     switch (payload.message.event) {
       case 'update':
-        dispatch(spaceUpdated<ReceivedSpace>(payload.message));
+        dispatch(
+          spaceUpdated<ReceivedSpace>(
+            ((payload as unknown) as SpaceListenerPayload<ReceivedSpace>)
+              .message
+          )
+        );
         break;
       case 'delete':
-        dispatch(spaceDeleted<ReceivedSpace>(payload.message));
+        dispatch(
+          spaceDeleted<ReceivedSpace>(
+            ((payload as unknown) as SpaceListenerPayload<ReceivedSpace>)
+              .message
+          )
+        );
         break;
       default:
         break;

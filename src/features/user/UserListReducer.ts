@@ -1,7 +1,7 @@
-import { UsersRetrievedAction, User, FetchUsersSuccess } from './UserActions';
+import { UsersRetrievedAction, FetchUsersSuccess, User } from './UserActions';
 import { UserActionType } from './UserActionType.enum';
-import { ObjectsCustom } from '../../foundations/ObjectsCustom';
 import { ActionMeta, AnyMeta } from '../../foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 // tag::RDX-state-userlist[]
 interface UserListState {

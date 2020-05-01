@@ -1,20 +1,20 @@
 import { AnyAction } from 'redux';
 import {
   MembersActions,
-  Members,
   FetchMembersSuccess,
   MembersSuccess,
+  Members,
 } from './MembersActions';
 import { MembersActionType } from './MembersActionType.enum';
 import {
   MembershipListenerActions,
-  MembershipEventMessage,
   Membership,
+  MembershipEventMessage,
 } from '../../features/membership/MembershipActions';
 import { MembershipActionType } from '../../features/membership/MembershipActionType.enum';
-import { ObjectsCustom } from '../../foundations/ObjectsCustom';
-import { Space } from '../space/SpaceActions';
 import { AnyMeta } from '../../foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { Space } from 'features/space/SpaceActions';
 
 // tag::RDX-type-members-byspaceid[]
 export type MembersBySpaceIdState<
@@ -42,16 +42,18 @@ const userAddedToSpace = <
       (membership) => membership.id === payload.data.userId
     ).length === 0
   ) {
-    let newState = {
+    const newState = {
       byId: { ...state.byId },
+    };
+
+    const newMembers = {
+      id: payload.data.userId,
+      custom: payload.data.custom,
     };
 
     newState.byId[payload.data.spaceId] = [
       ...newState.byId[payload.data.spaceId],
-      ({
-        id: payload.data.userId,
-        custom: payload.data.custom,
-      } as unknown) as ReceivedMembers, // TODO: find out a better pattern here
+      newMembers as ReceivedMembers,
     ];
 
     return newState;
@@ -72,7 +74,7 @@ const userRemovedFromSpace = <
       (membership) => membership.id === payload.data.userId
     ).length > 0
   ) {
-    let newState = {
+    const newState = {
       byId: { ...state.byId },
     };
 
@@ -92,7 +94,7 @@ const userMembershipUpdatedOnSpace = <
   state: MembersBySpaceIdState<ReceivedMembers>,
   payload: MembershipEventMessage<Membership>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 
@@ -124,7 +126,7 @@ const membersResult = <
     | FetchMembersSuccess<ReceivedMembers>
     | MembersSuccess<ReceivedMembers>
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 

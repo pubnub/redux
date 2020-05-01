@@ -2,10 +2,10 @@ import { createMembersReducer } from './MembersReducer';
 import { MembersActionType } from './MembersActionType.enum';
 import {
   MembersRetrievedAction,
-  Members,
   MembersUpdatedAction,
   MembersAddedAction,
   MembersRemovedAction,
+  Members,
 } from './MembersActions';
 import { MembershipActionType } from '../membership/MembershipActionType.enum';
 import {
@@ -13,14 +13,14 @@ import {
   UserRemovedFromSpaceEventAction,
   UserAddedToSpaceEventAction,
 } from '../membership/MembershipActions';
-const deepFreeze = require('deep-freeze');
+import deepFreeze from 'deep-freeze';
 
 describe('Handling members reducer without mutating the state', () => {
-  interface membersReducerInitialState {
+  interface MembersReducerInitialState {
     byId: { [key: string]: Members[] };
   }
   interface MetaType {}
-  let initialState: membersReducerInitialState;
+  let initialState: MembersReducerInitialState;
   beforeEach(() => {
     initialState = {
       byId: {
@@ -70,7 +70,7 @@ describe('Handling members reducer without mutating the state', () => {
     };
 
     //state after first space is added to the user
-    let state = createMembersReducer()(initialState, firstAction);
+    const state = createMembersReducer()(initialState, firstAction);
     //state after second space is added to the user
     expect(createMembersReducer()(state, secondAction)).toEqual({
       ...expectedState,
@@ -91,7 +91,7 @@ describe('Handling members reducer without mutating the state', () => {
       event: '',
       type: '',
     };
-    let action: UserRemovedFromSpaceEventAction<Members> = {
+    const action: UserRemovedFromSpaceEventAction<Members> = {
       type: MembershipActionType.USER_REMOVED_FROM_SPACE_EVENT,
       payload,
     };
@@ -120,11 +120,11 @@ describe('Handling members reducer without mutating the state', () => {
       event: '',
       type: '',
     };
-    let action: UserMembershipUpdatedOnSpaceEventAction<Members> = {
+    const action: UserMembershipUpdatedOnSpaceEventAction<Members> = {
       type: MembershipActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE_EVENT,
       payload,
     };
-    let expectedState = {
+    const expectedState = {
       ...initialState,
       byId: {
         [testData.spaceId]: [
@@ -154,12 +154,12 @@ describe('Handling members reducer without mutating the state', () => {
         spaceId: testData.spaceId,
       },
       response: {
-        status: '',
+        status: 200,
         data: testData.users,
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,
@@ -198,12 +198,12 @@ describe('Handling members reducer without mutating the state', () => {
         users: testData.users,
       },
       response: {
-        status: '',
+        status: 0,
         data: testData.users,
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,
@@ -245,12 +245,12 @@ describe('Handling members reducer without mutating the state', () => {
         users: testData.users,
       },
       response: {
-        status: '',
+        status: 0,
         data: testData.users,
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,
@@ -287,12 +287,12 @@ describe('Handling members reducer without mutating the state', () => {
         users: testData.users,
       },
       response: {
-        status: '',
+        status: 0,
         data: [],
       },
       status: {
         error: false,
-        errorData: '',
+        errorData: undefined,
         category: '',
         operation: '',
         statusCode: 0,

@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux';
 import {
   HereNowRequest,
-  HereNowResponse,
   HereNowError,
   FetchingHereNowAction,
   ErrorFetchingHereNowAction,
@@ -9,7 +8,6 @@ import {
   HereNowSuccess,
 } from '../PresenceActions';
 import { PresenceActionType } from '../PresenceActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 
@@ -65,9 +63,9 @@ export const fetchHereNow = <Meta extends ActionMeta>(
           includeUUIDs: true,
           includeState: false,
         },
-        (status: PubNubApiStatus, response: HereNowResponse) => {
+        (status, response) => {
           if (status.error) {
-            let payload: HereNowError = {
+            const payload = {
               request,
               status,
             };
@@ -75,7 +73,7 @@ export const fetchHereNow = <Meta extends ActionMeta>(
             dispatch(errorFetchingHereNow<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: HereNowSuccess = {
+            const payload = {
               request,
               response,
               status,

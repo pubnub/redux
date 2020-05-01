@@ -34,7 +34,7 @@ export const createErrorStatusReducer = () => {
     state = createInitialState(),
     action: ErrorStatusListenerActions
   ): ErrorState {
-    let newState = { ...state };
+    const newState = { ...state };
     switch (action.type) {
       case ErrorStatusActionType.NETWORK_ISSUES_EVENT:
         newState.networkIssues = [...state.networkIssues, action.payload];

@@ -1,20 +1,19 @@
 import { Dispatch } from 'redux';
 import {
   FetchingMembershipAction,
-  FetchMembershipRequest,
   MembershipRetrievedAction,
   FetchMembershipSuccess,
   ErrorFetchingMembershipAction,
   FetchMembershipError,
-  FetchMembershipResponse,
+  FetchMembershipRequest,
   Membership,
+  MembershipResponse,
 } from '../MembershipActions';
 import { MembershipActionType } from '../MembershipActionType.enum';
-import { Space } from '../../../features/space/SpaceActions';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta } from '../../../foundations/ActionMeta';
-import { ObjectsCustom } from '../../../foundations/ObjectsCustom';
+import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
+import { Space } from 'features/space/SpaceActions';
 
 // tag::RDX-function-memberships-fetch[]
 export const fetchingMembership = <Meta extends ActionMeta>(
@@ -56,7 +55,7 @@ export const errorFetchingMembership = <Meta extends ActionMeta>(
 // tag::RDX-command-memberships-fetch[]
 export const fetchMemberships = <
   MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
-  Meta extends ActionMeta
+  Meta extends ActionMeta = AnyMeta
 >(
   request: FetchMembershipRequest,
   meta?: Meta
@@ -73,12 +72,9 @@ export const fetchMemberships = <
         {
           ...request,
         },
-        (
-          status: PubNubApiStatus,
-          response: FetchMembershipResponse<MembershipType>
-        ) => {
+        (status, response) => {
           if (status.error) {
-            let payload: FetchMembershipError = {
+            const payload = {
               request,
               status,
             };
@@ -86,9 +82,9 @@ export const fetchMemberships = <
             dispatch(errorFetchingMembership<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: FetchMembershipSuccess<MembershipType> = {
+            const payload = {
               request,
-              response,
+              response: response as MembershipResponse<MembershipType>,
               status,
             };
 

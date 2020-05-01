@@ -1,3 +1,4 @@
+import Pubnub from 'pubnub';
 import { Dispatch } from 'redux';
 import { SignalReceivedAction, Signal } from './SignalActions';
 import { SignalActionType } from './SignalActionType.enum';
@@ -15,7 +16,7 @@ export const signalReceived = <SignalType extends Signal>(
 export const createSignalListener = <SignalType extends Signal>(
   dispatch: Dispatch<SignalReceivedAction<SignalType>>
 ) => ({
-  signal: (payload: SignalType) =>
-    dispatch(signalReceived<SignalType>(payload)),
+  signal: (payload: Pubnub.SignalEvent) =>
+    dispatch(signalReceived<SignalType>((payload as unknown) as SignalType)),
 });
 // end::RDX-method-listener-signals[]

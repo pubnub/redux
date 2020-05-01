@@ -20,7 +20,7 @@ const signalReceived = <SignalType extends Signal>(
   state: SignalState<SignalType>,
   payload: SignalType
 ) => {
-  let newState = {
+  const newState = {
     byId: { ...state.byId },
   };
 

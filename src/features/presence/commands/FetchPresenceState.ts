@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux';
 import {
   PresenceStateRequest,
-  PresenceStateResponse,
   PresenceStateError,
   FetchingPresenceStateAction,
   ErrorFetchingPresenceStateAction,
@@ -9,7 +8,6 @@ import {
   PresenceStateSuccess,
 } from '../PresenceActions';
 import { PresenceActionType } from '../PresenceActionType.enum';
-import { PubNubApiStatus } from '../../../foundations/PubNubApi';
 import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
 import { ActionMeta } from '../../../foundations/ActionMeta';
 
@@ -63,9 +61,9 @@ export const fetchPresenceState = <Meta extends ActionMeta>(
         {
           ...request,
         },
-        (status: PubNubApiStatus, response: PresenceStateResponse) => {
+        (status, response) => {
           if (status.error) {
-            let payload: PresenceStateError = {
+            const payload = {
               request,
               status,
             };
@@ -73,7 +71,7 @@ export const fetchPresenceState = <Meta extends ActionMeta>(
             dispatch(errorFetchingPresenceState<Meta>(payload, meta));
             reject(payload);
           } else {
-            let payload: PresenceStateSuccess = {
+            const payload = {
               request,
               response,
               status,

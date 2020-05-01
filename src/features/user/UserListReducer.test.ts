@@ -1,8 +1,7 @@
 import { createUserListReducer } from './UserListReducer';
 import { UserActionType } from './UserActionType.enum';
-import { UsersRetrievedAction } from './UserActions';
-import { User } from './UserActions';
-const deepFreeze = require('deep-freeze');
+import { UsersRetrievedAction, User } from './UserActions';
+import deepFreeze from 'deep-freeze';
 
 describe('Handling user list reducer without mutating the state', () => {
   interface UserListReducerInitialState {
@@ -21,7 +20,7 @@ describe('Handling user list reducer without mutating the state', () => {
       const payload = {
         request: {},
         response: {
-          status: '',
+          status: 200,
           data: [
             {
               id: 'User1',
@@ -48,7 +47,7 @@ describe('Handling user list reducer without mutating the state', () => {
         },
         status: {
           error: false,
-          errorData: '',
+          errorData: undefined,
           category: '',
           operation: '',
           statusCode: 0,

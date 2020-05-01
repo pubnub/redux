@@ -1,7 +1,7 @@
+import Pubnub from 'pubnub';
 import { PresenceActionType } from './PresenceActionType.enum';
 import { PresenceState, AnyPresenceState } from './PresenceState';
 import { ActionMeta } from '../../foundations/ActionMeta';
-import { PubNubApiStatus } from '../../foundations/PubNubApi';
 
 // tag::RDX-type-presence-action[]
 export interface Presence<
@@ -56,14 +56,14 @@ export type PresenceStateResponse = PresenceState;
 export interface HereNowSuccess<ReceivedPresence extends Presence = Presence> {
   request: HereNowRequest;
   response: HereNowResponse<ReceivedPresence>;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-presence-herenow-success[]
 
 // tag::RDX-type-presence-herenow-error[]
 export interface HereNowError {
   request: HereNowRequest;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-presence-herenow-error[]
 
@@ -79,14 +79,14 @@ export interface PresenceStateRequest {
 export interface PresenceStateSuccess {
   request: PresenceStateRequest;
   response: PresenceStateResponse;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-presence-state-success[]
 
 // tag::RDX-type-presence-state-error[]
 export interface PresenceStateError {
   request: PresenceStateRequest;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-presence-state-error[]
 
@@ -165,3 +165,11 @@ export interface StateChangeEventAction {
   payload: PresenceEventMessage;
 }
 // end::RDX-type-presence-event-state[]
+
+// tag::RDX-type-presence-listener-action[]
+export type PresenceListenerActions =
+  | JoinEventAction
+  | LeaveEventAction
+  | TimeoutEventAction
+  | StateChangeEventAction;
+// end::RDX-type-presence-listener-action[]

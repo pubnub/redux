@@ -1,8 +1,30 @@
+import Pubnub from 'pubnub';
 import { MembersActionType } from './MembersActionType.enum';
-import { PubNubApiStatus } from '../../foundations/PubNubApi';
-import { ObjectsCustom, AnyCustom } from '../../foundations/ObjectsCustom';
 import { ActionMeta } from '../../foundations/ActionMeta';
-import { User } from '../user/UserActions';
+import { ObjectsCustom, AnyCustom } from 'foundations/ObjectsCustom';
+import { Space } from 'features/space/SpaceActions';
+import { User } from 'features/user/UserActions';
+
+export type FetchMembersCallback<
+  MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>
+> = (
+  status: Pubnub.PubnubStatus,
+  response: FetchMembersResponse<MembersType>
+) => void;
+
+export type MembersCallback<
+  MembersType extends Members<ObjectsCustom, Space<ObjectsCustom>>
+> = (
+  status: Pubnub.PubnubStatus,
+  response: MembersResponse<MembersType>
+) => void;
+
+// tag::RDX-type-memberpage[]
+export interface MemberPage {
+  next?: string;
+  prev?: string;
+}
+// end::RDX-type-memberpage[]
 
 // tag::RDX-type-members[]
 export interface Members<
@@ -18,12 +40,36 @@ export interface Members<
 }
 // end::RDX-type-members[]
 
-// tag::RDX-type-memberpage[]
-export interface MemberPage {
-  next?: string;
-  prev?: string;
+// tag::RDX-type-member-request[]
+export type MembersRequest<
+  ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>
+> = {
+  spaceId: string;
+  users: ReceivedMembers[];
+};
+// end::RDX-type-member-request[]
+
+// tag::RDX-type-member-response[]
+export interface MembersResponse<
+  ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>
+> {
+  status: number;
+  data: ReceivedMembers[];
 }
-// end::RDX-type-memberpage[]
+// end::RDX-type-member-response[]
+
+// tag::RDX-type-member-fetch-option[]
+export interface MembersFetchRequestOptions {
+  limit?: number;
+  page?: MemberPage;
+  include?: {
+    customFields?: boolean;
+    userFields?: boolean;
+    customUserFields?: boolean;
+    totalCount?: boolean;
+  };
+}
+// end::RDX-type-member-fetch-option[]
 
 // tag::RDX-type-member-fetch-option[]
 export interface MembersFetchRequestOptions {
@@ -48,7 +94,7 @@ export interface FetchMembersRequest extends MembersFetchRequestOptions {
 export interface FetchMembersResponse<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>
 > {
-  status: string;
+  status: number;
   data: ReceivedMembers[];
 }
 // end::RDX-type-member-fetch-response[]
@@ -59,34 +105,16 @@ export interface FetchMembersSuccess<
 > {
   request: FetchMembersRequest;
   response: FetchMembersResponse<ReceivedMembers>;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-member-fetch-success[]
 
 // tag::RDX-type-member-fetch-error[]
 export interface FetchMembersError {
   request: FetchMembersRequest;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-member-fetch-error[]
-
-// tag::RDX-type-member-request[]
-export type MembersRequest<
-  ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>
-> = {
-  spaceId: string;
-  users: ReceivedMembers[];
-};
-// end::RDX-type-member-request[]
-
-// tag::RDX-type-member-response[]
-export interface MembersResponse<
-  ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>
-> {
-  status: string;
-  data: ReceivedMembers[];
-}
-// end::RDX-type-member-response[]
 
 // tag::RDX-type-member-success[]
 export interface MembersSuccess<
@@ -94,7 +122,7 @@ export interface MembersSuccess<
 > {
   request: MembersRequest<ReceivedMembers>;
   response: MembersResponse<ReceivedMembers>;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-member-success[]
 
@@ -103,7 +131,7 @@ export interface MembersError<
   ReceivedMembers extends Members<ObjectsCustom, User<ObjectsCustom>>
 > {
   request: MembersRequest<ReceivedMembers>;
-  status: PubNubApiStatus;
+  status: Pubnub.PubnubStatus;
 }
 // end::RDX-type-member-error[]
 
