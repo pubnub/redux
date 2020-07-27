@@ -8,10 +8,9 @@ import {
   SendMessageError,
 } from '../MessageActions';
 import { MessageActionType } from '../MessageActionType.enum';
-import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
+import { PubnubThunkContext } from 'foundations/ThunkTypes';
+import { ActionMeta, AnyMeta } from 'foundations/ActionMeta';
 
-// tag::RDX-function-messages-send[]
 export const sendingMessage = <
   MessageContentType extends object,
   MessageMeta extends object,
@@ -24,9 +23,7 @@ export const sendingMessage = <
   payload,
   meta,
 });
-// end::RDX-function-messages-send[]
 
-// tag::RDX-function-messages-send-success[]
 export const messageSent = <
   MessageContentType extends object,
   MessageMeta extends object,
@@ -39,9 +36,7 @@ export const messageSent = <
   payload,
   meta,
 });
-// end::RDX-function-messages-send-success[]
 
-// tag::RDX-function-messages-send-error[]
 export const errorSendingMessage = <
   MessageContentType extends object,
   MessageMeta extends object,
@@ -54,9 +49,7 @@ export const errorSendingMessage = <
   payload,
   meta,
 });
-// end::RDX-function-messages-send-error[]
 
-// tag::RDX-command-messages-send[]
 export const sendMessage = <
   MessageContentType extends object = {},
   MessageMeta extends object = {},
@@ -111,4 +104,3 @@ export const sendMessage = <
 
   return thunkFunction;
 };
-// end::RDX-command-messages-send[]

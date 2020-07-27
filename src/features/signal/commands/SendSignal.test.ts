@@ -1,7 +1,7 @@
 import Pubnub from 'pubnub';
 import { SignalActionType } from '../SignalActionType.enum';
 import { sendSignal } from './SendSignal';
-import { createMockStore } from '../../../foundations/Test-utils';
+import { createMockStore } from 'foundations/Test-utils';
 
 function fixturePubnubSendSignalSuccess() {
   const pubnub = {

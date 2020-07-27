@@ -1,52 +1,40 @@
 // Commands
 import {
-  joinSpaces,
-  joiningSpaces,
-  spacesJoined,
-  errorJoiningSpaces,
-} from './features/membership/commands/JoinSpaces';
-import {
-  leaveSpaces,
-  leavingSpaces,
-  spacesLeft,
-  errorLeavingSpaces,
-} from './features/membership/commands/LeaveSpaces';
+  removingMemberships,
+  removeMemberships,
+  membershipsRemoved,
+  errorRemovingMemberships,
+} from './features/membership/commands/RemoveMemberships';
 import {
   fetchMemberships,
-  fetchingMembership,
-  membershipRetrieved,
-  errorFetchingMembership,
+  fetchingMemberships,
+  membershipsRetrieved,
+  errorFetchingMemberships,
 } from './features/membership/commands/FetchMemberships';
 import {
-  updateMembership,
-  updatingMemberships,
-  membershipUpdated,
-  errorUpdatingMembership,
-} from './features/membership/commands/UpdateMembership';
+  setMemberships,
+  settingMemberships,
+  membershipsSet,
+  errorSettingMemberships,
+} from './features/membership/commands/SetMemberships';
 import {
-  fetchMembers,
-  fetchingMembers,
-  membersRetrieved,
-  errorFetchingMembers,
-} from './features/members/commands/FetchMembers';
+  fetchChannelMembers,
+  fetchingChannelMembers,
+  channelMembersRetrieved,
+  errorFetchingChannelMembers,
+} from './features/members/commands/FetchChannelMembers';
 import {
-  updateMembers,
-  updatingMembers,
-  membersUpdated,
-  errorUpdatingMembers,
-} from './features/members/commands/UpdateMembers';
+  setChannelMembers,
+  settingChannelMembers,
+  channelMembersSet,
+  errorSettingChannelMembers,
+} from './features/members/commands/SetChannelMembers';
 import {
-  addMembers,
-  addingMembers,
-  membersAdded,
-  errorAddingMembers,
-} from './features/members/commands/AddMembers';
-import {
-  removeMembers,
-  removingMembers,
-  membersRemoved,
-  errorRemovingMembers,
-} from './features/members/commands/RemoveMembers';
+  removeChannelMembers,
+  removingChannelMembers,
+  channelMembersRemoved,
+  errorRemovingChannelMembers,
+} from './features/members/commands/RemoveChannelMembers';
 import {
   sendMessage,
   sendingMessage,
@@ -66,65 +54,53 @@ import {
   errorFetchingMessageHistory,
 } from './features/message/commands/FetchMessageHistory';
 import {
-  createSpace,
-  creatingSpace,
-  spaceCreated,
-  errorCreatingSpace,
-} from './features/space/commands/CreateSpace';
+  removeChannelData,
+  removingChannelData,
+  channelDataRemoved,
+  errorRemovingChannelData,
+} from './features/channel/commands/RemoveChannelData';
 import {
-  deleteSpace,
-  deletingSpace,
-  spaceDeleted,
-  errorDeletingSpace,
-} from './features/space/commands/DeleteSpace';
+  fetchChannelData,
+  fetchingChannelData,
+  channelDataRetrieved,
+  errorFetchingChannelData,
+} from './features/channel/commands/FetchChannelData';
 import {
-  fetchSpaceById,
-  fetchingSpaceById,
-  spaceRetrieved,
-  errorFetchingSpaceById,
-} from './features/space/commands/FetchSpaceById';
+  fetchAllChannelData,
+  fetchingAllChannelData,
+  allChannelDataRetrieved,
+  errorFetchingAllChannelData,
+} from './features/channel/commands/FetchAllChannelData';
 import {
-  fetchSpaces,
-  fetchingSpaces,
-  spacesRetrieved,
-  errorFetchingSpaces,
-} from './features/space/commands/FetchSpaces';
+  setChannelData,
+  settingChannelData,
+  channelDataSet,
+  errorSettingChannelData,
+} from './features/channel/commands/SetChannelData';
 import {
-  updateSpace,
-  updatingSpace,
-  spaceUpdated,
-  errorUpdatingSpace,
-} from './features/space/commands/UpdateSpace';
+  removeUserData,
+  removingUserData,
+  UserDataRemoved,
+  errorRemovingUserData,
+} from './features/user/commands/RemoveUserData';
 import {
-  createUser,
-  creatingUser,
-  userCreated,
-  errorCreatingUser,
-} from './features/user/commands/CreateUser';
+  fetchUserData,
+  fetchingUserData,
+  UserDataRetrieved,
+  errorFetchingUserData,
+} from './features/user/commands/FetchUserData';
 import {
-  deleteUser,
-  deletingUser,
-  userDeleted,
-  errorDeletingUser,
-} from './features/user/commands/DeleteUser';
+  fetchAllUserData,
+  fetchingAllUserData,
+  allUserDataRetrieved,
+  errorFetchingAllUserData,
+} from './features/user/commands/FetchAllUserData';
 import {
-  fetchUserById,
-  fetchingUserById,
-  userRetrieved,
-  errorFetchingUserById,
-} from './features/user/commands/FetchUserById';
-import {
-  fetchUsers,
-  fetchingUsers,
-  usersRetrieved,
-  errorFetchingUsers,
-} from './features/user/commands/FetchUsers';
-import {
-  updateUser,
-  updatingUser,
-  userUpdated,
-  errorUpdatingUser,
-} from './features/user/commands/UpdateUser';
+  setUserData,
+  settingUserData,
+  UserDataSet,
+  errorSettingUserData,
+} from './features/user/commands/SetUserData';
 import {
   fetchHereNow,
   fetchingHereNow,
@@ -138,8 +114,8 @@ import {
   errorFetchingPresenceState,
 } from './features/presence/commands/FetchPresenceState';
 // Listeners
-import { createUserListener } from './features/user/UserListener';
-import { createSpaceListener } from './features/space/SpaceListener';
+import { createUserDataListener } from './features/user/UserDataListener';
+import { createChannelDataListener } from './features/channel/ChannelDataListener';
 import { createMembershipListener } from './features/membership/MembershipListener';
 import { createPubNubListener } from './features/helpers/PubNubListener';
 import { createMessageListener } from './features/message/MessageListener';
@@ -172,15 +148,15 @@ import { createMessageReducer } from './features/message/MessageReducer';
 import { createSignalReducer } from './features/signal/SignalReducer';
 import { createPresenceReducer } from './features/presence/PresenceReducer';
 import { createNetworkStatusReducer } from './features/networkStatus/NetworkStatusReducer';
-import { createUserReducer } from './features/user/UserReducer';
-import { createUserListReducer } from './features/user/UserListReducer';
-import { createSpaceReducer } from './features/space/SpaceReducer';
-import { createSpaceListReducer } from './features/space/SpaceListReducer';
+import { createUserDataReducer } from './features/user/UserDataReducer';
+import { createUsersListReducer } from './features/user/UsersListReducer';
+import { createChannelDataReducer } from './features/channel/ChannelDataReducer';
+import { createChannelsListReducer } from './features/channel/ChannelsListReducer';
 import { createMembershipReducer } from './features/membership/MembershipReducer';
-import { createMembersReducer } from './features/members/MembersReducer';
+import { createChannelMembersReducer } from './features/members/ChannelMembersReducer';
 // Types
-import { User } from './features/user/UserActions';
-import { Space } from './features/space/SpaceActions';
+import { UserData } from './features/user/UserDataActions';
+import { Channel } from './features/channel/ChannelDataActions';
 import {
   Message,
   MessageRequestOptions,
@@ -201,10 +177,10 @@ import { SubscriptionStatusResponse } from './features/subscriptionStatus/Subscr
 import { SignalActionType } from './features/signal/SignalActionType.enum';
 import { MessageActionType } from './features/message/MessageActionType.enum';
 import { PresenceActionType } from './features/presence/PresenceActionType.enum';
-import { UserActionType } from './features/user/UserActionType.enum';
-import { SpaceActionType } from './features/space/SpaceActionType.enum';
+import { UserDataActionType } from './features/user/UserDataActionType.enum';
+import { ChannelDataActionType } from './features/channel/ChannelDataActionType.enum';
 import { MembershipActionType } from './features/membership/MembershipActionType.enum';
-import { MembersActionType } from './features/members/MembersActionType.enum';
+import { ChannelMembersActionType } from './features/members/ChannelMembersActionType.enum';
 import { SubscriptionStatusActionType } from './features/subscriptionStatus/SubscriptionStatusActionType.enum';
 import { NetworkStatusActionType } from './features/networkStatus/NetworkStatusActionType.enum';
 import { ErrorStatusActionType } from './features/errorStatus/ErrorStatusActionType.enum';
@@ -212,38 +188,30 @@ import { PresenceCategory } from './features/presence/PresenceCategory.enum';
 
 export {
   // Commands
-  joinSpaces,
-  joiningSpaces,
-  spacesJoined,
-  errorJoiningSpaces,
-  leaveSpaces,
-  leavingSpaces,
-  spacesLeft,
-  errorLeavingSpaces,
+  removeMemberships,
+  removingMemberships,
+  membershipsRemoved,
+  errorRemovingMemberships,
   fetchMemberships,
-  fetchingMembership,
-  membershipRetrieved,
-  errorFetchingMembership,
-  updateMembership,
-  updatingMemberships,
-  membershipUpdated,
-  errorUpdatingMembership,
-  fetchMembers,
-  fetchingMembers,
-  membersRetrieved,
-  errorFetchingMembers,
-  updateMembers,
-  updatingMembers,
-  membersUpdated,
-  errorUpdatingMembers,
-  addMembers,
-  addingMembers,
-  membersAdded,
-  errorAddingMembers,
-  removeMembers,
-  removingMembers,
-  membersRemoved,
-  errorRemovingMembers,
+  fetchingMemberships,
+  membershipsRetrieved,
+  errorFetchingMemberships,
+  setMemberships,
+  settingMemberships,
+  membershipsSet,
+  errorSettingMemberships,
+  fetchChannelMembers,
+  fetchingChannelMembers,
+  channelMembersRetrieved,
+  errorFetchingChannelMembers,
+  setChannelMembers,
+  settingChannelMembers,
+  channelMembersSet,
+  errorSettingChannelMembers,
+  removeChannelMembers,
+  removingChannelMembers,
+  channelMembersRemoved,
+  errorRemovingChannelMembers,
   sendMessage,
   sendingMessage,
   messageSent,
@@ -270,62 +238,55 @@ export {
   createMessageListener,
   createPresenceListener,
   createSignalListener,
-  createSpaceListener,
+  createChannelDataListener,
   createNetworkStatusListener,
   createSubscriptionStatusListener,
   createErrorStatusListener,
-  createUserListener,
+  createUserDataListener,
   combineListeners,
-  createSpace,
-  creatingSpace,
-  spaceCreated,
-  errorCreatingSpace,
-  deleteSpace,
-  deletingSpace,
-  spaceDeleted,
-  errorDeletingSpace,
-  fetchSpaceById,
-  fetchingSpaceById,
-  spaceRetrieved,
-  errorFetchingSpaceById,
-  fetchSpaces,
-  fetchingSpaces,
-  spacesRetrieved,
-  errorFetchingSpaces,
-  updateSpace,
-  updatingSpace,
-  spaceUpdated,
-  errorUpdatingSpace,
-  createUser,
-  creatingUser,
-  userCreated,
-  errorCreatingUser,
-  deleteUser,
-  deletingUser,
-  userDeleted,
-  errorDeletingUser,
-  fetchUserById,
-  fetchingUserById,
-  userRetrieved,
-  errorFetchingUserById,
-  fetchUsers,
-  fetchingUsers,
-  usersRetrieved,
-  errorFetchingUsers,
-  updateUser,
-  updatingUser,
-  userUpdated,
-  errorUpdatingUser,
+  // Action Creators
+  removeChannelData,
+  removingChannelData,
+  channelDataRemoved,
+  errorRemovingChannelData,
+  fetchChannelData,
+  fetchingChannelData,
+  channelDataRetrieved,
+  errorFetchingChannelData,
+  fetchAllChannelData,
+  fetchingAllChannelData,
+  allChannelDataRetrieved,
+  errorFetchingAllChannelData,
+  setChannelData,
+  settingChannelData,
+  channelDataSet,
+  errorSettingChannelData,
+  removeUserData,
+  removingUserData,
+  UserDataRemoved,
+  errorRemovingUserData,
+  fetchUserData,
+  fetchingUserData,
+  UserDataRetrieved,
+  errorFetchingUserData,
+  fetchAllUserData,
+  fetchingAllUserData,
+  allUserDataRetrieved,
+  errorFetchingAllUserData,
+  setUserData,
+  settingUserData,
+  UserDataSet,
+  errorSettingUserData,
   createMessageReducer,
   createSignalReducer,
   createPresenceReducer,
   createNetworkStatusReducer,
-  createUserReducer,
-  createUserListReducer,
-  createSpaceReducer,
-  createSpaceListReducer,
+  createUserDataReducer,
+  createUsersListReducer,
+  createChannelDataReducer,
+  createChannelsListReducer,
   createMembershipReducer,
-  createMembersReducer,
+  createChannelMembersReducer,
   networkIssues,
   accessDenied,
   malformedResponse,
@@ -340,8 +301,8 @@ export {
   reconnected,
   PubnubThunkContext,
   ActionMeta,
-  Space,
-  User,
+  Channel,
+  UserData,
   Message,
   MessageRequestOptions,
   Signal,
@@ -356,10 +317,10 @@ export {
   SignalActionType,
   MessageActionType,
   PresenceActionType,
-  UserActionType,
-  SpaceActionType,
+  UserDataActionType,
+  ChannelDataActionType,
   MembershipActionType,
-  MembersActionType,
+  ChannelMembersActionType,
   SubscriptionStatusActionType,
   NetworkStatusActionType,
   ErrorStatusActionType,

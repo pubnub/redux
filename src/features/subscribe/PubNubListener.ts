@@ -1,11 +1,9 @@
 import Pubnub, {
   PresenceEvent,
   SignalEvent,
-  UserEvent,
-  SpaceEvent,
   MessageActionEvent,
   StatusEvent,
-  MembershipEvent,
+  ObjectsEvent,
 } from 'pubnub';
 import { Dispatch } from 'redux';
 import { createPresenceListener } from '../presence/PresenceListener';
@@ -23,38 +21,38 @@ import {
 } from '../errorStatus/ErrorStatusListener';
 import { createMessageListener } from '../message/MessageListener';
 import { createSignalListener } from '../signal/SignalListener';
-import { createUserListener } from '../user/UserListener';
-import { createSpaceListener } from '../space/SpaceListener';
+import { createUserDataListener } from '../user/UserDataListener';
+import { createChannelDataListener } from '../channel/ChannelDataListener';
 import { createMembershipListener } from '../membership/MembershipListener';
 import {
   Message,
   MessageReceivedAction,
-} from '../../features/message/MessageActions';
-import { UserListenerActions, User } from '../../features/user/UserActions';
-import { SpaceListenerActions, Space } from '../../features/space/SpaceActions';
-import { PresenceListenerActions } from '../../features/presence/PresenceActions';
+} from 'features/message/MessageActions';
+import { UserDataListenerActions } from 'features/user/UserDataActions';
 import {
-  SignalReceivedAction,
-  Signal,
-} from '../../features/signal/SignalActions';
-import {
-  MembershipListenerActions,
-  Membership,
-} from '../../features/membership/MembershipActions';
+  ChannelDataListenerActions,
+  Channel,
+} from 'features/channel/ChannelDataActions';
+import { PresenceListenerActions } from 'features/presence/PresenceActions';
+import { SignalReceivedAction, Signal } from 'features/signal/SignalActions';
+import { MembershipListenerActions } from 'features/membership/MembershipActions';
+import { ObjectsCustom, GetChannelCustom } from 'foundations/ObjectsCustom';
+
+type ListenerType = keyof Pubnub.ListenerParameters;
 
 export type ListenerActions<
   MessageType extends Message,
   SignalType extends Signal,
-  UserType extends User,
-  SpaceType extends Space,
-  MembershipType extends Membership
+  UserCustom extends ObjectsCustom,
+  ChannelCustom extends ObjectsCustom,
+  MembershipCustom extends ObjectsCustom
 > =
   | MessageReceivedAction<MessageType>
   | PresenceListenerActions
   | SignalReceivedAction<SignalType>
-  | UserListenerActions<UserType>
-  | SpaceListenerActions<SpaceType>
-  | MembershipListenerActions<MembershipType>
+  | UserDataListenerActions<UserCustom>
+  | ChannelDataListenerActions<ChannelCustom>
+  | MembershipListenerActions<MembershipCustom>
   | NetworkStatusListenerActions
   | SubscriptionStatusListenerActions
   | ErrorStatusListenerActions;
@@ -62,17 +60,17 @@ export type ListenerActions<
 export const createPubNubListener = <
   MessageType extends Message,
   SignalType extends Signal,
-  UserType extends User,
-  SpaceType extends Space,
-  MembershipType extends Membership
+  UserCustom extends ObjectsCustom,
+  ChannelType extends Channel,
+  MembershipCustom extends ObjectsCustom
 >(
   dispatch: Dispatch<
     ListenerActions<
       MessageType,
       SignalType,
-      UserType,
-      SpaceType,
-      MembershipType
+      UserCustom,
+      GetChannelCustom<ChannelType>,
+      MembershipCustom
     >
   >
 ) =>
@@ -80,9 +78,9 @@ export const createPubNubListener = <
     createMessageListener<MessageType>(dispatch),
     createPresenceListener(dispatch),
     createSignalListener(dispatch),
-    createUserListener<UserType>(dispatch),
-    createSpaceListener<SpaceType>(dispatch),
-    createMembershipListener<MembershipType>(dispatch),
+    createUserDataListener<UserCustom>(dispatch),
+    createChannelDataListener<ChannelType>(dispatch),
+    createMembershipListener<MembershipCustom>(dispatch),
     createNetworkStatusListener(dispatch),
     createSubscriptionStatusListener(dispatch),
     createErrorStatusListener(dispatch)
@@ -127,7 +125,9 @@ const mergeListenersByType = (listeners: any[]): any[] => {
         result.push(listenersOfType[0]);
       } else if (listenersOfType.length > 1) {
         // multiple listeners for this type so combine them and add to the result list
-        result.push(createCombinedListener(listenerType, listenersOfType));
+        result.push(
+          createCombinedListener(listenerType as ListenerType, listenersOfType)
+        );
       }
     }
   );
@@ -143,7 +143,7 @@ const mergeListenersByType = (listeners: any[]): any[] => {
  * @param listeners The Array of listeners of the same type.
  */
 const createCombinedListener = (
-  listenerType: keyof Pubnub.ListenerParameters,
+  listenerType: ListenerType,
   listeners: Pubnub.ListenerParameters[]
 ): Pubnub.ListenerParameters => {
   // returns a single listener which invokes each of the incomming listeners
@@ -152,15 +152,14 @@ const createCombinedListener = (
       payload: MessageEvent &
         PresenceEvent &
         SignalEvent &
-        UserEvent &
-        SpaceEvent &
-        MembershipEvent &
         StatusEvent &
-        MessageActionEvent
+        MessageActionEvent &
+        ObjectsEvent
     ) => {
       listeners.forEach((listener: Pubnub.ListenerParameters) => {
-        if (listener[listenerType]) {
-          listener[listenerType](payload);
+        const f = listener[listenerType];
+        if (f) {
+          f(payload);
         }
       });
     },

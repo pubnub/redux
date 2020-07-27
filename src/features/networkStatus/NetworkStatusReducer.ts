@@ -1,15 +1,12 @@
 import { NetworkStatusListenerActions } from './NetworkStatusListener';
 import { NetworkStatusActionType } from './NetworkStatusActionType.enum';
 
-// tag::RDX-type-state-networkstatus[]
 export interface NetworkStatusState {
   isConnected: boolean;
 }
-// end::RDX-type-state-networkstatus[]
 
 type NetworkStatusInitializerFunction = () => boolean;
 
-// tag::RDX-reducer-networkstatus[]
 export const createNetworkStatusReducer = (
   initializer: NetworkStatusInitializerFunction | boolean
 ) => {
@@ -48,4 +45,3 @@ export const createNetworkStatusReducer = (
     }
   };
 };
-// end::RDX-reducer-networkstatus[]

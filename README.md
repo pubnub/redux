@@ -30,9 +30,9 @@ The PubNub Redux SDK includes the following components that you help manage your
 - Sending and Receiving Messages
 - Indicating User Presence
 - Monitoring Network Status
-- Managing Users
-- Managing Spaces
-- Managing Space Memberships
+- Managing User Data
+- Managing Channel Data
+- Managing Channel Memberships
 
 ## Not Yet Supported
 
@@ -43,7 +43,7 @@ The PubNub Redux SDK includes the following components that you help manage your
 
 ## Dependencies
 
-- `pubnub 4.26.1` or later
+- `pubnub 4.28.3` or later
 - `redux 4.0.4` or later
 - `redux-thunk 2.3.0` or later
 
@@ -96,10 +96,12 @@ let rootReducer = combineReducers(
   createNetworkStatusReducer(false),
   createMessageReducer(),
   createPresenceReducer(),
-  createUserReducer(),
-  createSpaceReducer(),
+  createUUIDMetadataReducer(),
+  createUUIDMetadataListReducer(),
+  createChannelMetadataReducer(),
+  createChannelMetadataListReducer(),
   createMembershipReducer(),
-  createMembersReducer(),
+  createChannelMembersReducer(),
 );
 ```
 
@@ -142,7 +144,7 @@ You can also choose to register only specific listeners and combine with other l
 pubnub.addListener(
   combineListeners(
     createNetworkStatusListener(store.dispatch),
-    reateMessageListener(store.dispatch),
+    createMessageListener(store.dispatch),
     createPresenceListener(store.dispatch),
     // a custom listener
     {
@@ -160,10 +162,10 @@ This section contains a few examples of commands to get your started. This is no
 Also, you can create commands in your application that use our actions to meet your requirements.
 
 - [Sending a Message](#sending-a-message)
-- [Creating a User](#creating-a-user)
-- [Retrieving a User](#retrieving-a-user)
-- [Creating a Space](#creating-a-space)
-- [Joining a Space](#joining-a-space)
+- [Set User Data](#set-user-data)
+- [Fetch User Data](#fetch-user-data)
+- [Set Channel Data](#set-channel-data)
+- [Set Memberships](#set-memberships)
 
 ## Sending a Message
 
@@ -177,39 +179,43 @@ dispatch(sendMessage({
 }));
 ```
 
-## Creating a User
+## Set User Data
 
 ```javascript
-dispatch(createUser({
-  id: 'my-user-id',
-  name: 'User Name'
+dispatch(setUserData({
+  uuid: 'my-user-id',
+  data: {
+    name: 'User Name'
+  }
 }));
 ```
 
-## Retrieving a User
+## Fetch User Data
 
 ```javascript
-dispatch(fetchUserById({
-  userId: 'my-user-id'
+dispatch(fetchUserData({
+  uuid: 'my-user-id'
 }));
 ```
 
-## Creating a Space
+## Set Channel Data
 
 ```javascript
-dispatch(createSpace({
-  id: 'my-space-id',
-  name: 'Space Name'
+dispatch(setChannelData({
+  channel: 'my-channel-id',
+  data: {
+    name: 'Channel Name'
+  }
 }));
 ```
 
-## Joining a Space
+## Set Memberships
 
 ```javascript
-dispatch(joinSpaces({
-  userId: 'my-user-id',
-  spaces: [{
-    id: 'space-id'
+dispatch(setMemberships({
+  uuid: 'my-user-id',
+  channels: [{
+    id: 'channel-id'
   }]
 }));
 ```

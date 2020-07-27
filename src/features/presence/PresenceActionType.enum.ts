@@ -1,4 +1,3 @@
-// tag::RDX-enum-presence-action[]
 export enum PresenceActionType {
   HERE_NOW_COMMAND = 'pubnub/HERE_NOW_COMMAND',
   PRESENCE_STATE_COMMAND = 'pubnub/PRESENCE_STATE_COMMAND',
@@ -13,4 +12,3 @@ export enum PresenceActionType {
   TIMEOUT_EVENT = 'pubnub/TIMEOUT_EVENT',
   STATE_CHANGE_EVENT = 'pubnub/STATE_CHANGE_EVENT',
 }
-// end::RDX-enum-presence-action[]

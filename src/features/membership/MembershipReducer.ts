@@ -1,82 +1,46 @@
 import { AnyAction } from 'redux';
 import {
-  FetchMembershipSuccess,
-  MembershipSuccess,
+  FetchMembershipsSuccess,
+  SetMembershipsSuccess,
   MembershipListenerActions,
   MembershipActions,
-  Membership,
   MembershipEventMessage,
+  SetMembershipEventMessage,
 } from './MembershipActions';
 import { MembershipActionType } from './MembershipActionType.enum';
-import { AnyMeta } from '../../foundations/ActionMeta';
+import { AnyMeta } from 'foundations/ActionMeta';
 import { ObjectsCustom } from 'foundations/ObjectsCustom';
-import { User } from 'features/user/UserActions';
 
-// tag::RDX-type-memberships-byuserid[]
-export type MembershipByUserIdState<
-  ReceivedMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>
-> = {
+export type MembershipByUuidState<MembershipCustom extends ObjectsCustom> = {
   byId: {
-    [userId: string]: ReceivedMembership[];
+    [uuid: string]: {
+      id: string;
+      custom: MembershipCustom | null;
+    }[];
   };
 };
-// end::RDX-type-memberships-byuserid[]
 
 const createInitialState = () => ({
   byId: {},
 });
 
-const userAddedToSpace = <
-  ReceivedMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>
->(
-  state: MembershipByUserIdState<ReceivedMembership>,
-  payload: MembershipEventMessage<ReceivedMembership>
+const uuidRemovedFromChannel = <MembershipCustom extends ObjectsCustom>(
+  state: MembershipByUuidState<MembershipCustom>,
+  payload: MembershipEventMessage<MembershipCustom>
 ) => {
   if (
-    state.byId[payload.data.userId] &&
-    state.byId[payload.data.userId].filter(
-      (membership) => membership.id === payload.data.spaceId
-    ).length === 0
-  ) {
-    const newState = {
-      byId: { ...state.byId },
-    };
-
-    const newMembership = {
-      id: payload.data.spaceId,
-      custom: payload.data.custom,
-    };
-
-    newState.byId[payload.data.userId] = [
-      ...newState.byId[payload.data.userId],
-      newMembership as ReceivedMembership,
-    ];
-
-    return newState;
-  }
-
-  return state;
-};
-
-const userRemovedFromSpace = <
-  ReceivedMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>
->(
-  state: MembershipByUserIdState<ReceivedMembership>,
-  payload: MembershipEventMessage<ReceivedMembership>
-) => {
-  if (
-    state.byId[payload.data.userId] &&
-    state.byId[payload.data.userId].filter(
-      (membership) => membership.id === payload.data.spaceId
+    state.byId[payload.data.uuid.id] &&
+    state.byId[payload.data.uuid.id].filter(
+      (membership) => membership.id === payload.data.channel.id
     ).length > 0
   ) {
     const newState = {
       byId: { ...state.byId },
     };
 
-    newState.byId[payload.data.userId] = newState.byId[
-      payload.data.userId
-    ].filter((membership) => membership.id !== payload.data.spaceId);
+    newState.byId[payload.data.uuid.id] = newState.byId[
+      payload.data.uuid.id
+    ].filter((membership) => membership.id !== payload.data.channel.id);
 
     return newState;
   }
@@ -84,99 +48,107 @@ const userRemovedFromSpace = <
   return state;
 };
 
-const userMembershipUpdatedOnSpace = <
-  ReceivedMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>
->(
-  state: MembershipByUserIdState<ReceivedMembership>,
-  payload: MembershipEventMessage<ReceivedMembership>
+const uuidMembershipUpdatedOnChannel = <MembershipCustom extends ObjectsCustom>(
+  state: MembershipByUuidState<MembershipCustom>,
+  payload: SetMembershipEventMessage<MembershipCustom>
 ) => {
   const newState = {
     byId: { ...state.byId },
   };
 
-  let clonedUser = [...newState.byId[payload.data.userId]];
+  let clonedUUID = [...newState.byId[payload.data.uuid.id]];
 
-  if (clonedUser !== undefined) {
-    clonedUser = clonedUser.map((space) => {
-      if (space.id === payload.data.spaceId) {
+  if (clonedUUID !== undefined) {
+    let exists = false;
+    clonedUUID = clonedUUID.map((channel) => {
+      if (channel.id === payload.data.channel.id) {
+        exists = true;
         return {
-          ...space,
+          ...channel,
           custom: payload.data.custom,
         };
       } else {
-        return space;
+        return channel;
       }
     });
+    if (!exists) {
+      clonedUUID.push({
+        id: payload.data.channel.id,
+        custom: payload.data.custom,
+      });
+    }
   }
 
-  newState.byId[payload.data.userId] = clonedUser;
+  newState.byId[payload.data.uuid.id] = clonedUUID;
 
   return newState;
 };
 
 const membershipResult = <
-  ReceivedMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>
+  MembershipCustom extends ObjectsCustom,
+  ChannelCustom extends ObjectsCustom
 >(
-  state: MembershipByUserIdState<ReceivedMembership>,
+  state: MembershipByUuidState<MembershipCustom>,
   payload:
-    | FetchMembershipSuccess<ReceivedMembership>
-    | MembershipSuccess<ReceivedMembership>
+    | FetchMembershipsSuccess<MembershipCustom, ChannelCustom>
+    | SetMembershipsSuccess<MembershipCustom, ChannelCustom>
 ) => {
   const newState = {
     byId: { ...state.byId },
   };
 
-  newState.byId[payload.request.userId] = payload.response.data;
+  const memberships = payload.response.data.map((complete) => ({
+    id: complete.channel.id,
+    custom: complete.custom || null,
+  }));
+
+  newState.byId[payload.request.uuid] = memberships;
 
   return newState;
 };
 
 type MembershipReducerActions<
-  ReceivedMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>
+  MembershipCustom extends ObjectsCustom,
+  ChannelCustom extends ObjectsCustom
 > =
-  | MembershipActions<ReceivedMembership, AnyMeta>
-  | MembershipListenerActions<ReceivedMembership>;
+  | MembershipActions<MembershipCustom, ChannelCustom, AnyMeta>
+  | MembershipListenerActions<MembershipCustom>;
 
-// tag::RDX-type-membership[]
 export type MembershipReducer<
-  StoredMembership extends Membership<ObjectsCustom, User<ObjectsCustom>>,
+  MembershipCustom extends ObjectsCustom,
   MembershipAction extends AnyAction
 > = (
-  state: MembershipByUserIdState<StoredMembership> | undefined,
+  state: MembershipByUuidState<MembershipCustom> | undefined,
   action: MembershipAction
-) => MembershipByUserIdState<StoredMembership>;
-// end::RDX-type-membership[]
+) => MembershipByUuidState<MembershipCustom>;
 
-// tag::RDX-method-reducer-membership[]
 export const createMembershipReducer = <
-  StoredMembership extends Membership<
-    ObjectsCustom,
-    User<ObjectsCustom>
-  > = Membership,
+  MembershipCustom extends ObjectsCustom = ObjectsCustom,
+  ChannelCustom extends ObjectsCustom = ObjectsCustom,
   MembershipAction extends AnyAction = MembershipReducerActions<
-    StoredMembership
+    MembershipCustom,
+    ChannelCustom
   >
->(): MembershipReducer<StoredMembership, MembershipAction> => (
+>(): MembershipReducer<MembershipCustom, MembershipAction> => (
   state = createInitialState(),
   action: MembershipAction
-): MembershipByUserIdState<StoredMembership> => {
+): MembershipByUuidState<MembershipCustom> => {
   switch (action.type) {
-    case MembershipActionType.MEMBERSHIP_RETRIEVED:
-    case MembershipActionType.MEMBERSHIP_UPDATED:
-    case MembershipActionType.SPACES_JOINED:
-    case MembershipActionType.SPACES_LEFT:
-      return membershipResult<StoredMembership>(state, action.payload);
-    case MembershipActionType.USER_ADDED_TO_SPACE_EVENT:
-      return userAddedToSpace<StoredMembership>(state, action.payload);
-    case MembershipActionType.USER_REMOVED_FROM_SPACE_EVENT:
-      return userRemovedFromSpace<StoredMembership>(state, action.payload);
-    case MembershipActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE_EVENT:
-      return userMembershipUpdatedOnSpace<StoredMembership>(
+    case MembershipActionType.MEMBERSHIPS_RETRIEVED:
+    case MembershipActionType.MEMBERSHIPS_SET:
+    case MembershipActionType.MEMBERSHIPS_REMOVED:
+      return membershipResult<MembershipCustom, ChannelCustom>(
         state,
         action.payload
       );
+    case MembershipActionType.MEMBERSHIP_SET_EVENT:
+      return uuidMembershipUpdatedOnChannel<MembershipCustom>(
+        state,
+        action.payload
+      );
+    case MembershipActionType.MEMBERSHIP_REMOVED_EVENT:
+      return uuidRemovedFromChannel<MembershipCustom>(state, action.payload);
     default:
       return state;
   }
 };
-// end::RDX-method-reducer-membership[]

@@ -8,10 +8,9 @@ import {
   SendSignalError,
 } from '../SignalActions';
 import { SignalActionType } from '../SignalActionType.enum';
-import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
+import { PubnubThunkContext } from 'foundations/ThunkTypes';
+import { ActionMeta, AnyMeta } from 'foundations/ActionMeta';
 
-// tag::RDX-function-signals-send[]
 export const sendingSignal = <
   SignalContentType extends object,
   Meta extends ActionMeta
@@ -23,9 +22,7 @@ export const sendingSignal = <
   payload,
   meta,
 });
-// end::RDX-function-signals-send[]
 
-// tag::RDX-function-signals-send-success[]
 export const signalSent = <
   SignalContentType extends object,
   Meta extends ActionMeta
@@ -37,9 +34,7 @@ export const signalSent = <
   payload,
   meta,
 });
-// end::RDX-function-signals-send-success[]
 
-// tag::RDX-function-signals-send-error[]
 export const errorSendingSignal = <
   SignalContentType extends object,
   Meta extends ActionMeta
@@ -51,9 +46,7 @@ export const errorSendingSignal = <
   payload,
   meta,
 });
-// end::RDX-function-signals-send-error[]
 
-// tag::RDX-command-signals-send[]
 export const sendSignal = <
   SignalContentType extends object = {},
   Meta extends ActionMeta = AnyMeta
@@ -102,4 +95,3 @@ export const sendSignal = <
 
   return thunkFunction;
 };
-// end::RDX-command-signals-send[]

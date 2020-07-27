@@ -4,15 +4,13 @@ import {
   FetchMessageHistorySuccess,
 } from './MessageActions';
 import { MessageActionType } from './MessageActionType.enum';
-import { ActionMeta, AnyMeta } from '../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from 'foundations/ActionMeta';
 
-// tag::RDX-type-messages[]
 export type MessageState<MessageType extends Message> = {
   byId: {
     [channel: string]: MessageType[];
   };
 };
-// end::RDX-type-messages[]
 
 const createInitialState = <
   MessageType extends Message
@@ -69,7 +67,6 @@ const messageHistoryRetrieved = <
   return newState;
 };
 
-// tag::RDX-reducer-messages[]
 export const createMessageReducer = <
   MessageType extends Message = Message,
   MessageContentType extends object = {},
@@ -91,4 +88,3 @@ export const createMessageReducer = <
       return state;
   }
 };
-// end::RDX-reducer-messages[]

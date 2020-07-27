@@ -6,11 +6,10 @@ import { createErrorStatusListener } from '../errorStatus/ErrorStatusListener';
 import { createNetworkStatusListener } from '../networkStatus/NetworkStatusListener';
 import { createSubscriptionStatusListener } from '../subscriptionStatus/SubscriptionStatusListener';
 import { createMembershipListener } from '../membership/MembershipListener';
-import { createSpaceListener } from '../space/SpaceListener';
-import { createUserListener } from '../user/UserListener';
+import { createChannelDataListener } from '../channel/ChannelDataListener';
+import { createUserDataListener } from '../user/UserDataListener';
 import { combineListeners } from '../../foundations/CombineListeners';
 
-// tag::RDX-listener-pubnub[]
 export const createPubNubListener = (dispatch: Dispatch) =>
   combineListeners(
     createMessageListener(dispatch),
@@ -20,8 +19,7 @@ export const createPubNubListener = (dispatch: Dispatch) =>
     createErrorStatusListener(dispatch),
     createNetworkStatusListener(dispatch),
     createSubscriptionStatusListener(dispatch),
-    createUserListener(dispatch),
-    createSpaceListener(dispatch),
+    createUserDataListener(dispatch),
+    createChannelDataListener(dispatch),
     createMembershipListener(dispatch)
   );
-// end::RDX-listener-pubnub[]

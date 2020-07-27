@@ -1,341 +1,185 @@
 import Pubnub from 'pubnub';
 import { MembershipActionType } from './MembershipActionType.enum';
-import { ActionMeta } from '../../foundations/ActionMeta';
-import { ObjectsCustom, AnyCustom } from 'foundations/ObjectsCustom';
-import { Space } from 'features/space/SpaceActions';
+import { ActionMeta } from 'foundations/ActionMeta';
+import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
-export type FetchMembershipsCallback<
-  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> = (
-  status: Pubnub.PubnubStatus,
-  response: FetchMembershipResponse<MembershipType>
-) => void;
+export type Membership<
+  MembershipCustom extends ObjectsCustom = ObjectsCustom,
+  ChannelCustom extends ObjectsCustom = ObjectsCustom
+> = Pubnub.ChannelMembershipObject<MembershipCustom, ChannelCustom>;
 
-export type MembershipCallback<
-  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> = (
-  status: Pubnub.PubnubStatus,
-  response: MembershipResponse<MembershipType>
-) => void;
+export interface FetchMembershipsRequest
+  extends Pubnub.GetMembershipsParametersv2 {
+  uuid: string;
+}
 
-// tag::RDX-type-membership[]
-export interface Membership<
-  CustomMembershipFields extends ObjectsCustom = AnyCustom,
-  ReceivedSpace extends Space<ObjectsCustom> = Space
+export type FetchMembershipResponse<
+  MembershipCustom extends ObjectsCustom,
+  ChannelCustom extends ObjectsCustom
+> = Pubnub.ManageMembershipsResponse<MembershipCustom, ChannelCustom>;
+
+export interface SetMembershipsRequest<ChannelCustom extends ObjectsCustom>
+  extends Pubnub.SetMembershipsParameters<ChannelCustom> {
+  uuid: string;
+}
+
+export interface RemoveMembershipsRequest
+  extends Pubnub.RemoveMembershipsParameters {
+  uuid: string;
+}
+
+export type MembershipsResponse<
+  MembershipCustom extends ObjectsCustom,
+  ChannelCustom extends ObjectsCustom
+> = Pubnub.ManageMembershipsResponse<MembershipCustom, ChannelCustom>;
+
+export interface FetchMembershipsSuccess<
+  MembershipCustom extends ObjectsCustom,
+  ChannelCustom extends ObjectsCustom
 > {
-  id: string;
-  custom?: CustomMembershipFields;
-  space?: ReceivedSpace;
-  created?: string;
-  updated?: string;
-  eTag?: string;
-}
-// end::RDX-type-membership[]
-
-// tag::RDX-type-membership-page[]
-export interface MembershipPage {
-  next?: string;
-  prev?: string;
-}
-// end::RDX-type-membership-page[]
-
-// tag::RDX-type-membership-fetch-option[]
-export interface MembershipFetchRequestOptions {
-  limit?: number;
-  page?: MembershipPage;
-  include?: {
-    customFields?: boolean;
-    spaceFields?: boolean;
-    customSpaceFields?: boolean;
-    totalCount?: boolean;
-  };
-}
-// end::RDX-type-membership-fetch-option[]
-
-// tag::RDX-type-membership-fetch-request[]
-export interface FetchMembershipRequest extends MembershipFetchRequestOptions {
-  userId: string;
-}
-// end::RDX-type-membership-fetch-request[]
-
-// tag::RDX-type-membership-fetch-response[]
-export interface FetchMembershipResponse<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> {
-  status: number;
-  data: ReceivedMembership[];
-}
-// end::RDX-type-membership-fetch-response[]
-
-// tag::RDX-type-membership-request[]
-export type MembershipRequest<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> = {
-  userId: string;
-  spaces: ReceivedMembership[];
-};
-// end::RDX-type-membership-request[]
-
-export type MembershipLeaveRequest = {
-  userId: string;
-  spaces: string[];
-};
-
-// tag::RDX-type-membership-response[]
-export interface MembershipResponse<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> {
-  status: number;
-  data: ReceivedMembership[];
-}
-// end::RDX-type-membership-response[]
-
-// tag::RDX-type-membership-event-item[]
-export interface MembershipEventItem<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> {
-  userId: string;
-  spaceId: string;
-  custom: ReceivedMembership['custom'];
-}
-// end::RDX-type-membership-event-item[]
-
-// tag::RDX-type-membership-event-message[]
-export interface MembershipEventMessage<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> {
-  data: MembershipEventItem<ReceivedMembership>;
-  event: string;
-  type: string;
-}
-// end::RDX-type-membership-event-message[]
-
-export type MembershipListenerPayload<
-  ReceivedMembership extends Membership<
-    ObjectsCustom,
-    Space<ObjectsCustom>
-  > = Membership
-> = {
-  message: MembershipEventMessage<ReceivedMembership>;
-};
-
-// tag::RDX-type-membership-fetch-success[]
-export interface FetchMembershipSuccess<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> {
-  request: FetchMembershipRequest;
-  response: FetchMembershipResponse<ReceivedMembership>;
+  request: FetchMembershipsRequest;
+  response: FetchMembershipResponse<MembershipCustom, ChannelCustom>;
   status: Pubnub.PubnubStatus;
 }
-// end::RDX-type-membership-fetch-success[]
 
-// tag::RDX-type-membership-fetch-error[]
-export interface FetchMembershipError {
-  request: FetchMembershipRequest;
+export interface FetchMembershipsError {
+  request: FetchMembershipsRequest;
   status: Pubnub.PubnubStatus;
 }
-// end::RDX-type-membership-fetch-error[]
 
-// tag::RDX-type-membership-success[]
-export interface MembershipSuccess<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
+export interface SetMembershipsSuccess<
+  MembershipCustom extends ObjectsCustom,
+  ChannelCustom extends ObjectsCustom
 > {
-  request: MembershipRequest<ReceivedMembership>;
-  response: MembershipResponse<ReceivedMembership>;
+  request: SetMembershipsRequest<ChannelCustom>;
+  response: MembershipsResponse<MembershipCustom, ChannelCustom>;
   status: Pubnub.PubnubStatus;
 }
-// end::RDX-type-membership-success[]
 
-// tag::RDX-type-membership-error[]
-export interface MembershipError<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> {
-  request: MembershipRequest<ReceivedMembership>;
+export type RemoveMembershipEventMessage = Pubnub.RemoveMembershipEvent['message'];
+export type SetMembershipEventMessage<
+  MembershipCustom extends ObjectsCustom
+> = Pubnub.SetMembershipEvent<MembershipCustom>['message'];
+export type MembershipEventMessage<MembershipCustom extends ObjectsCustom> =
+  | RemoveMembershipEventMessage
+  | SetMembershipEventMessage<MembershipCustom>;
+
+export interface SetMembershipsError<ChannelCustom extends ObjectsCustom> {
+  request: SetMembershipsRequest<ChannelCustom>;
   status: Pubnub.PubnubStatus;
 }
-// end::RDX-type-membership-error[]
 
-// tag::RDX-action-membership-fetch[]
-export interface FetchingMembershipAction<Meta extends ActionMeta> {
-  type: typeof MembershipActionType.FETCHING_MEMBERSHIP;
-  payload: FetchMembershipRequest;
+export interface FetchingMembershipsAction<Meta extends ActionMeta> {
+  type: typeof MembershipActionType.FETCHING_MEMBERSHIPS;
+  payload: FetchMembershipsRequest;
   meta?: Meta;
 }
-// end::RDX-action-membership-fetch[]
 
-// tag::RDX-action-membership-fetch-success[]
-export interface MembershipRetrievedAction<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+export interface MembershipsRetrievedAction<
+  MembershipCustom extends ObjectsCustom,
+  ChannelCustom extends ObjectsCustom,
   Meta extends ActionMeta
 > {
-  type: typeof MembershipActionType.MEMBERSHIP_RETRIEVED;
-  payload: FetchMembershipSuccess<ReceivedMembership>;
+  type: typeof MembershipActionType.MEMBERSHIPS_RETRIEVED;
+  payload: FetchMembershipsSuccess<MembershipCustom, ChannelCustom>;
   meta?: Meta;
 }
-// end::RDX-action-membership-fetch-success[]
 
-// tag::RDX-action-membership-fetch-error[]
-export interface ErrorFetchingMembershipAction<Meta extends ActionMeta> {
-  type: typeof MembershipActionType.ERROR_FETCHING_MEMBERSHIP;
-  payload: FetchMembershipError;
+export interface ErrorFetchingMembershipsAction<Meta extends ActionMeta> {
+  type: typeof MembershipActionType.ERROR_FETCHING_MEMBERSHIPS;
+  payload: FetchMembershipsError;
   meta?: Meta;
   error: true;
 }
-// end::RDX-action-membership-fetch-error[]
 
-// tag::RDX-action-membership-update[]
-export interface UpdatingMembershipAction<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+export interface SettingMembershipsAction<
+  ChannelCustom extends ObjectsCustom,
   Meta extends ActionMeta
 > {
-  type: typeof MembershipActionType.UPDATING_MEMBERSHIP;
-  payload: MembershipRequest<ReceivedMembership>;
+  type: typeof MembershipActionType.SETTING_MEMBERSHIPS;
+  payload: SetMembershipsRequest<ChannelCustom>;
   meta?: Meta;
 }
-// end::RDX-action-membership-update[]
 
-// tag::RDX-action-membership-update-sucess[]
-export interface MembershipUpdatedAction<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+export interface MembershipsSetAction<
+  MembershipCustom extends ObjectsCustom,
+  ChannelCustom extends ObjectsCustom,
   Meta extends ActionMeta
 > {
-  type: typeof MembershipActionType.MEMBERSHIP_UPDATED;
-  payload: MembershipSuccess<ReceivedMembership>;
+  type: typeof MembershipActionType.MEMBERSHIPS_SET;
+  payload: SetMembershipsSuccess<MembershipCustom, ChannelCustom>;
   meta?: Meta;
 }
-// end::RDX-action-membership-update-sucess[]
 
-// tag::RDX-action-membership-update-error[]
-export interface ErrorUpdatingMembershipAction<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+export interface ErrorSettingMembershipsAction<
+  ChannelCustom extends ObjectsCustom,
   Meta extends ActionMeta
 > {
-  type: typeof MembershipActionType.ERROR_UPDATING_MEMBERSHIP;
-  payload: MembershipError<ReceivedMembership>;
+  type: typeof MembershipActionType.ERROR_SETTING_MEMBERSHIPS;
+  payload: SetMembershipsError<ChannelCustom>;
   meta?: Meta;
   error: true;
 }
-// end::RDX-action-membership-update-error[]
 
-// tag::RDX-action-spaces-join[]
-export interface JoiningSpacesAction<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+export interface RemovingChannelsAction<
+  ChannelCustom extends ObjectsCustom,
   Meta extends ActionMeta
 > {
-  type: typeof MembershipActionType.JOINING_SPACES;
-  payload: MembershipRequest<ReceivedMembership>;
+  type: typeof MembershipActionType.REMOVING_MEMBERSHIPS;
+  payload: SetMembershipsRequest<ChannelCustom>;
   meta?: Meta;
 }
-// end::RDX-action-spaces-join[]
 
-// tag::RDX-action-spaces-join-success[]
-export interface SpacesJoinedAction<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+export interface MembershipsRemovedAction<
+  MembershipCustom extends ObjectsCustom,
+  ChannelCustom extends ObjectsCustom,
   Meta extends ActionMeta
 > {
-  type: typeof MembershipActionType.SPACES_JOINED;
-  payload: MembershipSuccess<ReceivedMembership>;
+  type: typeof MembershipActionType.MEMBERSHIPS_REMOVED;
+  payload: SetMembershipsSuccess<MembershipCustom, ChannelCustom>;
   meta?: Meta;
 }
-// end::RDX-action-spaces-join-success[]
 
-// tag::RDX-action-spaces-join-error[]
-export interface ErrorJoiningSpacesAction<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+export interface ErrorRemovingMembershipsAction<
+  ChannelCustom extends ObjectsCustom,
   Meta extends ActionMeta
 > {
-  type: typeof MembershipActionType.ERROR_JOINING_SPACES;
-  payload: MembershipError<ReceivedMembership>;
+  type: typeof MembershipActionType.ERROR_REMOVING_MEMBERSHIPS;
+  payload: SetMembershipsError<ChannelCustom>;
   meta?: Meta;
   error: true;
 }
-// end::RDX-action-spaces-join-error[]
 
-// tag::RDX-action-spaces-leave[]
-export interface LeavingSpacesAction<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
-  Meta extends ActionMeta
+export interface MembershipSetEventAction<
+  MembershipCustom extends ObjectsCustom
 > {
-  type: typeof MembershipActionType.LEAVING_SPACES;
-  payload: MembershipRequest<ReceivedMembership>;
-  meta?: Meta;
+  type: typeof MembershipActionType.MEMBERSHIP_SET_EVENT;
+  payload: MembershipEventMessage<MembershipCustom>;
 }
-// end::RDX-action-spaces-leave[]
 
-// tag::RDX-action-spaces-leave-success[]
-export interface SpacesLeftAction<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
-  Meta extends ActionMeta
+export interface MembershipRemovedEventAction<
+  MembershipCustom extends ObjectsCustom
 > {
-  type: typeof MembershipActionType.SPACES_LEFT;
-  payload: MembershipSuccess<ReceivedMembership>;
-  meta?: Meta;
+  type: typeof MembershipActionType.MEMBERSHIP_REMOVED_EVENT;
+  payload: MembershipEventMessage<MembershipCustom>;
 }
-// end::RDX-action-spaces-leave-success[]
 
-// tag::RDX-action-spaces-leave-error[]
-export interface ErrorLeavingSpacesAction<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
-  Meta extends ActionMeta
-> {
-  type: typeof MembershipActionType.ERROR_LEAVING_SPACES;
-  payload: MembershipError<ReceivedMembership>;
-  meta?: Meta;
-  error: true;
-}
-// end::RDX-action-spaces-leave-error[]
-
-// tag::RDX-action-user-added[]
-export interface UserAddedToSpaceEventAction<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> {
-  type: typeof MembershipActionType.USER_ADDED_TO_SPACE_EVENT;
-  payload: MembershipEventMessage<ReceivedMembership>;
-}
-// end::RDX-action-user-added[]
-
-// tag::RDX-action-user-removed[]
-export interface UserRemovedFromSpaceEventAction<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> {
-  type: typeof MembershipActionType.USER_REMOVED_FROM_SPACE_EVENT;
-  payload: MembershipEventMessage<ReceivedMembership>;
-}
-// end::RDX-action-user-removed[]
-
-// tag::RDX-action-membership-updated[]
-export interface UserMembershipUpdatedOnSpaceEventAction<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> {
-  type: typeof MembershipActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE_EVENT;
-  payload: MembershipEventMessage<ReceivedMembership>;
-}
-// end::RDX-action-membership-updated[]
-
-// tag::RDX-action-membership[]
 export type MembershipActions<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+  ChannelCustom extends ObjectsCustom,
+  MembershipCustom extends ObjectsCustom,
   Meta extends ActionMeta
 > =
-  | FetchingMembershipAction<Meta>
-  | MembershipRetrievedAction<ReceivedMembership, Meta>
-  | ErrorFetchingMembershipAction<Meta>
-  | UpdatingMembershipAction<ReceivedMembership, Meta>
-  | MembershipUpdatedAction<ReceivedMembership, Meta>
-  | ErrorUpdatingMembershipAction<ReceivedMembership, Meta>
-  | JoiningSpacesAction<ReceivedMembership, Meta>
-  | SpacesJoinedAction<ReceivedMembership, Meta>
-  | ErrorJoiningSpacesAction<ReceivedMembership, Meta>
-  | LeavingSpacesAction<ReceivedMembership, Meta>
-  | SpacesLeftAction<ReceivedMembership, Meta>
-  | ErrorLeavingSpacesAction<ReceivedMembership, Meta>;
-// end::RDX-action-membership[]
+  | FetchingMembershipsAction<Meta>
+  | MembershipsRetrievedAction<MembershipCustom, ChannelCustom, Meta>
+  | ErrorFetchingMembershipsAction<Meta>
+  | SettingMembershipsAction<ChannelCustom, Meta>
+  | MembershipsSetAction<MembershipCustom, ChannelCustom, Meta>
+  | ErrorSettingMembershipsAction<ChannelCustom, Meta>
+  | RemovingChannelsAction<ChannelCustom, Meta>
+  | MembershipsRemovedAction<MembershipCustom, ChannelCustom, Meta>
+  | ErrorRemovingMembershipsAction<ChannelCustom, Meta>;
 
-// tag::RDX-action-membership-listener[]
-export type MembershipListenerActions<
-  ReceivedMembership extends Membership<ObjectsCustom, Space<ObjectsCustom>>
-> =
-  | UserAddedToSpaceEventAction<ReceivedMembership>
-  | UserRemovedFromSpaceEventAction<ReceivedMembership>
-  | UserMembershipUpdatedOnSpaceEventAction<ReceivedMembership>;
-// end::RDX-action-membership-listener[]
+export type MembershipListenerActions<MembershipCustom extends ObjectsCustom> =
+  | MembershipSetEventAction<MembershipCustom>
+  | MembershipRemovedEventAction<MembershipCustom>
+  | MembershipSetEventAction<MembershipCustom>;

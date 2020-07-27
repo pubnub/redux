@@ -9,11 +9,10 @@ import {
   FetchMessageHistorySuccess,
 } from '../../message/MessageActions';
 import { MessageActionType } from '../../message/MessageActionType.enum';
-import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta } from '../../../foundations/ActionMeta';
+import { PubnubThunkContext } from 'foundations/ThunkTypes';
+import { ActionMeta } from 'foundations/ActionMeta';
 import Pubnub from 'pubnub';
 
-// tag::RDX-function-presence-messagehistory[]
 export const fetchingMessageHistory = <Meta extends ActionMeta>(
   payload: FetchMessageHistoryRequest,
   meta?: Meta
@@ -22,9 +21,7 @@ export const fetchingMessageHistory = <Meta extends ActionMeta>(
   payload,
   meta,
 });
-// end::RDX-function-presence-messagehistory[]
 
-// tag::RDX-function-presence-messagehistory-success[]
 export const messageHistoryRetrieved = <
   MessageContentType,
   Meta extends ActionMeta
@@ -36,9 +33,7 @@ export const messageHistoryRetrieved = <
   payload,
   meta,
 });
-// end::RDX-function-presence-messagehistory-success[]
 
-// tag::RDX-function-presence-messagehistory-error[]
 export const errorFetchingMessageHistory = <Meta extends ActionMeta>(
   payload: FetchMessageHistoryError,
   meta?: Meta
@@ -47,9 +42,7 @@ export const errorFetchingMessageHistory = <Meta extends ActionMeta>(
   payload,
   meta,
 });
-// end::RDX-function-presence-messagehistory-error[]
 
-// tag::RDX-command-presence-messagehistory[]
 export const fetchMessageHistory = <
   MessageContentType,
   Meta extends ActionMeta
@@ -100,4 +93,3 @@ export const fetchMessageHistory = <
 
   return thunkFunction;
 };
-// end::RDX-command-presence-messagehistory[]

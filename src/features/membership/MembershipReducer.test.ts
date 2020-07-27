@@ -1,108 +1,111 @@
 import { createMembershipReducer } from './MembershipReducer';
 import { MembershipActionType } from './MembershipActionType.enum';
 import {
-  MembershipRetrievedAction,
-  MembershipUpdatedAction,
-  SpacesJoinedAction,
-  SpacesLeftAction,
-  UserMembershipUpdatedOnSpaceEventAction,
-  UserAddedToSpaceEventAction,
-  UserRemovedFromSpaceEventAction,
-  Membership,
+  MembershipsRetrievedAction,
+  MembershipsSetAction,
+  MembershipsRemovedAction,
+  MembershipSetEventAction,
+  MembershipRemovedEventAction,
 } from './MembershipActions';
 import deepFreeze from 'deep-freeze';
 
 describe('Handling membership reducer without mutating the state', () => {
   interface MembershipReducerInitialState {
-    byId: { [key: string]: Membership[] };
+    byId: { [key: string]: { id: string; custom: null | {} }[] };
   }
   interface MetaType {}
   let initialState: MembershipReducerInitialState;
   beforeEach(() => {
     initialState = {
       byId: {
-        user1: [{ id: 'space1', custom: {} }],
+        user1: [{ id: 'channel1', custom: {} }],
       },
     };
 
     deepFreeze(initialState);
   });
 
-  it('should add user to the space without mutations', () => {
+  it('should add user to the channel without mutations', () => {
     const firstPayload = {
       data: {
-        spaceId: 'space2',
-        userId: 'user1',
+        channel: { id: 'channel2' },
+        uuid: { id: 'user1' },
         custom: {},
+        updated: '',
+        eTag: '',
       },
-      event: '',
-      type: '',
+      event: 'set' as const,
+      type: 'membership' as const,
     };
     const secondPayload = {
       data: {
-        spaceId: 'space3',
-        userId: 'user1',
+        channel: { id: 'channel3' },
+        uuid: { id: 'user1' },
         custom: {},
+        updated: '',
+        eTag: '',
       },
-      event: '',
-      type: '',
+      event: 'set' as const,
+      type: 'membership' as const,
     };
-    const firstAction: UserAddedToSpaceEventAction<Membership> = {
-      type: MembershipActionType.USER_ADDED_TO_SPACE_EVENT,
+    const firstAction: MembershipSetEventAction<{}> = {
+      type: MembershipActionType.MEMBERSHIP_SET_EVENT,
       payload: firstPayload,
     };
-    const secondAction: UserAddedToSpaceEventAction<Membership> = {
-      type: MembershipActionType.USER_ADDED_TO_SPACE_EVENT,
+    const secondAction: MembershipSetEventAction<{}> = {
+      type: MembershipActionType.MEMBERSHIP_SET_EVENT,
       payload: secondPayload,
     };
     const expectedState = {
       ...initialState,
       byId: {
         ...initialState.byId,
-        [firstPayload.data.userId]: [
-          ...initialState.byId[firstPayload.data.userId],
+        [firstPayload.data.uuid.id]: [
+          ...initialState.byId[firstPayload.data.uuid.id],
           {
-            id: firstPayload.data.spaceId,
+            id: firstPayload.data.channel.id,
             custom: {},
           },
           {
-            id: secondPayload.data.spaceId,
+            id: secondPayload.data.channel.id,
             custom: {},
           },
         ],
       },
     };
 
-    //state after first space is added to the user
+    //state after first channel is added to the user
     const state = createMembershipReducer()(initialState, firstAction);
-    //state after second space is added to the user
+    //state after second channel is added to the user
     expect(createMembershipReducer()(state, secondAction)).toEqual({
       ...expectedState,
     });
   });
 
-  it('should remove user from the space without mutations', () => {
+  it('should remove user from the channel without mutations', () => {
     const testData = {
-      spaceId: 'space1',
-      userId: 'user1',
+      channel: 'channel1',
+      uuid: 'user1',
     };
     const payload = {
       data: {
-        spaceId: testData.spaceId,
-        userId: testData.userId,
+        channel: { id: testData.channel },
+        uuid: { id: testData.uuid },
         custom: {},
+        updated: '',
+        eTag: '',
       },
-      event: '',
-      type: '',
+      event: 'delete' as const,
+      type: 'membership' as const,
     };
-    const action: UserRemovedFromSpaceEventAction<Membership> = {
-      type: MembershipActionType.USER_REMOVED_FROM_SPACE_EVENT,
+    const action: MembershipRemovedEventAction<{}> = {
+      type: MembershipActionType.MEMBERSHIP_REMOVED_EVENT,
       payload,
     };
     const expectedState = {
       ...initialState,
       byId: {
-        [testData.userId]: [],
+        [testData.uuid]: [],
       },
     };
     expect(createMembershipReducer()(initialState, action)).toEqual({
@@ -110,29 +113,31 @@ describe('Handling membership reducer without mutating the state', () => {
     });
   });
 
-  it('should update user membership on the space without mutations', () => {
+  it('should update user membership on the channel without mutations', () => {
     const testData = {
-      spaceId: 'space1',
-      userId: 'user1',
+      channel: 'channel1',
+      uuid: 'user1',
     };
     const payload = {
       data: {
-        spaceId: testData.spaceId,
-        userId: testData.userId,
+        channel: { id: testData.channel },
+        uuid: { id: testData.uuid },
         custom: { myValue: 'updated' },
+        updated: '',
+        eTag: '',
       },
-      event: '',
-      type: '',
+      event: 'set' as const,
+      type: 'membership' as const,
     };
-    const action: UserMembershipUpdatedOnSpaceEventAction<Membership> = {
-      type: MembershipActionType.USER_MEMBERSHIP_UPDATED_ON_SPACE_EVENT,
+    const action: MembershipSetEventAction<{}> = {
+      type: MembershipActionType.MEMBERSHIP_SET_EVENT,
       payload,
     };
     const expectedState = {
       ...initialState,
       byId: {
-        [testData.userId]: [
-          { id: testData.spaceId, custom: { myValue: 'updated' } },
+        [testData.uuid]: [
+          { id: testData.channel, custom: { myValue: 'updated' } },
         ],
       },
     };
@@ -143,23 +148,28 @@ describe('Handling membership reducer without mutating the state', () => {
 
   it('should retrieve memberships without mutating the state', () => {
     const testData = {
-      userId: 'user1',
-      spaces: [
+      uuid: 'user1',
+      channels: [
         {
-          id: 'space1',
+          id: 'channel1',
         },
         {
-          id: 'space2',
+          id: 'channel2',
         },
       ],
     };
     const payload = {
       request: {
-        userId: testData.userId,
+        uuid: testData.uuid,
       },
       response: {
         status: 200,
-        data: testData.spaces,
+        data: testData.channels.map(({ id }) => ({
+          channel: { id },
+          custom: null,
+          updated: '',
+          eTag: '',
+        })),
       },
       status: {
         error: false,
@@ -169,14 +179,16 @@ describe('Handling membership reducer without mutating the state', () => {
         statusCode: 0,
       },
     };
-    const action: MembershipRetrievedAction<Membership, MetaType> = {
-      type: MembershipActionType.MEMBERSHIP_RETRIEVED,
+    const action: MembershipsRetrievedAction<{}, {}, MetaType> = {
+      type: MembershipActionType.MEMBERSHIPS_RETRIEVED,
       payload,
     };
     const expectedState = {
       ...initialState,
       byId: {
-        [testData.userId]: payload.response.data,
+        [testData.uuid]: payload.response.data.map(
+          ({ channel: { id }, custom }) => ({ id, custom })
+        ),
       },
     };
     expect(createMembershipReducer()(initialState, action)).toEqual({
@@ -186,24 +198,29 @@ describe('Handling membership reducer without mutating the state', () => {
 
   it('should update memberships without mutating the state', () => {
     const testData = {
-      userId: 'user1',
-      spaces: [
+      uuid: 'user1',
+      channels: [
         {
-          id: 'space1',
+          id: 'channel1',
         },
         {
-          id: 'space2',
+          id: 'channel2',
         },
       ],
     };
     const payload = {
       request: {
-        userId: testData.userId,
-        spaces: testData.spaces,
+        uuid: testData.uuid,
+        channels: testData.channels,
       },
       response: {
         status: 0,
-        data: testData.spaces,
+        data: testData.channels.map(({ id }) => ({
+          channel: { id },
+          custom: {},
+          updated: '',
+          eTag: '',
+        })),
       },
       status: {
         error: false,
@@ -213,14 +230,16 @@ describe('Handling membership reducer without mutating the state', () => {
         statusCode: 0,
       },
     };
-    const action: MembershipUpdatedAction<Membership, MetaType> = {
-      type: MembershipActionType.MEMBERSHIP_UPDATED,
+    const action: MembershipsSetAction<{}, {}, MetaType> = {
+      type: MembershipActionType.MEMBERSHIPS_SET,
       payload,
     };
     const expectedState = {
       ...initialState,
       byId: {
-        [testData.userId]: payload.response.data,
+        [testData.uuid]: payload.response.data.map(
+          ({ channel: { id }, custom }) => ({ id, custom })
+        ),
       },
     };
     expect(createMembershipReducer()(initialState, action)).toEqual({
@@ -228,67 +247,19 @@ describe('Handling membership reducer without mutating the state', () => {
     });
   });
 
-  it('should join spaces without mutating the state', () => {
+  it('should left channels without mutating the state', () => {
     const testData = {
-      userId: 'user1',
-      spaces: [
+      uuid: 'user1',
+      channels: [
         {
-          id: 'space1',
-        },
-        {
-          id: 'space2',
-        },
-        {
-          id: 'space3',
+          id: 'channel1',
         },
       ],
     };
     const payload = {
       request: {
-        userId: testData.userId,
-        spaces: testData.spaces,
-      },
-      response: {
-        status: 0,
-        data: testData.spaces,
-      },
-      status: {
-        error: false,
-        errorData: undefined,
-        category: '',
-        operation: '',
-        statusCode: 0,
-      },
-    };
-    const action: SpacesJoinedAction<Membership, MetaType> = {
-      type: MembershipActionType.SPACES_JOINED,
-      payload,
-    };
-    const expectedState = {
-      ...initialState,
-      byId: {
-        ...initialState.byId,
-        [testData.userId]: payload.response.data,
-      },
-    };
-    expect(createMembershipReducer()(initialState, action)).toEqual({
-      ...expectedState,
-    });
-  });
-
-  it('should left spaces without mutating the state', () => {
-    const testData = {
-      userId: 'user1',
-      spaces: [
-        {
-          id: 'space1',
-        },
-      ],
-    };
-    const payload = {
-      request: {
-        userId: testData.userId,
-        spaces: testData.spaces,
+        uuid: testData.uuid,
+        channels: testData.channels,
       },
       response: {
         status: 0,
@@ -302,15 +273,15 @@ describe('Handling membership reducer without mutating the state', () => {
         statusCode: 0,
       },
     };
-    const action: SpacesLeftAction<Membership, MetaType> = {
-      type: MembershipActionType.SPACES_LEFT,
+    const action: MembershipsRemovedAction<{}, {}, MetaType> = {
+      type: MembershipActionType.MEMBERSHIPS_REMOVED,
       payload,
     };
     const expectedState = {
       ...initialState,
       byId: {
         ...initialState.byId,
-        [testData.userId]: payload.response.data,
+        [testData.uuid]: payload.response.data,
       },
     };
     expect(createMembershipReducer()(initialState, action)).toEqual({

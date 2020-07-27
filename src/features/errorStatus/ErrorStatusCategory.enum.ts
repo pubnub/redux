@@ -1,4 +1,3 @@
-// tag::RDX-enum-error-category[]
 export enum ErrorStatusCategory {
   PN_NETWORK_ISSUES_CATEGORY = 'PNNetworkIssuesCategory',
   PN_ACCES_DENIED_CATEGORY = 'PNAccessDeniedCategory',
@@ -8,4 +7,3 @@ export enum ErrorStatusCategory {
   PN_REQUEST_MESSAGE_COUNT_EXCEEDED_CATEGORY = 'PNRequestMessageCountExceedCategory',
   PN_UNKNOWN_CATEGORY = 'PNUnknownCategory',
 }
-// end::RDX-enum-error-category[]

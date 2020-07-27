@@ -1,7 +1,7 @@
 import Pubnub from 'pubnub';
 import { MessageActionType } from '../MessageActionType.enum';
 import { sendMessage } from './SendMessage';
-import { createMockStore } from '../../../foundations/Test-utils';
+import { createMockStore } from 'foundations/Test-utils';
 
 function fixturePubnubSendMessageSuccess() {
   const pubnub = {

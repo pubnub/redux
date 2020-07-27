@@ -1,63 +1,55 @@
 import { Dispatch } from 'redux';
 import {
-  FetchingMembershipAction,
-  MembershipRetrievedAction,
-  FetchMembershipSuccess,
-  ErrorFetchingMembershipAction,
-  FetchMembershipError,
-  FetchMembershipRequest,
-  Membership,
-  MembershipResponse,
+  FetchingMembershipsAction,
+  MembershipsRetrievedAction,
+  FetchMembershipsSuccess,
+  ErrorFetchingMembershipsAction,
+  FetchMembershipsError,
+  FetchMembershipsRequest,
 } from '../MembershipActions';
 import { MembershipActionType } from '../MembershipActionType.enum';
-import { PubnubThunkContext } from '../../../foundations/ThunkTypes';
-import { ActionMeta, AnyMeta } from '../../../foundations/ActionMeta';
+import { PubnubThunkContext } from 'foundations/ThunkTypes';
+import { ActionMeta, AnyMeta } from 'foundations/ActionMeta';
 import { ObjectsCustom } from 'foundations/ObjectsCustom';
-import { Space } from 'features/space/SpaceActions';
 
-// tag::RDX-function-memberships-fetch[]
-export const fetchingMembership = <Meta extends ActionMeta>(
-  payload: FetchMembershipRequest,
+export const fetchingMemberships = <Meta extends ActionMeta>(
+  payload: FetchMembershipsRequest,
   meta?: Meta
-): FetchingMembershipAction<Meta> => ({
-  type: MembershipActionType.FETCHING_MEMBERSHIP,
+): FetchingMembershipsAction<Meta> => ({
+  type: MembershipActionType.FETCHING_MEMBERSHIPS,
   payload,
   meta,
 });
-// end::RDX-function-memberships-fetch[]
 
-// tag::RDX-function-memberships-fetch-success[]
-export const membershipRetrieved = <
-  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+export const membershipsRetrieved = <
+  MembershipCustom extends ObjectsCustom,
+  ChannelCustom extends ObjectsCustom,
   Meta extends ActionMeta
 >(
-  payload: FetchMembershipSuccess<MembershipType>,
+  payload: FetchMembershipsSuccess<MembershipCustom, ChannelCustom>,
   meta?: Meta
-): MembershipRetrievedAction<MembershipType, Meta> => ({
-  type: MembershipActionType.MEMBERSHIP_RETRIEVED,
+): MembershipsRetrievedAction<MembershipCustom, ChannelCustom, Meta> => ({
+  type: MembershipActionType.MEMBERSHIPS_RETRIEVED,
   payload,
   meta,
 });
-// end::RDX-function-memberships-fetch-success[]
 
-// tag::RDX-function-memberships-fetch-error[]
-export const errorFetchingMembership = <Meta extends ActionMeta>(
-  payload: FetchMembershipError,
+export const errorFetchingMemberships = <Meta extends ActionMeta>(
+  payload: FetchMembershipsError,
   meta?: Meta
-): ErrorFetchingMembershipAction<Meta> => ({
-  type: MembershipActionType.ERROR_FETCHING_MEMBERSHIP,
+): ErrorFetchingMembershipsAction<Meta> => ({
+  type: MembershipActionType.ERROR_FETCHING_MEMBERSHIPS,
   payload,
   meta,
   error: true,
 });
-// end::RDX-function-memberships-fetch-error[]
 
-// tag::RDX-command-memberships-fetch[]
 export const fetchMemberships = <
-  MembershipType extends Membership<ObjectsCustom, Space<ObjectsCustom>>,
+  MembershipCustom extends ObjectsCustom,
+  ChannelCustom extends ObjectsCustom,
   Meta extends ActionMeta = AnyMeta
 >(
-  request: FetchMembershipRequest,
+  request: FetchMembershipsRequest,
   meta?: Meta
 ) => {
   const thunkFunction = (
@@ -66,9 +58,9 @@ export const fetchMemberships = <
     { pubnub }: PubnubThunkContext
   ) =>
     new Promise<void>((resolve, reject) => {
-      dispatch(fetchingMembership<Meta>(request, meta));
+      dispatch(fetchingMemberships<Meta>(request, meta));
 
-      pubnub.api.getMemberships(
+      pubnub.api.objects.getMemberships<MembershipCustom, ChannelCustom>(
         {
           ...request,
         },
@@ -79,24 +71,28 @@ export const fetchMemberships = <
               status,
             };
 
-            dispatch(errorFetchingMembership<Meta>(payload, meta));
+            dispatch(errorFetchingMemberships<Meta>(payload, meta));
             reject(payload);
           } else {
             const payload = {
               request,
-              response: response as MembershipResponse<MembershipType>,
+              response,
               status,
             };
 
-            dispatch(membershipRetrieved<MembershipType, Meta>(payload, meta));
+            dispatch(
+              membershipsRetrieved<MembershipCustom, ChannelCustom, Meta>(
+                payload,
+                meta
+              )
+            );
             resolve();
           }
         }
       );
     });
 
-  thunkFunction.type = MembershipActionType.FETCH_MEMBERSHIP_COMMAND;
+  thunkFunction.type = MembershipActionType.FETCH_MEMBERSHIPS_COMMAND;
 
   return thunkFunction;
 };
-// end::RDX-command-memberships-fetch[]

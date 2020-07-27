@@ -1,14 +1,12 @@
 import { Signal, SignalActions } from './SignalActions';
 import { SignalActionType } from './SignalActionType.enum';
-import { ActionMeta, AnyMeta } from '../../foundations/ActionMeta';
+import { ActionMeta, AnyMeta } from 'foundations/ActionMeta';
 
-// tag::RDX-type-signals[]
 export type SignalState<SignalType extends Signal> = {
   byId: {
     [channel: string]: SignalType[];
   };
 };
-// end::RDX-type-signals[]
 
 const createInitialState = <
   SignalType extends Signal
@@ -33,7 +31,6 @@ const signalReceived = <SignalType extends Signal>(
   return newState;
 };
 
-// tag::RDX-reducer-signals[]
 export const createSignalReducer = <
   SignalType extends Signal = Signal,
   SignalContentType extends object = {},
@@ -49,4 +46,3 @@ export const createSignalReducer = <
       return state;
   }
 };
-// end::RDX-reducer-signals[]

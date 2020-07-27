@@ -1,11 +1,9 @@
 import Pubnub, {
   PresenceEvent,
   SignalEvent,
-  UserEvent,
-  SpaceEvent,
   MessageActionEvent,
   StatusEvent,
-  MembershipEvent,
+  ObjectsEvent,
 } from 'pubnub';
 
 /**
@@ -34,60 +32,22 @@ const mergeListenersByType = (
 
   // group the listeners by type so we can combine them
   listeners.forEach((listener) => {
-    if (listener.message !== undefined) {
-      if (incomingListeners.message === undefined) {
-        incomingListeners['message'] = [];
+    const allowedListeners = [
+      'status',
+      'message',
+      'presence',
+      'signal',
+      'messageAction',
+      'objects',
+    ] as const;
+    for (const listenerType of allowedListeners) {
+      if (listener[listenerType] !== undefined) {
+        if (incomingListeners[listenerType] === undefined) {
+          incomingListeners[listenerType] = [];
+        }
+
+        incomingListeners[listenerType]?.push(listener);
       }
-
-      incomingListeners['message'].push(listener);
-    }
-
-    if (listener.presence !== undefined) {
-      if (incomingListeners.presence === undefined) {
-        incomingListeners['presence'] = [];
-      }
-
-      incomingListeners['presence'].push(listener);
-    }
-
-    if (listener.signal !== undefined) {
-      if (incomingListeners.signal === undefined) {
-        incomingListeners['signal'] = [];
-      }
-
-      incomingListeners['signal'].push(listener);
-    }
-
-    if (listener.user !== undefined) {
-      if (incomingListeners.user === undefined) {
-        incomingListeners['user'] = [];
-      }
-
-      incomingListeners['user'].push(listener);
-    }
-
-    if (listener.space !== undefined) {
-      if (incomingListeners.space === undefined) {
-        incomingListeners['space'] = [];
-      }
-
-      incomingListeners['space'].push(listener);
-    }
-
-    if (listener.membership !== undefined) {
-      if (incomingListeners.membership === undefined) {
-        incomingListeners['membership'] = [];
-      }
-
-      incomingListeners['membership'].push(listener);
-    }
-
-    if (listener.status !== undefined) {
-      if (incomingListeners.status === undefined) {
-        incomingListeners['status'] = [];
-      }
-
-      incomingListeners['status'].push(listener);
     }
   });
 
@@ -129,11 +89,9 @@ const createCombinedListener = (
       payload: MessageEvent &
         PresenceEvent &
         SignalEvent &
-        UserEvent &
-        SpaceEvent &
-        MembershipEvent &
         StatusEvent &
-        MessageActionEvent
+        MessageActionEvent &
+        ObjectsEvent
     ) => {
       listeners.forEach((listener) => {
         const currentListener = listener[listenerType];

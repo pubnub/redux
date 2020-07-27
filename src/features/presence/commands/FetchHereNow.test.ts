@@ -1,7 +1,7 @@
 import Pubnub from 'pubnub';
 import { PresenceActionType } from '../PresenceActionType.enum';
 import { fetchHereNow } from './FetchHereNow';
-import { createMockStore } from '../../../foundations/Test-utils';
+import { createMockStore } from 'foundations/Test-utils';
 
 function fixturePubnubFetchHereNowSuccess() {
   const pubnub = {

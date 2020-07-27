@@ -1,4 +1,3 @@
-// tag::RDX-enum-messages-action[]
 export enum MessageActionType {
   SEND_MESSAGE_COMMAND = 'pubnub/SEND_MESSAGE_COMMAND',
   FETCH_MESSAGE_HISTORY_COMMAND = 'pubnub/FETCH_MESSAGE_HISTORY_COMMAND',
@@ -10,4 +9,3 @@ export enum MessageActionType {
   MESSAGE_HISTORY_RETRIEVED = 'pubnub/MESSAGE_HISTORY_RETRIEVED',
   ERROR_FETCHING_MESSAGE_HISTORY = 'pubnub/ERROR_FETCHING_MESSAGE_HISTORY',
 }
-// end::RDX-enum-messages-action[]
