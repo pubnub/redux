@@ -58,7 +58,7 @@ export const setUserData = <
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
+    new Promise<UserDataSetAction<UserCustom, Meta>>((resolve, reject) => {
       dispatch(settingUserData<UserCustom, Meta>(request, meta));
 
       pubnub.api.objects.setUUIDMetadata<UserCustom>(
@@ -81,8 +81,10 @@ export const setUserData = <
               status,
             };
 
-            dispatch(UserDataSet<UserCustom, Meta>(payload, meta));
-            resolve();
+            const action = UserDataSet<UserCustom, Meta>(payload, meta);
+
+            dispatch(action);
+            resolve(action);
           }
         }
       );

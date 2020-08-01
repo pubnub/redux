@@ -47,7 +47,7 @@ export const fetchHereNow = <Meta extends ActionMeta>(
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
+    new Promise<HereNowRetrievedAction<Meta>>((resolve, reject) => {
       dispatch(fetchingHereNow(request, meta));
 
       pubnub.api.hereNow(
@@ -72,8 +72,10 @@ export const fetchHereNow = <Meta extends ActionMeta>(
               status,
             };
 
-            dispatch(hereNowRetrieved<Meta>(payload, meta));
-            resolve();
+            const action = hereNowRetrieved<Meta>(payload, meta);
+
+            dispatch(action);
+            resolve(action);
           }
         }
       );

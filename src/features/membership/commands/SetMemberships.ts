@@ -63,42 +63,45 @@ export const setMemberships = <
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
-      dispatch(settingMemberships<ChannelCustom, Meta>(request, meta));
+    new Promise<MembershipsSetAction<MembershipCustom, ChannelCustom, Meta>>(
+      (resolve, reject) => {
+        dispatch(settingMemberships<ChannelCustom, Meta>(request, meta));
 
-      pubnub.api.objects.setMemberships<MembershipCustom, ChannelCustom>(
-        {
-          ...request,
-        },
-        (status, response) => {
-          if (status.error) {
-            const payload = {
-              request,
-              status,
-            };
+        pubnub.api.objects.setMemberships<MembershipCustom, ChannelCustom>(
+          {
+            ...request,
+          },
+          (status, response) => {
+            if (status.error) {
+              const payload = {
+                request,
+                status,
+              };
 
-            dispatch(
-              errorSettingMemberships<ChannelCustom, Meta>(payload, meta)
-            );
-            reject(payload);
-          } else {
-            const payload = {
-              request,
-              response,
-              status,
-            };
+              dispatch(
+                errorSettingMemberships<ChannelCustom, Meta>(payload, meta)
+              );
+              reject(payload);
+            } else {
+              const payload = {
+                request,
+                response,
+                status,
+              };
 
-            dispatch(
-              membershipsSet<MembershipCustom, ChannelCustom, Meta>(
-                payload,
-                meta
-              )
-            );
-            resolve();
+              const action = membershipsSet<
+                MembershipCustom,
+                ChannelCustom,
+                Meta
+              >(payload, meta);
+
+              dispatch(action);
+              resolve(action);
+            }
           }
-        }
-      );
-    });
+        );
+      }
+    );
 
   thunkFunction.type = MembershipActionType.SET_MEMBERSHIPS_COMMAND;
 

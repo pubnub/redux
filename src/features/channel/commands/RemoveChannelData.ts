@@ -48,7 +48,7 @@ export const removeChannelData = <Meta extends ActionMeta = AnyMeta>(
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
+    new Promise<ChannelDataRemovedAction<Meta>>((resolve, reject) => {
       dispatch(removingChannelData<Meta>(request, meta));
 
       pubnub.api.objects.removeChannelMetadata(
@@ -68,8 +68,10 @@ export const removeChannelData = <Meta extends ActionMeta = AnyMeta>(
               status,
             };
 
-            dispatch(channelDataRemoved<Meta>(payload, meta));
-            resolve();
+            const action = channelDataRemoved<Meta>(payload, meta);
+
+            dispatch(action);
+            resolve(action);
           }
         }
       );

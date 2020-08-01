@@ -4,8 +4,8 @@ import {
   UserDataListenerActions,
   UserDataSuccess,
   DeleteUserDataSuccess,
+  FetchAllUserDataSuccess,
   FetchUserDataSuccess,
-  FetchUserDataByIdSuccess,
   UserData,
   UserDataEventMessage,
   SetUserDataEventMessage,
@@ -62,7 +62,7 @@ const UserDataRemoved = <UserDataType extends UserData>(
 
 const allUserDataRetrieved = <UserDataType extends UserData>(
   state: UserDataByIdState<UserDataType>,
-  payload: FetchUserDataSuccess<GetUserCustom<UserDataType>>
+  payload: FetchAllUserDataSuccess<GetUserCustom<UserDataType>>
 ) => {
   const newState = {
     byId: { ...state.byId },
@@ -77,7 +77,7 @@ const allUserDataRetrieved = <UserDataType extends UserData>(
 
 const UserDataRetrieved = <UserDataType extends UserData>(
   state: UserDataByIdState<UserDataType>,
-  payload: FetchUserDataByIdSuccess<GetUserCustom<UserDataType>>
+  payload: FetchUserDataSuccess<GetUserCustom<UserDataType>>
 ) => {
   const newState = {
     byId: { ...state.byId },

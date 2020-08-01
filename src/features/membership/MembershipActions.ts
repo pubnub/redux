@@ -13,11 +13,6 @@ export interface FetchMembershipsRequest
   uuid: string;
 }
 
-export type FetchMembershipResponse<
-  MembershipCustom extends ObjectsCustom,
-  ChannelCustom extends ObjectsCustom
-> = Pubnub.ManageMembershipsResponse<MembershipCustom, ChannelCustom>;
-
 export interface SetMembershipsRequest<ChannelCustom extends ObjectsCustom>
   extends Pubnub.SetMembershipsParameters<ChannelCustom> {
   uuid: string;
@@ -38,7 +33,7 @@ export interface FetchMembershipsSuccess<
   ChannelCustom extends ObjectsCustom
 > {
   request: FetchMembershipsRequest;
-  response: FetchMembershipResponse<MembershipCustom, ChannelCustom>;
+  response: MembershipsResponse<MembershipCustom, ChannelCustom>;
   status: Pubnub.PubnubStatus;
 }
 

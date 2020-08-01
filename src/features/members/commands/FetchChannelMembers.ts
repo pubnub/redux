@@ -57,7 +57,9 @@ export const fetchChannelMembers = <
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
+    new Promise<
+      ChannelMembersRetrievedAction<MembershipCustom, UserCustom, Meta>
+    >((resolve, reject) => {
       dispatch(fetchingChannelMembers<Meta>(request, meta));
 
       pubnub.api.objects.getChannelMembers<MembershipCustom, UserCustom>(
@@ -76,17 +78,18 @@ export const fetchChannelMembers = <
           } else {
             const payload = {
               request,
-              response: response,
+              response,
               status,
             };
 
-            dispatch(
-              channelMembersRetrieved<MembershipCustom, UserCustom, Meta>(
-                payload,
-                meta
-              )
-            );
-            resolve();
+            const action = channelMembersRetrieved<
+              MembershipCustom,
+              UserCustom,
+              Meta
+            >(payload, meta);
+
+            dispatch(action);
+            resolve(action);
           }
         }
       );

@@ -4,8 +4,8 @@ import {
   ErrorFetchingUserDataAction,
   UserDataRetrievedAction,
   FetchingUserDataAction,
-  FetchUserDataByIdError,
-  FetchUserDataByIdSuccess,
+  FetchUserDataError,
+  FetchUserDataSuccess,
   FetchUserDataRequest,
 } from '../UserDataActions';
 import { PubnubThunkContext } from 'foundations/ThunkTypes';
@@ -25,7 +25,7 @@ export const UserDataRetrieved = <
   UserCustom extends ObjectsCustom,
   Meta extends ActionMeta
 >(
-  payload: FetchUserDataByIdSuccess<UserCustom>,
+  payload: FetchUserDataSuccess<UserCustom>,
   meta?: Meta
 ): UserDataRetrievedAction<UserCustom, Meta> => ({
   type: UserDataActionType.USER_DATA_RETRIEVED,
@@ -34,7 +34,7 @@ export const UserDataRetrieved = <
 });
 
 export const errorFetchingUserData = <Meta extends ActionMeta>(
-  payload: FetchUserDataByIdError,
+  payload: FetchUserDataError,
   meta?: Meta
 ): ErrorFetchingUserDataAction<Meta> => ({
   type: UserDataActionType.ERROR_FETCHING_USER_DATA,
@@ -55,42 +55,46 @@ export const fetchUserData = <
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
-      dispatch(
-        fetchingUserData<Meta>(
+    new Promise<UserDataRetrievedAction<UserCustom, Meta>>(
+      (resolve, reject) => {
+        dispatch(
+          fetchingUserData<Meta>(
+            {
+              ...request,
+            },
+            meta
+          )
+        );
+
+        pubnub.api.objects.getUUIDMetadata<UserCustom>(
           {
             ...request,
           },
-          meta
-        )
-      );
+          (status, response) => {
+            if (status.error) {
+              const payload = {
+                request,
+                status,
+              };
 
-      pubnub.api.objects.getUUIDMetadata<UserCustom>(
-        {
-          ...request,
-        },
-        (status, response) => {
-          if (status.error) {
-            const payload = {
-              request,
-              status,
-            };
+              dispatch(errorFetchingUserData<Meta>(payload, meta));
+              reject(payload);
+            } else {
+              const payload = {
+                request,
+                response,
+                status,
+              };
 
-            dispatch(errorFetchingUserData<Meta>(payload, meta));
-            reject(payload);
-          } else {
-            const payload = {
-              request,
-              response,
-              status,
-            };
+              const action = UserDataRetrieved<UserCustom, Meta>(payload, meta);
 
-            dispatch(UserDataRetrieved<UserCustom, Meta>(payload, meta));
-            resolve();
+              dispatch(action);
+              resolve(action);
+            }
           }
-        }
-      );
-    });
+        );
+      }
+    );
 
   thunkFunction.type = UserDataActionType.FETCH_USER_DATA_COMMAND;
 

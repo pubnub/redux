@@ -47,7 +47,7 @@ export const fetchPresenceState = <Meta extends ActionMeta>(
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
+    new Promise<PresenceStateRetrievedAction<Meta>>((resolve, reject) => {
       dispatch(fetchingPresenceState(request, meta));
 
       pubnub.api.getState(
@@ -70,8 +70,10 @@ export const fetchPresenceState = <Meta extends ActionMeta>(
               status,
             };
 
-            dispatch(presenceStateRetrieved<Meta>(payload, meta));
-            resolve();
+            const action = presenceStateRetrieved<Meta>(payload, meta);
+
+            dispatch(action);
+            resolve(action);
           }
         }
       );

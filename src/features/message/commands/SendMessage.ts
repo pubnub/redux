@@ -63,42 +63,47 @@ export const sendMessage = <
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
-      dispatch(sendingMessage(request, meta));
+    new Promise<MessageSentAction<MessageContentType, MessageMeta, Meta>>(
+      (resolve, reject) => {
+        dispatch(sendingMessage(request, meta));
 
-      pubnub.api.publish(
-        {
-          ...request,
-        },
-        (status, response) => {
-          if (status.error) {
-            const payload = {
-              request,
-              status,
-            };
+        pubnub.api.publish(
+          {
+            ...request,
+          },
+          (status, response) => {
+            if (status.error) {
+              const payload = {
+                request,
+                status,
+              };
 
-            dispatch(
-              errorSendingMessage<MessageContentType, MessageMeta, Meta>(
+              dispatch(
+                errorSendingMessage<MessageContentType, MessageMeta, Meta>(
+                  payload,
+                  meta
+                )
+              );
+              reject(payload);
+            } else {
+              const payload = {
+                request,
+                response,
+                status,
+              };
+
+              const action = messageSent<MessageContentType, MessageMeta, Meta>(
                 payload,
                 meta
-              )
-            );
-            reject(payload);
-          } else {
-            const payload = {
-              request,
-              response,
-              status,
-            };
+              );
 
-            dispatch(
-              messageSent<MessageContentType, MessageMeta, Meta>(payload, meta)
-            );
-            resolve();
+              dispatch(action);
+              resolve(action);
+            }
           }
-        }
-      );
-    });
+        );
+      }
+    );
 
   thunkFunction.type = MessageActionType.SEND_MESSAGE_COMMAND;
 

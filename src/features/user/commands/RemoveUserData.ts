@@ -48,7 +48,7 @@ export const removeUserData = <Meta extends ActionMeta = AnyMeta>(
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
+    new Promise<UserDataRemovedAction<Meta>>((resolve, reject) => {
       dispatch(removingUserData<Meta>(request, meta));
 
       pubnub.api.objects.removeUUIDMetadata(
@@ -68,8 +68,10 @@ export const removeUserData = <Meta extends ActionMeta = AnyMeta>(
               status,
             };
 
-            dispatch(UserDataRemoved<Meta>(payload, meta));
-            resolve();
+            const action = UserDataRemoved<Meta>(payload, meta);
+
+            dispatch(action);
+            resolve(action);
           }
         }
       );

@@ -59,37 +59,41 @@ export const sendSignal = <
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
-      dispatch(sendingSignal(request, meta));
+    new Promise<SignalSentAction<SignalContentType, Meta>>(
+      (resolve, reject) => {
+        dispatch(sendingSignal(request, meta));
 
-      pubnub.api.signal(
-        {
-          ...request,
-        },
-        (status, response) => {
-          if (status.error) {
-            const payload = {
-              request,
-              status,
-            };
+        pubnub.api.signal(
+          {
+            ...request,
+          },
+          (status, response) => {
+            if (status.error) {
+              const payload = {
+                request,
+                status,
+              };
 
-            dispatch(
-              errorSendingSignal<SignalContentType, Meta>(payload, meta)
-            );
-            reject(payload);
-          } else {
-            const payload = {
-              request,
-              response,
-              status,
-            };
+              dispatch(
+                errorSendingSignal<SignalContentType, Meta>(payload, meta)
+              );
+              reject(payload);
+            } else {
+              const payload = {
+                request,
+                response,
+                status,
+              };
 
-            dispatch(signalSent<SignalContentType, Meta>(payload, meta));
-            resolve();
+              const action = signalSent<SignalContentType, Meta>(payload, meta);
+
+              dispatch(action);
+              resolve(action);
+            }
           }
-        }
-      );
-    });
+        );
+      }
+    );
 
   thunkFunction.type = SignalActionType.SEND_SIGNAL_COMMAND;
 

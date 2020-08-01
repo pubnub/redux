@@ -14,7 +14,7 @@ export type SetUserDataRequest<
   UserCustom extends ObjectsCustom
 > = Pubnub.SetUUIDMetadataParameters<UserCustom>;
 
-export type UserDataResponse<
+export type FetchUserDataResponse<
   UserCustom extends ObjectsCustom
 > = Pubnub.GetUUIDMetadataResponse<UserCustom>;
 
@@ -24,7 +24,7 @@ export interface FetchUserDataRequest extends UserDataRequestOptions {
 
 export type FetchAllUserDataRequest = UserDataRequestOptions;
 
-export type FetchUserDataResponse<
+export type FetchAllUserDataResponse<
   UserCustom extends ObjectsCustom
 > = Pubnub.GetAllUUIDMetadataResponse<UserCustom>;
 
@@ -40,20 +40,20 @@ export type UsersListenerPayload<UserCustom extends ObjectsCustom> = {
   message: UserDataEventMessage<UserCustom>;
 };
 
-export interface FetchUserDataSuccess<UserCustom extends ObjectsCustom> {
+export interface FetchAllUserDataSuccess<UserCustom extends ObjectsCustom> {
   request: FetchAllUserDataRequest;
-  response: FetchUserDataResponse<UserCustom>;
+  response: FetchAllUserDataResponse<UserCustom>;
   status: Pubnub.PubnubStatus;
 }
 
-export interface FetchUserDataError {
+export interface FetchAllUserDataError {
   request: FetchAllUserDataRequest;
   status: Pubnub.PubnubStatus;
 }
 
 export interface UserDataSuccess<UserCustom extends ObjectsCustom> {
   request: UserDataRequest;
-  response: UserDataResponse<UserCustom>;
+  response: FetchUserDataResponse<UserCustom>;
   status: Pubnub.PubnubStatus;
 }
 
@@ -62,13 +62,13 @@ export interface UserDataError {
   status: Pubnub.PubnubStatus;
 }
 
-export interface FetchUserDataByIdSuccess<UserCustom extends ObjectsCustom> {
+export interface FetchUserDataSuccess<UserCustom extends ObjectsCustom> {
   request: FetchUserDataRequest;
-  response: UserDataResponse<UserCustom>;
+  response: FetchUserDataResponse<UserCustom>;
   status: Pubnub.PubnubStatus;
 }
 
-export interface FetchUserDataByIdError {
+export interface FetchUserDataError {
   request: FetchUserDataRequest;
   status: Pubnub.PubnubStatus;
 }
@@ -98,13 +98,13 @@ export interface AllUserDataRetrievedAction<
   Meta extends ActionMeta
 > {
   type: typeof UserDataActionType.ALL_USER_DATA_RETRIEVED;
-  payload: FetchUserDataSuccess<UserCustom>;
+  payload: FetchAllUserDataSuccess<UserCustom>;
   meta?: Meta;
 }
 
 export interface ErrorFetchingAllUserDataAction<Meta extends ActionMeta> {
   type: typeof UserDataActionType.ERROR_FETCHING_ALL_USER_DATA;
-  payload: FetchUserDataError;
+  payload: FetchAllUserDataError;
   meta?: Meta;
   error: true;
 }
@@ -120,13 +120,13 @@ export interface UserDataRetrievedAction<
   Meta extends ActionMeta
 > {
   type: typeof UserDataActionType.USER_DATA_RETRIEVED;
-  payload: FetchUserDataByIdSuccess<UserCustom>;
+  payload: FetchUserDataSuccess<UserCustom>;
   meta?: Meta;
 }
 
 export interface ErrorFetchingUserDataAction<Meta extends ActionMeta> {
   type: typeof UserDataActionType.ERROR_FETCHING_USER_DATA;
-  payload: FetchUserDataByIdError;
+  payload: FetchUserDataError;
   meta?: Meta;
   error: true;
 }

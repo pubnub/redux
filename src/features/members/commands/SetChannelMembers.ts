@@ -63,42 +63,48 @@ export const setChannelMembers = <
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
-      dispatch(settingChannelMembers(request, meta));
+    new Promise<ChannelMembersSetAction<MembershipCustom, UserCustom, Meta>>(
+      (resolve, reject) => {
+        dispatch(settingChannelMembers(request, meta));
 
-      pubnub.api.objects.setChannelMembers<MembershipCustom, UserCustom>(
-        {
-          ...request,
-        },
-        (status, response) => {
-          if (status.error) {
-            const payload = {
-              request,
-              status,
-            };
+        pubnub.api.objects.setChannelMembers<MembershipCustom, UserCustom>(
+          {
+            ...request,
+          },
+          (status, response) => {
+            if (status.error) {
+              const payload = {
+                request,
+                status,
+              };
 
-            dispatch(
-              errorSettingChannelMembers<MembershipCustom, Meta>(payload, meta)
-            );
-            reject(payload);
-          } else {
-            const payload = {
-              request,
-              response,
-              status,
-            };
+              dispatch(
+                errorSettingChannelMembers<MembershipCustom, Meta>(
+                  payload,
+                  meta
+                )
+              );
+              reject(payload);
+            } else {
+              const payload = {
+                request,
+                response,
+                status,
+              };
 
-            dispatch(
-              channelMembersSet<MembershipCustom, UserCustom, Meta>(
-                payload,
-                meta
-              )
-            );
-            resolve();
+              const action = channelMembersSet<
+                MembershipCustom,
+                UserCustom,
+                Meta
+              >(payload, meta);
+
+              dispatch(action);
+              resolve(action);
+            }
           }
-        }
-      );
-    });
+        );
+      }
+    );
 
   thunkFunction.type = ChannelMembersActionType.SET_CHANNEL_MEMBERS_COMMAND;
 

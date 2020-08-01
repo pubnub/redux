@@ -55,39 +55,44 @@ export const fetchMessageHistory = <
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
-      dispatch(fetchingMessageHistory(request, meta));
+    new Promise<MessageHistoryRetrievedAction<MessageContentType, Meta>>(
+      (resolve, reject) => {
+        dispatch(fetchingMessageHistory(request, meta));
 
-      pubnub.api.history(
-        {
-          ...(request as Pubnub.HistoryParameters),
-        },
-        (status, response) => {
-          if (status.error) {
-            const payload = {
-              request,
-              status,
-            };
+        pubnub.api.history(
+          {
+            ...(request as Pubnub.HistoryParameters),
+          },
+          (status, response) => {
+            if (status.error) {
+              const payload = {
+                request,
+                status,
+              };
 
-            dispatch(errorFetchingMessageHistory<Meta>(payload, meta));
-            reject(payload);
-          } else {
-            const payload = {
-              request,
-              response: response as FetchMessageHistoryResponse<
-                MessageContentType
-              >,
-              status,
-            };
+              dispatch(errorFetchingMessageHistory<Meta>(payload, meta));
+              reject(payload);
+            } else {
+              const payload = {
+                request,
+                response: response as FetchMessageHistoryResponse<
+                  MessageContentType
+                >,
+                status,
+              };
 
-            dispatch(
-              messageHistoryRetrieved<MessageContentType, Meta>(payload, meta)
-            );
-            resolve();
+              const action = messageHistoryRetrieved<MessageContentType, Meta>(
+                payload,
+                meta
+              );
+
+              dispatch(action);
+              resolve(action);
+            }
           }
-        }
-      );
-    });
+        );
+      }
+    );
 
   thunkFunction.type = MessageActionType.FETCH_MESSAGE_HISTORY_COMMAND;
 

@@ -61,37 +61,41 @@ export const setChannelData = <
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
-      dispatch(settingChannelData<ChannelCustom, Meta>(request, meta));
+    new Promise<ChannelDataSetAction<ChannelCustom, Meta>>(
+      (resolve, reject) => {
+        dispatch(settingChannelData<ChannelCustom, Meta>(request, meta));
 
-      pubnub.api.objects.setChannelMetadata<ChannelCustom>(
-        {
-          ...request,
-        },
-        (status, response) => {
-          if (status.error) {
-            const payload = {
-              request,
-              status,
-            };
+        pubnub.api.objects.setChannelMetadata<ChannelCustom>(
+          {
+            ...request,
+          },
+          (status, response) => {
+            if (status.error) {
+              const payload = {
+                request,
+                status,
+              };
 
-            dispatch(
-              errorSettingChannelData<ChannelCustom, Meta>(payload, meta)
-            );
-            reject(payload);
-          } else {
-            const payload = {
-              request,
-              response,
-              status,
-            };
+              dispatch(
+                errorSettingChannelData<ChannelCustom, Meta>(payload, meta)
+              );
+              reject(payload);
+            } else {
+              const payload = {
+                request,
+                response,
+                status,
+              };
 
-            dispatch(channelDataSet<ChannelCustom, Meta>(payload, meta));
-            resolve();
+              const action = channelDataSet<ChannelCustom, Meta>(payload, meta);
+
+              dispatch(action);
+              resolve(action);
+            }
           }
-        }
-      );
-    });
+        );
+      }
+    );
 
   thunkFunction.type = ChannelDataActionType.SET_CHANNEL_DATA_COMMAND;
 

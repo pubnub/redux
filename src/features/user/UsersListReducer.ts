@@ -1,6 +1,6 @@
 import {
   AllUserDataRetrievedAction,
-  FetchUserDataSuccess,
+  FetchAllUserDataSuccess,
 } from './UserDataActions';
 import { UserDataActionType } from './UserDataActionType.enum';
 import { ActionMeta, AnyMeta } from 'foundations/ActionMeta';
@@ -15,7 +15,7 @@ const createInitialState = (): UsersListState => ({
 });
 
 const allUserDataRetrieved = <UserCustom extends ObjectsCustom>(
-  payload: FetchUserDataSuccess<UserCustom>
+  payload: FetchAllUserDataSuccess<UserCustom>
 ) => ({ uuids: payload.response.data.map((uuid) => uuid.id) });
 
 export const createUsersListReducer = <

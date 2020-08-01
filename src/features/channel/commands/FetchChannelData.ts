@@ -55,42 +55,49 @@ export const fetchChannelData = <
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
-      dispatch(
-        fetchingChannelData<Meta>(
+    new Promise<ChannelDataRetrievedAction<ChannelCustom, Meta>>(
+      (resolve, reject) => {
+        dispatch(
+          fetchingChannelData<Meta>(
+            {
+              ...request,
+            },
+            meta
+          )
+        );
+
+        pubnub.api.objects.getChannelMetadata<ChannelCustom>(
           {
             ...request,
           },
-          meta
-        )
-      );
+          (status, response) => {
+            if (status.error) {
+              const payload = {
+                request,
+                status,
+              };
 
-      pubnub.api.objects.getChannelMetadata<ChannelCustom>(
-        {
-          ...request,
-        },
-        (status, response) => {
-          if (status.error) {
-            const payload = {
-              request,
-              status,
-            };
+              dispatch(errorFetchingChannelData<Meta>(payload, meta));
+              reject(payload);
+            } else {
+              const payload = {
+                request,
+                response,
+                status,
+              };
 
-            dispatch(errorFetchingChannelData<Meta>(payload, meta));
-            reject(payload);
-          } else {
-            const payload = {
-              request,
-              response,
-              status,
-            };
+              const action = channelDataRetrieved<ChannelCustom, Meta>(
+                payload,
+                meta
+              );
 
-            dispatch(channelDataRetrieved<ChannelCustom, Meta>(payload, meta));
-            resolve();
+              dispatch(action);
+              resolve(action);
+            }
           }
-        }
-      );
-    });
+        );
+      }
+    );
 
   thunkFunction.type = ChannelDataActionType.FETCH_CHANNEL_DATA_COMMAND;
 

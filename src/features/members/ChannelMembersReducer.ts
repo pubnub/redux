@@ -60,27 +60,25 @@ const channelMembershipSetEventRecieved = <
     byId: { ...state.byId },
   };
 
-  let clonedChannel = [...newState.byId[payload.data.channel.id]];
+  let clonedChannel = [...(newState.byId[payload.data.channel.id] || [])];
 
-  if (clonedChannel !== undefined) {
-    let exists = false;
-    clonedChannel = clonedChannel.map((uuid) => {
-      if (uuid.id === payload.data.uuid.id) {
-        exists = true;
-        return {
-          id: uuid.id,
-          custom: payload.data.custom,
-        };
-      } else {
-        return uuid;
-      }
-    });
-    if (!exists) {
-      clonedChannel.push({
-        id: payload.data.uuid.id,
+  let exists = false;
+  clonedChannel = clonedChannel.map((uuid) => {
+    if (uuid.id === payload.data.uuid.id) {
+      exists = true;
+      return {
+        id: uuid.id,
         custom: payload.data.custom,
-      });
+      };
+    } else {
+      return uuid;
     }
+  });
+  if (!exists) {
+    clonedChannel.push({
+      id: payload.data.uuid.id,
+      custom: payload.data.custom,
+    });
   }
 
   newState.byId[payload.data.channel.id] = clonedChannel;

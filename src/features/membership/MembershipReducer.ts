@@ -56,27 +56,25 @@ const uuidMembershipUpdatedOnChannel = <MembershipCustom extends ObjectsCustom>(
     byId: { ...state.byId },
   };
 
-  let clonedUUID = [...newState.byId[payload.data.uuid.id]];
+  let clonedUUID = [...(newState.byId[payload.data.uuid.id] || [])];
 
-  if (clonedUUID !== undefined) {
-    let exists = false;
-    clonedUUID = clonedUUID.map((channel) => {
-      if (channel.id === payload.data.channel.id) {
-        exists = true;
-        return {
-          ...channel,
-          custom: payload.data.custom,
-        };
-      } else {
-        return channel;
-      }
-    });
-    if (!exists) {
-      clonedUUID.push({
-        id: payload.data.channel.id,
+  let exists = false;
+  clonedUUID = clonedUUID.map((channel) => {
+    if (channel.id === payload.data.channel.id) {
+      exists = true;
+      return {
+        ...channel,
         custom: payload.data.custom,
-      });
+      };
+    } else {
+      return channel;
     }
+  });
+  if (!exists) {
+    clonedUUID.push({
+      id: payload.data.channel.id,
+      custom: payload.data.custom,
+    });
   }
 
   newState.byId[payload.data.uuid.id] = clonedUUID;

@@ -65,7 +65,9 @@ export const removeMemberships = <
     _getState: any,
     { pubnub }: PubnubThunkContext
   ) =>
-    new Promise<void>((resolve, reject) => {
+    new Promise<
+      MembershipsRemovedAction<MembershipCustom, ChannelCustom, Meta>
+    >((resolve, reject) => {
       dispatch(removingMemberships<ChannelCustom, Meta>(request, meta));
 
       pubnub.api.objects.removeMemberships<MembershipCustom, ChannelCustom>(
@@ -88,13 +90,14 @@ export const removeMemberships = <
               status,
             };
 
-            dispatch(
-              membershipsRemoved<MembershipCustom, ChannelCustom, Meta>(
-                payload,
-                meta
-              )
-            );
-            resolve();
+            const action = membershipsRemoved<
+              MembershipCustom,
+              ChannelCustom,
+              Meta
+            >(payload, meta);
+
+            dispatch(action);
+            resolve(action);
           }
         }
       );
