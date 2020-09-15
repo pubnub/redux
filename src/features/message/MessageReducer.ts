@@ -30,7 +30,13 @@ const messageReceived = <MessageType extends Message>(
     newState.byId[payload.channel] = [];
   }
 
-  newState.byId[payload.channel] = [...newState.byId[payload.channel], payload];
+  const ids = newState.byId[payload.channel].map((m) => m.timetoken);
+  if (ids.indexOf(payload.timetoken) === -1) {
+    newState.byId[payload.channel] = [
+      ...newState.byId[payload.channel],
+      payload,
+    ];
+  }
 
   return newState;
 };
@@ -59,9 +65,14 @@ const messageHistoryRetrieved = <
       } as unknown) as MessageType)
   );
 
+  // deduplicate messages (prevents duplicates from subscribing and pulling history on the same channel)
+  const ids = newState.byId[payload.request.channel].map(
+    (message) => message.timetoken
+  );
+
   newState.byId[payload.request.channel] = [
     ...newState.byId[payload.request.channel],
-    ...results,
+    ...results.filter((m) => ids.indexOf(m.timetoken) === -1),
   ];
 
   return newState;

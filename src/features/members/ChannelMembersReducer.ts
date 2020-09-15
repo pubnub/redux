@@ -98,13 +98,27 @@ const channelMembersResult = <
   const newState = {
     byId: { ...state.byId },
   };
-
-  const memberships = payload.response.data.map((complete) => ({
+  const channel = payload.request.channel;
+  const members = payload.response.data.map((complete) => ({
     id: complete.uuid.id,
     custom: complete.custom || null,
   }));
 
-  newState.byId[payload.request.channel] = memberships;
+  if (
+    payload.request.page &&
+    (payload.request.page.next || payload.request.page.prev)
+  ) {
+    // append and deduplicate
+    const previous = newState.byId[channel] || [];
+    const ids = previous.map((m) => m.id);
+    newState.byId[channel] = [
+      ...previous,
+      ...members.filter(({ id }) => ids.indexOf(id) === -1),
+    ];
+  } else {
+    // reset if pagination was not used
+    newState.byId[channel] = members;
+  }
 
   return newState;
 };

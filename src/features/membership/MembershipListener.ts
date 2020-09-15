@@ -4,21 +4,22 @@ import {
   MembershipListenerActions,
   MembershipSetEventAction,
   MembershipRemovedEventAction,
-  MembershipEventMessage,
+  SetMembershipEventMessage,
+  RemoveMembershipEventMessage,
 } from './MembershipActions';
 import { MembershipActionType } from './MembershipActionType.enum';
 import { ObjectsCustom } from 'foundations/ObjectsCustom';
 
 const membershipSetEventRecieved = <MembershipCustom extends ObjectsCustom>(
-  payload: MembershipEventMessage<MembershipCustom>
+  payload: SetMembershipEventMessage<MembershipCustom>
 ): MembershipSetEventAction<MembershipCustom> => ({
   type: MembershipActionType.MEMBERSHIP_SET_EVENT,
   payload,
 });
 
-const membershipRemovedEventRecieved = <MembershipCustom extends ObjectsCustom>(
-  payload: MembershipEventMessage<MembershipCustom>
-): MembershipRemovedEventAction<MembershipCustom> => ({
+const membershipRemovedEventRecieved = (
+  payload: RemoveMembershipEventMessage
+): MembershipRemovedEventAction => ({
   type: MembershipActionType.MEMBERSHIP_REMOVED_EVENT,
   payload,
 });
@@ -39,9 +40,7 @@ export const createMembershipListener = <
           );
           break;
         case 'delete':
-          dispatch(
-            membershipRemovedEventRecieved<MembershipCustom>(payload.message)
-          );
+          dispatch(membershipRemovedEventRecieved(payload.message));
           break;
         default:
           break;

@@ -98,7 +98,7 @@ describe('Handling membership reducer without mutating the state', () => {
       event: 'delete' as const,
       type: 'membership' as const,
     };
-    const action: MembershipRemovedEventAction<{}> = {
+    const action: MembershipRemovedEventAction = {
       type: MembershipActionType.MEMBERSHIP_REMOVED_EVENT,
       payload,
     };
@@ -192,6 +192,272 @@ describe('Handling membership reducer without mutating the state', () => {
       },
     };
     expect(createMembershipReducer()(initialState, action)).toEqual({
+      ...expectedState,
+    });
+  });
+
+  it('should retrieve multiple pages of memberships without mutating the state', () => {
+    const testData = {
+      uuid: 'user1',
+      channels: [
+        {
+          id: 'channel1',
+        },
+        {
+          id: 'channel2',
+        },
+      ],
+    };
+    const testData2 = {
+      uuid: 'user1',
+      channels: [
+        {
+          id: 'channel3',
+        },
+        {
+          id: 'channel4',
+        },
+      ],
+    };
+    const firstPayload = {
+      request: {
+        uuid: testData.uuid,
+      },
+      response: {
+        status: 200,
+        data: testData.channels.map(({ id }) => ({
+          channel: { id },
+          custom: null,
+          updated: '',
+          eTag: '',
+        })),
+      },
+      status: {
+        error: false,
+        errorData: undefined,
+        category: '',
+        operation: '',
+        statusCode: 0,
+      },
+    };
+    const secondPayload = {
+      request: {
+        uuid: testData2.uuid,
+        page: {
+          next: 'page1',
+          prev: 'page0',
+        },
+      },
+      response: {
+        status: 200,
+        data: testData2.channels.map(({ id }) => ({
+          channel: { id },
+          custom: null,
+          updated: '',
+          eTag: '',
+        })),
+      },
+      status: {
+        error: false,
+        errorData: undefined,
+        category: '',
+        operation: '',
+        statusCode: 0,
+      },
+    };
+    const firstAction: MembershipsRetrievedAction<{}, {}, MetaType> = {
+      type: MembershipActionType.MEMBERSHIPS_RETRIEVED,
+      payload: firstPayload,
+    };
+    const secondAction: MembershipsRetrievedAction<{}, {}, MetaType> = {
+      type: MembershipActionType.MEMBERSHIPS_RETRIEVED,
+      payload: secondPayload,
+    };
+    const expectedState = {
+      ...initialState,
+      byId: {
+        [testData.uuid]: [
+          ...firstPayload.response.data,
+          ...secondPayload.response.data,
+        ].map(({ channel: { id }, custom }) => ({ id, custom })),
+      },
+    };
+    const reducer = createMembershipReducer();
+    const state = reducer(reducer(initialState, firstAction), secondAction);
+    expect(state).toEqual({
+      ...expectedState,
+    });
+  });
+
+  it('should remove duplicates between multiple pages of memberships without mutating the state', () => {
+    const testData = {
+      uuid: 'user1',
+      channels: [
+        {
+          id: 'channel1',
+        },
+        {
+          id: 'channel2',
+        },
+      ],
+    };
+    const firstPayload = {
+      request: {
+        uuid: testData.uuid,
+        page: {
+          next: 'page1',
+          prev: 'page0',
+        },
+      },
+      response: {
+        status: 200,
+        data: testData.channels.map(({ id }) => ({
+          channel: { id },
+          custom: null,
+          updated: '',
+          eTag: '',
+        })),
+      },
+      status: {
+        error: false,
+        errorData: undefined,
+        category: '',
+        operation: '',
+        statusCode: 0,
+      },
+    };
+    const secondPayload = {
+      request: {
+        uuid: testData.uuid,
+      },
+      response: {
+        status: 200,
+        data: testData.channels.map(({ id }) => ({
+          channel: { id },
+          custom: null,
+          updated: '',
+          eTag: '',
+        })),
+      },
+      status: {
+        error: false,
+        errorData: undefined,
+        category: '',
+        operation: '',
+        statusCode: 0,
+      },
+    };
+    const firstAction: MembershipsRetrievedAction<{}, {}, MetaType> = {
+      type: MembershipActionType.MEMBERSHIPS_RETRIEVED,
+      payload: firstPayload,
+    };
+    const secondAction: MembershipsRetrievedAction<{}, {}, MetaType> = {
+      type: MembershipActionType.MEMBERSHIPS_RETRIEVED,
+      payload: secondPayload,
+    };
+    const expectedState = {
+      ...initialState,
+      byId: {
+        [testData.uuid]: [
+          ...firstPayload.response.data,
+        ].map(({ channel: { id }, custom }) => ({ id, custom })),
+      },
+    };
+    const reducer = createMembershipReducer();
+    const state = reducer(reducer(initialState, firstAction), secondAction);
+    expect(state).toEqual({
+      ...expectedState,
+    });
+  });
+
+  it('should reset when missing pagination without mutating the state', () => {
+    const testData = {
+      uuid: 'user1',
+      channels: [
+        {
+          id: 'channel1',
+        },
+        {
+          id: 'channel2',
+        },
+      ],
+    };
+    const testData2 = {
+      uuid: 'user1',
+      channels: [
+        {
+          id: 'channel3',
+        },
+        {
+          id: 'channel4',
+        },
+      ],
+    };
+    const firstPayload = {
+      request: {
+        uuid: testData2.uuid,
+        page: {
+          next: 'page1',
+          prev: 'page0',
+        },
+      },
+      response: {
+        status: 200,
+        data: testData2.channels.map(({ id }) => ({
+          channel: { id },
+          custom: null,
+          updated: '',
+          eTag: '',
+        })),
+      },
+      status: {
+        error: false,
+        errorData: undefined,
+        category: '',
+        operation: '',
+        statusCode: 0,
+      },
+    };
+    const secondPayload = {
+      request: {
+        uuid: testData.uuid,
+      },
+      response: {
+        status: 200,
+        data: testData.channels.map(({ id }) => ({
+          channel: { id },
+          custom: null,
+          updated: '',
+          eTag: '',
+        })),
+      },
+      status: {
+        error: false,
+        errorData: undefined,
+        category: '',
+        operation: '',
+        statusCode: 0,
+      },
+    };
+    const firstAction: MembershipsRetrievedAction<{}, {}, MetaType> = {
+      type: MembershipActionType.MEMBERSHIPS_RETRIEVED,
+      payload: firstPayload,
+    };
+    const secondAction: MembershipsRetrievedAction<{}, {}, MetaType> = {
+      type: MembershipActionType.MEMBERSHIPS_RETRIEVED,
+      payload: secondPayload,
+    };
+    const expectedState = {
+      ...initialState,
+      byId: {
+        [testData.uuid]: secondPayload.response.data.map(
+          ({ channel: { id }, custom }) => ({ id, custom })
+        ),
+      },
+    };
+    const reducer = createMembershipReducer();
+    const state = reducer(reducer(initialState, firstAction), secondAction);
+    expect(state).toEqual({
       ...expectedState,
     });
   });

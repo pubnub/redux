@@ -149,14 +149,12 @@ export interface MembershipSetEventAction<
   MembershipCustom extends ObjectsCustom
 > {
   type: typeof MembershipActionType.MEMBERSHIP_SET_EVENT;
-  payload: MembershipEventMessage<MembershipCustom>;
+  payload: SetMembershipEventMessage<MembershipCustom>;
 }
 
-export interface MembershipRemovedEventAction<
-  MembershipCustom extends ObjectsCustom
-> {
+export interface MembershipRemovedEventAction {
   type: typeof MembershipActionType.MEMBERSHIP_REMOVED_EVENT;
-  payload: MembershipEventMessage<MembershipCustom>;
+  payload: RemoveMembershipEventMessage;
 }
 
 export type MembershipActions<

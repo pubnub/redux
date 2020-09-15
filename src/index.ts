@@ -154,6 +154,7 @@ import { createChannelDataReducer } from './features/channel/ChannelDataReducer'
 import { createChannelsListReducer } from './features/channel/ChannelsListReducer';
 import { createMembershipReducer } from './features/membership/MembershipReducer';
 import { createChannelMembersReducer } from './features/members/ChannelMembersReducer';
+import { createChannelMembersCountReducer } from './features/members/ChannelMembersCountReducer';
 // Types
 import { UserData } from './features/user/UserDataActions';
 import { Channel } from './features/channel/ChannelDataActions';
@@ -287,6 +288,7 @@ export {
   createChannelsListReducer,
   createMembershipReducer,
   createChannelMembersReducer,
+  createChannelMembersCountReducer,
   networkIssues,
   accessDenied,
   malformedResponse,

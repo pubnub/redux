@@ -15,8 +15,29 @@ const createInitialState = (): UsersListState => ({
 });
 
 const allUserDataRetrieved = <UserCustom extends ObjectsCustom>(
+  state: UsersListState,
   payload: FetchAllUserDataSuccess<UserCustom>
-) => ({ uuids: payload.response.data.map((uuid) => uuid.id) });
+) => {
+  if (
+    payload.request.page &&
+    (payload.request.page.next || payload.request.page.prev)
+  ) {
+    // append and deduplicate
+    return {
+      uuids: [
+        ...state.uuids,
+        ...payload.response.data
+          .map((user) => user.id)
+          .filter((id) => state.uuids.indexOf(id) === -1),
+      ],
+    };
+  } else {
+    // reset if pagination was not used
+    return {
+      uuids: payload.response.data.map((user) => user.id),
+    };
+  }
+};
 
 export const createUsersListReducer = <
   UserCustom extends ObjectsCustom = ObjectsCustom,
@@ -27,7 +48,7 @@ export const createUsersListReducer = <
 ): UsersListState => {
   switch (action.type) {
     case UserDataActionType.ALL_USER_DATA_RETRIEVED:
-      return allUserDataRetrieved(action.payload);
+      return allUserDataRetrieved(state, action.payload);
     default:
       return state;
   }
