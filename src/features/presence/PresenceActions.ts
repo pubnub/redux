@@ -40,7 +40,15 @@ export interface HereNowResponse<ReceivedPresence extends Presence = Presence> {
   };
 }
 
-export type PresenceStateResponse = PresenceState;
+export interface PresenceStateResponse {
+  channels: {
+    [channelId: string]: AnyPresenceState;
+    // server reponse includes additional "channels" wrapper in cases where getState parameters contained multiple channels
+    channels?: {
+      [channelId: string]: AnyPresenceState;
+    };
+  };
+}
 
 export interface HereNowSuccess<ReceivedPresence extends Presence = Presence> {
   request: HereNowRequest;

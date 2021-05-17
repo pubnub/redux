@@ -83,7 +83,7 @@ describe('Fetching user by ID ', () => {
     try {
       await store.dispatch(fetchUserData({ uuid: 'test' }));
     } catch {
-      console.log('dispatch fetchUserById failed');
+      console.log('dispatch fetchUserData failed');
     }
 
     receivedActions = store.getActions().map((action: any) => action.type);

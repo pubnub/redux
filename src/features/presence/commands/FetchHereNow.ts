@@ -54,7 +54,6 @@ export const fetchHereNow = <Meta extends ActionMeta>(
         {
           ...request,
           includeUUIDs: true,
-          includeState: false,
         },
         (status, response) => {
           if (status.error) {

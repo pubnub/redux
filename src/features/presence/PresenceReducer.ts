@@ -4,10 +4,10 @@ import {
   PresenceListenerActions,
   PresenceEventMessage,
   Presence,
-  HereNowResponse,
   HereNowSuccess,
   HereNowRetrievedAction,
   PresenceStateRetrievedAction,
+  PresenceStateSuccess,
 } from './PresenceActions';
 import { PresenceState } from './PresenceState';
 
@@ -46,18 +46,28 @@ const hereNow = <ReceivedPresence extends Presence<PresenceState>>(
 
 const getState = <ReceivedPresence extends Presence<PresenceState>>(
   state: PresencebyIdState<ReceivedPresence>,
-  payload: HereNowResponse<ReceivedPresence>
+  payload: PresenceStateSuccess
 ) => {
   const newState = {
     byId: { ...state.byId },
     totalOccupancy: state.totalOccupancy,
   };
 
-  Object.keys(payload.channels).forEach((channel) => {
-    // update occupant state if exists
-    if (newState.byId[channel]) {
-      newState.byId[channel] = payload.channels[channel];
-    }
+  const presenceState = Object.prototype.hasOwnProperty.call(
+    payload.response.channels,
+    'channels'
+  )
+    ? payload.response.channels.channels
+    : payload.response.channels;
+
+  if (!presenceState) return newState;
+
+  Object.keys(presenceState).forEach((channel) => {
+    if (!newState.byId[channel]) return;
+    const occupant = newState.byId[channel].occupants.find(
+      (occupant) => occupant.uuid === payload.request.uuid
+    );
+    if (occupant) occupant.state = presenceState[channel];
   });
 
   return newState;
