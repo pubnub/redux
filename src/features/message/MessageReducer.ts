@@ -62,6 +62,7 @@ const messageHistoryRetrieved = <
         channel: payload.request.channel,
         message: m.entry as MessageContentType,
         timetoken: m.timetoken,
+        userMetadata: m.meta,
       } as unknown) as MessageType)
   );
 
