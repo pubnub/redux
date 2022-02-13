@@ -11,3 +11,7 @@ deployment_keys
 deployment_keys.pub
 
 .idea
+
+# GitHub Actions #
+##################
+.github/.release
